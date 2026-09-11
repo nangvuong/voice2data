@@ -1,0 +1,18 @@
+[Unit]
+Description=Nong Ky - Voice to Text to Data Flask Web App
+After=network.target mysql.service rkllm.service rkllm-classifier.service
+Wants=mysql.service rkllm.service rkllm-classifier.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/voice_to_data/app
+ExecStart=/root/voice_to_data/.venv/bin/python /root/voice_to_data/app/app.py --port 5001 --ssl
+Restart=always
+RestartSec=3
+EnvironmentFile=/root/voice_to_data/.env
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

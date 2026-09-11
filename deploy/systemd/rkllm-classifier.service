@@ -1,0 +1,24 @@
+[Unit]
+Description=RKLLM Classifier Server - Local 0.6B LLM on RK3588 NPU (Port 8081)
+After=network.target
+Before=nongky.service rkllm.service
+PartOf=rkllm.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/voice_to_data/rkllm_server
+Environment="RKLLM_MODEL=/mnt/data/qwen3-0.6b_w8a8_rk3588.rkllm"
+Environment="TARGET_PLATFORM=rk3588"
+Environment="PORT=8081"
+ExecStartPre=-/usr/bin/fuser -k 8081/tcp
+ExecStart=/root/voice_to_data/.venv/bin/python flask_server.py --rkllm_model_path ${RKLLM_MODEL} --target_platform ${TARGET_PLATFORM} --port ${PORT}
+Restart=always
+RestartSec=5
+KillSignal=SIGTERM
+TimeoutStopSec=15
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target rkllm.service

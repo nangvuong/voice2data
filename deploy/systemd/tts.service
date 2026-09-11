@@ -1,0 +1,20 @@
+[Unit]
+Description=Vietnamese TTS Server (vi_VN-vais1000-medium)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/voice_to_data
+ExecStart=/root/voice_to_data/.venv/bin/python /root/voice_to_data/services/tts_server.py --host 0.0.0.0 --port 8082 --engine sherpa
+EnvironmentFile=/root/voice_to_data/.env
+
+Restart=on-failure
+RestartSec=5
+
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
