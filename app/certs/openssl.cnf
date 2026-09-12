@@ -1,0 +1,28 @@
+[req]
+default_bits = 2048
+prompt = no
+default_md = sha256
+distinguished_name = dn
+x509_extensions = v3_req
+
+[dn]
+C = VN
+ST = Hanoi
+L = Hanoi
+O = NongKy AI
+OU = AgriTech
+CN = 192.168.40.5
+
+[v3_req]
+subjectAltName = @alt_names
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+
+[alt_names]
+IP.1 = 192.168.40.5
+IP.2 = 192.168.40.5
+IP.3 = 192.168.40.18
+IP.4 = 127.0.0.1
+DNS.1 = localhost
+DNS.2 = nongky.local
