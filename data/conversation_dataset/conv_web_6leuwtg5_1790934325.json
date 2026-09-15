@@ -1,0 +1,84 @@
+{
+  "session_id": "web_6leuwtg5",
+  "farmer_id": 1,
+  "activity_type": "spray",
+  "crop_name": "Bưởi diễn",
+  "activity_date": "2026-10-02",
+  "accumulated_slots": {
+    "crop_name": "Bưởi diễn",
+    "activity_date": "2026-10-02",
+    "ten_thuoc_bvtv": "Dầu khoáng Ds 98.8EC",
+    "target_pest": "Sâu vẽ bùa, Nhện đỏ",
+    "huong_dan_pha": "Pha theo hướng dẫn trên nhãn cho từng loại cây trồng và mật độ sâu hại",
+    "thoi_gian_cach_ly": 7,
+    "pesticide_id": 31,
+    "nong_do_va_luong_dung": "5 bình"
+  },
+  "dialogue_history": [
+    {
+      "turn_id": 1,
+      "role": "user",
+      "text": "TÔI MUỐN GHI NHẬT KG PHUN THUỐC BVTV.",
+      "audio_path": null,
+      "image_path": null,
+      "intent": null,
+      "timestamp": 1790934260.08
+    },
+    {
+      "turn_id": 2,
+      "role": "assistant",
+      "text": "Bác cho em hỏi mình đang phun loại thuốc bảo vệ thực vật tên gì thế ạ?",
+      "audio_path": null,
+      "image_path": null,
+      "intent": null,
+      "timestamp": 1790934261.39
+    },
+    {
+      "turn_id": 3,
+      "role": "user",
+      "text": "[Gửi ảnh: conv_img_03d16366f0.jpg]",
+      "audio_path": null,
+      "image_path": "/root/voice_to_data/app/uploads/conv_img_03d16366f0.jpg",
+      "intent": null,
+      "timestamp": 1790934288.3
+    },
+    {
+      "turn_id": 4,
+      "role": "assistant",
+      "text": "🌿 **Thuốc phát hiện:** **Dầu khoáng D9 98.8EC** *(Hoạt chất: Petroleum Spray Oil 98.8% w/w)*\n🎯 **Tác dụng:** Sâu vẽ bùa, Nhện đỏ\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n📝 **Em đã tự động cập nhật thông tin từ ảnh vào nhật ký Phun thuốc BVTV đang ghi.**\nBác cho em hỏi đợt này mình phun thuốc Dầu khoáng Ds 98.8EC với liều lượng bao nhiêu (mấy bình hoặc mấy lít nước) ạ?",
+      "audio_path": null,
+      "image_path": null,
+      "intent": null,
+      "timestamp": 1790934292.63
+    },
+    {
+      "turn_id": 5,
+      "role": "user",
+      "text": "TÔI PHUN 5 BÌNH",
+      "audio_path": null,
+      "image_path": null,
+      "intent": null,
+      "timestamp": 1790934310.42
+    },
+    {
+      "turn_id": 6,
+      "role": "assistant",
+      "text": "📝 **PHIẾU XÁC NHẬN: PHUN THUỐC BVTV**\n📅 **Ngày thực hiện:** 02/10/2026\n🌱 **Cây trồng:** Bưởi diễn\n💊 **Tên thuốc BVTV:** Dầu khoáng Ds 98.8EC\n🎯 **Đối tượng phòng trừ:** Sâu vẽ bùa, Nhện đỏ\n⚖️ **Nồng độ & liều lượng:** 5 bình\n⏳ **Thời gian cách ly:** 7 ngày\n\n💡 *Bác có muốn ghi thêm **dụng cụ phun (bình đeo vai, máy bay drone hay máy nén)** không ạ?*\n👉 **Bác có thể nói thêm, hoặc bấm ĐỒNG Ý LƯU VÀO SỔ nếu thông tin đã đủ nhé!**",
+      "audio_path": null,
+      "image_path": null,
+      "intent": null,
+      "timestamp": 1790934311.98
+    },
+    {
+      "turn_id": 7,
+      "role": "user",
+      "text": "ĐỒNG Ý LƯU VÀO SỔ NHẬT KG.",
+      "audio_path": null,
+      "image_path": null,
+      "intent": null,
+      "timestamp": 1790934325.43
+    }
+  ],
+  "raw_user_text": "TÔI MUỐN GHI NHẬT KG PHUN THUỐC BVTV. [Gửi ảnh: conv_img_03d16366f0.jpg] TÔI PHUN 5 BÌNH ĐỒNG Ý LƯU VÀO SỔ NHẬT KG.",
+  "created_at": 1790934325.4328458
+}

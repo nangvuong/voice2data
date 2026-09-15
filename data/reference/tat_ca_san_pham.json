@@ -1,0 +1,1213 @@
+[
+  {
+    "category": "fertilizer",
+    "product_name": "Canxi Bo - Silic",
+    "db_pesticide": null,
+    "db_fertilizer": {
+      "name": "Canxi Bo - Silic (FUNO-PN01)",
+      "fertilizer_type": "Phân bón vi lượng",
+      "npk_ratio": "Bo: 2.000ppm, Ca: 7, Mg: 3, Zn: 15.000, Fe: 90, Cu: 80, Mn: 80",
+      "registration_no": "16838",
+      "manufacturer": "Công ty TNHH Khoa học Kỹ thuật Asanzo"
+    },
+    "rag_knowledge": {
+      "ten_vat_tu": "Canxi Bo - Silic (FUNO-PN01)",
+      "loai_vat_tu": "Phân bón",
+      "phong_ngua_nhom_benh": "Dưỡng chất vi lượng, Chống rụng trái, Chống nứt trái",
+      "doi_tuong_gay_hai": "Rụng hoa, rụng trái non, nứt trái, thối cuống trái",
+      "bo_phan_gay_hai": "Hoa, Quả",
+      "thoi_gian_phun_bon": "Khi chồi hoa 10-15cm, giai đoạn trái non, giai đoạn nuôi trái",
+      "tan_suat_phun_bon": "Theo nhu cầu sinh trưởng của cây",
+      "lieu_luong_nong_do": "Pha 20ml/bình 16 lít nước hoặc 500ml cho 400 lít nước",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá",
+      "thoi_gian_cach_ly_ngay": null,
+      "luu_y_khi_su_dung": "Lắc đều trước khi sử dụng, không dùng quá liều quy định, bảo quản nơi khô mát, để xa tầm tay trẻ em",
+      "rag_summary_text": "Canxi Bo - Silic là phân bón vi lượng giúp cây trồng chống rụng hoa, rụng trái non và ngăn ngừa hiện tượng nứt trái, thối cuống trái. Sản phẩm cung cấp các dưỡng chất thiết yếu như Bo, Ca, Mg, Zn, Fe, Cu, Mn giúp cây phục hồi nhanh sau sâu bệnh và thời tiết khắc nghiệt. Liều lượng sử dụng là 20ml cho bình 16 lít nước hoặc 500ml cho 400 lít nước. Sản phẩm giúp tăng tỷ lệ đậu hoa, trái bóng đẹp và nâng cao năng suất chất lượng nông sản."
+    },
+    "folder_id": "1",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/1",
+    "source_images": [
+      "1.jpg",
+      "2.jpg",
+      "3.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:36:59",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "fertilizer",
+    "product_name": "CANXIBO HỮU CƠ",
+    "db_pesticide": null,
+    "db_fertilizer": {
+      "name": "CANXIBO HỮU CƠ (V-CABO OGRANIC)",
+      "fertilizer_type": "Phân bón hữu cơ",
+      "npk_ratio": "Chất hữu cơ: 20%, Canxi (Ca): 8.6%, Bo (B): 800ppm",
+      "registration_no": "MSPB: 28634",
+      "manufacturer": "Công ty TNHH New Vision Vietnamese"
+    },
+    "rag_knowledge": {
+      "ten_vat_tu": "CANXIBO HỮU CƠ",
+      "loai_vat_tu": "Phân bón",
+      "phong_ngua_nhom_benh": "Dưỡng chất vi lượng, Chống rụng trái",
+      "doi_tuong_gay_hai": "Nứt trái, thối trái, nám trái, rụng hoa, rụng trái non",
+      "bo_phan_gay_hai": "Hoa, Quả",
+      "thoi_gian_phun_bon": "Trước khi ra hoa, sau khi đậu trái, thời kỳ nuôi trái cho đến khi thu hoạch",
+      "tan_suat_phun_bon": "Định kỳ 7-10 ngày/lần",
+      "lieu_luong_nong_do": "Pha 500ml/400 lít nước (tương đương 20-25ml/16-20 lít nước)",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá hoặc hòa nước tưới trực tiếp vào gốc",
+      "thoi_gian_cach_ly_ngay": null,
+      "luu_y_khi_su_dung": "Để nơi khô ráo thoáng mát, tránh ánh nắng mặt trời, để xa tầm tay trẻ em, thực phẩm và vật nuôi. Có thể kết hợp với thuốc bảo vệ thực vật.",
+      "rag_summary_text": "CANXIBO HỮU CƠ là phân bón hữu cơ cao cấp giúp chống rụng hoa, rụng trái, ngăn ngừa nứt trái và thối trái hiệu quả. Sản phẩm cung cấp Canxi và Bo thiết yếu giúp trái to đều, chắc trái, bóng trái và tăng chất lượng nông sản. Nông dân nên sử dụng định kỳ 7-10 ngày/lần với liều lượng 20-25ml cho bình 16-20 lít nước. Sản phẩm có thể phun qua lá hoặc tưới gốc và có khả năng phối trộn với các loại thuốc bảo vệ thực vật khác."
+    },
+    "folder_id": "2",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/2",
+    "source_images": [
+      "1.jpg",
+      "2.jpg",
+      "3.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:37:09",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "fertilizer",
+    "product_name": "Bơ Max (BO NSG 1)",
+    "db_pesticide": null,
+    "db_fertilizer": {
+      "name": "Bơ Max (BO NSG 1)",
+      "fertilizer_type": "Phân bón lá vi lượng",
+      "npk_ratio": "Bo: 117.800 mg/l, N: 5,4%, NAA: 1.200 ppm",
+      "registration_no": "MSPB: 14669",
+      "manufacturer": "Công ty CPĐT và Phát triển Vũng Phát"
+    },
+    "rag_knowledge": {
+      "ten_vat_tu": "Bơ Max (BO NSG 1)",
+      "loai_vat_tu": "Phân bón",
+      "phong_ngua_nhom_benh": "Dưỡng chất vi lượng, hạn chế rụng trái",
+      "doi_tuong_gay_hai": "Rụng hoa, rụng trái non, nứt trái, cây sinh trưởng kém",
+      "bo_phan_gay_hai": "Hoa, trái, lá",
+      "thoi_gian_phun_bon": "Thời kỳ cây ra chồi hoa, giai đoạn trái non và nuôi trái",
+      "tan_suat_phun_bon": "Sử dụng 2 lần cách nhau 10-15 ngày",
+      "lieu_luong_nong_do": "15-20ml/16 lít nước hoặc 500ml/400 lít nước",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá",
+      "thoi_gian_cach_ly_ngay": null,
+      "luu_y_khi_su_dung": "Lắc đều trước khi sử dụng, bảo quản nơi khô ráo thoáng mát, tránh ánh nắng trực tiếp, để xa tầm tay trẻ em.",
+      "rag_summary_text": "Bơ Max (BO NSG 1) là phân bón lá vi lượng chứa Bo, Đạm và chất điều hòa sinh trưởng NAA giúp cây trồng tăng khả năng thụ phấn, chống rụng hoa và trái non hiệu quả. Sản phẩm được sử dụng cho nhiều loại cây trồng như cây ăn trái, rau màu và cây công nghiệp vào giai đoạn ra hoa hoặc nuôi trái. Với liều lượng pha 20ml cho bình 16 lít nước, sản phẩm giúp cây hấp thụ Canxi tốt hơn, hạn chế tình trạng nứt trái và thối trái. Đây là giải pháp tối ưu để đảm bảo năng suất và chất lượng nông sản cho bà con nông dân."
+    },
+    "folder_id": "3",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/3",
+    "source_images": [
+      "1.jpg",
+      "2.jpg",
+      "3.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:37:15",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "fertilizer",
+    "product_name": "Siêu ra rễ - đẻ nhánh",
+    "db_pesticide": null,
+    "db_fertilizer": {
+      "name": "Siêu ra rễ - đẻ nhánh",
+      "fertilizer_type": "Phân bón lá vi lượng",
+      "npk_ratio": "Bo (B): 2,222ppm",
+      "registration_no": "27463",
+      "manufacturer": "Công ty Cổ phần Thương mại Xuất Nhập Khẩu VNT"
+    },
+    "rag_knowledge": {
+      "ten_vat_tu": "Siêu ra rễ - đẻ nhánh",
+      "loai_vat_tu": "Phân bón",
+      "phong_ngua_nhom_benh": "Dưỡng chất vi lượng, Phục hồi cây",
+      "doi_tuong_gay_hai": "Kích rễ, Đẻ nhánh, Giải độc hữu cơ, Chống nghẹt rễ, Vàng lá sinh lý",
+      "bo_phan_gay_hai": "Rễ, Thân, Lá",
+      "thoi_gian_phun_bon": "Sử dụng định kỳ trong quá trình sinh trưởng của cây",
+      "tan_suat_phun_bon": "7-10 ngày/lần",
+      "lieu_luong_nong_do": "1 gói 35g pha với 20 lít nước",
+      "cach_thuc_phun_bon": "Phun hoặc tưới lá",
+      "thoi_gian_cach_ly_ngay": null,
+      "luu_y_khi_su_dung": "Bảo quản nơi thoáng mát, tránh xa tầm tay trẻ em và ánh nắng mặt trời. Đọc kỹ hướng dẫn trước khi sử dụng.",
+      "rag_summary_text": "Siêu ra rễ - đẻ nhánh là loại phân bón lá vi lượng giúp cây trồng phát triển bộ rễ mạnh, đẻ nhánh khỏe và thân mập. Sản phẩm hỗ trợ hạ phèn, khử chua, giải độc hữu cơ và khắc phục tình trạng vàng lá sinh lý, nghẹt rễ. Với thành phần chứa Bo (2,222ppm), sản phẩm giúp cây phục hồi nhanh và tăng khả năng ra hoa, đậu quả. Liều lượng sử dụng là 1 gói 35g pha cho 20 lít nước, phun hoặc tưới định kỳ 7-10 ngày/lần."
+    },
+    "folder_id": "4",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/4",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:37:21",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "fertilizer",
+    "product_name": "PROFARM-TOPMICRO",
+    "db_pesticide": null,
+    "db_fertilizer": {
+      "name": "PROFARM-TOPMICRO",
+      "fertilizer_type": "Phân bón vi lượng",
+      "npk_ratio": "Mangan: 40.000 ppm, Kẽm: 30.000 ppm, Sắt: 20.000 ppm, Đồng: 10.000 ppm, Bo: 5.000 ppm, Molipđen: 1.000 ppm, Côban: 500 ppm, Lưu huỳnh: 8%, Magie: 7,2%",
+      "registration_no": "MSPB: 11658",
+      "manufacturer": "Công ty TNHH Nông Việt (Agriviet Co., Ltd)"
+    },
+    "rag_knowledge": {
+      "ten_vat_tu": "PROFARM-TOPMICRO",
+      "loai_vat_tu": "Phân bón",
+      "phong_ngua_nhom_benh": "Dưỡng chất vi lượng",
+      "doi_tuong_gay_hai": "Khắc phục hiện tượng thiếu hụt vi lượng, vàng lá, xoăn lá, rụng hoa, rụng quả non, lép hạt",
+      "bo_phan_gay_hai": "Toàn cây",
+      "thoi_gian_phun_bon": "Từ thời kỳ cây con đến thu hoạch",
+      "tan_suat_phun_bon": "3-4 lần/vụ",
+      "lieu_luong_nong_do": "20g pha 160-200 lít nước; hoặc 2-3g/16-20 lít nước",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá hoặc tưới vào vùng rễ",
+      "thoi_gian_cach_ly_ngay": null,
+      "luu_y_khi_su_dung": "Để xa tầm tay trẻ em, thực phẩm và vật nuôi. Bảo quản nơi khô ráo, thoáng mát.",
+      "rag_summary_text": "PROFARM-TOPMICRO là phân bón vi lượng dạng chelate cao cấp giúp cây trồng xanh lá, dày lá, mập cây và hạn chế các hiện tượng thiếu hụt dinh dưỡng như vàng lá, xoăn lá, rụng hoa, rụng quả non. Sản phẩm phù hợp cho nhiều loại cây trồng từ cây ăn trái, rau màu đến cây công nghiệp, giúp tăng năng suất và chất lượng nông sản. Liều lượng khuyến cáo là 20g cho 160-200 lít nước, có thể dùng để phun hoặc tưới gốc định kỳ 3-4 lần mỗi vụ. Đây là giải pháp bổ sung vi lượng thiết yếu giúp cây phát triển khỏe mạnh từ giai đoạn cây con đến khi thu hoạch."
+    },
+    "folder_id": "5",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/5",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:37:28",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "fertilizer",
+    "product_name": "Farmproka-V3 16-8-34",
+    "db_pesticide": null,
+    "db_fertilizer": {
+      "name": "Farmproka-V3 16-8-34",
+      "fertilizer_type": "Phân bón NPK",
+      "npk_ratio": "16-8-34",
+      "registration_no": "932/QĐ-BVTV-PB",
+      "manufacturer": "Công ty TNHH Nông Việt (Agriviet Co., Ltd.)"
+    },
+    "rag_knowledge": {
+      "ten_vat_tu": "Farmproka-V3 16-8-34",
+      "loai_vat_tu": "Phân bón",
+      "phong_ngua_nhom_benh": "Dưỡng chất nuôi quả, hạn chế nứt trái, thối trái, rụng trái non",
+      "doi_tuong_gay_hai": "Kích thích ra hoa, nuôi quả, xuống củ, làm đẹp mã",
+      "bo_phan_gay_hai": "Quả, củ, hạt",
+      "thoi_gian_phun_bon": "Thời kỳ ra hoa, nuôi quả, nuôi củ, nuôi hạt",
+      "tan_suat_phun_bon": "Sử dụng định kỳ trong giai đoạn nuôi trái/củ",
+      "lieu_luong_nong_do": "Pha 15-25g cho 16-20 lít nước, tưới vào vùng rễ hoặc phun",
+      "cach_thuc_phun_bon": "Hòa tưới gốc hoặc phun lên lá",
+      "thoi_gian_cach_ly_ngay": null,
+      "luu_y_khi_su_dung": "Để xa tầm tay trẻ em, thực phẩm và vật nuôi. Bảo quản nơi khô ráo, thoáng mát.",
+      "rag_summary_text": "Farmproka-V3 16-8-34 là loại phân bón NPK nhập khẩu từ Bỉ, chuyên dùng để thúc đẩy quá trình nuôi quả, xuống củ và làm đẹp mã nông sản. Sản phẩm giúp cây trồng tăng khả năng đậu quả, hạn chế tình trạng nứt trái, thối trái và rụng trái non hiệu quả. Với hàm lượng Kali cao, phân bón hỗ trợ cây trồng phát triển tối ưu trong giai đoạn ra hoa và nuôi trái, củ, hạt. Người dùng có thể hòa tan 15-25g sản phẩm với 16-20 lít nước để tưới gốc hoặc phun trực tiếp cho cây."
+    },
+    "folder_id": "6",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/6",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:37:34",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "fertilizer",
+    "product_name": "Deltamicro Hydro",
+    "db_pesticide": null,
+    "db_fertilizer": {
+      "name": "Deltamicro Hydro",
+      "fertilizer_type": "Phân bón vi lượng",
+      "npk_ratio": "Lưu huỳnh: 6.98%, Magie: 1.8%, Sắt: 54000 ppm, Mangan: 50000 ppm, Bo: 35000 ppm, Kẽm: 30000 ppm, Đồng: 3000 ppm, Molipden: 4000 ppm, Coban: 500 ppm",
+      "registration_no": "15626",
+      "manufacturer": "Greendelta Co., Ltd."
+    },
+    "rag_knowledge": {
+      "ten_vat_tu": "Deltamicro Hydro",
+      "loai_vat_tu": "Phân bón",
+      "phong_ngua_nhom_benh": "Dưỡng chất vi lượng",
+      "doi_tuong_gay_hai": "Khắc phục hiện tượng thiếu hụt vi lượng trên cây trồng",
+      "bo_phan_gay_hai": "Toàn cây",
+      "thoi_gian_phun_bon": "Trong mọi thời kỳ sinh trưởng và phát triển của cây",
+      "tan_suat_phun_bon": "7-15 ngày/lần đối với cây ngắn ngày và 20-30 ngày/lần đối với cây dài ngày (cây lưu niên)",
+      "lieu_luong_nong_do": "Pha 1-3 gói 2g cho một bình phun/xịt (hoặc 1-3 gói 2g cho 200 lít nước)",
+      "cach_thuc_phun_bon": "Phun qua lá hoặc tưới gốc",
+      "thoi_gian_cach_ly_ngay": null,
+      "luu_y_khi_su_dung": "Có thể trộn với phân bón lá và thuốc bảo vệ thực vật khác để tăng khả năng hấp thụ. Bảo quản nơi khô ráo, thoáng mát, tránh xa tầm tay trẻ em.",
+      "rag_summary_text": "Deltamicro Hydro là phân bón vi lượng dạng bột chứa phức hợp Chelate giúp cây trồng hấp thụ tối đa các dưỡng chất thiết yếu như Sắt, Mangan, Bo, Kẽm, Đồng, Molipden và Coban. Sản phẩm giúp ngăn ngừa và khắc phục hiệu quả các triệu chứng thiếu hụt vi lượng trên mọi loại cây trồng trong suốt quá trình sinh trưởng. Người dùng có thể pha 1-3 gói 2g cho bình phun hoặc 200 lít nước, phun định kỳ tùy theo loại cây ngắn ngày hay dài ngày. Sản phẩm an toàn, có thể phối trộn với các loại phân bón và thuốc BVTV khác để nâng cao hiệu quả canh tác."
+    },
+    "folder_id": "7",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/7",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:37:41",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "fertilizer",
+    "product_name": "Phân bón vi lượng SIAMB 12",
+    "db_pesticide": null,
+    "db_fertilizer": {
+      "name": "Phân bón vi lượng SIAMB 12",
+      "fertilizer_type": "Phân bón vi lượng",
+      "npk_ratio": "Kẽm (Zn): 15.000ppm",
+      "registration_no": "MSPB: 08524",
+      "manufacturer": "Công ty TNHH TLC CONTINENTAL"
+    },
+    "rag_knowledge": {
+      "ten_vat_tu": "Phân bón vi lượng SIAMB 12",
+      "loai_vat_tu": "Phân bón",
+      "phong_ngua_nhom_benh": "Dưỡng chất vi lượng, Điều hòa sinh trưởng",
+      "doi_tuong_gay_hai": "Kích thích ra hoa, chống rụng hoa và trái non, hạn chế nghẹn hoa, giúp to trái, to hạt, to củ",
+      "bo_phan_gay_hai": "Hoa, Trái, Củ, Toàn cây",
+      "thoi_gian_phun_bon": "Thời kỳ tạo mầm hoa, khi cây chuẩn bị ra hoa, giai đoạn nuôi trái, nuôi củ",
+      "tan_suat_phun_bon": "Định kỳ 7-10 ngày/lần tùy theo loại cây trồng và giai đoạn sinh trưởng",
+      "lieu_luong_nong_do": "Pha 20-30g cho bình 16 lít nước hoặc 250-400g cho phuy 200 lít nước",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá hoặc tưới gốc theo hướng dẫn cụ thể cho từng loại cây",
+      "thoi_gian_cach_ly_ngay": null,
+      "luu_y_khi_su_dung": "Bảo quản nơi khô ráo, thoáng mát, tránh ánh nắng trực tiếp. Tránh xa tầm tay trẻ em và nguồn thực phẩm. Nên sử dụng vào lúc sáng sớm hoặc chiều mát.",
+      "rag_summary_text": "Phân bón vi lượng SIAMB 12 là sản phẩm chuyên dùng để xử lý ra hoa nghịch vụ, giúp phân hóa mầm hoa đồng loạt và chống rụng hoa, trái non hiệu quả. Sản phẩm chứa hàm lượng Kẽm (Zn) 15.000ppm giúp cây trồng tăng sức đề kháng, chống ngộ độc hữu cơ và hỗ trợ phát triển củ, quả tối ưu. Người dùng nên pha 20-30g cho bình 16 lít nước và phun định kỳ theo giai đoạn sinh trưởng của cây để đạt hiệu quả cao nhất. Đây là giải pháp an toàn, giúp cây trồng phát triển khỏe mạnh và nâng cao năng suất nông sản."
+    },
+    "folder_id": "8",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/8",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:37:48",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "fertilizer",
+    "product_name": "SUPER LÂN - HOÀNG THÁI NÔNG",
+    "db_pesticide": null,
+    "db_fertilizer": {
+      "name": "SUPER LÂN",
+      "fertilizer_type": "Phân bón vi lượng",
+      "npk_ratio": "Bo: 2.000ppm",
+      "registration_no": "MSP: 14420",
+      "manufacturer": "Công ty TNHH Sản xuất Thương mại Hoàng Thái Nông"
+    },
+    "rag_knowledge": {
+      "ten_vat_tu": "SUPER LÂN - HOÀNG THÁI NÔNG",
+      "loai_vat_tu": "Phân bón",
+      "phong_ngua_nhom_benh": "Dưỡng chất vi lượng, Kích thích ra hoa",
+      "doi_tuong_gay_hai": "Khắc phục nghẹn hoa, giúp lá già nhanh, tạo mầm hoa",
+      "bo_phan_gay_hai": "Toàn cây",
+      "thoi_gian_phun_bon": "Thời kỳ trước khi ra hoa",
+      "tan_suat_phun_bon": "Định kỳ 3-4 lần, 7 ngày/lần",
+      "lieu_luong_nong_do": "Pha 250-500g cho phuy 220 lít hoặc 1-2g cho 1 lít nước",
+      "cach_thuc_phun_bon": "Tưới gốc",
+      "thoi_gian_cach_ly_ngay": null,
+      "luu_y_khi_su_dung": "Bảo quản nơi khô ráo, thoáng mát, tránh xa ánh sáng mặt trời và tầm tay trẻ em.",
+      "rag_summary_text": "SUPER LÂN là phân bón vi lượng chuyên dùng để kích thích phân hóa mầm hoa, giúp cây ra hoa đồng loạt và khắc phục tình trạng nghẹn hoa. Sản phẩm chứa Bo 2.000ppm, giúp lá già nhanh, dày lá và cứng lá, đồng thời hạn chế hiện tượng vàng lá, xoáy lá. Liều lượng khuyến cáo là pha 250-500g cho phuy 220 lít nước, tưới gốc định kỳ 3-4 lần, mỗi lần cách nhau 7 ngày trước khi cây ra hoa. Sản phẩm phù hợp cho nhiều loại cây ăn trái, cây công nghiệp và rau màu."
+    },
+    "folder_id": "9",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/9",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:37:54",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "Spendora 690WP",
+    "db_pesticide": {
+      "name": "Spendora 690WP",
+      "active_ingredient": "Dimethomorph 90g/kg, Mancozeb 600g/kg",
+      "formulation": "WP",
+      "registration_no": "7949/CNĐKT - BVTV",
+      "allowed_crops": "Đậu tương, cà chua, khoai tây, vải, thiều, nhãn, dâu tây, hoa cắt cảnh, tiêu, dưa hấu, thuốc lá, cao su, dưa, bầu bí, hành tỏi, nho",
+      "min_isolation_days": 7,
+      "max_concentration": "1.5 - 2.0 kg/ha",
+      "toxicity_group": "GHS",
+      "is_banned": false,
+      "manufacturer": "Heze Longge Plant Protection Technology Co., Ltd (Đăng ký và phân phối: Công ty Cổ phần Kỹ thuật Công nghệ Klever)"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "Spendora 690WP",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Nấm mốc, Sương mai, Thán thư, Chết nhanh, Thối rễ, Vàng lá",
+      "doi_tuong_gay_hai": "Sương mai, thán thư, chết nhanh, nứt vỏ, chảy mủ, vàng lá, thối rễ, loét sọc mặt cạo, đốm phấn, đốm lá, héo xanh",
+      "bo_phan_gay_hai": "Lá, Thân, Rễ, Quả",
+      "thoi_gian_phun_bon": "Khi bệnh chớm xuất hiện, tỷ lệ khoảng 5%",
+      "tan_suat_phun_bon": "Phun khi cần thiết, không bị rửa trôi sau 1 giờ phun",
+      "lieu_luong_nong_do": "1.5 - 2.0 kg/ha (Lượng nước 400 - 500 lít/ha)",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá và các bộ phận cây trồng",
+      "thoi_gian_cach_ly_ngay": 7,
+      "luu_y_khi_su_dung": "Mang đầy đủ đồ bảo hộ lao động khi tiếp xúc với thuốc. Nếu dính vào da, mắt phải rửa bằng nước sạch nhiều lần. Bảo quản nơi khô ráo, xa tầm tay trẻ em và nguồn thực phẩm.",
+      "rag_summary_text": "Spendora 690WP là thuốc trừ bệnh thế hệ mới với sự kết hợp của Dimethomorph và Mancozeb, có khả năng tiếp xúc, lưu dẫn và thấm sâu mạnh mẽ. Sản phẩm chuyên dùng để phòng trừ nhiều loại nấm bệnh nguy hiểm như sương mai, thán thư, chết nhanh và thối rễ trên nhiều loại cây trồng. Thuốc có ưu điểm không bị rửa trôi sau 1 giờ phun, giúp bảo vệ cây trồng hiệu quả ở nhiều giai đoạn. Người dùng cần tuân thủ thời gian cách ly 7 ngày và sử dụng đồ bảo hộ lao động khi phun thuốc."
+    },
+    "folder_id": "10",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/10",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:38:01",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "Epolists 85WP",
+    "db_pesticide": {
+      "name": "Epolists 85WP",
+      "active_ingredient": "Copper oxychloride 85% w/w",
+      "formulation": "WP",
+      "registration_no": "5289/CNĐKT-BVTV",
+      "allowed_crops": "Lúa, Cà phê, Điều",
+      "min_isolation_days": 7,
+      "max_concentration": "20g/8 lít nước",
+      "toxicity_group": "GHS",
+      "is_banned": false,
+      "manufacturer": "Parikh Enterprises Pvt. Ltd - India / Công ty Cổ phần Thanh Điền"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "Epolists 85WP",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Nấm mốc, Vi khuẩn",
+      "doi_tuong_gay_hai": "Bạc lá lúa, Rỉ sắt cà phê, Thán thư điều",
+      "bo_phan_gay_hai": "Lá, Quả",
+      "thoi_gian_phun_bon": "Khi chớm bệnh, tỷ lệ bệnh khoảng 5-10%",
+      "tan_suat_phun_bon": "Phun khi bệnh xuất hiện, không phun khi lúa trổ",
+      "lieu_luong_nong_do": "Pha 8-15g/8 lít nước hoặc 20g/8 lít nước tùy loại cây",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá",
+      "thoi_gian_cach_ly_ngay": 7,
+      "luu_y_khi_su_dung": "Không được pha chung với lưu huỳnh, vôi và các loại thuốc trừ sâu, bệnh có tính kiềm. Bảo quản nơi khô ráo, thoáng mát, tránh xa tầm tay trẻ em.",
+      "rag_summary_text": "Epolists 85WP là thuốc trừ bệnh phổ rộng chứa hoạt chất Copper oxychloride 85% w/w, chuyên dùng phòng trị bệnh bạc lá lúa, rỉ sắt cà phê và thán thư điều. Sản phẩm có tác dụng kép vừa trừ bệnh vừa cung cấp vi lượng Đồng giúp cây xanh tốt. Khi sử dụng, cần pha liều lượng từ 8-20g cho bình 8 lít nước và phun ướt đều tán lá khi bệnh mới chớm xuất hiện. Lưu ý tuyệt đối không pha chung với các loại thuốc có tính kiềm như vôi hoặc lưu huỳnh và tuân thủ thời gian cách ly 7 ngày trước khi thu hoạch."
+    },
+    "folder_id": "11",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/11",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:38:07",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "Kasuduc 3SL",
+    "db_pesticide": {
+      "name": "Kasuduc 3SL",
+      "active_ingredient": "Kasugamycin 30g/l",
+      "formulation": "SL",
+      "registration_no": "5153/CNĐKT-BVTV",
+      "allowed_crops": "Lúa",
+      "min_isolation_days": 7,
+      "max_concentration": "15ml/20 lít nước",
+      "toxicity_group": "GHS 5",
+      "is_banned": false,
+      "manufacturer": "Công ty TNHH Việt Đức"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "Kasuduc 3SL",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Nấm mốc và Vi khuẩn",
+      "doi_tuong_gay_hai": "Bệnh bạc lá trên lúa",
+      "bo_phan_gay_hai": "Lá",
+      "thoi_gian_phun_bon": "Khi chớm bệnh",
+      "tan_suat_phun_bon": "Theo mật độ bệnh hại",
+      "lieu_luong_nong_do": "Pha 15ml cho bình 16-20 lít nước; chai 450ml pha 400-500 lít nước",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá",
+      "thoi_gian_cach_ly_ngay": 7,
+      "luu_y_khi_su_dung": "Tránh hít phải thuốc, không để thuốc tiếp xúc với da và mắt. Mang bảo hộ lao động khi sử dụng. Bảo quản nơi khô ráo, nhiệt độ không quá 30 độ C.",
+      "rag_summary_text": "Kasuduc 3SL là thuốc trừ bệnh có nguồn gốc kháng sinh sinh học với hoạt chất Kasugamycin 30g/l, chuyên dùng để phòng và trị bệnh bạc lá trên lúa. Thuốc có tính nội hấp lưu dẫn, thấm sâu và an toàn cho cây trồng ở nhiều giai đoạn phát triển. Khi sử dụng, nông dân pha 15ml cho bình 16-20 lít nước và phun ướt đều tán lá khi bệnh mới chớm xuất hiện. Thời gian cách ly của thuốc là 7 ngày trước khi thu hoạch."
+    },
+    "folder_id": "12",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/12",
+    "source_images": [
+      "1.jpg",
+      "2.jpg",
+      "3.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:38:14",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "Amity Top 500SC",
+    "db_pesticide": {
+      "name": "Amity Top 500SC",
+      "active_ingredient": "Azoxystrobin 250g/l, Difenoconazole 250g/l",
+      "formulation": "SC",
+      "registration_no": "4611/CNĐKT-BVTV",
+      "allowed_crops": "Lúa, Vải",
+      "min_isolation_days": null,
+      "max_concentration": "Chưa ghi rõ trên nhãn",
+      "toxicity_group": "Vàng",
+      "is_banned": false,
+      "manufacturer": "Công ty TNHH Việt Đức"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "Amity Top 500SC",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Nấm bệnh",
+      "doi_tuong_gay_hai": "Phấn trắng, Rỉ sắt",
+      "bo_phan_gay_hai": "Lá, Quả",
+      "thoi_gian_phun_bon": "Khi chớm bệnh",
+      "tan_suat_phun_bon": "Chưa ghi rõ",
+      "lieu_luong_nong_do": "Chưa ghi rõ trên nhãn",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá",
+      "thoi_gian_cach_ly_ngay": null,
+      "luu_y_khi_su_dung": "Mang bảo hộ lao động khi sử dụng, không đổ thuốc thừa xuống nguồn nước, bảo quản nơi khô ráo thoáng mát, tránh xa tầm tay trẻ em và thực phẩm.",
+      "rag_summary_text": "Amity Top 500SC là thuốc trừ bệnh phổ rộng với sự kết hợp của hai hoạt chất Azoxystrobin và Difenoconazole (mỗi loại 250g/l). Sản phẩm được đăng ký để phòng trừ các bệnh như phấn trắng và rỉ sắt trên cây trồng như lúa và vải. Khi sử dụng, cần tuân thủ nghiêm ngặt các biện pháp an toàn lao động, phun ướt đều tán lá khi bệnh mới chớm xuất hiện và bảo quản thuốc ở nơi khô ráo, tránh xa nguồn nước sinh hoạt."
+    },
+    "folder_id": "13",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/13",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:38:20",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "Tilbest super 300EC",
+    "db_pesticide": {
+      "name": "Tilbest super 300EC",
+      "active_ingredient": "Difenoconazole 150g/l, Propiconazole 150g/l",
+      "formulation": "EC",
+      "registration_no": "Chưa xác định",
+      "allowed_crops": "Lúa, Vải, Nhãn, Táo, Cam, Bưởi, Mận, Na",
+      "min_isolation_days": 14,
+      "max_concentration": "10ml/16 lít nước",
+      "toxicity_group": "Chưa xác định",
+      "is_banned": false,
+      "manufacturer": "Công ty Cổ phần Green Mê Kông"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "Tilbest super 300EC",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Nấm mốc",
+      "doi_tuong_gay_hai": "Rỉ sắt, đốm mắt cua, mực quả, thán thư, lem lép hạt, phấn trắng, sương mai, mốc leo, mốc xám, mốc lục, thối quả, ghẻ nhám",
+      "bo_phan_gay_hai": "Lá, Quả, Hạt",
+      "thoi_gian_phun_bon": "Khi tỷ lệ bệnh khoảng 5%, nếu bệnh nặng phun kép sau 07 ngày",
+      "tan_suat_phun_bon": "Phun kép sau 07 ngày nếu bệnh nặng",
+      "lieu_luong_nong_do": "10ml/16 lít nước (0,6 lít/ha)",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá cây trồng",
+      "thoi_gian_cach_ly_ngay": 14,
+      "luu_y_khi_su_dung": "Có thể có hại nếu nuốt phải, hít phải hay khi tiếp xúc với da. Cần trang bị bảo hộ lao động khi phun.",
+      "rag_summary_text": "Tilbest super 300EC là thuốc trừ nấm bệnh cao cấp với phổ tác dụng rộng, chứa hoạt chất Difenoconazole và Propiconazole. Sản phẩm được sử dụng để phòng trừ nhiều loại bệnh như rỉ sắt, thán thư, lem lép hạt, phấn trắng và ghẻ nhám trên nhiều loại cây trồng như lúa, cây ăn quả. Liều lượng khuyến cáo là 10ml cho bình 16 lít nước, phun khi tỷ lệ bệnh khoảng 5%. Thời gian cách ly trước khi thu hoạch là 14 ngày."
+    },
+    "folder_id": "14",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/14",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:38:28",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "Ridomil Gold 68WG",
+    "db_pesticide": {
+      "name": "Ridomil Gold 68WG",
+      "active_ingredient": "Metalaxyl M 40g/kg, Mancozeb 640g/kg",
+      "formulation": "WG",
+      "registration_no": "154/CNĐKT-BVTV",
+      "allowed_crops": "Ca cao, Điều, Cao su, Thuốc lá, Lạc, Hồ tiêu, Ngô (bắp)",
+      "min_isolation_days": 14,
+      "max_concentration": "1000g/phuy 200 lít",
+      "toxicity_group": "Nhóm 4",
+      "is_banned": false,
+      "manufacturer": "Công ty TNHH Syngenta Việt Nam"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "Ridomil Gold 68WG",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Nấm mốc, Sương mai, Thán thư, Loét sọc mặt cạo, Chết cây con, Chết nhanh",
+      "doi_tuong_gay_hai": "Bệnh sương mai, thán thư, loét sọc mặt cạo, chết cây con, chết nhanh, đốm lá",
+      "bo_phan_gay_hai": "Lá, Thân, Rễ",
+      "thoi_gian_phun_bon": "Khi chớm bệnh xuất hiện hoặc thời tiết thuận lợi cho bệnh phát triển",
+      "tan_suat_phun_bon": "Tối đa 4 lần/vụ, cách nhau 7-14 ngày tùy loại cây trồng",
+      "lieu_luong_nong_do": "Pha 800g-1000g/phuy 200 lít nước hoặc 50-150g/bình 16-25 lít nước",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá hoặc quét trực tiếp lên vết bệnh (đối với cao su)",
+      "thoi_gian_cach_ly_ngay": 14,
+      "luu_y_khi_su_dung": "Có thể gây dị ứng da, rất độc đối với sinh vật thủy sinh, không được hít phải thuốc, cần trang bị bảo hộ lao động khi phun.",
+      "rag_summary_text": "Ridomil Gold 68WG là thuốc trừ bệnh nội hấp cực mạnh với sự kết hợp của hai hoạt chất Metalaxyl M và Mancozeb. Sản phẩm chuyên dùng để phòng trừ các bệnh nấm như sương mai, thán thư, loét sọc mặt cạo và chết nhanh trên nhiều loại cây trồng như ca cao, điều, cao su, thuốc lá, lạc, hồ tiêu và ngô. Khi sử dụng, cần pha theo liều lượng khuyến cáo và phun ướt đều tán lá hoặc quét lên vết bệnh khi mới chớm xuất hiện. Thời gian cách ly tối thiểu là 14 ngày trước khi thu hoạch để đảm bảo an toàn nông sản."
+    },
+    "folder_id": "15",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/15",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:38:44",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "Anvil 5SC",
+    "db_pesticide": {
+      "name": "Anvil 5SC",
+      "active_ingredient": "Hexaconazole 50g/l",
+      "formulation": "SC",
+      "registration_no": "141/CNĐKT-BVTV",
+      "allowed_crops": "Lúa, Cà phê, Lạc, Ngô, Thuốc lá, Cao su, Cam, Thanh long",
+      "min_isolation_days": 7,
+      "max_concentration": "0.6%",
+      "toxicity_group": "Nhóm 3",
+      "is_banned": false,
+      "manufacturer": "Syngenta Việt Nam"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "Anvil 5SC",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Nấm bệnh",
+      "doi_tuong_gay_hai": "Lem lép hạt, khô vằn, đốm vòng, rỉ sắt, nấm hồng, đốm lá, lở cổ rễ, vàng lá, phấn trắng, ghẻ sẹo, đốm nâu",
+      "bo_phan_gay_hai": "Lá, thân, quả",
+      "thoi_gian_phun_bon": "Khi chớm bệnh hoặc khi điều kiện thời tiết thuận lợi cho nấm bệnh phát triển",
+      "tan_suat_phun_bon": "Phun khi cần thiết, tuân thủ luân phiên với các thuốc có cơ chế tác động khác để tránh kháng thuốc",
+      "lieu_luong_nong_do": "Pha 62.5ml/bình 25 lít hoặc 500ml/phuy 200 lít nước tùy theo loại cây trồng",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá và thân cây",
+      "thoi_gian_cach_ly_ngay": 7,
+      "luu_y_khi_su_dung": "Lắc kỹ trước khi pha; mặc đồ bảo hộ lao động khi phun; không phun ngược chiều gió; không để thuốc dính vào da, mắt; bảo quản nơi khô ráo, tránh xa tầm tay trẻ em và nguồn thực phẩm.",
+      "rag_summary_text": "Anvil 5SC là thuốc trừ bệnh phổ rộng chứa hoạt chất Hexaconazole 50g/l, được đăng ký phòng trừ nhiều loại nấm bệnh trên các cây trồng như lúa, cà phê, cao su, cam và thanh long. Sản phẩm có dạng huyền phù (SC), thuộc nhóm độc 3, yêu cầu thời gian cách ly tối thiểu là 7 ngày đối với cam, thanh long và 14 ngày đối với các loại cây trồng khác. Khi sử dụng, cần pha thuốc theo nồng độ khuyến cáo và phun ướt đều tán lá, đồng thời tuân thủ các biện pháp an toàn lao động và quản lý tính kháng thuốc bằng cách luân phiên với các loại thuốc khác."
+    },
+    "folder_id": "16",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/16",
+    "source_images": [
+      "1.jpg",
+      "2.jpg",
+      "3.jpg",
+      "4.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:38:53",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "FORTHANE 80WP",
+    "db_pesticide": {
+      "name": "FORTHANE 80WP",
+      "active_ingredient": "Mancozeb 80% w/w",
+      "formulation": "WP",
+      "registration_no": "2556/CNĐKT-BVTV",
+      "allowed_crops": "Bắp cải, Lúa",
+      "min_isolation_days": 7,
+      "max_concentration": "50g/20-25 lít nước",
+      "toxicity_group": "GHS",
+      "is_banned": false,
+      "manufacturer": "Công ty TNHH Thuốc BVTV Hoàng Phát"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "FORTHANE 80WP",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Nấm mốc",
+      "doi_tuong_gay_hai": "Bệnh thán thư, Bệnh đạo ôn",
+      "bo_phan_gay_hai": "Lá",
+      "thoi_gian_phun_bon": "Khi chớm bệnh",
+      "tan_suat_phun_bon": "Theo khuyến cáo của cán bộ kỹ thuật hoặc khi áp lực bệnh cao",
+      "lieu_luong_nong_do": "Pha 50g cho bình 20-25 lít nước",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá cây trồng",
+      "thoi_gian_cach_ly_ngay": 7,
+      "luu_y_khi_su_dung": "Rửa sạch dụng cụ sau khi sử dụng, trang bị bảo hộ lao động khi phun. Nếu dính vào da, mắt phải rửa sạch bằng nước và xà phòng, nếu ngộ độc cần đưa nạn nhân đến cơ sở y tế gần nhất. Bảo quản nơi khô ráo, thoáng mát, tránh xa tầm tay trẻ em và thực phẩm.",
+      "rag_summary_text": "FORTHANE 80WP là thuốc trừ bệnh phổ rộng với hoạt chất Mancozeb 80% w/w, có tác dụng tiếp xúc mạnh giúp ngăn ngừa và chặn đứng sự lây lan của nấm bệnh. Sản phẩm được đăng ký đặc trị bệnh thán thư trên bắp cải và bệnh đạo ôn trên lúa. Khi sử dụng, nông dân cần pha 50g cho bình 20-25 lít nước và phun ướt đều tán lá. Thời gian cách ly tối thiểu là 7 ngày đối với bắp cải và 10 ngày đối với lúa."
+    },
+    "folder_id": "17",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/17",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:39:01",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "Mexyl MZ 72 WP Xanh Gold",
+    "db_pesticide": {
+      "name": "Mexyl MZ 72 WP Xanh Gold",
+      "active_ingredient": "Metalaxyl 8% w/w, Mancozeb 64% w/w",
+      "formulation": "WP",
+      "registration_no": "2706/CNĐKT-BVTV",
+      "allowed_crops": "Tiêu, Cao su",
+      "min_isolation_days": 7,
+      "max_concentration": "0.45% (300-450g/100 lít nước)",
+      "toxicity_group": "GHS",
+      "is_banned": false,
+      "manufacturer": "Công ty Cổ phần Bảo vệ Thực vật Sài Gòn"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "Mexyl MZ 72 WP Xanh Gold",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Nấm bệnh",
+      "doi_tuong_gay_hai": "Chết nhanh trên tiêu, Loét sọc mặt cạo trên cao su",
+      "bo_phan_gay_hai": "Thân, Lá, Gốc",
+      "thoi_gian_phun_bon": "Khi bệnh mới phát sinh",
+      "tan_suat_phun_bon": "Phun 2 lần cách nhau 7 ngày nếu bệnh phát triển",
+      "lieu_luong_nong_do": "Tiêu: 300-450g/100 lít nước; Cao su: 2% (pha 1 gói/1.5 lít nước)",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá, tưới gốc hoặc quét lên vết bệnh",
+      "thoi_gian_cach_ly_ngay": 7,
+      "luu_y_khi_su_dung": "Mang bảo hộ lao động khi tiếp xúc, không hút thuốc ăn uống khi sử dụng, tránh xa tầm tay trẻ em và nguồn nước, rửa sạch trang thiết bị sau khi dùng.",
+      "rag_summary_text": "Mexyl MZ 72 WP Xanh Gold là thuốc trừ bệnh hỗn hợp có tác dụng tiếp xúc và nội hấp mạnh, chuyên dùng phòng trừ bệnh chết nhanh trên tiêu và loét sọc mặt cạo trên cao su. Sản phẩm chứa hoạt chất Metalaxyl và Mancozeb, đồng thời cung cấp thêm vi lượng Lưu huỳnh, Mangan và Kẽm giúp cây xanh lá. Khi sử dụng, cần phun ướt đều tán lá hoặc quét lên vết bệnh ngay khi mới phát sinh, với thời gian cách ly là 7 ngày trước khi thu hoạch. Lưu ý tuân thủ nghiêm ngặt các biện pháp an toàn lao động và bảo quản sản phẩm nơi khô ráo, tránh xa tầm tay trẻ em."
+    },
+    "folder_id": "18",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/18",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:39:09",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "INCOPPER 85WP",
+    "db_pesticide": {
+      "name": "INCOPPER 85WP",
+      "active_ingredient": "Copper oxychloride 85% w/w",
+      "formulation": "WP",
+      "registration_no": "3790/CNĐKT-BVTV",
+      "allowed_crops": "Cà phê, cam, quýt, dưa hấu, cà chua, khoai tây, dưa chuột, đậu đỗ, hành tỏi, thuốc lá",
+      "min_isolation_days": 7,
+      "max_concentration": "1kg/600-800 lít nước",
+      "toxicity_group": "GHS 4",
+      "is_banned": false,
+      "manufacturer": "Agro Life Science Corporation (Ấn Độ) - Phân phối: Công ty Cổ phần Agrifarm Việt Nam"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "INCOPPER 85WP",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Nấm mốc, Vi khuẩn",
+      "doi_tuong_gay_hai": "Xì mủ, vàng lá, thối rễ, ghẻ quả, thối quả, sương mai, thán thư, khô cuống đầu, chín sớm, rỉ sắt",
+      "bo_phan_gay_hai": "Toàn cây, lá, quả, rễ",
+      "thoi_gian_phun_bon": "Khi bệnh mới xuất hiện, tỷ lệ bệnh khoảng 5%",
+      "tan_suat_phun_bon": "Theo khuyến cáo của cán bộ kỹ thuật hoặc khi bệnh chớm xuất hiện",
+      "lieu_luong_nong_do": "Pha 1kg cho 600-800 lít nước; tưới gốc 0.5-1.5 lít/cây",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá hoặc tưới gốc",
+      "thoi_gian_cach_ly_ngay": 7,
+      "luu_y_khi_su_dung": "Mang đầy đủ bảo hộ lao động khi tiếp xúc với thuốc, không ăn uống khi phun thuốc, bảo quản nơi khô mát, xa tầm tay trẻ em và nguồn nước uống.",
+      "rag_summary_text": "INCOPPER 85WP là thuốc trừ bệnh phổ rộng chứa hoạt chất Copper oxychloride 85% w/w, có tác dụng tiếp xúc và thấm sâu hiệu quả. Sản phẩm chuyên dùng để phòng trừ các bệnh như xì mủ, thán thư, ghẻ quả, sương mai trên nhiều loại cây trồng như cà phê, cam, quýt và rau màu. Khi sử dụng, cần pha 1kg thuốc cho 600-800 lít nước và phun khi bệnh mới xuất hiện với tỷ lệ khoảng 5%. Thời gian cách ly là 7 ngày trước khi thu hoạch và người dùng cần tuân thủ nghiêm ngặt các biện pháp bảo hộ lao động."
+    },
+    "folder_id": "19",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/19",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:39:16",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "Dosay 45WP",
+    "db_pesticide": {
+      "name": "Dosay 45WP",
+      "active_ingredient": "Cymoxanil 4% + Zineb 12% + Copper Oxychloride 29%",
+      "formulation": "WP",
+      "registration_no": "2172/CNĐKT-BVTV",
+      "allowed_crops": "Khoai tây, Cao su",
+      "min_isolation_days": 7,
+      "max_concentration": "0.3%",
+      "toxicity_group": "GHS",
+      "is_banned": false,
+      "manufacturer": "AGRIA S.A. - Bulgaria"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "Dosay 45WP",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Nấm mốc",
+      "doi_tuong_gay_hai": "Bệnh sương mai khoai tây, bệnh vàng rụng lá cao su",
+      "bo_phan_gay_hai": "Lá",
+      "thoi_gian_phun_bon": "Khi bệnh mới xuất hiện",
+      "tan_suat_phun_bon": "Phun khi chớm bệnh",
+      "lieu_luong_nong_do": "Khoai tây: 2kg/ha pha 320-400 lít nước; Cao su: nồng độ 0.25-0.3% (pha 40-50g/bình 16-20 lít nước)",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá",
+      "thoi_gian_cach_ly_ngay": 7,
+      "luu_y_khi_su_dung": "Tránh hít phải thuốc, không ăn uống khi sử dụng, mang bảo hộ lao động đầy đủ. Bảo quản nơi khô thoáng, nhiệt độ dưới 30 độ C, để xa tầm tay trẻ em và nguồn thực phẩm.",
+      "rag_summary_text": "Dosay 45WP là thuốc trừ bệnh phổ rộng với sự kết hợp của ba hoạt chất Cymoxanil, Zineb và Copper Oxychloride. Sản phẩm được đăng ký đặc trị bệnh sương mai trên khoai tây và bệnh vàng rụng lá trên cây cao su. Khi sử dụng, cần phun ướt đều tán lá ngay khi bệnh mới xuất hiện với nồng độ khuyến cáo từ 0.25-0.3%. Thời gian cách ly của thuốc là 7 ngày trước khi thu hoạch."
+    },
+    "folder_id": "20",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/20",
+    "source_images": [
+      "1.jpg",
+      "2.jpg",
+      "3.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:39:25",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "LION RAY 200SC",
+    "db_pesticide": {
+      "name": "LION RAY 200SC",
+      "active_ingredient": "Imidacloprid 200g/l",
+      "formulation": "SC",
+      "registration_no": "8005/CNĐKT-BVTV",
+      "allowed_crops": "Rệp sáp bột hồng/sắn",
+      "min_isolation_days": 7,
+      "max_concentration": "20ml/25 lít nước",
+      "toxicity_group": "GHS",
+      "is_banned": false,
+      "manufacturer": "Công ty TNHH TCT Hà Nội"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "LION RAY 200SC",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Côn trùng trích hút",
+      "doi_tuong_gay_hai": "Rệp sáp, rầy, rệp muội, rệp kim, bọ trĩ, ruồi vàng, bọ phấn trắng, bọ nhảy, bọ xít",
+      "bo_phan_gay_hai": "Toàn cây",
+      "thoi_gian_phun_bon": "Khi rệp mới xuất hiện, mật độ khoảng 5-6 con/đọt",
+      "tan_suat_phun_bon": "Phun khi cần thiết theo mật độ gây hại",
+      "lieu_luong_nong_do": "20ml/bình 25 lít nước (500ml/ha)",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá, lượng nước phun 500-600 lít/ha",
+      "thoi_gian_cach_ly_ngay": 7,
+      "luu_y_khi_su_dung": "Đọc kỹ nhãn thuốc trước khi sử dụng, mang bảo hộ lao động phù hợp, không hút thuốc ăn uống khi phun, bảo quản nơi an toàn tránh xa tầm tay trẻ em và thực phẩm.",
+      "rag_summary_text": "LION RAY 200SC là thuốc trừ sâu thế hệ mới với hoạt chất Imidacloprid 200g/l, chuyên đặc trị các loại côn trùng trích hút như rệp sáp, bọ trĩ, rầy và bọ phấn trắng. Sản phẩm được đăng ký sử dụng cho rệp sáp trên cây sắn với liều lượng 20ml cho bình 25 lít nước. Thời gian cách ly tối thiểu là 7 ngày trước khi thu hoạch. Người sử dụng cần tuân thủ nghiêm ngặt các biện pháp an toàn lao động và bảo quản thuốc đúng quy định."
+    },
+    "folder_id": "21",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/21",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:39:32",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "Mãng Xà",
+    "db_pesticide": {
+      "name": "Mãng Xà (Masterpyr 240 SC)",
+      "active_ingredient": "Chlorfenapyr 240g/l",
+      "formulation": "SC",
+      "registration_no": "7587/CNĐKT-BVTV",
+      "allowed_crops": "Lạc, chè, hoa, quất, cam, phật thủ, lúa, ngô, rau màu",
+      "min_isolation_days": 7,
+      "max_concentration": "15ml/bình 18-20 lít",
+      "toxicity_group": "GHS",
+      "is_banned": false,
+      "manufacturer": "Công ty TNHH Agro Việt"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "Mãng Xà",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Côn trùng trích hút và sâu hại",
+      "doi_tuong_gay_hai": "Bọ trĩ, bọ vàng, bọ cánh tơ, bọ xít muỗi, dòi đục lá, nhện đỏ, nhện gié, sâu cuốn lá, đục thân, đục bông, sâu khoang, sâu keo mùa thu",
+      "bo_phan_gay_hai": "Lá, thân, quả",
+      "thoi_gian_phun_bon": "Khi sâu non mới xuất hiện (tuổi 1, 2)",
+      "tan_suat_phun_bon": "Phun khi chớm xuất hiện dịch hại",
+      "lieu_luong_nong_do": "15ml/bình 18-20 lít nước (0.4 lít/ha)",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá",
+      "thoi_gian_cach_ly_ngay": 7,
+      "luu_y_khi_su_dung": "Lắc đều chai trước khi sử dụng; tuân thủ bảo hộ lao động; không ăn uống hoặc hút thuốc khi phun; để xa tầm tay trẻ em và nguồn thực phẩm.",
+      "rag_summary_text": "Mãng Xà là thuốc trừ sâu thế hệ mới với hoạt chất Chlorfenapyr 240g/l, chuyên đặc trị các loại côn trùng như bọ trĩ, nhện đỏ, sâu khoang và sâu cuốn lá trên nhiều loại cây trồng. Sản phẩm được khuyến cáo sử dụng với liều lượng 15ml cho bình 18-20 lít nước khi sâu non mới xuất hiện. Thời gian cách ly của thuốc là 7 ngày trước khi thu hoạch. Người sử dụng cần trang bị bảo hộ lao động đầy đủ và lắc đều chai trước khi pha để đạt hiệu quả cao nhất."
+    },
+    "folder_id": "22",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/22",
+    "source_images": [
+      "1.jpg",
+      "2.jpg",
+      "3.jpg",
+      "4.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:39:40",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "Movento 150 OD",
+    "db_pesticide": {
+      "name": "Movento 150 OD",
+      "active_ingredient": "Spirotetramat 150g/l",
+      "formulation": "OD",
+      "registration_no": "Đang cập nhật",
+      "allowed_crops": "Cây ăn trái, rau màu, cây công nghiệp",
+      "min_isolation_days": 7,
+      "max_concentration": "0.04% - 0.05% (pha 20-25ml cho bình 16 lít nước)",
+      "toxicity_group": "Nhóm 3",
+      "is_banned": false,
+      "manufacturer": "Bayer Việt Nam"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "Movento 150 OD",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Côn trùng chích hút",
+      "doi_tuong_gay_hai": "Rệp sáp, rệp muội, bọ trĩ, nhện đỏ",
+      "bo_phan_gay_hai": "Lá, quả, thân",
+      "thoi_gian_phun_bon": "Khi mật độ rệp sáp và côn trùng chích hút mới xuất hiện",
+      "tan_suat_phun_bon": "Phun khi cần thiết, có thể phun nhắc lại sau 7-10 ngày nếu áp lực dịch hại cao",
+      "lieu_luong_nong_do": "Pha 20-25ml cho bình 16 lít nước, phun ướt đều tán lá",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá, thuốc có tính lưu dẫn 2 chiều nên hiệu quả cao với các loại côn trùng ẩn nấp",
+      "thoi_gian_cach_ly_ngay": 7,
+      "luu_y_khi_su_dung": "Đeo bảo hộ lao động khi phun, không ăn uống hoặc hút thuốc trong khi sử dụng, bảo quản nơi khô ráo thoáng mát xa tầm tay trẻ em",
+      "rag_summary_text": "Movento 150 OD là thuốc trừ sâu lưu dẫn 2 chiều thế hệ mới của Bayer, chuyên đặc trị các loại côn trùng chích hút như rệp sáp, rệp muội và bọ trĩ. Sản phẩm có khả năng thấm sâu và di chuyển trong cây, giúp bảo vệ cả những bộ phận khó tiếp xúc. Khi sử dụng, cần pha nồng độ 20-25ml cho bình 16 lít nước và phun ướt đều tán lá. Thời gian cách ly tối thiểu là 7 ngày trước khi thu hoạch để đảm bảo an toàn thực phẩm."
+    },
+    "folder_id": "23",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/23",
+    "source_images": [
+      "1.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:39:46",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "NOFARA 35WG",
+    "db_pesticide": {
+      "name": "NOFARA 35WG",
+      "active_ingredient": "Thiamethoxam 35% w/w",
+      "formulation": "WG",
+      "registration_no": "669/CNĐKT-BVTV",
+      "allowed_crops": "Lúa",
+      "min_isolation_days": 14,
+      "max_concentration": "20g/ha (lượng nước 320-500 lít/ha)",
+      "toxicity_group": "Nhóm 5 GHS",
+      "is_banned": false,
+      "manufacturer": "Công ty TNHH TM Nông Phát"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "NOFARA 35WG",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Côn trùng trích hút",
+      "doi_tuong_gay_hai": "Bọ trĩ",
+      "bo_phan_gay_hai": "Toàn cây",
+      "thoi_gian_phun_bon": "Khi bọ trĩ xuất hiện",
+      "tan_suat_phun_bon": "Phun khi cần thiết",
+      "lieu_luong_nong_do": "20g/ha, lượng nước phun 320-500 lít/ha",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá",
+      "thoi_gian_cach_ly_ngay": 14,
+      "luu_y_khi_su_dung": "Đọc kỹ hướng dẫn trước khi dùng, trang bị bảo hộ lao động đầy đủ, không hút thuốc ăn uống khi sử dụng, tránh để thuốc dính vào da và mắt, bảo quản xa tầm tay trẻ em.",
+      "rag_summary_text": "NOFARA 35WG là thuốc trừ sâu thế hệ mới với hoạt chất Thiamethoxam 35% w/w, có khả năng lưu dẫn mạnh và nội hấp nhanh để tiêu diệt bọ trĩ trên lúa. Sản phẩm có hiệu quả hạ gục nhanh, kéo dài và không gây nóng cây. Khi sử dụng, cần tuân thủ liều lượng 20g/ha với lượng nước từ 320-500 lít/ha và đảm bảo thời gian cách ly là 14 ngày trước khi thu hoạch."
+    },
+    "folder_id": "24",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/24",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:39:53",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "Rệp Vương (Acetat 250EC)",
+    "db_pesticide": {
+      "name": "Rệp Vương (Acetat 250EC)",
+      "active_ingredient": "Acetamiprid 200g/l + Lambda-cyhalothrin 50g/l",
+      "formulation": "EC",
+      "registration_no": "7886/CNĐKT-BVTV",
+      "allowed_crops": "Mía",
+      "min_isolation_days": 7,
+      "max_concentration": "200ml/200-250 lít nước",
+      "toxicity_group": "GHS",
+      "is_banned": false,
+      "manufacturer": "Công ty TNHH A2T Việt Nam"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "Rệp Vương (Acetat 250EC)",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Côn trùng chích hút và sâu hại",
+      "doi_tuong_gay_hai": "Rệp bông xơ, rệp sáp, rệp kim, bọ nhảy, bọ xít, rầy nâu, rầy xanh, ruồi vàng, sâu đục quả",
+      "bo_phan_gay_hai": "Toàn cây",
+      "thoi_gian_phun_bon": "Phun khi rệp mới xuất hiện",
+      "tan_suat_phun_bon": "Phun khi cần thiết theo mật độ dịch hại",
+      "lieu_luong_nong_do": "Pha 200ml thuốc cho 200-250 lít nước, liều lượng 0,4 lít/ha",
+      "cach_thuc_phun_bon": "Phun ướt đều tán cây trồng",
+      "thoi_gian_cach_ly_ngay": 7,
+      "luu_y_khi_su_dung": "Mang đầy đủ trang thiết bị bảo hộ khi sử dụng. Bảo quản nơi khô mát, xa tầm tay trẻ em, thực phẩm và nguồn nước. Nếu bị ngộ độc phải đưa nạn nhân đi cấp cứu kèm theo nhãn thuốc.",
+      "rag_summary_text": "Rệp Vương (Acetat 250EC) là thuốc trừ sâu hỗn hợp giữa Acetamiprid và Lambda-cyhalothrin, có tác dụng tiếp xúc, vị độc, lưu dẫn và thẩm thấu mạnh. Sản phẩm chuyên dùng để phòng trừ các loại côn trùng như rệp bông xơ trên mía, rệp sáp, rầy nâu và sâu đục quả. Khi sử dụng, cần pha 200ml thuốc cho 200-250 lít nước và phun ướt đều tán cây khi rệp mới xuất hiện. Thời gian cách ly là 7 ngày trước khi thu hoạch và cần tuân thủ nghiêm ngặt các biện pháp an toàn lao động."
+    },
+    "folder_id": "25",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/25",
+    "source_images": [
+      "1.jpg",
+      "2.jpg",
+      "3.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:39:59",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "Pesieu 500SC",
+    "db_pesticide": {
+      "name": "Pesieu 500SC",
+      "active_ingredient": "Diafenthiuron 500g/l",
+      "formulation": "SC",
+      "registration_no": "63/CNĐKT-BVTV",
+      "allowed_crops": "Hoa, hoa hồng, cúc, dưa, rau màu, vải, nhãn, cam",
+      "min_isolation_days": 7,
+      "max_concentration": "10-15ml cho bình 16 lít nước",
+      "toxicity_group": "GHS",
+      "is_banned": false,
+      "manufacturer": "Công ty TNHH Việt Thắng"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "Pesieu 500SC",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Côn trùng trích hút và sâu hại",
+      "doi_tuong_gay_hai": "Nhện, bọ cánh tơ, rầy, sâu kháng thuốc, bọ phấn, sâu đục nụ, bọ trĩ, sâu tơ, sâu xanh, sâu khoang, bọ nhảy, nhện lông nhung, bọ xít",
+      "bo_phan_gay_hai": "Lá, hoa, quả",
+      "thoi_gian_phun_bon": "Khi sâu, nhện tuổi 1-2",
+      "tan_suat_phun_bon": "Phun khi chớm xuất hiện dịch hại",
+      "lieu_luong_nong_do": "10-15ml cho bình 16 lít nước hoặc 1 chai cho 1 phuy 200-250 lít nước",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá",
+      "thoi_gian_cach_ly_ngay": 7,
+      "luu_y_khi_su_dung": "Đeo găng tay, kính, khẩu trang và mặc quần áo bảo hộ khi tiếp xúc. Không ăn uống, hút thuốc khi sử dụng thuốc. Bảo quản nơi khô mát, xa tầm tay trẻ em và thực phẩm.",
+      "rag_summary_text": "Pesieu 500SC là thuốc trừ sâu cao cấp với hoạt chất Diafenthiuron 500g/l, chuyên đặc trị các loại nhện, bọ cánh tơ, rầy và các loại sâu kháng thuốc trên nhiều loại cây trồng như hoa, rau màu, vải, nhãn và cam. Sản phẩm được sử dụng với liều lượng 10-15ml cho bình 16 lít nước, phun khi sâu hoặc nhện ở tuổi 1-2 để đạt hiệu quả cao nhất. Thời gian cách ly tối thiểu là 7 ngày trước khi thu hoạch. Người sử dụng cần tuân thủ nghiêm ngặt các biện pháp an toàn lao động và bảo quản thuốc nơi khô ráo, thoáng mát."
+    },
+    "folder_id": "26",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/26",
+    "source_images": [
+      "1.jpg",
+      "2.jpg",
+      "3.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:40:06",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "BP. Newone 500SC",
+    "db_pesticide": {
+      "name": "BP. Newone 500SC",
+      "active_ingredient": "Diafenthiuron 500g/l",
+      "formulation": "SC",
+      "registration_no": "8180/CNĐKT-BVTV",
+      "allowed_crops": "Hoa hồng",
+      "min_isolation_days": 7,
+      "max_concentration": "0.8 lít/ha",
+      "toxicity_group": "GHS 4",
+      "is_banned": false,
+      "manufacturer": "Công ty TNHH Nông dược Việt Đức"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "BP. Newone 500SC",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Côn trùng trích hút",
+      "doi_tuong_gay_hai": "Nhện đỏ",
+      "bo_phan_gay_hai": "Lá",
+      "thoi_gian_phun_bon": "Khi nhện mới xuất hiện, mật độ khoảng 3-5 con/lá",
+      "tan_suat_phun_bon": "Theo mật độ gây hại",
+      "lieu_luong_nong_do": "0.8 lít/ha, lượng nước phun 400-500 lít/ha",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá",
+      "thoi_gian_cach_ly_ngay": 7,
+      "luu_y_khi_su_dung": "Sản phẩm có tính tiếp xúc, nội hấp, lưu dẫn 2 chiều. Cần trang bị bảo hộ lao động khi sử dụng, tránh để thuốc tiếp xúc với da, mắt và miệng. Bảo quản nơi khô ráo, xa tầm tay trẻ em và nguồn thực phẩm.",
+      "rag_summary_text": "BP. Newone 500SC là thuốc trừ sâu dạng huyền phù (SC) với hoạt chất Diafenthiuron 500g/l, chuyên dùng để diệt nhện đỏ trên hoa hồng. Thuốc có cơ chế tác động tiếp xúc, nội hấp và lưu dẫn hai chiều, giúp tiêu diệt cả trứng và nhện trưởng thành nhanh chóng. Khi sử dụng, cần phun với liều lượng 0.8 lít/ha và đảm bảo thời gian cách ly là 7 ngày trước khi thu hoạch. Người sử dụng cần tuân thủ nghiêm ngặt các biện pháp an toàn lao động và bảo quản thuốc đúng quy định."
+    },
+    "folder_id": "28",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/28",
+    "source_images": [
+      "1.jpg",
+      "2.jpg",
+      "3.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:40:21",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "Dầu khoáng Ds 98.8EC",
+    "db_pesticide": {
+      "name": "Dầu khoáng Ds 98.8EC",
+      "active_ingredient": "Petroleum Spray Oil 98.8% w/w",
+      "formulation": "EC",
+      "registration_no": "5056/CNĐKT-BVTV",
+      "allowed_crops": "Cây có múi",
+      "min_isolation_days": 2,
+      "max_concentration": "85-125ml/bình 25 lít",
+      "toxicity_group": "GHS 5",
+      "is_banned": false,
+      "manufacturer": "Công ty Cổ phần Đồng Xanh"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "Dầu khoáng Ds 98.8EC",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Côn trùng trích hút",
+      "doi_tuong_gay_hai": "Sâu vẽ bùa, Nhện đỏ",
+      "bo_phan_gay_hai": "Lá, chồi non",
+      "thoi_gian_phun_bon": "Khi cây ra đọt, lá non hoặc khi nhện mới xuất hiện",
+      "tan_suat_phun_bon": "Phun khi cần thiết",
+      "lieu_luong_nong_do": "85-125ml/bình 25 lít nước (tương đương 2-5 lít/ha)",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá, phun vào lúc sáng sớm hoặc chiều mát",
+      "thoi_gian_cach_ly_ngay": 2,
+      "luu_y_khi_su_dung": "Không phun khi trời nắng gắt hoặc nhiệt độ trên 35 độ C, không phun khi cây đang ra hoa, không tăng quá liều lượng hướng dẫn để tránh gây ảnh hưởng đến cây trồng.",
+      "rag_summary_text": "Dầu khoáng Ds 98.8EC là thuốc trừ sâu gốc dầu hữu cơ có tác dụng bịt lỗ thở, ngăn cản hô hấp và hạn chế trứng sâu hại nở. Sản phẩm chuyên dùng để phòng trừ sâu vẽ bùa và nhện đỏ trên cây có múi với hiệu quả cao và không gây tính kháng thuốc. Khi sử dụng, cần pha 85-125ml cho bình 25 lít nước và phun ướt đều tán lá vào lúc sáng sớm hoặc chiều mát. Lưu ý không phun khi nhiệt độ trên 35 độ C hoặc khi cây đang ra hoa để tránh gây hại cho cây trồng."
+    },
+    "folder_id": "29",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/29",
+    "source_images": [
+      "1.jpg",
+      "2.jpg",
+      "3.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:40:27",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "Dũng sĩ diệt ruồi vàng An Phát",
+    "db_pesticide": {
+      "name": "Dũng sĩ diệt ruồi vàng An Phát",
+      "active_ingredient": "Không có (Sản phẩm bẫy dính cơ học)",
+      "formulation": "Bẫy dính",
+      "registration_no": "Không áp dụng",
+      "allowed_crops": "Tất cả các loại cây trồng",
+      "min_isolation_days": null,
+      "max_concentration": "Không áp dụng",
+      "toxicity_group": "Không độc hại",
+      "is_banned": false,
+      "manufacturer": "Công ty TNHH MTV Thương mại Sản xuất An Phát"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "Dũng sĩ diệt ruồi vàng An Phát",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Côn trùng gây hại",
+      "doi_tuong_gay_hai": "Ruồi vàng, bướm mắt đỏ, ngài mắt đỏ",
+      "bo_phan_gay_hai": "Quả, hoa",
+      "thoi_gian_phun_bon": "Khi cây bắt đầu ra hoa và nuôi quả",
+      "tan_suat_phun_bon": "Treo bẫy liên tục trong suốt giai đoạn quả phát triển",
+      "lieu_luong_nong_do": "Không áp dụng (Sử dụng bằng cách treo trực tiếp)",
+      "cach_thuc_phun_bon": "Bóc lớp giấy bảo vệ và treo tấm dính lên cành cây",
+      "thoi_gian_cach_ly_ngay": 0,
+      "luu_y_khi_su_dung": "Sản phẩm là bẫy dính cơ học, không chứa hóa chất độc hại, an toàn cho người sử dụng và môi trường. Nên treo ở vị trí thoáng, tránh nơi có nhiều bụi bẩn để duy trì độ dính.",
+      "rag_summary_text": "Dũng sĩ diệt ruồi vàng An Phát là sản phẩm bẫy dính cơ học chuyên dụng để kiểm soát ruồi vàng, bướm mắt đỏ và ngài mắt đỏ trên các loại cây ăn trái và hoa màu. Sản phẩm không chứa hóa chất độc hại, đảm bảo an toàn tuyệt đối cho nông sản và người sử dụng. Cách sử dụng rất đơn giản, chỉ cần bóc lớp giấy bảo vệ và treo tấm dính lên cành cây tại khu vực cần bảo vệ. Đây là giải pháp hữu hiệu giúp bảo vệ hoa và quả khỏi sự tấn công của côn trùng mà không gây ô nhiễm môi trường."
+    },
+    "folder_id": "30",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/30",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:40:34",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "BILLADEN 50WG (Sói Xám)",
+    "db_pesticide": {
+      "name": "BILLADEN 50WG",
+      "active_ingredient": "Emamectin benzoate 50g/kg",
+      "formulation": "WG",
+      "registration_no": "3537/CNĐKT-BVTV",
+      "allowed_crops": "Cam, bắp cải",
+      "min_isolation_days": 7,
+      "max_concentration": "0.03% (cho nhện đỏ), 0.12 kg/ha (cho sâu xanh)",
+      "toxicity_group": "GHS",
+      "is_banned": false,
+      "manufacturer": "Công ty CP Nông nghiệp Thanh Xuân"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "BILLADEN 50WG (Sói Xám)",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Côn trùng và nhện hại",
+      "doi_tuong_gay_hai": "Sâu keo, sâu tơ, sâu xanh, sâu đục quả, sâu đục thân, sâu cuốn lá, nhện đỏ",
+      "bo_phan_gay_hai": "Lá, thân, quả",
+      "thoi_gian_phun_bon": "Khi sâu, nhện mới xuất hiện",
+      "tan_suat_phun_bon": "Theo mật độ sâu hại trên đồng ruộng",
+      "lieu_luong_nong_do": "Pha 10g cho bình 18 lít nước; Lượng nước phun 400-500 lít/ha",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá cây trồng",
+      "thoi_gian_cach_ly_ngay": 7,
+      "luu_y_khi_su_dung": "Mang đồ bảo hộ lao động, khẩu trang, găng tay khi sử dụng. Không ăn uống, hút thuốc lá trong khi phun thuốc. Bảo quản nơi khô mát, xa tầm tay trẻ em và thực phẩm.",
+      "rag_summary_text": "BILLADEN 50WG (hiệu Sói Xám) là thuốc trừ sâu sinh học thế hệ mới với hoạt chất Emamectin benzoate, có hiệu lực cao đối với các loại sâu hại kháng thuốc. Sản phẩm được đăng ký sử dụng cho cam để trừ nhện đỏ và bắp cải để trừ sâu xanh. Khi sử dụng, cần pha 10g thuốc cho bình 18 lít nước và phun ướt đều tán lá khi sâu, nhện mới xuất hiện. Thời gian cách ly là 7 ngày trước khi thu hoạch để đảm bảo an toàn thực phẩm."
+    },
+    "folder_id": "31",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/31",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:40:40",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "pesticide",
+    "product_name": "Tumazine 50WP (Vua Mèo)",
+    "db_pesticide": {
+      "name": "Tumazine 50WP",
+      "active_ingredient": "Cyromazine 500g/kg",
+      "formulation": "WP",
+      "registration_no": "7842/CNĐKT-BVTV",
+      "allowed_crops": "Dưa chuột",
+      "min_isolation_days": 7,
+      "max_concentration": "18g/25 lít nước",
+      "toxicity_group": "GHS 5",
+      "is_banned": false,
+      "manufacturer": "Guangxi Baikal Biochemical Product Co., Ltd"
+    },
+    "db_fertilizer": null,
+    "rag_knowledge": {
+      "ten_vat_tu": "Tumazine 50WP (Vua Mèo)",
+      "loai_vat_tu": "Thuốc bảo vệ thực vật",
+      "phong_ngua_nhom_benh": "Côn trùng gây hại",
+      "doi_tuong_gay_hai": "Sâu vẽ bùa, dòi đục lá, ruồi vàng, sâu đục lòn",
+      "bo_phan_gay_hai": "Lá",
+      "thoi_gian_phun_bon": "Khi sâu còn nhỏ hoặc khi mới xuất hiện gây hại",
+      "tan_suat_phun_bon": "Phun khi cần thiết theo mật độ sâu hại",
+      "lieu_luong_nong_do": "Pha 18g cho bình 25 lít nước, lượng nước phun 400-600 lít/ha",
+      "cach_thuc_phun_bon": "Phun ướt đều 2 mặt lá",
+      "thoi_gian_cach_ly_ngay": 7,
+      "luu_y_khi_su_dung": "Không ăn uống hoặc hút thuốc khi sử dụng, mang bảo hộ lao động đầy đủ, tránh hít phải thuốc, rửa sạch tay chân sau khi sử dụng, bảo quản nơi khô ráo thoáng mát.",
+      "rag_summary_text": "Tumazine 50WP (Vua Mèo) là thuốc trừ sâu điều hòa sinh trưởng chứa hoạt chất Cyromazine 500g/kg, chuyên đặc trị sâu vẽ bùa, dòi đục lá và ruồi vàng trên dưa chuột. Thuốc có tác động tiếp xúc, vị độc và lưu dẫn mạnh, diệt được cả trứng và ấu trùng, phù hợp cho chương trình IPM. Khi sử dụng, pha 18g thuốc cho bình 25 lít nước và phun ướt đều hai mặt lá khi sâu còn nhỏ. Thời gian cách ly là 7 ngày trước khi thu hoạch và cần tuân thủ nghiêm ngặt các quy định về an toàn lao động."
+    },
+    "folder_id": "32",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/32",
+    "source_images": [
+      "1.jpg",
+      "2.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:40:46",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  },
+  {
+    "category": "fertilizer",
+    "product_name": "TOBA NET",
+    "db_pesticide": null,
+    "db_fertilizer": {
+      "name": "TOBA NET",
+      "fertilizer_type": "Phân bón hỗn hợp NPK",
+      "npk_ratio": "N: 5%, P2O5: 8%, K2O: 8%",
+      "registration_no": "MSPB: 18640",
+      "manufacturer": "Công ty TNHH Sản xuất - Thương mại Toba"
+    },
+    "rag_knowledge": {
+      "ten_vat_tu": "TOBA NET",
+      "loai_vat_tu": "Phân bón",
+      "phong_ngua_nhom_benh": "Phục hồi cây, Dưỡng chất vi lượng",
+      "doi_tuong_gay_hai": "Cây suy kiệt, bộ rễ yếu",
+      "bo_phan_gay_hai": "Rễ",
+      "thoi_gian_phun_bon": "Thời kỳ cây con, khi cây bị suy kiệt do bệnh hoặc thời tiết",
+      "tan_suat_phun_bon": "7-10 ngày/lần",
+      "lieu_luong_nong_do": "8-10g/bình 8 lít nước hoặc 8-10g/bình 16 lít nước; tưới gốc 5-10g/thùng 10 lít nước",
+      "cach_thuc_phun_bon": "Phun ướt đều tán lá hoặc tưới trực tiếp vào vùng rễ",
+      "thoi_gian_cach_ly_ngay": null,
+      "luu_y_khi_su_dung": "Có thể pha chung với thuốc trừ sâu, bệnh nhưng không nên pha chung với phân bón lá khác. Không phun hoặc tưới vào lúc nắng gắt. Bảo quản nơi khô ráo, thoáng mát, tránh xa tầm tay trẻ em.",
+      "rag_summary_text": "TOBA NET là phân bón hỗn hợp NPK chuyên dùng để phục hồi và phát triển bộ rễ cực mạnh cho cây trồng. Sản phẩm giúp cây con trong vườn ươm có bộ rễ khỏe, tăng khả năng chống chịu sâu bệnh và điều kiện thời tiết bất lợi. Với hàm lượng dinh dưỡng NPK 5-8-8, sản phẩm hỗ trợ cây phục hồi nhanh sau thời gian nuôi trái hoặc bị suy kiệt. Người dùng nên sử dụng định kỳ 7-10 ngày/lần bằng cách phun lên lá hoặc tưới trực tiếp vào vùng rễ để đạt hiệu quả tối ưu."
+    },
+    "folder_id": "33",
+    "folder_path": "/Users/nangvuong/Downloads/ChatExport_A Dũng Cad/Phan_Loai_Anh/33",
+    "source_images": [
+      "1.jpg",
+      "2.jpg",
+      "3.jpg"
+    ],
+    "extracted_at": "2026-09-30 16:40:53",
+    "gemini_model_used": "gemini-3.1-flash-lite"
+  }
+]

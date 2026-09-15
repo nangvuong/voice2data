@@ -1,0 +1,64 @@
+{
+  "session_id": "test_818e35",
+  "farmer_id": 1,
+  "activity_type": "spray",
+  "crop_name": "Cà gai leo",
+  "activity_date": "2026-10-02",
+  "accumulated_slots": {
+    "ten_thuoc_bvtv": "Nano Ecotech",
+    "crop_name": "Cà gai leo",
+    "activity_date": "2026-10-02",
+    "target_pest": "rầy nâu",
+    "nong_do_va_luong_dung": "pha 2 lít vào 500 lít nước",
+    "thoi_gian_cach_ly": 14
+  },
+  "dialogue_history": [
+    {
+      "turn_id": 1,
+      "role": "user",
+      "text": "SÁNG NAY TÔI PHUN THUỐC SINH HỌC NANO ECOTECH CHO ĐÁM CÀ GAI LEO.",
+      "audio_path": null,
+      "image_path": null,
+      "intent": null,
+      "timestamp": 1790925860.79
+    },
+    {
+      "turn_id": 2,
+      "role": "assistant",
+      "text": "Dạ bác phun thuốc Nano Ecotech để trị sâu bệnh gì, liều lượng bao nhiêu và cách ly mấy ngày ạ?",
+      "audio_path": null,
+      "image_path": null,
+      "intent": null,
+      "timestamp": 1790925862.24
+    },
+    {
+      "turn_id": 3,
+      "role": "user",
+      "text": "TRỊ RẦY NÂU , PHA 2 LÍT VÀO 500 LÍT NƯỚC , CÁCH LY 14 NGÀY NHÉ.",
+      "audio_path": null,
+      "image_path": null,
+      "intent": null,
+      "timestamp": 1790925862.24
+    },
+    {
+      "turn_id": 4,
+      "role": "assistant",
+      "text": "📝 **PHIẾU XÁC NHẬN: PHUN THUỐC BVTV**\n📅 **Ngày thực hiện:** 02/10/2026\n🌱 **Cây trồng:** Cà gai leo\n💊 **Tên thuốc BVTV:** Nano Ecotech\n🎯 **Đối tượng phòng trừ:** rầy nâu\n⚖️ **Nồng độ & liều lượng:** pha 2 lít vào 500 lít nước\n⏳ **Thời gian cách ly:** 14 ngày\n\n💡 *Bác có muốn ghi thêm **dụng cụ phun (bình đeo vai, máy bay drone hay máy nén)** không ạ?*\n👉 **Bác có thể nói thêm, hoặc bấm ĐỒNG Ý LƯU VÀO SỔ nếu thông tin đã đủ nhé!**",
+      "audio_path": null,
+      "image_path": null,
+      "intent": null,
+      "timestamp": 1790925863.66
+    },
+    {
+      "turn_id": 5,
+      "role": "user",
+      "text": "ĐỒNG Ý LƯU ĐI CHÁU.",
+      "audio_path": null,
+      "image_path": null,
+      "intent": null,
+      "timestamp": 1790925863.66
+    }
+  ],
+  "raw_user_text": "SÁNG NAY TÔI PHUN THUỐC SINH HỌC NANO ECOTECH CHO ĐÁM CÀ GAI LEO. TRỊ RẦY NÂU , PHA 2 LÍT VÀO 500 LÍT NƯỚC , CÁCH LY 14 NGÀY NHÉ. ĐỒNG Ý LƯU ĐI CHÁU.",
+  "created_at": 1790925863.6618965
+}

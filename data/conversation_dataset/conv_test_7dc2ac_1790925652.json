@@ -1,0 +1,63 @@
+{
+  "session_id": "test_7dc2ac",
+  "farmer_id": 1,
+  "activity_type": "fertilize",
+  "crop_name": "Bưởi diễn",
+  "activity_date": "2026-10-02",
+  "accumulated_slots": {
+    "ten_phan_bon": "NPK",
+    "luong_phan_bon": "5 bao",
+    "phuong_phap_bon": "bón thúc",
+    "crop_name": "Bưởi diễn",
+    "activity_date": "2026-10-02"
+  },
+  "dialogue_history": [
+    {
+      "turn_id": 1,
+      "role": "user",
+      "text": "HÔM NAY BÓN THÚC 3 BAO PHÂN NPK CHO VƯỜN.",
+      "audio_path": null,
+      "image_path": null,
+      "intent": null,
+      "timestamp": 1790925650.43
+    },
+    {
+      "turn_id": 2,
+      "role": "assistant",
+      "text": "📝 **PHIẾU XÁC NHẬN: BÓN PHÂN**\n📅 **Ngày thực hiện:** 02/10/2026\n🌱 **Cây trồng:** Bưởi diễn\n🌾 **Tên phân bón:** NPK\n⚖️ **Khối lượng:** 3 bao\n🚜 **Phương pháp bón:** bón thúc\n\n👉 **Thông tin đã rất đầy đủ! Bác kiểm tra lại rồi bấm ĐỒNG Ý LƯU VÀO SỔ nhé!**",
+      "audio_path": null,
+      "image_path": null,
+      "intent": null,
+      "timestamp": 1790925651.69
+    },
+    {
+      "turn_id": 3,
+      "role": "user",
+      "text": "À NHẦM , 5 BAO CHỨ 0 PHẢI 3 BAO NHÉ.",
+      "audio_path": null,
+      "image_path": null,
+      "intent": null,
+      "timestamp": 1790925651.69
+    },
+    {
+      "turn_id": 4,
+      "role": "assistant",
+      "text": "📝 **PHIẾU XÁC NHẬN: BÓN PHÂN**\n📅 **Ngày thực hiện:** 02/10/2026\n🌱 **Cây trồng:** Bưởi diễn\n🌾 **Tên phân bón:** NPK\n⚖️ **Khối lượng:** 5 bao\n🚜 **Phương pháp bón:** bón thúc\n\n👉 **Thông tin đã rất đầy đủ! Bác kiểm tra lại rồi bấm ĐỒNG Ý LƯU VÀO SỔ nhé!**",
+      "audio_path": null,
+      "image_path": null,
+      "intent": null,
+      "timestamp": 1790925652.84
+    },
+    {
+      "turn_id": 5,
+      "role": "user",
+      "text": "LƯU LUÔN.",
+      "audio_path": null,
+      "image_path": null,
+      "intent": null,
+      "timestamp": 1790925652.84
+    }
+  ],
+  "raw_user_text": "HÔM NAY BÓN THÚC 3 BAO PHÂN NPK CHO VƯỜN. À NHẦM , 5 BAO CHỨ 0 PHẢI 3 BAO NHÉ. LƯU LUÔN.",
+  "created_at": 1790925652.839169
+}
