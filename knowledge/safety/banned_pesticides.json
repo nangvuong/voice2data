@@ -1,0 +1,222 @@
+{
+  "source": "Thông tư số 75/BNNMT - Phụ lục II: Danh mục thuốc BVTV cấm sử dụng tại Việt Nam & Luật BVTV 41/2013",
+  "updated_at": "2026-10-08",
+  "banned_ingredients": [
+    {
+      "name": "Aldrin",
+      "aliases": ["aldrin"],
+      "group": "Thuốc trừ sâu, bảo quản lâm sản",
+      "hazard": "Rất độc, tồn lưu lâu dài trong môi trường và nông sản (POP)"
+    },
+    {
+      "name": "BHC, Lindane",
+      "aliases": ["bhc", "lindane", "hch", "hexachlorocyclohexane"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Độc cao đối với thần kinh và gan, tích lũy sinh học"
+    },
+    {
+      "name": "Cadmium compound",
+      "aliases": ["cadmium", "cadimi", "cd compound"],
+      "group": "Thuốc trừ sâu, bảo quản lâm sản",
+      "hazard": "Kim loại nặng gây tổn thương thận và ung thư"
+    },
+    {
+      "name": "Carbofuran",
+      "aliases": ["carbofuran", "furadan", "curaterr"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Cực độc đối với động vật và người, ức chế enzyme cholinesterase"
+    },
+    {
+      "name": "Chlordane",
+      "aliases": ["chlordane", "clođan"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Chất ô nhiễm hữu cơ khó phân hủy (POP)"
+    },
+    {
+      "name": "Chlordimeform",
+      "aliases": ["chlordimeform"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Gây ung thư bàng quang và tổn thương thần kinh"
+    },
+    {
+      "name": "DDT",
+      "aliases": ["ddt", "clo-phenothane"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Độc tính tích lũy cao, phá hủy hệ sinh thái"
+    },
+    {
+      "name": "Dieldrin",
+      "aliases": ["dieldrin"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Gây độc thần kinh cấp tính và mãn tính"
+    },
+    {
+      "name": "Endosulfan",
+      "aliases": ["endosulfan", "thiodan"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Gây rối loạn nội tiết, dị tật bẩm sinh và tử vong"
+    },
+    {
+      "name": "Endrin",
+      "aliases": ["endrin"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Cực độc với người và sinh vật thủy sinh"
+    },
+    {
+      "name": "Heptachlor",
+      "aliases": ["heptachlor"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Gây ung thư, tích tụ trong mô mỡ"
+    },
+    {
+      "name": "Isobenzan",
+      "aliases": ["isobenzan"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Độc tính cấp tính cực cao"
+    },
+    {
+      "name": "Isodrin",
+      "aliases": ["isodrin"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Chất độc cực mạnh nhóm Clo hữu cơ"
+    },
+    {
+      "name": "Lead compound",
+      "aliases": ["lead", "chì", "lead compound"],
+      "group": "Thuốc trừ sâu, bảo quản lâm sản",
+      "hazard": "Nhiễm độc chì mãn tính, suy thoái não bộ"
+    },
+    {
+      "name": "Methamidophos",
+      "aliases": ["methamidophos", "monitor"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Thuốc lân hữu cơ cực độc, gây tử vong nhanh chóng"
+    },
+    {
+      "name": "Methyl Parathion",
+      "aliases": ["methyl parathion", "wofatox", "vofatox"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Cực kỳ nguy hiểm, đã bị cấm toàn diện"
+    },
+    {
+      "name": "Monocrotophos",
+      "aliases": ["monocrotophos", "azodrin"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Độc tính tim mạch và ức chế hô hấp"
+    },
+    {
+      "name": "Parathion Ethyl",
+      "aliases": ["parathion ethyl", "parathion"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Thuốc trừ sâu độc bảng I, tỷ lệ tử vong cao"
+    },
+    {
+      "name": "Sodium Pentachlorophenate monohydrate",
+      "aliases": ["sodium pentachlorophenate monohydrate", "sodium pentachlorophenate"],
+      "group": "Thuốc trừ sâu, bảo quản lâm sản",
+      "hazard": "Gây hoại tử và tổn thương đa nội tạng"
+    },
+    {
+      "name": "Pentachlorophenol",
+      "aliases": ["pentachlorophenol", "pcp"],
+      "group": "Thuốc trừ sâu, bảo quản lâm sản",
+      "hazard": "Độc hại môi trường và nước ngầm nghiêm trọng"
+    },
+    {
+      "name": "Phosphamidon",
+      "aliases": ["phosphamidon", "dimecron"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Độc cấp tính qua da và đường hô hấp"
+    },
+    {
+      "name": "Polychlorocamphene",
+      "aliases": ["polychlorocamphene", "toxaphene"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Chất độc ô nhiễm hữu cơ khó phân hủy"
+    },
+    {
+      "name": "Trichlorfon (Chlorophos)",
+      "aliases": ["trichlorfon", "chlorophos", "dipterex"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Đã bị loại bỏ khỏi danh mục do độc tính thần kinh"
+    },
+    {
+      "name": "Arsenic compound",
+      "aliases": ["arsenic", "thạch tín", "asen"],
+      "group": "Thuốc trừ bệnh",
+      "hazard": "Độc tính cao, gây ung thư da, phổi và bàng quang"
+    },
+    {
+      "name": "Captan",
+      "aliases": ["captan"],
+      "group": "Thuốc trừ bệnh",
+      "hazard": "Gây đột biến gen và độc với môi trường"
+    },
+    {
+      "name": "Captafol",
+      "aliases": ["captafol", "difolatan"],
+      "group": "Thuốc trừ bệnh",
+      "hazard": "Chất gây ung thư nhóm 2A đã cấm toàn cầu"
+    },
+    {
+      "name": "Hexachlorobenzene",
+      "aliases": ["hexachlorobenzene", "hcb"],
+      "group": "Thuốc trừ bệnh",
+      "hazard": "Gây rối loạn chuyển hóa porphyrin, tổn thương gan"
+    },
+    {
+      "name": "Mercury compound",
+      "aliases": ["mercury", "thủy ngân"],
+      "group": "Thuốc trừ bệnh",
+      "hazard": "Kim loại nặng cực độc, phá hủy hệ thần kinh trung ương"
+    },
+    {
+      "name": "Selenium compound",
+      "aliases": ["selenium", "selen"],
+      "group": "Thuốc trừ bệnh",
+      "hazard": "Độc tính tích lũy cao"
+    },
+    {
+      "name": "Talium compound",
+      "aliases": ["talium compound", "thallium", "thallium compound", "thali"],
+      "group": "Thuốc trừ chuột",
+      "hazard": "Độc tính tử vong cực cao, không có thuốc giải đặc hiệu"
+    },
+    {
+      "name": "2,4,5-T",
+      "aliases": ["2,4,5-t", "2,4,5-trichlorophenoxyacetic acid"],
+      "group": "Thuốc trừ cỏ",
+      "hazard": "Chứa tạp chất Dioxin cực kỳ nguy hiểm, bị cấm tuyệt đối"
+    },
+    {
+      "name": "Paraquat",
+      "aliases": ["paraquat", "gramoxone"],
+      "group": "Thuốc trừ cỏ",
+      "hazard": "Độc tính cấp tính gây xơ phổi tử vong, cấm sử dụng tại VN từ 2019"
+    },
+    {
+      "name": "Glyphosate",
+      "aliases": ["glyphosate", "roundup"],
+      "group": "Thuốc trừ cỏ",
+      "hazard": "Bị cấm lưu hành và sử dụng tại Việt Nam từ 01/07/2021 (Thông tư 10/2020)"
+    },
+    {
+      "name": "Chlorpyrifos Ethyl",
+      "aliases": ["chlorpyrifos ethyl", "chlorpyrifos-ethyl", "chlorpyrifos"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Cấm lưu hành tại VN từ 12/02/2021 do gây hại não bộ thai nhi và trẻ em"
+    },
+    {
+      "name": "Fipronil",
+      "aliases": ["fipronil", "regent"],
+      "group": "Thuốc trừ sâu",
+      "hazard": "Cấm sử dụng trên cây ăn trái/lúa từ 12/02/2021 do hủy hoại loài ong và hệ sinh thái"
+    },
+    {
+      "name": "Carbendazim",
+      "aliases": ["carbendazim", "derosal", "bavistin"],
+      "group": "Thuốc trừ bệnh",
+      "hazard": "Cấm sử dụng từ 2017 do gây đột biến gen và vô sinh"
+    }
+  ]
+}
