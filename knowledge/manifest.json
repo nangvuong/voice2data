@@ -1,0 +1,193 @@
+{
+  "name": "Vietnamese Agricultural RAG Knowledge Base (Production Package)",
+  "description": "Bộ dữ liệu tri thức nông nghiệp đã lọc bỏ bìa/mục lục, tối ưu cho multilingual-e5-small.",
+  "model_target": "intfloat/multilingual-e5-small",
+  "embedding_prefix": {
+    "document": "passage: ",
+    "query": "query: "
+  },
+  "max_sequence_tokens": 512,
+  "total_chunks": 1681,
+  "total_documents": 33,
+  "graph_nodes": 1670,
+  "graph_edges": 2355,
+  "statistics": {
+    "chunk_text_length": {
+      "min": 143,
+      "max": 999,
+      "avg": 857.0
+    },
+    "embedding_text_length": {
+      "min": 163,
+      "max": 1180,
+      "avg": 901.5
+    }
+  },
+  "documents": [
+    {
+      "source_file": "hoạt chất/75_bnnmt_pl1.pdf",
+      "title": "75_bnnmt_pl1",
+      "chunks_count": 833
+    },
+    {
+      "source_file": "hoạt chất/75_bnnmt_pl2.pdf",
+      "title": "75_bnnmt_pl2",
+      "chunks_count": 2
+    },
+    {
+      "source_file": "kỹ thuật nông nghiệp chung/220624_tap_huan_msvt_finalpdf.pdf",
+      "title": "220624_tap_huan_msvt_finalpdf",
+      "chunks_count": 275
+    },
+    {
+      "source_file": "kỹ thuật nông nghiệp chung/230621_apr_tai_lieu_ky_thuat_hd_1776_final_completepdf.pdf",
+      "title": "230621_apr_tai_lieu_ky_thuat_hd_1776_final_completepdf",
+      "chunks_count": 80
+    },
+    {
+      "source_file": "kỹ thuật nông nghiệp chung/clv_dong_thap_tai_lieu_cho_nong_dan_2025_view.pdf",
+      "title": "clv_dong_thap_tai_lieu_cho_nong_dan_2025_view",
+      "chunks_count": 170
+    },
+    {
+      "source_file": "quy trình canh tác/buởi da xanh/ky_thuat_canh_tac_buoi_da_xanh_8_trang_biensoan2021.pdf",
+      "title": "ky_thuat_canh_tac_buoi_da_xanh_8_trang_biensoan2021",
+      "chunks_count": 5
+    },
+    {
+      "source_file": "quy trình canh tác/bưởi diễn/qt_buoi_dien_10_quy_trinh_quan_ly_am_o_thoi_ky_sxkd.docx",
+      "title": "qt_buoi_dien_10_quy_trinh_quan_ly_am_o_thoi_ky_sxkd",
+      "chunks_count": 8
+    },
+    {
+      "source_file": "quy trình canh tác/bưởi diễn/qt_buoi_dien_11_quy_trinh_on_tia_cay_buoi_thoi_ky_sxkd.docx",
+      "title": "qt_buoi_dien_11_quy_trinh_on_tia_cay_buoi_thoi_ky_sxkd",
+      "chunks_count": 6
+    },
+    {
+      "source_file": "quy trình canh tác/bưởi diễn/qt_buoi_dien_12_quy_trinh_xu_ly_ra_hoa_au_qua.docx",
+      "title": "qt_buoi_dien_12_quy_trinh_xu_ly_ra_hoa_au_qua",
+      "chunks_count": 14
+    },
+    {
+      "source_file": "quy trình canh tác/bưởi diễn/qt_buoi_dien_13_quy_trinh_xu_ly_bao_quan_truoc_va_sau_thu_hoach_buoi_dien_cho_vung_mien_nui_phia_bac.docx",
+      "title": "qt_buoi_dien_13_quy_trinh_xu_ly_bao_quan_truoc_va_sau_thu_hoach_buoi_dien_cho_vung_mien_nui_phia_bac",
+      "chunks_count": 6
+    },
+    {
+      "source_file": "quy trình canh tác/bưởi diễn/qt_buoi_dien_15_quy_trinh_cham_soc_va_khai_thac_vuon_cay_s1.docx",
+      "title": "qt_buoi_dien_15_quy_trinh_cham_soc_va_khai_thac_vuon_cay_s1",
+      "chunks_count": 8
+    },
+    {
+      "source_file": "quy trình canh tác/bưởi diễn/qt_buoi_dien_17_quy_trinh_ky_thuat_trong_va_cham_soc_cay_buoi.docx",
+      "title": "qt_buoi_dien_17_quy_trinh_ky_thuat_trong_va_cham_soc_cay_buoi",
+      "chunks_count": 30
+    },
+    {
+      "source_file": "quy trình canh tác/bưởi diễn/qt_buoi_dien_1_quy_trinh_thiet_ke_mo_hinh_trong_buoi.doc",
+      "title": "qt_buoi_dien_1_quy_trinh_thiet_ke_mo_hinh_trong_buoi",
+      "chunks_count": 12
+    },
+    {
+      "source_file": "quy trình canh tác/bưởi diễn/qt_buoi_dien_2_quy_trinh_nhan_giong_buoi_dien_tai_phu_tho.docx",
+      "title": "qt_buoi_dien_2_quy_trinh_nhan_giong_buoi_dien_tai_phu_tho",
+      "chunks_count": 11
+    },
+    {
+      "source_file": "quy trình canh tác/bưởi diễn/qt_buoi_dien_3_quy_trinh_trong_va_cham_soc_sau_trong.docx",
+      "title": "qt_buoi_dien_3_quy_trinh_trong_va_cham_soc_sau_trong",
+      "chunks_count": 5
+    },
+    {
+      "source_file": "quy trình canh tác/bưởi diễn/qt_buoi_dien_4_quy_trinh_cat_tia_buoi_dien_thoi_ky_ktcb.docx",
+      "title": "qt_buoi_dien_4_quy_trinh_cat_tia_buoi_dien_thoi_ky_ktcb",
+      "chunks_count": 5
+    },
+    {
+      "source_file": "quy trình canh tác/bưởi diễn/qt_buoi_dien_5_quy_trinh_quan_ly_phan_bon_thoi_ky_ktcb.docx",
+      "title": "qt_buoi_dien_5_quy_trinh_quan_ly_phan_bon_thoi_ky_ktcb",
+      "chunks_count": 5
+    },
+    {
+      "source_file": "quy trình canh tác/bưởi diễn/qt_buoi_dien_6_quy_trinh_quan_ly_o_am_thoi_ky_ktcb.docx",
+      "title": "qt_buoi_dien_6_quy_trinh_quan_ly_o_am_thoi_ky_ktcb",
+      "chunks_count": 4
+    },
+    {
+      "source_file": "quy trình canh tác/bưởi diễn/qt_buoi_dien_7_quy_trinh_trong_xen_cay_ngan_ngay.docx",
+      "title": "qt_buoi_dien_7_quy_trinh_trong_xen_cay_ngan_ngay",
+      "chunks_count": 4
+    },
+    {
+      "source_file": "quy trình canh tác/bưởi diễn/qt_buoi_dien_8_quy_trinh_quan_ly_phan_bon_thoi_ky_sxkd.docx",
+      "title": "qt_buoi_dien_8_quy_trinh_quan_ly_phan_bon_thoi_ky_sxkd",
+      "chunks_count": 10
+    },
+    {
+      "source_file": "quy trình canh tác/bưởi diễn/qt_buoi_dien_9_quy_trinh_quan_ly_dich_hai_cay_buoi_dien.docx",
+      "title": "qt_buoi_dien_9_quy_trinh_quan_ly_dich_hai_cay_buoi_dien",
+      "chunks_count": 22
+    },
+    {
+      "source_file": "quy trình canh tác/bưởi diễn/qt_buoi_dien_danh_muc_quy_trinh_cong_nghe.docx",
+      "title": "qt_buoi_dien_danh_muc_quy_trinh_cong_nghe",
+      "chunks_count": 6
+    },
+    {
+      "source_file": "tiêu chuẩn/EU/2305_pomelopdf.pdf",
+      "title": "2305_pomelopdf",
+      "chunks_count": 20
+    },
+    {
+      "source_file": "tiêu chuẩn/vietGAP/2_so_tay_tofcay_buoivietgap_parts_01_phn_01.pdf",
+      "title": "2_so_tay_tofcay_buoivietgap_parts_01_phn_01",
+      "chunks_count": 3
+    },
+    {
+      "source_file": "tiêu chuẩn/vietGAP/2_so_tay_tofcay_buoivietgap_parts_02_phn_02.pdf",
+      "title": "2_so_tay_tofcay_buoivietgap_parts_02_phn_02",
+      "chunks_count": 4
+    },
+    {
+      "source_file": "tiêu chuẩn/vietGAP/2_so_tay_tofcay_buoivietgap_parts_03_phn_03.pdf",
+      "title": "2_so_tay_tofcay_buoivietgap_parts_03_phn_03",
+      "chunks_count": 10
+    },
+    {
+      "source_file": "tiêu chuẩn/vietGAP/2_so_tay_tofcay_buoivietgap_parts_04_phn_04.pdf",
+      "title": "2_so_tay_tofcay_buoivietgap_parts_04_phn_04",
+      "chunks_count": 7
+    },
+    {
+      "source_file": "tiêu chuẩn/vietGAP/2_so_tay_tofcay_buoivietgap_parts_05_phn_05.pdf",
+      "title": "2_so_tay_tofcay_buoivietgap_parts_05_phn_05",
+      "chunks_count": 9
+    },
+    {
+      "source_file": "tiêu chuẩn/vietGAP/2_so_tay_tofcay_buoivietgap_parts_06_phn_06.pdf",
+      "title": "2_so_tay_tofcay_buoivietgap_parts_06_phn_06",
+      "chunks_count": 6
+    },
+    {
+      "source_file": "tiêu chuẩn/vietGAP/2_so_tay_tofcay_buoivietgap_parts_07_phn_07.pdf",
+      "title": "2_so_tay_tofcay_buoivietgap_parts_07_phn_07",
+      "chunks_count": 7
+    },
+    {
+      "source_file": "tiêu chuẩn/vietGAP/2_so_tay_tofcay_buoivietgap_parts_08_phn_08.pdf",
+      "title": "2_so_tay_tofcay_buoivietgap_parts_08_phn_08",
+      "chunks_count": 25
+    },
+    {
+      "source_file": "tiêu chuẩn/vietGAP/2_so_tay_tofcay_buoivietgap_parts_09_phn_09.pdf",
+      "title": "2_so_tay_tofcay_buoivietgap_parts_09_phn_09",
+      "chunks_count": 5
+    },
+    {
+      "source_file": "vật tư/rag_knowledge_base.md",
+      "title": "rag_knowledge_base",
+      "chunks_count": 64
+    }
+  ]
+}

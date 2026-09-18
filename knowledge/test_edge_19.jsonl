@@ -1,0 +1,19 @@
+{"id": "EDGE-01", "question": "Đất trồng bưởi cần độ pH bao nhiêu?", "type": "Knowledge"}
+{"id": "EDGE-02", "question": "Bưởi bị rụng quả non thì xử lý thế nào?", "type": "Knowledge"}
+{"id": "EDGE-03", "question": "Cây đang ra đọt non thì chăm sóc thế nào?", "type": "Knowledge"}
+{"id": "EDGE-04", "question": "Trời mưa nhiều thì chăm sóc bưởi thế nào?", "type": "Semantic"}
+{"id": "EDGE-05", "question": "Dosay 45WP dùng để trị bệnh gì?", "type": "Product"}
+{"id": "EDGE-06", "question": "Dosay 45WP dùng liều bao nhiêu?", "type": "Product"}
+{"id": "EDGE-07", "question": "Dosay 45WP thời gian cách ly bao lâu?", "type": "Product"}
+{"id": "EDGE-08", "question": "Tôi có chai Dosay, nó dùng để làm gì?", "type": "Product paraphrase"}
+{"id": "EDGE-09", "question": "Phun thuốc xong trời mưa có cần phun lại không?", "type": "Missing knowledge"}
+{"id": "EDGE-10", "question": "Phun thuốc 30 phút rồi mưa thì sao?", "type": "Missing knowledge"}
+{"id": "EDGE-11", "question": "PHI có phải thời gian thuốc khô trên lá không?", "type": "Grounding"}
+{"id": "EDGE-12", "question": "Mưa 12mm rửa trôi bao nhiêu % thuốc?", "type": "Hallucination"}
+{"id": "EDGE-13", "question": "Thuốc cần bao nhiêu phút để khô trên lá?", "type": "Hallucination"}
+{"id": "EDGE-14", "question": "Hoạt chất X có bị cấm không?", "type": "Banned DB"}
+{"id": "EDGE-15", "question": "ABCXYZ có bị cấm không?", "type": "Unknown entity"}
+{"id": "EDGE-16", "question": "Dosay có chứa hoạt chất bị cấm không?", "type": "Cross-DB"}
+{"id": "EDGE-17", "question": "Dosay và Kasuduc khác nhau thế nào?", "type": "Multi-document"}
+{"id": "EDGE-18", "question": "Tôi vừa phun Dosay thì trời mưa, có cần phun lại không?", "type": "Product + knowledge"}
+{"id": "EDGE-19", "question": "Thuốc này có cần phun lại không?", "type": "Ambiguous"}
