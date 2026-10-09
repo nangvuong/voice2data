@@ -1,0 +1,385 @@
+{
+  "timestamp": "2026-09-29 16:31:06",
+  "summary": {
+    "total_cases": 16,
+    "activity_accuracy_pct": 93.75,
+    "field_accuracy_pct": 88.92,
+    "wall_time_s": 149.95,
+    "avg_latency_s": 9.37,
+    "median_latency_s": 8.63,
+    "min_latency_s": 7.05,
+    "max_latency_s": 13.68,
+    "avg_tps": 7.67
+  },
+  "cases": [
+    {
+      "id": 1,
+      "table": "purchase",
+      "name": "Mua thuốc BVTV (đủ 6 trường)",
+      "latency_s": 11.18,
+      "tokens_per_sec": 7.7,
+      "accuracy_pct": 85.7,
+      "activity_correct": true,
+      "passed_fields": [
+        "activity='purchase'",
+        "material_name (tìm thấy: 'thuốc trừ sâu sinh học nano ecotech')",
+        "material_type (tìm thấy: 'pesticide')",
+        "quantity (tìm thấy: '20.0')",
+        "unit (tìm thấy: 'chai')",
+        "expiry_date (tìm thấy: '2026-12-31')"
+      ],
+      "failed_fields": [
+        "supplier_name: mong đợi chứa 'quang minh', nhưng thực tế không tìm thấy (giá trị có: 'công ty trách nhiệm hữu')"
+      ],
+      "extracted_tables": [
+        "b1_5_material_purchases",
+        "material_purchases",
+        "purchase"
+      ]
+    },
+    {
+      "id": 2,
+      "table": "purchase",
+      "name": "Mua phân bón NPK (đủ 6 trường)",
+      "latency_s": 11.32,
+      "tokens_per_sec": 8.3,
+      "accuracy_pct": 57.1,
+      "activity_correct": true,
+      "passed_fields": [
+        "activity='purchase'",
+        "material_name (tìm thấy: 'phân bón n p k')",
+        "material_type (tìm thấy: 'material_name=phân bón n p k')",
+        "supplier_name (tìm thấy: 'đại lý vật tư ba doanh')"
+      ],
+      "failed_fields": [
+        "quantity: mong đợi chứa '50', nhưng thực tế không tìm thấy (giá trị có: '55.0')",
+        "unit: mong đợi chứa 'bao', nhưng thực tế không tìm thấy (giá trị có: 'kg')",
+        "expiry_date: mong đợi chứa '2027-12', nhưng thực tế không tìm thấy (giá trị có: '2026-12-31')"
+      ],
+      "extracted_tables": [
+        "b1_5_material_purchases",
+        "material_purchases",
+        "purchase"
+      ]
+    },
+    {
+      "id": 3,
+      "table": "fertilize",
+      "name": "Bón NPK theo tạ/ha",
+      "latency_s": 9.33,
+      "tokens_per_sec": 7.5,
+      "accuracy_pct": 100.0,
+      "activity_correct": true,
+      "passed_fields": [
+        "activity='fertilize'",
+        "ten_phan_bon (tìm thấy: 'n p k')",
+        "luong_phan_bon (tìm thấy: '5 tạ / ha')",
+        "growth_stage (tìm thấy: 'sinh trưởng')"
+      ],
+      "failed_fields": [],
+      "extracted_tables": [
+        "fertilize",
+        "fertilizer_applications",
+        "b1_6_material_usages",
+        "material_usages"
+      ]
+    },
+    {
+      "id": 4,
+      "table": "fertilize",
+      "name": "Bón phân dạng nước Nano Ecotech",
+      "latency_s": 10.99,
+      "tokens_per_sec": 8.2,
+      "accuracy_pct": 50.0,
+      "activity_correct": false,
+      "passed_fields": [
+        "ten_phan_bon (tìm thấy: 'material_name=thuốc sinh học nano ecotech 2 lít pha 500 lít nước')",
+        "luong_phan_bon (tìm thấy: 'material_name=thuốc sinh học nano ecotech 2 lít pha 500 lít nước')"
+      ],
+      "failed_fields": [
+        "activity: mong đợi 'fertilize', thực tế nhận '['purchase']'",
+        "growth_stage: mong đợi chứa 'phát triển', nhưng thực tế không tìm thấy (giá trị có: 'None')"
+      ],
+      "extracted_tables": [
+        "b1_5_material_purchases",
+        "material_purchases",
+        "purchase"
+      ]
+    },
+    {
+      "id": 5,
+      "table": "spray",
+      "name": "Phun thuốc Nano Ecotech & Top 1 (câu ghép thực tế)",
+      "latency_s": 13.68,
+      "tokens_per_sec": 8.2,
+      "accuracy_pct": 100.0,
+      "activity_correct": true,
+      "passed_fields": [
+        "activity='spray'",
+        "ten_thuoc_bvtv (tìm thấy: 'nano ecotech top một')",
+        "target_pest (tìm thấy: 'sâu ăn lá, rầy nâu')",
+        "nong_do_va_luong_dung (tìm thấy: '2 lít pha 500 lít nước / ha')",
+        "thoi_gian_cach_ly (tìm thấy: '14 ngày')"
+      ],
+      "failed_fields": [],
+      "extracted_tables": [
+        "spray",
+        "pesticide_applications",
+        "b1_6_material_usages",
+        "material_usages"
+      ]
+    },
+    {
+      "id": 6,
+      "table": "spray",
+      "name": "Phun thuốc trừ sâu",
+      "latency_s": 11.37,
+      "tokens_per_sec": 7.6,
+      "accuracy_pct": 100.0,
+      "activity_correct": true,
+      "passed_fields": [
+        "activity='spray'",
+        "ten_thuoc_bvtv (tìm thấy: 'ten_thuoc_=sinh học nano ecotech')",
+        "target_pest (tìm thấy: 'sâu ăn lá')",
+        "nong_do_va_luong_dung (tìm thấy: '1 lít pha 400 lít nước')",
+        "thoi_gian_cach_ly (tìm thấy: '14 ngày')"
+      ],
+      "failed_fields": [],
+      "extracted_tables": [
+        "spray",
+        "pesticide_applications",
+        "b1_6_material_usages",
+        "material_usages"
+      ]
+    },
+    {
+      "id": 7,
+      "table": "waste",
+      "name": "Thu gom vỏ chai thuốc",
+      "latency_s": 8.25,
+      "tokens_per_sec": 8.1,
+      "accuracy_pct": 75.0,
+      "activity_correct": true,
+      "passed_fields": [
+        "activity='waste'",
+        "waste_type (tìm thấy: 'vỏ chai thuốc')",
+        "storage_location (tìm thấy: 'hố rác tập trung')"
+      ],
+      "failed_fields": [
+        "treatment_method: mong đợi chứa 'thu gom', nhưng thực tế không tìm thấy (giá trị có: 'chôn lấp')"
+      ],
+      "extracted_tables": [
+        "b1_7_waste_treatments",
+        "waste_treatments",
+        "waste"
+      ]
+    },
+    {
+      "id": 8,
+      "table": "waste",
+      "name": "Súc rửa vỏ chai thuốc",
+      "latency_s": 8.51,
+      "tokens_per_sec": 8.4,
+      "accuracy_pct": 100.0,
+      "activity_correct": true,
+      "passed_fields": [
+        "activity='waste'",
+        "waste_type (tìm thấy: 'material_name=vỏ chai thuốc bảo vệ thực vật')",
+        "storage_location (tìm thấy: 'bể chứa rác thải nguy hại')",
+        "treatment_method (tìm thấy: 'súc rửa')"
+      ],
+      "failed_fields": [],
+      "extracted_tables": [
+        "b1_7_waste_treatments",
+        "waste_treatments",
+        "waste"
+      ]
+    },
+    {
+      "id": 9,
+      "table": "harvest",
+      "name": "Thu hoạch băm cắt chở về xưởng",
+      "latency_s": 8.38,
+      "tokens_per_sec": 7.6,
+      "accuracy_pct": 75.0,
+      "activity_correct": true,
+      "passed_fields": [
+        "activity='harvest'",
+        "crop_name (tìm thấy: 'cà gai leo')",
+        "dia_diem_cach_so_che (tìm thấy: 'chở về xưởng sấy')"
+      ],
+      "failed_fields": [
+        "san_luong_thu_hoach: mong đợi chứa '['1.5', 'một tấn rưỡi', '1,5']', nhưng thực tế không tìm thấy (giá trị có: 'None')"
+      ],
+      "extracted_tables": [
+        "b1_8_harvests",
+        "harvests",
+        "harvest",
+        "b1_9_sales",
+        "sales",
+        "sale",
+        "b1_8_harvest_sales",
+        "harvest_records"
+      ]
+    },
+    {
+      "id": 10,
+      "table": "harvest",
+      "name": "Cắt tỉa thu hoạch đợt 1",
+      "latency_s": 8.54,
+      "tokens_per_sec": 7.8,
+      "accuracy_pct": 100.0,
+      "activity_correct": true,
+      "passed_fields": [
+        "activity='harvest'",
+        "crop_name (tìm thấy: 'cà gai leo')",
+        "san_luong_thu_hoach (tìm thấy: 'harvest_date=2026-09-29')",
+        "dia_diem_cach_so_che (tìm thấy: 'chở về xưởng sơ chế phơi sấy')"
+      ],
+      "failed_fields": [],
+      "extracted_tables": [
+        "b1_8_harvests",
+        "harvests",
+        "harvest",
+        "b1_9_sales",
+        "sales",
+        "sale",
+        "b1_8_harvest_sales",
+        "harvest_records"
+      ]
+    },
+    {
+      "id": 11,
+      "table": "sale",
+      "name": "Xuất bán cho Sandu & thương lái",
+      "latency_s": 9.33,
+      "tokens_per_sec": 8.2,
+      "accuracy_pct": 100.0,
+      "activity_correct": true,
+      "passed_fields": [
+        "activity='sale'",
+        "khoi_luong_ban (tìm thấy: '5361 kg')",
+        "co_so_thu_mua (tìm thấy: 'công ty sandu và thương lái')"
+      ],
+      "failed_fields": [],
+      "extracted_tables": [
+        "b1_8_harvests",
+        "harvests",
+        "harvest",
+        "b1_9_sales",
+        "sales",
+        "sale",
+        "b1_8_harvest_sales",
+        "sales_records"
+      ]
+    },
+    {
+      "id": 12,
+      "table": "sale",
+      "name": "Xuất bán cà gai leo",
+      "latency_s": 7.05,
+      "tokens_per_sec": 6.4,
+      "accuracy_pct": 100.0,
+      "activity_correct": true,
+      "passed_fields": [
+        "activity='sale'",
+        "crop_name (tìm thấy: 'cà gai leo')",
+        "khoi_luong_ban (tìm thấy: '512 kg')"
+      ],
+      "failed_fields": [],
+      "extracted_tables": [
+        "b1_8_harvests",
+        "harvests",
+        "harvest",
+        "b1_9_sales",
+        "sales",
+        "sale",
+        "b1_8_harvest_sales",
+        "sales_records"
+      ]
+    },
+    {
+      "id": 13,
+      "table": "observation",
+      "name": "Quan sát rầy nâu",
+      "latency_s": 8.63,
+      "tokens_per_sec": 7.5,
+      "accuracy_pct": 80.0,
+      "activity_correct": true,
+      "passed_fields": [
+        "activity='observation'",
+        "sinh_vat_gay_hai (tìm thấy: 'rầy nâu')",
+        "muc_do (tìm thấy: 'nhẹ')",
+        "action_taken (tìm thấy: 'tiếp tục theo dõi chưa cần phun thuốc')"
+      ],
+      "failed_fields": [
+        "growth_stage: mong đợi chứa '['đọt non', 'cành lá']', nhưng thực tế không tìm thấy (giá trị có: 'sinh trưởng')"
+      ],
+      "extracted_tables": [
+        "observation",
+        "pest_observations",
+        "diary_pests"
+      ]
+    },
+    {
+      "id": 14,
+      "table": "observation",
+      "name": "Quan sát vườn sạch bệnh",
+      "latency_s": 8.39,
+      "tokens_per_sec": 7.5,
+      "accuracy_pct": 100.0,
+      "activity_correct": true,
+      "passed_fields": [
+        "activity='observation'",
+        "sinh_vat_gay_hai (tìm thấy: 'không phát hiện')",
+        "growth_stage (tìm thấy: 'sinh trưởng')"
+      ],
+      "failed_fields": [],
+      "extracted_tables": [
+        "observation",
+        "pest_observations",
+        "diary_pests"
+      ]
+    },
+    {
+      "id": 15,
+      "table": "general",
+      "name": "Làm cỏ chia 3 tổ",
+      "latency_s": 7.4,
+      "tokens_per_sec": 6.7,
+      "accuracy_pct": 100.0,
+      "activity_correct": true,
+      "passed_fields": [
+        "activity='general'",
+        "cong_viec (tìm thấy: 'làm cỏ')",
+        "so_luong (tìm thấy: '10-15 người')",
+        "growth_stage (tìm thấy: 'sinh trưởng')"
+      ],
+      "failed_fields": [],
+      "extracted_tables": [
+        "cultivation_diaries",
+        "cultivation_activities",
+        "general"
+      ]
+    },
+    {
+      "id": 16,
+      "table": "general",
+      "name": "Xây dựng mở rộng xưởng sấy",
+      "latency_s": 7.6,
+      "tokens_per_sec": 7.1,
+      "accuracy_pct": 100.0,
+      "activity_correct": true,
+      "passed_fields": [
+        "activity='general'",
+        "cong_viec (tìm thấy: 'xây dựng mở rộng xưởng lò sấy và nhà máy sản xuất')"
+      ],
+      "failed_fields": [],
+      "extracted_tables": [
+        "cultivation_diaries",
+        "cultivation_activities",
+        "general"
+      ]
+    }
+  ]
+}

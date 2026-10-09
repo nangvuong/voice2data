@@ -1,0 +1,3055 @@
+{
+  "summary": {
+    "dataset": {
+      "directory": "/mnt/data/photos",
+      "total_photos": 111,
+      "photos_with_text": 110,
+      "detection_rate_pct": 99.1,
+      "total_lines_detected": 2398,
+      "avg_lines_per_photo": 21.6,
+      "avg_lines_when_detected": 21.8
+    },
+    "performance": {
+      "total_batch_time_sec": 343.53,
+      "avg_sec_per_image": 3.095,
+      "throughput_fps": 0.323,
+      "timing_breakdown_ms": {
+        "total_ms": {
+          "mean": 3092.74,
+          "median": 2511.0,
+          "min": 840.1,
+          "max": 11452.4,
+          "p90": 5521.4,
+          "p95": 6063.35,
+          "std": 1723.97
+        },
+        "det_ms": {
+          "mean": 613.45,
+          "median": 614.3,
+          "min": 0.0,
+          "max": 750.1,
+          "p90": 643.8,
+          "p95": 670.15,
+          "std": 64.96
+        },
+        "cls_ms": {
+          "mean": 76.53,
+          "median": 59.5,
+          "min": 0.0,
+          "max": 216.1,
+          "p90": 160.6,
+          "p95": 182.25,
+          "std": 52.43
+        },
+        "rec_ms": {
+          "mean": 2344.49,
+          "median": 1785.9,
+          "min": 0.0,
+          "max": 10513.8,
+          "p90": 4749.2,
+          "p95": 5182.2,
+          "std": 1663.94
+        }
+      }
+    },
+    "accuracy": {
+      "mean_confidence_score": 0.8835,
+      "median_confidence_score": 0.8916,
+      "score_distribution": {
+        ">= 90%": 39,
+        "80% - 89%": 65,
+        "70% - 79%": 6,
+        "50% - 69%": 0,
+        "< 50%": 0
+      },
+      "line_count_distribution": {
+        "0 dòng (không có chữ / cảnh thuần túy)": 1,
+        "1 - 5 dòng": 4,
+        "6 - 15 dòng": 48,
+        "16 - 30 dòng": 33,
+        "> 30 dòng (bao bì chi tiết, hóa đơn dài)": 25
+      }
+    }
+  },
+  "details": [
+    {
+      "index": 1,
+      "filename": "photo_1570_0.jpg",
+      "file_size_kb": 18.9,
+      "resolution": "591x1280",
+      "width": 591,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 6,
+      "avg_score": 0.9599,
+      "timing": {
+        "det_elapse_ms": 616.9,
+        "cls_elapse_ms": 18.0,
+        "rec_elapse_ms": 697.2,
+        "total_elapse_ms": 1351.1
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "07:43",
+        "nguyen thi tan 4 manh",
+        "60 15 nam 5,5m"
+      ],
+      "full_text": "07:43\nnguyen thi tan 4 manh\n60 15 nam 5,5m\n15515nam5m\n13010nam5m\n9010nam5m"
+    },
+    {
+      "index": 2,
+      "filename": "photo_1660_0.jpg",
+      "file_size_kb": 142.2,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 20,
+      "avg_score": 0.8842,
+      "timing": {
+        "det_elapse_ms": 750.1,
+        "cls_elapse_ms": 74.8,
+        "rec_elapse_ms": 2037.7,
+        "total_elapse_ms": 2910.7
+      },
+      "keywords_found": [
+        "ml",
+        "iso"
+      ],
+      "sample_lines": [
+        "CACH DUNG",
+        "LIEU DUNG",
+        "TRONG"
+      ],
+      "full_text": "CACH DUNG\nLIEU DUNG\nTRONG\nKhi ch61hoa10-15cm\nCayanirdi:\nPha20ml/binh16litnuochoc\nNndn,Nu.man,vai\n500ml phacho400litnuoc\nthieu,com,buoi.\nKhi cay cochoi hoa va trainon\nRouantrai&lua:\nPha15m/binh16 lit nuoc\notdualuoi, dua leo,\nGiai doan trailon:Pha20ml/\ndutay..\nbinh16 litnuochoc500ml pho\ncho400 lit nuoc.\nISO\nPhan phoi:\nDlien thoql:0938416268"
+    },
+    {
+      "index": 3,
+      "filename": "photo_1661_0.jpg",
+      "file_size_kb": 140.4,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 3,
+      "avg_score": 0.8717,
+      "timing": {
+        "det_elapse_ms": 631.7,
+        "cls_elapse_ms": 21.0,
+        "rec_elapse_ms": 933.7,
+        "total_elapse_ms": 1631.0
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "DANH NONG PHAT",
+        "CANXI BO -SILIC",
+        "福"
+      ],
+      "full_text": "DANH NONG PHAT\nCANXI BO -SILIC\n福"
+    },
+    {
+      "index": 4,
+      "filename": "photo_1662_0.jpg",
+      "file_size_kb": 143.9,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 4,
+      "avg_score": 0.8181,
+      "timing": {
+        "det_elapse_ms": 581.7,
+        "cls_elapse_ms": 38.6,
+        "rec_elapse_ms": 673.4,
+        "total_elapse_ms": 1350.5
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "2751",
+        "NG UONG",
+        "CANXI BO-SILIC"
+      ],
+      "full_text": "2751\nNG UONG\nCANXI BO-SILIC\nMANA"
+    },
+    {
+      "index": 5,
+      "filename": "photo_1663_0.jpg",
+      "file_size_kb": 137.9,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 18,
+      "avg_score": 0.89,
+      "timing": {
+        "det_elapse_ms": 703.2,
+        "cls_elapse_ms": 74.7,
+        "rec_elapse_ms": 2251.1,
+        "total_elapse_ms": 3075.7
+      },
+      "keywords_found": [
+        "bvtv",
+        "ml"
+      ],
+      "sample_lines": [
+        "THANH PHAN",
+        "min.",
+        "CONG DUNG"
+      ],
+      "full_text": "THANH PHAN\nmin.\nCONG DUNG\nchongrung hoa tren cac loai cay.\nTing kha nang dau hoa, trai dua non.\nCheg xoan, thoi cuong trai tren cac loi\ncay.\nChorgnut trai,da cang bong xanhmugt.\n·Tang nang suat chat luong.\nGOLH188/QD-BVTV-PB\nMSPB:16838\nS6:04/2023/CBHQ-PN\nPhuongthu sudung:Bonre\nHSD:36thong ketuNSX\nNSXXem trenbaobi\nHheatnLong h\nLAC DEU TRUOC KHI SU DUNG\nTHE TICH THUC:500ML"
+    },
+    {
+      "index": 6,
+      "filename": "photo_1664_0.jpg",
+      "file_size_kb": 114.2,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 8,
+      "avg_score": 0.8988,
+      "timing": {
+        "det_elapse_ms": 597.5,
+        "cls_elapse_ms": 31.5,
+        "rec_elapse_ms": 706.2,
+        "total_elapse_ms": 1367.9
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "CANXIBO HUU CO",
+        "CHONGRUNGOAUNGRA",
+        "NUTTRAIHOTAI"
+      ],
+      "full_text": "CANXIBO HUU CO\nCHONGRUNGOAUNGRA\nNUTTRAIHOTAI\nNatural 100%\nORGANIC\nPHU GIA CAO CAP\nDAM DAC\n5"
+    },
+    {
+      "index": 7,
+      "filename": "photo_1665_0.jpg",
+      "file_size_kb": 127.0,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 11,
+      "avg_score": 0.9175,
+      "timing": {
+        "det_elapse_ms": 623.6,
+        "cls_elapse_ms": 73.9,
+        "rec_elapse_ms": 1472.3,
+        "total_elapse_ms": 2206.0
+      },
+      "keywords_found": [
+        "bvtv",
+        "ml"
+      ],
+      "sample_lines": [
+        "cay.",
+        "THANH PHAN:",
+        "nang san pham."
+      ],
+      "full_text": "cay.\nTHANH PHAN:\nnang san pham.\nBaoquan:\nDe noi kho rao thoang mat, tranh anh nang mat\ntoi.Dexatm taytreem,thucpham,vatnuoi.\nCothe ket hiop voi thuocBVTV.\nThetichthuc:500ml\nPhan phoi:\nH. Hoc Mon,Tp.HCM\nHotline:0972176236"
+    },
+    {
+      "index": 8,
+      "filename": "photo_1666_0.jpg",
+      "file_size_kb": 128.0,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 14,
+      "avg_score": 0.8811,
+      "timing": {
+        "det_elapse_ms": 580.9,
+        "cls_elapse_ms": 42.1,
+        "rec_elapse_ms": 1626.5,
+        "total_elapse_ms": 2304.3
+      },
+      "keywords_found": [
+        "bvtv",
+        "ml"
+      ],
+      "sample_lines": [
+        "HUONG DAN SU DUNG:",
+        "thehanuctuitructipvaogchoxite",
+        "cay."
+      ],
+      "full_text": "HUONG DAN SU DUNG:\nthehanuctuitructipvaogchoxite\ncay.\nTHANH PHAN:\nChat huuco:20%,Canxi(Ca）：8,6%,Bo(B)800pm\npH0:5Ty trong (dang 1ong):1.3,Ty le C/N:12\nBosngcacphugiinhhcdbiettheoth\nnang san pham.\nBao quan:\nCothe ket hgp voi thuocBVTV.\nThe tich thyc:500ml\nPhan phol:\nH.Hoc Mon,Tp.HCM\nHotline:0972 176 236"
+    },
+    {
+      "index": 9,
+      "filename": "photo_1667_0.jpg",
+      "file_size_kb": 129.5,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 22,
+      "avg_score": 0.8972,
+      "timing": {
+        "det_elapse_ms": 635.1,
+        "cls_elapse_ms": 101.5,
+        "rec_elapse_ms": 2017.8,
+        "total_elapse_ms": 2799.8
+      },
+      "keywords_found": [
+        "bvtv"
+      ],
+      "sample_lines": [
+        "NSX:09/04/25",
+        "HSD:09/04/28",
+        "nonbonhauco.o"
+      ],
+      "full_text": "NSX:09/04/25\nHSD:09/04/28\nnonbonhauco.o\nV-CABO OGRANIC\nTACDUNG:\ndau trai cao.\nHan cherunghoava trainongintraitot\ntrong giai doan nuoi trai.\n-Ngannguahintuongnut traisuongtral\nkho dau trai,nam trai.\nTang to cung capva dayvo traikeo dai\nthuoi gian bao quan.\ngiuptito deu,chactraibong traisang\ntrai,clac.com.\nda.\nTCCS:15:2023/VP.HN\nMSPB:28634\nSO\nGPSX: S0789/GCN-BVTV-PB\n006\n1S09001:2015S61052023015\nNSX:in tren nhan chai"
+    },
+    {
+      "index": 10,
+      "filename": "photo_1668_0.jpg",
+      "file_size_kb": 116.0,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 15,
+      "avg_score": 0.8227,
+      "timing": {
+        "det_elapse_ms": 585.2,
+        "cls_elapse_ms": 54.6,
+        "rec_elapse_ms": 1148.8,
+        "total_elapse_ms": 1820.5
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "ungrnot",
+        "oithu",
+        "BO Max"
+      ],
+      "full_text": "ungrnot\noithu\nBO Max\nCONG NGHE NANO\nHOAT HOA CUC MANH\n100%HIGHYEILD\nNEW Product\nDAM DAC\nX9 LAN\nKHONG LO RUNG TRAI\nANGKHNGHANONG\nSIEU DAUTAISIEUDAICUONG\nHAN CHE:\nKHONGUGHA\nHotline:0972 176 236"
+    },
+    {
+      "index": 11,
+      "filename": "photo_1669_0.jpg",
+      "file_size_kb": 135.1,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 13,
+      "avg_score": 0.8888,
+      "timing": {
+        "det_elapse_ms": 627.3,
+        "cls_elapse_ms": 44.0,
+        "rec_elapse_ms": 1422.7,
+        "total_elapse_ms": 2136.7
+      },
+      "keywords_found": [
+        "ml"
+      ],
+      "sample_lines": [
+        "BO NSGI",
+        "CONG DUNG",
+        "sin truong."
+      ],
+      "full_text": "BO NSGI\nCONG DUNG\nsin truong.\nKal va Canxi trong cay.\ndau trai.\nahoamanhtugim\ngiam thoi nut trai.\nHan che hien tuong cay sinh truong kem，á\nnho,cay dam choi nach nhieu, re kem phat\ntin,thar cay bi nut ne,choi ngon kho heo\nop tacnghieneuva han hoi\nWebsite:vungphat.vn\nThe tich thuc:500 ml"
+    },
+    {
+      "index": 12,
+      "filename": "photo_1670_0.jpg",
+      "file_size_kb": 131.4,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 31,
+      "avg_score": 0.8575,
+      "timing": {
+        "det_elapse_ms": 641.6,
+        "cls_elapse_ms": 109.3,
+        "rec_elapse_ms": 2318.9,
+        "total_elapse_ms": 3120.8
+      },
+      "keywords_found": [
+        "ml",
+        "gam"
+      ],
+      "sample_lines": [
+        "THANH PHAN",
+        "HUONG DAN SU DUNG",
+        "CACH DUNG"
+      ],
+      "full_text": "THANH PHAN\nHUONG DAN SU DUNG\nCACH DUNG\nCAY TRONG\nKhi ch6ihoa10-14cm:Pha\nclyantrlSauriengam,\n20ml/16lit nuchoac500ml\ncanhquytbxoait\npha cho 400 lit nudc.\nmin,mang cau,tao,nho\nsapoche....\nKhi cay c6 ch6i hoa vatail\nRaumau & Lua: Dua hau,\nnon:Pha 15ml/16 lit nuoc.\ncachatb\nGiai doan trai 1on:Pha20ml\ndaucac loaikhqua,su\n16 lit nu6choc 500ml pha\nsU,...\ncho 400 lit nuoc.\nChong rung trai non: Pha\nCay cong nghiep:Caphe,\n20m/16litnuochoc500ml\ncao su,tucad\ncho 400 lit nu6c. Su dung2\nlan cach nhau 10-15 ngay.\nCanhbao:Dexatam tay treem.\nNOSNSG07/28\nPhuong thuc su dung:Bon la\n160001:2016\nNSX:Xem tren nhan chai"
+    },
+    {
+      "index": 13,
+      "filename": "photo_1671_0.jpg",
+      "file_size_kb": 157.7,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 10,
+      "avg_score": 0.9043,
+      "timing": {
+        "det_elapse_ms": 614.3,
+        "cls_elapse_ms": 55.9,
+        "rec_elapse_ms": 1406.2,
+        "total_elapse_ms": 2118.0
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "Phan bon la vi lurong MULTI CROPS",
+        "GROWSEASON",
+        "SIEU"
+      ],
+      "full_text": "Phan bon la vi lurong MULTI CROPS\nGROWSEASON\nSIEU\nHieu\nRA RE-DE NHANH\nTHAN MAP- CHOI TO-NO BUI KHOE\nHA PHEN-KHU CHUA- GIAI DOC HUU CO\nCHONG RET,NGHEN RE,VANG A SINH Y\nKh6i luong:35gr\nSIEU TOT -HIEU QUA TUC THi"
+    },
+    {
+      "index": 14,
+      "filename": "photo_1672_0.jpg",
+      "file_size_kb": 205.7,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 9,
+      "avg_score": 0.9025,
+      "timing": {
+        "det_elapse_ms": 605.6,
+        "cls_elapse_ms": 21.3,
+        "rec_elapse_ms": 1432.9,
+        "total_elapse_ms": 2102.3
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "Phan bon lavi luong MULTI CROPS",
+        "SIEU",
+        "Hieu"
+      ],
+      "full_text": "Phan bon lavi luong MULTI CROPS\nSIEU\nHieu\nRA RE-DE NHANH\nTHAN MAP- CHOI TO-NO BUI KHOE\nHA PHEN-KHU CHUA- GIAI DOC HUU CO\nCHONG RET,NGHEN REVANG A SINHY\nKhoiluong:35gr\nSIEU TOT - HIEU QUA TUC THI"
+    },
+    {
+      "index": 15,
+      "filename": "photo_1673_0.jpg",
+      "file_size_kb": 187.7,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 29,
+      "avg_score": 0.9063,
+      "timing": {
+        "det_elapse_ms": 574.5,
+        "cls_elapse_ms": 85.6,
+        "rec_elapse_ms": 3540.4,
+        "total_elapse_ms": 4289.6
+      },
+      "keywords_found": [
+        "phun"
+      ],
+      "sample_lines": [
+        "Phan bon lavi luong MULTI CROPS",
+        "Thanh phan:Bo(B):2,222ppm.Ty trong:1,1.PH(HO)",
+        "NSX101025"
+      ],
+      "full_text": "Phan bon lavi luong MULTI CROPS\nThanh phan:Bo(B):2,222ppm.Ty trong:1,1.PH(HO)\nNSX101025\nPhugia dcbietkichre\nCONGDUNG\nRA RE CUCMANHCHONGRETCHIU HAN\nHA PHEN GIAI DOCHOU CO\nDENHANH KHOETAP TRUNG\nCHONG NGHETREVANGASINHY\nRA RE NHANHPHUCHOI CAY NHANH\nDENHANH PHAN CANH NHANH\nA#ONHIEU HOANHIEU QUA\nHUONG DAN SU DUNG\n-Pha1goi 35 grvoi 20 lit phun,tuoi dinh ky\n7-10ngay.\nDoc ky huong dan truockhi sir dung\nHUONGDAN BAO QUAN\n-Bao quan noi thoang mat\n-Tranh xa tam taytre em va anh nang mat troi\n-Phuong thuc su dung:Bon la\nKh6i luong:35gr\nNSX:In tren mep tul\nHSD:3nam\nMa so phanb6n:27463\nDonvldangky:CongtyC6phanThuong Mai XuatNhapKhauVNT\nSan pham cua:CTY TNHH MUA PHAT TRIEN\nDia chi:X3,ThuPhu,Thuong Tin,HaNoi\nNha may:Km110+500QL10,MyXa,Tp.NamDinh\nSDT:0378176012"
+    },
+    {
+      "index": 16,
+      "filename": "photo_1674_0.jpg",
+      "file_size_kb": 169.1,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 44,
+      "avg_score": 0.9045,
+      "timing": {
+        "det_elapse_ms": 624.2,
+        "cls_elapse_ms": 112.2,
+        "rec_elapse_ms": 4158.4,
+        "total_elapse_ms": 4978.7
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "PHAN BON",
+        "R",
+        "PROFARM-TOPMICRO"
+      ],
+      "full_text": "PHAN BON\nR\nPROFARM-TOPMICRO\nVi luong Chelated (-) nhap khau tu nuocngoai\nCHELATE\nHAN CHECACHIENTUONG\nTHANH PHAN\nQuan la,vanglasinh ly,\nMangan(Mn):40.000 ppm\nKem (Zn)\n:30.000ppm\nchay top dau la,rung hoa,\nSat(Fe)\n:20.000ppm\nrung qua non,rung la,si cay,\ng(Cu)\n:10.000ppm\n()0\n:5.000ppm\ncoi coc,chetnhanh,thoi qua,\n-Molipden(Mo):1.000 ppm\nden lep hat,nam qua,\nCoban(Co)\n:500ppm\nDo thieu hut vi luong.\n-Luu huynh (S):8%\nMagie(Mg)\n:7,2%\n(SIEUVILUONG)\n-Doam\n:1%\nHSD:36thang\nNSX:Xem tren mep bao bi\nTCCS30:2015/NV\nMSPB:11658\nagriviet\nPhan vi luong bon re m\nNguon goc: Nhap khau tu Thai Lan\nValue innovation\nnphmnunghgCd\nKhoilufgngtinh\nThhnhdgXgnqg\nDnth279216|vangmm|Wb:we\n20g"
+    },
+    {
+      "index": 17,
+      "filename": "photo_1675_0.jpg",
+      "file_size_kb": 179.7,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 39,
+      "avg_score": 0.8444,
+      "timing": {
+        "det_elapse_ms": 623.7,
+        "cls_elapse_ms": 137.8,
+        "rec_elapse_ms": 4945.8,
+        "total_elapse_ms": 5784.4
+      },
+      "keywords_found": [
+        "phun",
+        "cam",
+        "iso"
+      ],
+      "sample_lines": [
+        "PHAN BON",
+        "PROFARM-TOPMICRO",
+        "uong Chelated (-) nhap khau tu nuoc ngoai"
+      ],
+      "full_text": "PHAN BON\nPROFARM-TOPMICRO\nuong Chelated (-) nhap khau tu nuoc ngoai\nNGDUNG:\nup xanh la,dayla,mapcay,nngon,\nto,cu map,hatchac may,bong dep.\nan che cac hien tuong:Quan la,vang la sinh ly\nho top daula,rung hoa,rung quanon,runglasicay\nhet nhanh,thoi qua,lephat,nam qua,..\neu hut vi luong.\nHUCNGDAN SU DUNG:\nChyane\n(ai,Nhan,Cam,Chanh,Buoi,Chui,\nDung2-3g/16-20litnuoc/lan/sao360m²\nngringoingc\nTuoi vaovungrecuacay3-4lan/vu,dung tu\nDudu,Chanh leo,Roi,Man,Na,...)\nthoikycay conden thu hoach hoacbosung\nngay khithay hien tugng thieu hut vi lugng.\nClyraumaucyhoa(DuahuOt,DualeDua\nDung2-2,5g/16-20litnu6c/lan/sao360m².\nchutiht\nTuoi vaovungrecua cay3-4lan/vu,dung ti\nKhoaiSouaix,\nthoi ky caycon den thuhoachhoacb6sung\nolg\nken,Hoa lan,..)\nCag\nDung2-2,5g/16-20litnuoc/1an/sao360m²\nKhoal my..)\nTuoi vaovungrecua cay3-4lan/vu,dung tu\nthoi kycaycon den thu hoachhoacb6 sung\nCaphe,Tieu,Dieu...)\nngay khi thay hien tugng thieu hut vi luong.\n(Hag6i20gv16020litnuocC6thedungdbonhtuiphun.chocaytng)\nNSX01072025\nagriviet\"\nThurong hieu da duqc cap van bang bao ho s6:76284\nVnSveionovsunA"
+    },
+    {
+      "index": 18,
+      "filename": "photo_1676_0.jpg",
+      "file_size_kb": 210.0,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 18,
+      "avg_score": 0.8385,
+      "timing": {
+        "det_elapse_ms": 618.1,
+        "cls_elapse_ms": 79.9,
+        "rec_elapse_ms": 2337.0,
+        "total_elapse_ms": 3091.6
+      },
+      "keywords_found": [
+        "ml"
+      ],
+      "sample_lines": [
+        "PHAN BON",
+        "agriviet",
+        "Valueinnovatios"
+      ],
+      "full_text": "PHAN BON\nagriviet\nValueinnovatios\nPHAN BON\nFarmprokao-V3\n16-8-34\nSIEV TO TRAI\nhADEP\nVAO QUA,XUONG CU CUCMANH\nPSC\nHAN CHE NUT-THOI,RUNG TRAI NON,..\nTAYTRAM,SANGTRAI\nKhollurongtih\ngbgC\n20g\nTyh/VThgqnTha\nXunghgygqg\nth043859216|mllgmcm|Webitwwwae/et.cm"
+    },
+    {
+      "index": 19,
+      "filename": "photo_1677_0.jpg",
+      "file_size_kb": 215.4,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 39,
+      "avg_score": 0.8605,
+      "timing": {
+        "det_elapse_ms": 634.6,
+        "cls_elapse_ms": 152.2,
+        "rec_elapse_ms": 4165.4,
+        "total_elapse_ms": 5016.4
+      },
+      "keywords_found": [
+        "bvtv",
+        "phun",
+        "cam",
+        "npk"
+      ],
+      "sample_lines": [
+        "PHAN BON",
+        "THANHPHAN",
+        "Farmproka-V3"
+      ],
+      "full_text": "PHAN BON\nTHANHPHAN\nFarmproka-V3\nDam(N,)\n:16%\nLan(POS）:8%\nKal(K,O）:34%\n16-8-34\nDoam\n:5%\nCONGDUNG:\nNG DAN SU DUNG:\nhnCamChanhBuChlai\nDung20-25g/16-20itnudc/1an/sho360mTuoi\nyXoiMngtuduChanh,\nvao vung recuacay thoikyra hon,nuolqu\nDuahau,Ot,Duale,Dua chuot\ndarthtayh,\no,6xi,Hanh,Toi,Hoahng\nnuolqua-cd-hat.\nadao,Hoaloaken,Hoalan,\naNgo,Khoai lang,San,\nDung15-20g/16-20lftnudc/lin/sao360m.Tuo\nvao vung recua cay thbiky ra hon,nuolqu-ci-hat.\nghie\nCaymia,Che,Lac,Dau,Caph\nvungrecuacaythbikyrahoa,nudiqu-cohat.\nHe\n96i20\ni16-20 litnuc.6thedungdbonhoa tubiphun,chocay trong\nNSX 0101\nHSD:36thang\nNSX:Xem trenmep baobi\nTCCS26:2015/NV-MSPB:11655\nS6QDCNLH:932/QD-BVTV-PB\nSPECIALTY\n?\nPhan bon hon hap NPk bonre\nFERTILIZERS"
+    },
+    {
+      "index": 20,
+      "filename": "photo_1678_0.jpg",
+      "file_size_kb": 211.3,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 48,
+      "avg_score": 0.872,
+      "timing": {
+        "det_elapse_ms": 627.9,
+        "cls_elapse_ms": 164.4,
+        "rec_elapse_ms": 4466.6,
+        "total_elapse_ms": 5337.6
+      },
+      "keywords_found": [
+        "bvtv"
+      ],
+      "sample_lines": [
+        "PHAN BON",
+        "THANH PHAN",
+        "Dam(N):16%"
+      ],
+      "full_text": "PHAN BON\nTHANH PHAN\nDam(N):16%\nFarmproka-V3\nLan(PO:8%\nKali(K0h）:34%\n-8-34\nDoam\n:5%\nCONGDUNG:\n-GiL\nnphat trien,giuplanon nhanh truong thanh,\nHaM che\noarahoamraongloadauquh\nthucday\ndaylhanchngtngnng suthtng.\n-Giup\nHUONDAN SU DUNG:\ncayen ralv\nanhBu,Chui,Tao,i\nDung20-25g/16-20litnudc/lin/sao360mTu\nMang cut,Du du,Chanh leo,\nvao vung recua cay thdiky ra hoanuoil\nThanhlonguriens\nRoi,MAn,Na,...\ncayraca\nJuahauOt,Duale,Dua chuot,\nDung20g/16-20 litnudc/1an/sao360m\nBi anhup,Cacharthyhoa,\nvao vung re cua cay thdi ky ra hoa,\nSuhao,acaiuxianhiong\nnuoiqua-cu-hat.\nHoa cucoalyoaao,oaloaknoaan,\nCaylungthh n\n360m².Tu\nDung15-20g/16-20litnuoc/ln/\nKhoaimy...)\nvao vungrecua cay thdi kyrah\ndiqua-cu-hat.\nDung 20g/16-20 lit nudc/lan/sa360m²Tuoi vao\nTieu,Dieu.\nHSD:36 thang\nNSX:Xem tren mep bao bi\nTCCS26:2015/NV-MSPB:11655\nSPECIALTY\nS6QDCNLH:932/QD-BVTV-PB\nagriviet\nFERTILIZERS"
+    },
+    {
+      "index": 21,
+      "filename": "photo_1679_0.jpg",
+      "file_size_kb": 235.6,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 57,
+      "avg_score": 0.8987,
+      "timing": {
+        "det_elapse_ms": 598.6,
+        "cls_elapse_ms": 216.1,
+        "rec_elapse_ms": 5248.6,
+        "total_elapse_ms": 6125.6
+      },
+      "keywords_found": [
+        "bvtv"
+      ],
+      "sample_lines": [
+        "Vi luong Cheiate(-) dangbot dungqua li:",
+        "Deltamicro",
+        "?"
+      ],
+      "full_text": "Vi luong Cheiate(-) dangbot dungqua li:\nDeltamicro\n?\nGreendelta\nHydro\nChelate Micro-Nutrients Fertilizer\nVi Ludng Chelate)）dung nghia va aocnhfi vohj\nSupply all chelatemtero-mutrlents\nfor crops to avoid difficiencies\nand help pltgloo well.\n150:0405/\n15:04/06/\nEhanh phan chinh:\nTYnay\n(Component)\nLanu huynh (S):\n6,98%\nCac hien tuong, trieu chtng\nMagie (Mg):\n1,8%\nSat (Fe):\n54.000ppm\nthieu hut Vi luong/Micro-nutrient\nMangan (Mn):\n50.000ppm\ndeficiency trenmoi loai cay trong\nBo(B):\n35.000ppm\nKem(Zn):\n30.000ppm\ntrongmoi thai ky sinh truong va\nDong(Cu):\n3.000ppm\nphat trien\nMolipden (Mo):\n4.000ppm\nCoban (Co):\n500ppm\nCing phai tranh xa\nDeltamicronydro\npH:5,1;D6am:20%\nKhbiluong tjnh/Not weight:\nSan pham& donggoi tai:\n2g\nGreendelta Co.,Ltd.\nGrcemdelta-Longan:D14,duong s3,KCNNht Chnb,\nNSX:(xem d bao/goi)\nxa Bih Dac,tinhTay Ni,Vir Nam\nHSD:36 thang k&NSX\nTel:0272-3637365\n0272-3637367\nQuyd:19S/Q-BVTV-PB\nEnailgcondelta-saigon@ynn.yn\nMa a6ptn bon:15626\nWabalte.www.crcendeta.com.n\nGreendeltavi luong voi chat luong tot dinh\nXustxdThailnd"
+    },
+    {
+      "index": 22,
+      "filename": "photo_1680_0.jpg",
+      "file_size_kb": 194.4,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 34,
+      "avg_score": 0.8611,
+      "timing": {
+        "det_elapse_ms": 598.7,
+        "cls_elapse_ms": 90.8,
+        "rec_elapse_ms": 3915.4,
+        "total_elapse_ms": 4665.4
+      },
+      "keywords_found": [
+        "phun"
+      ],
+      "sample_lines": [
+        "Hanganiom",
+        "ViluiongC",
+        "Chelate'-)dang bot dungqua la:"
+      ],
+      "full_text": "Hanganiom\nViluiongC\nChelate'-)dang bot dungqua la:\n®\nDeltamticro\nHydro\nvon\nVi Lugng Chelate） dungngha vad\nugn\nDeltamicro la phuchop doe nhatvonhicuatatca\nChelate(-)voiham luong cao nhatma cay\nhaicoahapthududchoantoan tidocaytrongdat\nong sinh hoc toi da trong qua trinh sinh truong va\ntrien Dong thoimang lai hieuqua kinh te cao nhat trong\nhapthuoctatca cac loaiphan bonva thuoc da bon.\nCONG DUNG:Dung lam phan bon qua la,bon qua he\nthong tuoi,tuoi vao dat cho tat cacac loai cay trong dengan\nngua va khac phac cac hien tuong bat thuong tirkhi trong den\nkhi thu hoach.\nDeltamicro con duog dung lam nguyen lieu de san xuat cac\nphan bon viluong va b6 sung vao cac phan qua la dang bothay\ndang long khac.\n*LIEULUONGSU DUNG:\nPha1-3g6i2g chomot binh phun/xit(1-3g6i20gcho1 phuy\no\nngaylandoivaicaynganngay va20-30ngay/land6i vdicay\nthuoe\ndaingaycay lunien）c theronvoi phanqua\nhoad\n*Thong tin canh bao:An toan\nnepxic\nloaithuoedo\n*BAOQuAN:Nai khorao va thoang mat\nGreendeltavi luong voi chat luong to.dinh"
+    },
+    {
+      "index": 23,
+      "filename": "photo_1681_0.jpg",
+      "file_size_kb": 166.3,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 10,
+      "avg_score": 0.9507,
+      "timing": {
+        "det_elapse_ms": 634.8,
+        "cls_elapse_ms": 36.1,
+        "rec_elapse_ms": 1120.3,
+        "total_elapse_ms": 1829.1
+      },
+      "keywords_found": [
+        "kg"
+      ],
+      "sample_lines": [
+        "CONTROL",
+        "THE HE CAI TIEN MOI",
+        "XU LY RA HOA NGHICH VU"
+      ],
+      "full_text": "CONTROL\nTHE HE CAI TIEN MOI\nXU LY RA HOA NGHICH VU\n100%\nSOLUBLEINWATER\nKHONG CHE DOT LA DAY GIA NHANH\nPHAN HOA MAM HOA RA HOA DONG LOAT\nCHONG RUNG HOA TRAI NON\nKhoi ludng tinh:\n1KG"
+    },
+    {
+      "index": 24,
+      "filename": "photo_1682_0.jpg",
+      "file_size_kb": 213.0,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 78,
+      "avg_score": 0.8729,
+      "timing": {
+        "det_elapse_ms": 623.0,
+        "cls_elapse_ms": 206.6,
+        "rec_elapse_ms": 10513.8,
+        "total_elapse_ms": 11452.4
+      },
+      "keywords_found": [
+        "bvtv",
+        "kg",
+        "cam"
+      ],
+      "sample_lines": [
+        "SIAMB12",
+        "PHAN BON",
+        "VLLUONG"
+      ],
+      "full_text": "SIAMB12\nPHAN BON\nVLLUONG\nThanh phan:Kem (Zn):15.000ppm;Do am (Dang ran）:1%\nCong dung:\nSan pham dugc san xuat theoquy trinh tu dong hoa nham tao ra luong lan tinh khiet.\n-Giuptaoramamhoarahoa dong loat,kichthichcayrahoatheoymuon(xilynghichmua）\n-Chongnghenhoanghendongchonghientng chai dauhoa.\n-Chongrung hoa,chong rung trainon,tang khanang dau trai,to trai,tohat,tocu.\nNgoairhnngngngingn\ntrong,kich thichborephat trien.\nDoivoicaylaycu(khoaimikhoai lang,dauhnghoam.ipcu tonngkychng ungsau\nKhuyen nghi cach sir dung:\nLIEU LUONG\nTHOI DIEM SU DUNG\nLOAI CAY TRONG\n20-25g/16litnuoc\nSur dung khi lua tro let xet va khi\nLua-Nep-Bap\n(35-45g/25litnuc,250-350g/\nlua tr6 hoan toan (nuoi hat).\nphuy200lit)\n20-30g/16litnuoc\nKhimuon taomam hoa （ra hoa\n（300-400g/phuy200litnu6c)\ntheoymuon).\nCay an trai:Xoai,Mit,Su\nKhihoavua nhu,giup hoara deu\nrieng,Nhan,Man,Vu sa,\n20-25g/16litnuoc\nvadongloat.\nBuoi,Cam,Chanh,Oi..\n(35-45g/25.litnuc,250-350g/\nKhi trai da tuong hinhhoan thien\nphuy200lit)\nchoden truocthuhoach15ngay.\nRau mau:Ot,cay lay cu,\n10-15g/16nuoc\ncay kieng....\n15-20g/16linuoc\nCay cong nghiep: Dieu,\n10-15g/16litnuoc\nCa phe,Ca cao....\n15-0g/16litnuoc\nHuongdan sir dung cua cuc BVTV:\nNSX:20/11/2025\n1.Cay an trai,cay comui,sur dung theomua vu:\n-Vumudng4atanaaancaha0ngayngkga10luig\ncho1ha.\nVutraimuadung5an:trcrahoa2ancachnhau7ngaysauduti3ancachnhau7ngay.iedung4lihoc5kghaa\n1.000 lit nuc,tucigoc cho1ha.\n2.CayCongnghpdaingaytnasdngantongvasauhicayaothigiandngcachhanga\ndung2 lit hoac3kg hoa tan trong 800lit nuacturoig8ccho1ha.\n3.Caynggngaaylayaygihig\ncach nhau7yay.Lieu sur dung 2 lit hoc3kg hoa tan trong 800 lit nuoc tuoigccho1ha.\n4Cayykigngtngnngadgihngnbanghkgh\ntrong 400 litnuoc tuoigoccho1ha.\nANANuGqaqnirngattrantitraxataytemvngn\nNen si dung vaoluc sang somhoacchieumat.\nUyqyevadangy:NCONGNGESINHHOVAUNGDUNGVINHMIENNM\nPhan pholi:\nNhanuyquyenthngmaiCONGTTNHHDLCCONTINENTAL\nCONG TY TNHH TLC CONTINENTAL\nMinh,Viet Nam\nDhin\nDonvi san xuat:CONGTYTNHH AMERICAN\nS6 dien thoal:0979666448-0869949901\nDiachF\nMSPB:08524\nLap,TaNinhim\nS6HQ:34/HQPB-SIAMB\nThngh\nPhudng thcsi dung:onre\nNgay san xuat:Xem tren bao bl\nHan sui dung:36thang ke tiuNSX\nSAN XUATDONGGOI HOANTATTAIVIETNAM\nKhoiluongtinh:\n1KG"
+    },
+    {
+      "index": 25,
+      "filename": "photo_1683_0.jpg",
+      "file_size_kb": 130.4,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 1,
+      "avg_score": 0.9791,
+      "timing": {
+        "det_elapse_ms": 595.6,
+        "cls_elapse_ms": 7.5,
+        "rec_elapse_ms": 296.6,
+        "total_elapse_ms": 927.5
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "PSC.1"
+      ],
+      "full_text": "PSC.1"
+    },
+    {
+      "index": 26,
+      "filename": "photo_1684_0.jpg",
+      "file_size_kb": 130.4,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 0,
+      "avg_score": 0.0,
+      "timing": {
+        "det_elapse_ms": 0.0,
+        "cls_elapse_ms": 0.0,
+        "rec_elapse_ms": 0.0,
+        "total_elapse_ms": 939.2
+      },
+      "keywords_found": [],
+      "sample_lines": [],
+      "full_text": ""
+    },
+    {
+      "index": 27,
+      "filename": "photo_1685_0.jpg",
+      "file_size_kb": 162.1,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 9,
+      "avg_score": 0.9228,
+      "timing": {
+        "det_elapse_ms": 614.6,
+        "cls_elapse_ms": 51.9,
+        "rec_elapse_ms": 849.6,
+        "total_elapse_ms": 1551.5
+      },
+      "keywords_found": [
+        "kg"
+      ],
+      "sample_lines": [
+        "PHAN BON VI",
+        "HOANG THAI NONG N",
+        "SUPER LAN"
+      ],
+      "full_text": "PHAN BON VI\nHOANG THAI NONG N\nSUPER LAN\nSPECIAL\nRA HOA DONG LOAT\n1KG\nGIUP LA GIA NHANH\nSIEU TAO MAN\nKHAC PHUC NGHEN HOA"
+    },
+    {
+      "index": 28,
+      "filename": "photo_1686_0.jpg",
+      "file_size_kb": 180.6,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 35,
+      "avg_score": 0.8828,
+      "timing": {
+        "det_elapse_ms": 596.3,
+        "cls_elapse_ms": 137.0,
+        "rec_elapse_ms": 3379.8,
+        "total_elapse_ms": 4172.2
+      },
+      "keywords_found": [
+        "cam"
+      ],
+      "sample_lines": [
+        "NHPNAN",
+        "Bo(b.2.000ppm,Do am (dang ran):1%",
+        "CONG DUNG"
+      ],
+      "full_text": "NHPNAN\nBo(b.2.000ppm,Do am (dang ran):1%\nCONG DUNG\nHUONG DAN SU DUNG\nvututtxungvngevagiaidoanhattrincaay\noi truc tiep xuong vungrevao giai doan phat trien cua cay\nLIEU DUNG KHUYEN CAO\nLieu luong\nThoi ky bon\nCay trong\nCay an trai:Xoai,chanh,cam,\nquyt,bui,saurieng,thanh\nTuoi truoc khira hoa\nPha 250-500g\nlong,nhan\nDinh ky 3-4 lan va\ncho phuy 220 lit\n7ngay 1 lan\nCay cong nghiep: Dieu,ca phe,\nca cao, chanh day...\nTuoi truoc khira hoa\nRaumau: Ot,cay lay cu,cay\nPha 1-2g\nkieng..\nDinhk7ngay 1lan\ncho 1 lit nuoc\nNOP:14420\nPhutng ticsi dung:Bone\nqN\n04/CBHQ-HTN\nnggtam\nQuocTe\nDon vi phan phoi\nHotline:0868767688\nChi Minh,Viot Nam"
+    },
+    {
+      "index": 29,
+      "filename": "photo_1687_0.jpg",
+      "file_size_kb": 170.5,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 16,
+      "avg_score": 0.9582,
+      "timing": {
+        "det_elapse_ms": 614.3,
+        "cls_elapse_ms": 33.3,
+        "rec_elapse_ms": 1456.5,
+        "total_elapse_ms": 2139.0
+      },
+      "keywords_found": [
+        "kg"
+      ],
+      "sample_lines": [
+        "Canh bao:",
+        "THUOCTRU BENH",
+        "Co the co haineu nuot phai,hit"
+      ],
+      "full_text": "Canh bao:\nTHUOCTRU BENH\nCo the co haineu nuot phai,hit\nphai va khitiepxucvoi da\nSPENDORA\nThanh phan:Dimethomorph 90g/kg\n600g/kg\n690WP\nMancozeb\nAdditives\n310g/kg\nDoctor\nXanh Cay\nSach Benh\nTiepXuc,LuuDan,Tham Sau\nBam Dinh Tot-Khong Lo Rua Troi"
+    },
+    {
+      "index": 30,
+      "filename": "photo_1688_0.jpg",
+      "file_size_kb": 189.5,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 30,
+      "avg_score": 0.9031,
+      "timing": {
+        "det_elapse_ms": 594.7,
+        "cls_elapse_ms": 87.7,
+        "rec_elapse_ms": 3916.4,
+        "total_elapse_ms": 4679.3
+      },
+      "keywords_found": [
+        "bvtv",
+        "phun",
+        "ml",
+        "kg"
+      ],
+      "sample_lines": [
+        "donmPhytophthoranmlongchutvasethanthoinin",
+        "bentrongbaovcaytonghieugiaioan",
+        "KHONGSOBI RUA TROISAUIGIOPHUN"
+      ],
+      "full_text": "donmPhytophthoranmlongchutvasethanthoinin\nbentrongbaovcaytonghieugiaioan\nKHONGSOBI RUA TROISAUIGIOPHUN\nSPENDORA 69owP dangky trir:Benh than thu tren caydau turong.\nHUONGDANSUDUNG\nKhoi lugng tjnh:\nLicu dung:Pha 1,5-2,0 kg/ha\n100g\nuongnuoc:400-500lit/ha\nhoidiem phun:Phunkhi benh chom xuat hien,ty lekhoang5%.\nThoi gian cach ly:7ngay\nANTOANSUDUNG\nMangdaydudobaoho laodongkhitip xucvoi thuoc.Khi thuocdinhvaodamat\nphai rrabangnuc sachnhiulanhicotrieuchngngdocduangaynanhan\nden co so y te gan nhat va mang theo nhan thuoc.\nBao quan:Noikhorao,xa tre em, xanguon thuc anva nuoc uongTieuhuy baobi\ntheo quy dinh.\nDOCKY HUONGDANTRUOCKHIDUNG\nNSX:Heze Longge Plant ProtectionTechnology Co,td\nAdd:DongGuanTunZhenHuaYeYuanQuWeiQi LuZhongDuanLuNan,JuyeCounty\nHezeCity,handongrovince,China.\n90/9000N\nDang ky va phan phoi:\nSOLO5X:01\nCONG TY CO PHAN KY THUAT CONG NGHE KLEVER\nDC:S612/167/31Tay Son,Dng Da,HaNi\nSDK:7949/CNDKT-BVTV\nHSD:2nam\nNoidong goi;Xem tren phieu Kcs\nNgay dong goi/s6 lo sx:In tren nhan"
+    },
+    {
+      "index": 31,
+      "filename": "photo_1689_0.jpg",
+      "file_size_kb": 196.3,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 25,
+      "avg_score": 0.8831,
+      "timing": {
+        "det_elapse_ms": 576.8,
+        "cls_elapse_ms": 111.3,
+        "rec_elapse_ms": 2586.7,
+        "total_elapse_ms": 3318.4
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "CANHBAO-DE XATAM VOICUA TREEM",
+        "Co hai neunut phaihit phaikhit xu id.",
+        "THUOC TRU BENH"
+      ],
+      "full_text": "CANHBAO-DE XATAM VOICUA TREEM\nCo hai neunut phaihit phaikhit xu id.\nTHUOC TRU BENH\nEpolists\n85WP\nThanh phan:\nopperoxychloride...85%w/w.\nbenhBae l lua,Risat caphe.Than thu dieu\nHUONG DAN AN TOAN:\nCATGIUVAXULYBAOGOISAUKHISUDUNG:\n-Baoquanthubc noikhrao,thoangmat.\nphmnay.\n-Khitiepxuchojcchufin bithufc:\n+Tranhht phithtvmnd\nnhan.\n+Mang:baoh lao dong phahdp.\nao\nnaokhac.\nbenhvien va nhmang theo nhin thube.\nem va dongvat.\nchantayva timria.\ndung noi quy dinh.\nHOI GIAN CACH LY THUOCLA 7 NGAY\nKh6iluong tinh\n100g"
+    },
+    {
+      "index": 32,
+      "filename": "photo_1690_0.jpg",
+      "file_size_kb": 194.7,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 37,
+      "avg_score": 0.9332,
+      "timing": {
+        "det_elapse_ms": 609.5,
+        "cls_elapse_ms": 159.3,
+        "rec_elapse_ms": 3723.7,
+        "total_elapse_ms": 4568.9
+      },
+      "keywords_found": [
+        "bvtv",
+        "phun",
+        "kg"
+      ],
+      "sample_lines": [
+        "CONG DUNG",
+        "nguyen t vilung Dong giup cay phat trien xanh tot.",
+        "CACH DUNG"
+      ],
+      "full_text": "CONG DUNG\nnguyen t vilung Dong giup cay phat trien xanh tot.\nCACH DUNG\nBENH HAI\nLIEU LUONG\nCACH SU DUNG\nCAY TRONG\nPha 8-15g/binh 8 litnuoc.\nLugng nuoc phun400-500\nLUA\nBACLA\n0,4-0,7kg/ha.\nlit/ha.Phun khi ty le benh\nkhoang5-10%.Khong\nphun thuockhi lua tro.\nPha 8-15g/binh 8lit nuoc.\nCAPHE\nRiSAT\n0,1-0,18%.\nPhun uot deu cay trong khi\nbenh xuat hien.\nPha 20g/binh 8 lit nuoc.Phun\nDIEU\nTHAN THU\n0,25%\nkhitylebenhkhoang 5%.\nLudng nuocphun 600 lit/ha.\nDonvisan xuat thuocBVTVthanh pham/hoatchat:\nPARKENS\nPARIKHENTERPRISESPVT.LTD-INDIA\nOdhav.Ahmedabad,India\nDon vidang ky va phan phoi:\nCONG TY CO PHAN THANH DIEN\n5DK:5289/CNDKT-BVTV\nNSX/S6 16 sx:Xem tren nhan\nong goiSan xuat tai: Viet Nam\nHSD:02namke tuNSx"
+    },
+    {
+      "index": 33,
+      "filename": "photo_1691_0.jpg",
+      "file_size_kb": 117.8,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 9,
+      "avg_score": 0.9151,
+      "timing": {
+        "det_elapse_ms": 602.2,
+        "cls_elapse_ms": 33.7,
+        "rec_elapse_ms": 810.3,
+        "total_elapse_ms": 1476.2
+      },
+      "keywords_found": [
+        "gam"
+      ],
+      "sample_lines": [
+        "CANH BAO",
+        "THUOC TRU BENH",
+        "KASUDUC 3SL"
+      ],
+      "full_text": "CANH BAO\nTHUOC TRU BENH\nKASUDUC 3SL\n30g/l\nThanh phan:Kasugamycin.\nPhu gia dac biet du cho.\nDIET NAM MOCVA VI KHUAN\nPSC.1\nC.1"
+    },
+    {
+      "index": 34,
+      "filename": "photo_1692_0.jpg",
+      "file_size_kb": 131.0,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 14,
+      "avg_score": 0.8676,
+      "timing": {
+        "det_elapse_ms": 625.2,
+        "cls_elapse_ms": 57.1,
+        "rec_elapse_ms": 1718.1,
+        "total_elapse_ms": 2433.8
+      },
+      "keywords_found": [
+        "ml"
+      ],
+      "sample_lines": [
+        "HUONG DAN AN TOAN:",
+        "gua",
+        "tang bibaoho lao dong."
+      ],
+      "full_text": "HUONG DAN AN TOAN:\ngua\ntang bibaoho lao dong.\nPSC.1\nCATGIU SU DUNGVA XULYBAO GOI SAU SU DUNG.\nGikintong baogoigocdugcdannhan.Khong sudung laibaogoinayw\nbkymdichnaohac.ebaogindiantoan,tranhxataneem\ndnvatbagisaudngngdiquydagiau\ndung phaidudcruta 3lan.\nBOC KY HUONG DAN TRUOC KHI SU DUNG\nHSD:2nam\nThe tich thuc:\nNgay SX:\n450ml"
+    },
+    {
+      "index": 35,
+      "filename": "photo_1693_0.jpg",
+      "file_size_kb": 119.9,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 13,
+      "avg_score": 0.9203,
+      "timing": {
+        "det_elapse_ms": 603.2,
+        "cls_elapse_ms": 83.4,
+        "rec_elapse_ms": 1400.1,
+        "total_elapse_ms": 2118.0
+      },
+      "keywords_found": [
+        "phun",
+        "ml"
+      ],
+      "sample_lines": [
+        "DAC TINH SAN PHAM:",
+        "HUONG DAN SU DUNG:",
+        "Canh pha: Pha goi15ml cho binh16 den 20lit uc."
+      ],
+      "full_text": "DAC TINH SAN PHAM:\nHUONG DAN SU DUNG:\nCanh pha: Pha goi15ml cho binh16 den 20lit uc.\nPSC.1\nPha chai 450ml cho400-500 lit nuoc\n.Liu luong:0.7-0.8 lit/ha.Luong nuoc phun\n400-500lit/ha\nKasuduc3SLDang ky trubenhbac la trenLua.\n-Thoi gian cach ly:07 ngay.\nPhan phoi tai Viet Nam:\nTHUYOSI\nBIOCHEMISTRY\nDT:024.6688.3285"
+    },
+    {
+      "index": 36,
+      "filename": "photo_1694_0.jpg",
+      "file_size_kb": 109.3,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 13,
+      "avg_score": 0.914,
+      "timing": {
+        "det_elapse_ms": 608.8,
+        "cls_elapse_ms": 56.5,
+        "rec_elapse_ms": 1055.1,
+        "total_elapse_ms": 1752.1
+      },
+      "keywords_found": [
+        "ml"
+      ],
+      "sample_lines": [
+        "CANH BAO",
+        "THUOC TRU BENH",
+        "Amity Top 5oosc"
+      ],
+      "full_text": "CANH BAO\nTHUOC TRU BENH\nAmity Top 5oosc\nTAOVANG\nThuy Si Biochemistry\nThanh phan:Azoxystrobin..20\nSIEU\nDifenoconazole.250g\nTAY CHAM\nSANGQUA\nDAC TRI:\nPHAN TRANG-Ri SAT\nThe tich thuc:100ml"
+    },
+    {
+      "index": 37,
+      "filename": "photo_1695_0.jpg",
+      "file_size_kb": 113.7,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 23,
+      "avg_score": 0.7472,
+      "timing": {
+        "det_elapse_ms": 615.0,
+        "cls_elapse_ms": 91.7,
+        "rec_elapse_ms": 2315.5,
+        "total_elapse_ms": 3075.1
+      },
+      "keywords_found": [
+        "ml"
+      ],
+      "sample_lines": [
+        "CANH BAO",
+        "An bi",
+        "THUOC TRU BENH"
+      ],
+      "full_text": "CANH BAO\nAn bi\nTHUOC TRU BENH\nsach\nAmity Top 5oosc\nsachtm\nching年p\nThuy Si Biochemistry\nmagia\nThanh phan:Azoxystrobin...250g/\nDifenoconazole..250g/\nAdL中\nDisnoa\nHAM\nAdt加l\nBagtcni\nDO-87-8\nDO:L\nCTRI:\nPHAN TRANG-Ri SAT\nSOK-612\nHS0:2\nThetih thuc:100ml"
+    },
+    {
+      "index": 38,
+      "filename": "photo_1696_0.jpg",
+      "file_size_kb": 138.6,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 11,
+      "avg_score": 0.7577,
+      "timing": {
+        "det_elapse_ms": 588.7,
+        "cls_elapse_ms": 64.9,
+        "rec_elapse_ms": 1600.1,
+        "total_elapse_ms": 2319.5
+      },
+      "keywords_found": [
+        "bvtv"
+      ],
+      "sample_lines": [
+        "magkmthatugaygdc",
+        "DOC KY HUONG DAN TRUOC KHI SU DUNG",
+        "AtnghTawifnguingreia"
+      ],
+      "full_text": "magkmthatugaygdc\nDOC KY HUONG DAN TRUOC KHI SU DUNG\nAtnghTawifnguingreia\nDeaoconazole: Shandong Shengnong Chemical Co.,Ltd.\nA8ntnaihne\nBang b:CongTyTNHHVietDuc\n71-26KPKiB,TT.anHpHTanHip,TKien Giang\nSsmma vadong chai Cong ty CP Lien Nong Vie Nam\nTihTayNnh,iet Nam.\nHSX:03.01.2026\nSOK:4611/CNDKT-BVTV"
+    },
+    {
+      "index": 39,
+      "filename": "photo_1697_0.jpg",
+      "file_size_kb": 114.1,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 9,
+      "avg_score": 0.9269,
+      "timing": {
+        "det_elapse_ms": 591.9,
+        "cls_elapse_ms": 18.2,
+        "rec_elapse_ms": 848.8,
+        "total_elapse_ms": 1501.9
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "THUOC TRU BENH",
+        "Tilbest super",
+        "300EC"
+      ],
+      "full_text": "THUOC TRU BENH\nTilbest super\n300EC\nMountain Morterhorn -Thuy sy\nThanh phan:\nDifenoconazole150 g/lit\nPropiconazole 150g/lit\nPhu gia 700 g/lit\ncay trong."
+    },
+    {
+      "index": 40,
+      "filename": "photo_1698_0.jpg",
+      "file_size_kb": 117.2,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 10,
+      "avg_score": 0.8956,
+      "timing": {
+        "det_elapse_ms": 613.5,
+        "cls_elapse_ms": 34.1,
+        "rec_elapse_ms": 857.0,
+        "total_elapse_ms": 1549.1
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "THUOCTRU BENH",
+        "Tilbest super",
+        "300EC"
+      ],
+      "full_text": "THUOCTRU BENH\nTilbest super\n300EC\nMountain Morterhorn - Thuy sy\nThanh phan:\nDfenoconazole150g/lit\nPopiconazole150g/lit\nPhugia70g/lit\nTuctru nambenh cao cap\ncaytrong."
+    },
+    {
+      "index": 41,
+      "filename": "photo_1699_0.jpg",
+      "file_size_kb": 142.9,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 6,
+      "avg_score": 0.833,
+      "timing": {
+        "det_elapse_ms": 610.4,
+        "cls_elapse_ms": 12.3,
+        "rec_elapse_ms": 1082.7,
+        "total_elapse_ms": 1749.1
+      },
+      "keywords_found": [
+        "cam"
+      ],
+      "sample_lines": [
+        "HUONG DAN SU DUNG:",
+        "Rist dommatcua,muc qua,than thulem lep",
+        "hat phan trang,suongmai,mocleo,mocxam"
+      ],
+      "full_text": "HUONG DAN SU DUNG:\nRist dommatcua,muc qua,than thulem lep\nhat phan trang,suongmai,mocleo,mocxam\nmocluc, thoi qua, ghe nham tren vai,nhan,tao,\ncam,buoi,man, na,...\nliuluong:O,.ltyha"
+    },
+    {
+      "index": 42,
+      "filename": "photo_1700_0.jpg",
+      "file_size_kb": 143.3,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 9,
+      "avg_score": 0.8405,
+      "timing": {
+        "det_elapse_ms": 570.3,
+        "cls_elapse_ms": 26.5,
+        "rec_elapse_ms": 1269.1,
+        "total_elapse_ms": 1906.0
+      },
+      "keywords_found": [
+        "ml",
+        "cam"
+      ],
+      "sample_lines": [
+        "HUONG DAN SU DUNG:",
+        "Haihat chat Difenoconazole va Propiconazole",
+        "duoc cac cong ty dang ky Viet Nam tru cac benh:"
+      ],
+      "full_text": "HUONG DAN SU DUNG:\nHaihat chat Difenoconazole va Propiconazole\nduoc cac cong ty dang ky Viet Nam tru cac benh:\nRisat,dommatcua,mucqua,than thu,lemlep\nhat phan trang, suong maimoc leo,moc xam\ncam,buoi,man,na,..\nnuoo\nPhan phoi:\nyreenMEHONG"
+    },
+    {
+      "index": 43,
+      "filename": "photo_1701_0.jpg",
+      "file_size_kb": 161.6,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 26,
+      "avg_score": 0.9002,
+      "timing": {
+        "det_elapse_ms": 626.7,
+        "cls_elapse_ms": 108.9,
+        "rec_elapse_ms": 3182.9,
+        "total_elapse_ms": 3973.2
+      },
+      "keywords_found": [
+        "ml",
+        "kg"
+      ],
+      "sample_lines": [
+        "L1125502",
+        "THUOC TRU BENH",
+        "R"
+      ],
+      "full_text": "L1125502\nTHUOC TRU BENH\nR\nRidomilGold\n68WG\nsyngenta\nNHOM4M03THUOCTRUBENH\nThanh phan:\nMetalaxylM40g/kg,Mancozeb640g/kg\nPhugia:320g/kg\nthuhaidieuloet socmatcaocao suchetcaycon hai thuocllac;chet\nnhanh haiho tieu;domlahaingo(bap)\nNhapkhauva dong goi:Cong tyTNHHSyngenta Viet Nam\nS616,ungANBinallngi\nThong tinsanpham:(028)37756200-Ho trgsdcap cuiu:(028)37756288\nXuatxur:Duc\nSanxuat thanh pham:IPT-Pergande GmbH,\nWilfried-rgande-Platz106369SudichesAnhalt,\nOTWeiBandt-Golzau,Germany(Duc)\nDang kyva phan phoi:Cong ty CoPhan KhuTrung Viet Nam\n29TonDucThang,Qun1,TP.HChiMinh\nDocky nhan phu kem theotruockhisirdung\n100g\nKhoi ludng tinh\n?\nVICB1498.10-7"
+    },
+    {
+      "index": 44,
+      "filename": "photo_1702_0.jpg",
+      "file_size_kb": 196.3,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 64,
+      "avg_score": 0.9334,
+      "timing": {
+        "det_elapse_ms": 643.8,
+        "cls_elapse_ms": 189.3,
+        "rec_elapse_ms": 6322.7,
+        "total_elapse_ms": 7226.5
+      },
+      "keywords_found": [
+        "bvtv",
+        "phun",
+        "ml",
+        "kg"
+      ],
+      "sample_lines": [
+        "Huong dan sirdung",
+        "HSD:24 thang ketuNSX",
+        "OK:154/CNDKT-BVTV"
+      ],
+      "full_text": "Huong dan sirdung\nHSD:24 thang ketuNSX\nOK:154/CNDKT-BVTV\nLieuluong\nCach dung\nCay trong\nBenhhai\nPha 800g/phuy200L,phun5phuy/ha.\nCacao\nSudngmai\n0,4-0,75%\nPhun khibenh chom xuathien\nPha 1000 g/phuy200L,phun5phuy/ha.\nPhunt6ida4lan/vu,cachnhau 10-14ngay.\nDiéu\nThanthu\n0,5-0,6%\nNeubenhphattriennangvao muamua,\nphun cach nhau 10ngay/lan\nLoetsoc\n%E'0\nCaosachvetbenh,quet dung dich lenmatcao\nCaosu\nmatcao\n(3g/Lnuoc)\n3lan,moi lan cachnhau 7ngay.\nLungnu6chun:huclac,ng:400500ha;tieu,diucacao:001000ha\nThoigian cach ly:Ngung phunthuoctruockhi thu hoach14ngay\nCnuy:Phunkhibenhxuathien,phunphong khithaitietthuanlgichobenhphatrien\nCIVI.\nrial:\nCANHDA\n10SX:\nnggoi:\nCo the gayra mot phan ung diung da.\nRatdocdivoisinhvatthuysinhvoianhhungkeodi\nHuong dan sudung\nLieu luong\nCach dung\nCaytrong\nBenhhai\n08935226300134\n46EH689SW1\nIPT5C061RM\n110725\n130325\n1,25-2,25\nPha5090g/bin6pin/10\nThuocla\nkg/ha\npha80-140g/binh25L,phun1，6binh/1000m²\nChet\ncaycon\nLac\n3kg/ha\nH6tieu\nChet nhanh\n0,3%\ncao,co the phun cach nhau 7ngaylan.\nNgo(bap)\n2-3\nDoml6\nkg/ha\ngiaidoan20ngayva45ngaysaukhigieo"
+    },
+    {
+      "index": 45,
+      "filename": "photo_1703_0.jpg",
+      "file_size_kb": 215.3,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 57,
+      "avg_score": 0.91,
+      "timing": {
+        "det_elapse_ms": 601.9,
+        "cls_elapse_ms": 184.0,
+        "rec_elapse_ms": 5579.4,
+        "total_elapse_ms": 6441.0
+      },
+      "keywords_found": [
+        "bvtv",
+        "phun",
+        "ml",
+        "kg"
+      ],
+      "sample_lines": [
+        "phun2binh/1000mvao",
+        "pha80-140g/binh25,phun1,6binh/1000m",
+        "Cao sachvetbenhquet dung dichlenmatcao"
+      ],
+      "full_text": "phun2binh/1000mvao\npha80-140g/binh25,phun1,6binh/1000m\nCao sachvetbenhquet dung dichlenmatcao\npha150g/binh25L,phun2binh/1000m\nPhun ti da 4 lan/vy,cach nhau 10-14ngay.\nNeu benh phat trien nang vao mua mua,\nPha 800 g/phuy 200L,phun 5 phuy/ha.\n3 lan,moi lancachnhau7ngay.\nCach dung\nPhun khi benh chom xuat hien\nphun cach nhau 10ngay/lan\nCach dung\nHuong dan sir dung\nCo the co hai neu nuot phai.Co hai neu hit phai.\npha100-\nbunn pe uep buonh\nLieu luong\n1,25-2,25\n3kg/ha\n0,3%\n2-3\nkg/ha\n(3g/Lnuoc)\nkg/ha\nbuonina\nSuongmai0,4-0,75%\n0,5-0,6%\n0,3%\nChetnhanh\nBenh hai\nDoml6\nChet\ncaycon\nThan thu\nLoetsoc\nmatcao\nyyuae\nCay trong\nHotieu\nThuocla\nCay trong\no\nCaosu\nDiéu\n130325\nSDK:154/CNDKT-BVTV\nHSD:24 thang ke tuNSX\nX：\n110725\ndonggoi:\nTensanphamcghihoc,kh6ikhung hinh\n16SX:\nIPT5C061RM\nlogoSYNGENTAvabieutudng\n46EH689SW1\nlanhanhieuhang h6adocquyen\n08935226300134"
+    },
+    {
+      "index": 46,
+      "filename": "photo_1704_0.jpg",
+      "file_size_kb": 139.7,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 19,
+      "avg_score": 0.8874,
+      "timing": {
+        "det_elapse_ms": 611.2,
+        "cls_elapse_ms": 83.7,
+        "rec_elapse_ms": 1979.6,
+        "total_elapse_ms": 2727.7
+      },
+      "keywords_found": [
+        "ml",
+        "cam"
+      ],
+      "sample_lines": [
+        "Anvil5sc",
+        "syngenta",
+        "NHOM3THUOCTRU BENH"
+      ],
+      "full_text": "Anvil5sc\nsyngenta\nNHOM3THUOCTRU BENH\nThanh phan:Hexaconazole50 g/L\nPhugia va dungmoi:990 g/L\nCong dung:Thuocphrong,phong trir dugc\nhiubenhhai trennhieu loai cay trong nhu lem\nlephatkhvaniluaomngatm\nhong hai caphe;Domlahailac;Khovanhai\nngI rehai thucla;Vangla(Coryespora),\nphantrangnamhong hai cao suGheseohai\ncam;Dom nau hai thanh long.\nLacky thuoc truockhi pha\nDoc ky nhan thuoc truoc khi sir dung\nhngh\nlag SYNGENTAvabieutugng\nThetich thuc:\n1Lit\nVICB1498.10-9"
+    },
+    {
+      "index": 47,
+      "filename": "photo_1705_0.jpg",
+      "file_size_kb": 147.9,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 26,
+      "avg_score": 0.8472,
+      "timing": {
+        "det_elapse_ms": 614.5,
+        "cls_elapse_ms": 110.7,
+        "rec_elapse_ms": 2581.0,
+        "total_elapse_ms": 3346.1
+      },
+      "keywords_found": [
+        "cam"
+      ],
+      "sample_lines": [
+        "THUOC TRU BENH",
+        "Anvil5sc",
+        "syngenta"
+      ],
+      "full_text": "THUOC TRU BENH\nAnvil5sc\nsyngenta\nNHOM3THUOCTRU BENH\nThanh phan:Hexaconazole50g/L\n6066obunpen n\nCngdungThhrongng\nheubenhhaitenhuloicaytrongnhm\nlep hahnhalamngiatm\nhong hai ca phe;Dom lahai lac;Khovan hai\nThi\nngo;Licrehai thuoc la;Vang la(Corynespora),\nphan tang,nam honghai cao su;Gheseo hai\ncamDom nauhai thanh long.\nHinda\nCach\nLac ky thuoc truockhipha\ntenc\nDoc ky nhan thuoc truockhi sur dung\nBa0\nnpmc ghihockhikhunghinh\nlogpSYNGENTAvabieu tudng\naninguhang hadocquyen\nThetich thuc:\n1Lit\nVICB1498.10-9"
+    },
+    {
+      "index": 48,
+      "filename": "photo_1706_0.jpg",
+      "file_size_kb": 194.8,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 11,
+      "avg_score": 0.8994,
+      "timing": {
+        "det_elapse_ms": 628.5,
+        "cls_elapse_ms": 25.4,
+        "rec_elapse_ms": 1641.1,
+        "total_elapse_ms": 2330.0
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "Co the cohai neunuot phai",
+        "sinhhoat,hoacdongnuochaynuoc trongaoho.",
+        "Dieu tricap cuu;"
+      ],
+      "full_text": "Co the cohai neunuot phai\nsinhhoat,hoacdongnuochaynuoc trongaoho.\nDieu tricap cuu;\nHit phaithuocDuanannhanranoithong khihohapha\nroiduangaydenbacsi.\nThuocdinhvaodaRuavungdabidinhthuocnhieutabang\nThuoc dinhyao mat:Ruamatbang cach giu chomat mo\ntrongit nhat15-20phut.Candi khambacsi.\ndenbacsi.\nHienchuacothuocgiaidcdachieuChuatriteteung\nXyat xu:Malaysia"
+    },
+    {
+      "index": 49,
+      "filename": "photo_1707_0.jpg",
+      "file_size_kb": 186.9,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 19,
+      "avg_score": 0.7779,
+      "timing": {
+        "det_elapse_ms": 635.3,
+        "cls_elapse_ms": 62.8,
+        "rec_elapse_ms": 2013.1,
+        "total_elapse_ms": 2750.4
+      },
+      "keywords_found": [
+        "phun"
+      ],
+      "sample_lines": [
+        "syngentae",
+        "hai.",
+        "uing di ung da."
+      ],
+      "full_text": "syngentae\nhai.\nuing di ung da.\nwww.frac.infon\nmapmntchaynuoctrong aoho.\nlars.\nchinmugyon,duangayannhan cung chaithuco nhan\nghitCandikhambacsi.\noodachieuChuatritheotrieuchung\ntuoc Khong divao khuvucvuaphun thuocchodenkhi thuoc\nhingduoctrangbidobaohocanhan.\nfaokhuwicvuaphun thuoc.\nagantuochungoithuchamphaicachxanguongaychay\noqua35℃\nMaongcha:CongtyTNHSyngntaVNam\nBin Hall,ongai\nMasralndustriesDNBHD\nangr,Malaysia\nWHASD:24thangke tuNSX"
+    },
+    {
+      "index": 50,
+      "filename": "photo_1708_0.jpg",
+      "file_size_kb": 185.1,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 11,
+      "avg_score": 0.7793,
+      "timing": {
+        "det_elapse_ms": 646.7,
+        "cls_elapse_ms": 54.0,
+        "rec_elapse_ms": 1525.1,
+        "total_elapse_ms": 2260.2
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "syngen'",
+        "sterolt",
+        "ithoathoac dongnuochaynuoctrongaoho."
+      ],
+      "full_text": "syngen'\nsterolt\nithoathoac dongnuochaynuoctrongaoho.\nlieutnicapcuiu;:\natunanhanraitongkhhhphntaneuing\niblangaydenbacsi.\nodhvadauvngdabidintiuanbangn\ntugitnhat15-20phut.Candikhambacsi.\ndenbacs.\nhtatotuocgiaidocdachieuChatitheotrieuchuing\nlunitMalaysia"
+    },
+    {
+      "index": 51,
+      "filename": "photo_1709_0.jpg",
+      "file_size_kb": 168.1,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 72,
+      "avg_score": 0.8897,
+      "timing": {
+        "det_elapse_ms": 673.0,
+        "cls_elapse_ms": 212.3,
+        "rec_elapse_ms": 4937.0,
+        "total_elapse_ms": 5879.7
+      },
+      "keywords_found": [
+        "phun",
+        "ml",
+        "cam"
+      ],
+      "sample_lines": [
+        "Benh hai",
+        "Lieu luong",
+        "Cachdung"
+      ],
+      "full_text": "Benh hai\nLieu luong\nCachdung\nCaytrong\nPha62.5m/bh25\nLemlephat,\n1L/ha\nkhovan\nPhun16binhiha\nLua\n0,25%\nPha500mllphuy 20u\nDom vong\n1.2L/ha\nPhun4phuyhaPh\nCaphe\nRisat,\n(0,15-0,3%)\nlabihaihoackhibha\nnamhong\n1L/ha\nPha62.5mblh 25\nDomla\nlac\nPhun 16binh/ha\n1-1,5L/ha\nPha70-90m/lbm2\nNgo\nKhovan\nPhun 16binh/ha\n0,5-1L/ha\nPha35-60/b2\nThubcla\nLocore\nPhun15 binh/ha\nPha50-150mbm2\nVangla\n(rungla\n0,2-0,6%\n20binh/hahoac400120\nCorynespora)\nphuy200nuc,p\nPha20-40ml/bh\n0,08-0,16%\n20binh/hahoac 160-3\nPhan trang\nCaosu\nphuy200Lnuc,pn\nPha125m/binh25.\n0,5%\n20binh/hahosc 100\nNamhong\nphuy200uc.pn\nPha600m/lphuy20mt\nCam\nGheseo\n0,3%\nPhun3-4phuyia\nPha600mlphuy20t\nThanh long\nDomnau\n0,3%\nPhun3-4phuyiha\nAMVLla tenthuongmai cia\nR\nNSX:\n131224\n18022582\nSeial\nGIN:\n3RSZCYX9AY\n08935226302190"
+    },
+    {
+      "index": 52,
+      "filename": "photo_1710_0.jpg",
+      "file_size_kb": 180.3,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 61,
+      "avg_score": 0.8585,
+      "timing": {
+        "det_elapse_ms": 635.8,
+        "cls_elapse_ms": 176.5,
+        "rec_elapse_ms": 5115.8,
+        "total_elapse_ms": 6001.1
+      },
+      "keywords_found": [
+        "phun",
+        "ml",
+        "cam"
+      ],
+      "sample_lines": [
+        "Cach dung",
+        "Pha 62.5ml/binh 25L.",
+        "1L/ha"
+      ],
+      "full_text": "Cach dung\nPha 62.5ml/binh 25L.\n1L/ha\nPhun16binh/ha\nPha500ml/ phuy200Lnuc.\n0,25%\nPhun4phuyha.Phunkhi15%\n1-2L/ha\nlabihaihoackhibenhxuathien\n(0,15-0,3%)\nPha 62.5ml/ binh25L.\n1L/ha\nPhun16binh/ha\nPha70-90ml/binh25L.\n1-1,5L/ha\nPhun16binh/ha\nPha35-60ml binh 25L.\n0.5-1Lha\nPhun15binh/ha\nPha50-150ml/binh25L,phun\n0,2-0,6%\n20binh/hahoac400-1200mll\nphuy200Lnuc,phun3phuyha.\nipespora)\nPha20-40ml/binh25L,phun\n20binh/hahoac160-320mll\nNHOM3THJS\nManteng\n0,08-0,16%\nphuy200Lnu8c,phun3phuy/ha.\nThanh phanHean\nPha125ml/binh25L,phun\nPhu ga vadnmn\n0,5%\n20binh/hahoac1000ml\nCong dung hiut\nphuy200Lnuoc,phun3phuy/ha.\nnhieuberhhanei\n0,3%\nPha 600ml/phuy200Lnuoc.\nlep hathia\nPhun3-4phuyha\nhong haicape\nbinau\n0,3%\nPha600ml/ phuy,200L nuoc.\nngo:Lo coieha\nPhun3-4phuy/ha\nphan trang ann\nCasrhunuotdeucaytrong\ncam,Dom alit\npCamthaon\nLacky thuctati\nDocky nhani\n131224\n180225B2\nThetihthuc\nMMA4L0008E\n3RSZCYX9AY\n1-Lit\n08935226302190"
+    },
+    {
+      "index": 53,
+      "filename": "photo_1711_0.jpg",
+      "file_size_kb": 162.6,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 72,
+      "avg_score": 0.8884,
+      "timing": {
+        "det_elapse_ms": 657.9,
+        "cls_elapse_ms": 187.8,
+        "rec_elapse_ms": 4930.5,
+        "total_elapse_ms": 5834.7
+      },
+      "keywords_found": [
+        "phun",
+        "ml",
+        "cam"
+      ],
+      "sample_lines": [
+        "Benhhai",
+        "Lieuluong",
+        "Cachdung"
+      ],
+      "full_text": "Benhhai\nLieuluong\nCachdung\nCaytrong\nLemlephat,\n1L/ha\nPha625m/o79\nLua\nkhovan\nPhun16 binha\nDom vong\n0,25%\nPha500mlpby/20.m\nRisat,\n1-2L/ha\nPhun4 phuyha.h\nCaphe\n(0,15-0,3%)\nlabihaihoachitehu\nnamhong\n1L/ha\nPha62.5mlblh29\nLac\nDomla\nPhun16binhha\nPha70-90m/b\nKhovan\n1-1,5L/ha\nNgo\nPhun 16binhha\n0,5-1L/ha\nPha 35-60m/lb\nThuocla\nLocore\nPhun 15 binh/ha\nVangla\nPha50-150mlbm\n(rungla-\n0,2-0.6%\n20binh/hahoac4001\nCorynespora)\nphuy200Lnuoc,pn\nPha20-40m/b\nPhan trang\n0,08-0,16%\n20binh/hahoac10\nCaosu\nphuy 200Lnut,\nPha 125m/binh2.\n0,5%\n20binh/ha hoac 100\nNamhong\nphuy200uoc.p\nPha600m/phy20\nCam\nGheseo\n0,3%\nPhun3-4 phuyhna\nPha600m/tun2lm\nThanh long\nDomnau\n0,3%\nPhun3-4phuypa\nANVLlatentuong mai cua\nNSX:\nNgay dong hai:\n131224\n18022582\nSerial\nMMA4L0008E\n3RSZCYX9AY\n0893522630219"
+    },
+    {
+      "index": 54,
+      "filename": "photo_1712_0.jpg",
+      "file_size_kb": 156.8,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 23,
+      "avg_score": 0.9321,
+      "timing": {
+        "det_elapse_ms": 606.1,
+        "cls_elapse_ms": 41.8,
+        "rec_elapse_ms": 2108.4,
+        "total_elapse_ms": 2795.6
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "CANHBAO:",
+        "Cotheco hai neunuotphai",
+        "Cotheco hal neu hit phal"
+      ],
+      "full_text": "CANHBAO:\nCotheco hai neunuotphai\nCotheco hal neu hit phal\nHOANG PHAT\nCothec6hai khi tiepxucvdida\nTHUOC TRU BENH FORTHANE 80WP\nSACH BENH\nM8\nThanh phan:\nMancozeb80%w/w\nAcditives20%w/w\nHO.NGPH.AT\ncong dung:\nHANG CHINH HIEU\nThuoc tru benh FORTHANE 8oWP la\nthuoc tru benh pho rong, co tac dong\ntiep xuc manh, ngan ngua su xam\nnhapvachan dung tuc thdisu lay lan,\nphat trien cua nam benh.\nXUNG DANH HANG HIEU\nBOT SIEU MIN-TAN CUC NHANH\nDAC TRI NAM BENH KHANG THUOC\nDUONG CAY-XANH LA"
+    },
+    {
+      "index": 55,
+      "filename": "photo_1713_0.jpg",
+      "file_size_kb": 176.9,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 37,
+      "avg_score": 0.9043,
+      "timing": {
+        "det_elapse_ms": 620.0,
+        "cls_elapse_ms": 142.1,
+        "rec_elapse_ms": 4569.5,
+        "total_elapse_ms": 5383.6
+      },
+      "keywords_found": [
+        "bvtv",
+        "phun",
+        "kg"
+      ],
+      "sample_lines": [
+        "SL.20260115",
+        "THUOC TRU BENH",
+        "80WP"
+      ],
+      "full_text": "SL.20260115\nTHUOC TRU BENH\n80WP\nFORTHANE\nHUONG DAN SU DUNG\nCach dung\nThdi gian cach ly\nCay trongSinh vetgay hailLieu ludng\n2.0-3.0\nBenh than thu\n7\nBapcai\nkg/ha\nLuong nuocphun300-500lith\n5-3.0\nBenh dao on\n10\nLua\nkg/ha\nChch pha:Pha 50g cho bin 20-25 lit nuoc.Phun uot deu tan la cay trong.\nHUONG DAN AN TOAN\nSAUKHIuNG:uasachdungcuthitbivadbaohlaodongIENPHd\ncuuuhcdinadachinuvaxanguhbn\nrua sachmat duoi dong nuoc sachlien tuc trong itnhat10 phutNeubingodoc\nnhanhchong chuyennannhandencd saytgannhatmang theonhan thuocga\nngodoc.AoquNNoi hrao,thoangmattranhxa tam taytremnguonth\nDang ky:LongFat Global Co,dDC:SimonsBildRdTownTortolaBristsh\nVirgin Island.Nha uy quyen:Forward (Beihai Hepu Pesticide Co.,td.DC:N\nQinghni\npham tai Viet Nam.\nSDK:2556/CNDKT-BVTV Don vi gia cong:Tren phieuKCS\nKhdludngtinh:\n50g\nHSD:02 nam ke tur NSXNgay SX/S6 lo:Xem tren tui\nNhap khauvaphan phoi tai Vit Nam:\nCONG TY TNHH THUOC BVTV HOANG PHAT\nHO.NG PH.T"
+    },
+    {
+      "index": 56,
+      "filename": "photo_1714_0.jpg",
+      "file_size_kb": 165.0,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 23,
+      "avg_score": 0.9183,
+      "timing": {
+        "det_elapse_ms": 643.2,
+        "cls_elapse_ms": 115.5,
+        "rec_elapse_ms": 2255.8,
+        "total_elapse_ms": 3056.0
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "CANH BAO:",
+        "HOANG PHAT",
+        "Cothe cohaineunuot phai"
+      ],
+      "full_text": "CANH BAO:\nHOANG PHAT\nCothe cohaineunuot phai\nC6 the cohaineu hit phai\nC6 thec6hai khitiep xucvoida\nTHUOC TRU BENH FORTHANE 8OWP\nSACH BENH M8\nneiH\nThanh phan:\nMancozeb 80%w/w\nAdditives20%w/w\nHO.NGPHAT\nCong dung:\nHANG CHINH HIEU\nThuoc tru benh FORTHANE 8oWP la\nthuoc tri benh pho rong, co tac dong\ntiep xuc manh, ngan ngua su xam\nnhap va chan dung tuic thai su lay lan,\nphat trien cua nam benh.\nXUNG DANH HANG HIEU\nBOT SIEU MIN -TAN CUC NHANH\nDAC TRI NAM BENH KHANG THUOC\nDUONG CAY -XANH LA"
+    },
+    {
+      "index": 57,
+      "filename": "photo_1715_0.jpg",
+      "file_size_kb": 181.8,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 28,
+      "avg_score": 0.8954,
+      "timing": {
+        "det_elapse_ms": 669.4,
+        "cls_elapse_ms": 103.0,
+        "rec_elapse_ms": 3164.1,
+        "total_elapse_ms": 4006.0
+      },
+      "keywords_found": [
+        "iso"
+      ],
+      "sample_lines": [
+        "ISO9001:2015",
+        "TNA",
+        "SPC"
+      ],
+      "full_text": "ISO9001:2015\nTNA\nSPC\nTHUOC TRU BENH CAY\nONGUOTEUDOING\nSINCE1989\nBINHCHON\nMexyl MZ\n72WP\noold\nXANH\nThanh phan:\nMetalaxyl:8%w/w\n·Mancozeb:64%w/w\nChat mang,ph gia:28%w/w\nXuat xu:AN DO.Nha san xuat: IndofilIndustres Ltd\napatqodiifib\nCung cap trung,vi luong nhu Luu huynh (S)-Mangan (Mn）-Kem (Zn)\nGiup cay xanh la va tang nang suat cay trong\nMn\nZn\nThuoc tru benh\npho rong,\nPhong, Tru nam benh\ncho cay trong\nDang ky va\nphan phoibor:\nCONG TY CO PHAN BAO VE THUC VAT SAIGON"
+    },
+    {
+      "index": 58,
+      "filename": "photo_1716_0.jpg",
+      "file_size_kb": 197.6,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 47,
+      "avg_score": 0.9095,
+      "timing": {
+        "det_elapse_ms": 621.5,
+        "cls_elapse_ms": 180.5,
+        "rec_elapse_ms": 6190.3,
+        "total_elapse_ms": 7066.4
+      },
+      "keywords_found": [
+        "bvtv",
+        "phun"
+      ],
+      "sample_lines": [
+        "DOC KY NHAN THUOC TRUOC KHI SU DUNG",
+        "MEXYM7Wlathuhnhpcptacdngrongnenhngridunhuoi",
+        "am benh hai cay."
+      ],
+      "full_text": "DOC KY NHAN THUOC TRUOC KHI SU DUNG\nMEXYM7Wlathuhnhpcptacdngrongnenhngridunhuoi\nam benh hai cay.\nMEXYWctacdng tixicvaniapmanhehicavakedi\nHUONG DAN SU DUNG\nCAY TRONG\nBENH HAI\nLIEU LUONG\n0.30-0,45%.Pha 300-450 g/100 lit nuoc.\nTIEU\nChet nhanh\nPhun uot deu tan lahoactuoivaogoc\nkhi benh moi phat sinh.\nLoet soc mat cao\nCAO SU\n2,0%. Pha 1 g6i/1,5 lit nuoc.\n(mieng cao)\nQuet len vetbenh\ndn\nlan,cach nhau7ngay.\n*Thdi gian cach ly:Ngung phun thuoc truoc khi thu hoach7 ngay.\n*Huong dan an toan chung:-Dexatam voi cua tre em.-Khong hut thuoc,an\nhoacuong trong khi si dung sanphamnay.-Khi tiep xichoac chuan bi thuc\ntranh:hit phai thuoc;de thuoc tiep xucvoimieng,davamat-Mang bao ho lao\ndng phuhp.Neubi dinhthuc:Ngaylaptuccaiquanaobi dinh thuc,raky\nphan bi dinh thuoc bang nhieu nuoc.-Sau khi sir dung:Rua chan tay va tam rua,\nrua sach trang bi bao ho lao dong.\n*Cat giu, sir dung va xir Iy bao goi sau khi sir dung:-Giu kin trong bao goi\ngoc duocdannhan.Debao goinoian toan,tranhxa thuc an,treemva dong\nvat.-Khong sur dung lai bao goinay vi bat kymuc dichnao khac.-Baogoisau\nsidung phai duocrua 3 lan va bo dung noi quy dinh.\nKhuyen cao\nViec su dung san phammau xanh co theanh huong den mau cuamu cao su.\ncongdonggoitaiChiNhanhCongTyCPhanBaoVeThucVat SaiGon\nNghiep Bao Ve ThucVatSai Gon.\nKh6i lugng tinh\n1-C3,KCN.Hiep Phuoc,H.Nha Be,Tp.Ho Chi Minh.\n30g\nSDK:2706/CNDKT-BVTV\nNSX/S61o SX:xem tren mep bao\n47.1832\nHSD:2nam\nCANH BAO-BAO QUAN XA TRE EM\nCo the co hai neu nuot phai,hit phai\n（028）37730699-37731073\nwww.spchcmc.vn\nkhi tiep xuc voi da.Rat doc doi voi sinh vat thuy sinh."
+    },
+    {
+      "index": 59,
+      "filename": "photo_1717_0.jpg",
+      "file_size_kb": 171.5,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 18,
+      "avg_score": 0.8987,
+      "timing": {
+        "det_elapse_ms": 629.4,
+        "cls_elapse_ms": 57.2,
+        "rec_elapse_ms": 1785.9,
+        "total_elapse_ms": 2511.0
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "CANH BAO:",
+        "THUOC TRU BENH",
+        "INC0PPER85WP"
+      ],
+      "full_text": "CANH BAO:\nTHUOC TRU BENH\nINC0PPER85WP\nSUNER\nDONG OXYCLORUA\nNAN\nCAO CAP\nCHUYEN:\nHoat Chat\n\"RUA VUON-DIET RONG REUBAM\nCopper oxych\nNe85%w/w\n%W/W\nPhu gia dac bi\nIndia\nCuCLBCu(OH)\nDACTXIUNGAGQU\nSUONG MAIANTHU,XIMU,KHOCUONGAUCHINSOM"
+    },
+    {
+      "index": 60,
+      "filename": "photo_1718_0.jpg",
+      "file_size_kb": 175.6,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 17,
+      "avg_score": 0.8919,
+      "timing": {
+        "det_elapse_ms": 611.6,
+        "cls_elapse_ms": 32.2,
+        "rec_elapse_ms": 1865.9,
+        "total_elapse_ms": 2548.6
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "THUOC TRU BENH",
+        "CANH BAO:",
+        "NCOPPER 85WP"
+      ],
+      "full_text": "THUOC TRU BENH\nCANH BAO:\nNCOPPER 85WP\nSU.ER\nDONG OXYCLORUA\nNAM\nCAO CAP\nHoat Chat.\nCHUYEN:\nCopper oxychte85%w/w\n\"RUA VUON-DIET RONGREUBAM\nPhu giadacbie%w/w\nIndia\nCuCL3Cu(OH)\nBen vang\nDACTRIXiUNGAHOREGHEUAQU\nSUONGMAIATHXIMUKHOCUNGAUCHIOM"
+    },
+    {
+      "index": 61,
+      "filename": "photo_1719_0.jpg",
+      "file_size_kb": 194.7,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 32,
+      "avg_score": 0.8913,
+      "timing": {
+        "det_elapse_ms": 625.2,
+        "cls_elapse_ms": 59.5,
+        "rec_elapse_ms": 3809.3,
+        "total_elapse_ms": 4578.7
+      },
+      "keywords_found": [
+        "bvtv",
+        "phun",
+        "kg",
+        "cam"
+      ],
+      "sample_lines": [
+        "HUONG DAN SU DUNG",
+        "INCOPpERsWP duocdang ky tru Ri sat trenCa phe.",
+        "Cachpha:Tuoi0,5-1,5lit/cay."
+      ],
+      "full_text": "HUONG DAN SU DUNG\nINCOPpERsWP duocdang ky tru Ri sat trenCa phe.\nCachpha:Tuoi0,5-1,5lit/cay.\nLieu luong:Pha1kg cho600-800 lit nuoc\nat hien,tylebenhkhoang5%.\nThoi diem phun:Phun thuockhibenhm\nAntoan lao dong:Mang day du baohoe\nepxucvaithuoc.\n*Bao quan:Noi kho mat, xa tre em, xa nguont\nocuong.Tieu\nhuybao bi heo quy dinh.\nua nan nhan den co soy te gan nhat\nCap\nthuoc\nngodoc.\nDock gdan truockhi dung.\nPhan phoi: CONG TY CO PHAN AGRIFARM VIET NAM\nDC:S643duong Vuon Cam,P.PhuDo,Q.NamTuLim\nJeyuF-,\nJietnam\nTP.HaNoi*Tel/Fax:02439069666\nEang ky:Cong ty Khur trung NamViet.Add:157/34duong NguyenGiaTriPhuong\n25,Quan Thanh,TP.H6Chi Minh.SanXuat:Agro Life Science Corporation\nAddw99\nSDK:3790/CNDKT-BVTV.\nDong goi:In tren phieu KCS\nHan sur dung:02 nam.\nKhoi luong tinh:\n1kg\nNgay san xuat: In tren tui\nLSX072024\nDG29072024"
+    },
+    {
+      "index": 62,
+      "filename": "photo_1720_0.jpg",
+      "file_size_kb": 205.7,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 28,
+      "avg_score": 0.9049,
+      "timing": {
+        "det_elapse_ms": 614.6,
+        "cls_elapse_ms": 131.4,
+        "rec_elapse_ms": 3633.4,
+        "total_elapse_ms": 4442.5
+      },
+      "keywords_found": [
+        "bvtv",
+        "kg",
+        "cam"
+      ],
+      "sample_lines": [
+        "HUONG DAN SU DUNG",
+        "INCOPpERs5Wpduocdang kytruRisat trenCaphe.",
+        "ach pha:Tuoi0,-1,5 lit/cay"
+      ],
+      "full_text": "HUONG DAN SU DUNG\nINCOPpERs5Wpduocdang kytruRisat trenCaphe.\nach pha:Tuoi0,-1,5 lit/cay\nLieu luong:Pha 1kg cho 600-800 lit nuoc\nathien,ty lebenhkhoang 5%.\nThoigian cach ly:07ngay sau khi phuy\nAntnan lao dong:Mang day dubaoho\nepxucvoithuoc\n*Bao quan:Noi khomat, xa tre em, xanguon\nocuong.Tieu\nhuybao bi heoquy dinh.\nCap\nuua nan nhan den cd soy tegan nha\nnan\nthuoc'\nngo doc.\nDockog dan truockhi dung.\nPhan phoi: CONG TY CO PHAN AGRIFARM VIET NAM\nDC:S643duongVuonCam,P.PhuDo,Q.NamTuLiem\nAgriFarmVietnam\nTP.HaNoi*Tel/Fax:02439069666\nSDK:3790/CNDKT-BVTV.\nDong goi:In tren phieu KCS\nHan sur dung:02 nam.\nKhoi luong tinh:\n1Kg\nNgay san xuat:In tren tui\nSX072024"
+    },
+    {
+      "index": 63,
+      "filename": "photo_1721_0.jpg",
+      "file_size_kb": 166.6,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 14,
+      "avg_score": 0.8227,
+      "timing": {
+        "det_elapse_ms": 639.5,
+        "cls_elapse_ms": 46.8,
+        "rec_elapse_ms": 1377.8,
+        "total_elapse_ms": 2098.2
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "CANH BAG",
+        "Co the cohainouna",
+        "Khi tiepxucvo da hontn"
+      ],
+      "full_text": "CANH BAG\nCo the cohainouna\nKhi tiepxucvo da hontn\n45WP\nDOSAY\n8\n0o\nDOSAY45WPSANPHAMCHINHHIEUCUAAGRIABULGARIA\nThrong hiuhangdauthegioivechat luong san pha\nNhap khau va cung ung:\n100g\nCONG TY CO PHAN SX&TM HA THAI KhIN\nlathai\nOag Fer Decepent"
+    },
+    {
+      "index": 64,
+      "filename": "photo_1722_0.jpg",
+      "file_size_kb": 199.6,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 16,
+      "avg_score": 0.9284,
+      "timing": {
+        "det_elapse_ms": 630.6,
+        "cls_elapse_ms": 32.7,
+        "rec_elapse_ms": 1725.2,
+        "total_elapse_ms": 2426.2
+      },
+      "keywords_found": [
+        "bvtv",
+        "kg"
+      ],
+      "sample_lines": [
+        "CONG DUNG-HUONG DAN SU DUNG",
+        "Dosay 45WP La thuoc tru benh ph6 rong,tu",
+        "duoc nhieu benh hai cay trong. Thuoc duoc"
+      ],
+      "full_text": "CONG DUNG-HUONG DAN SU DUNG\nDosay 45WP La thuoc tru benh ph6 rong,tu\nduoc nhieu benh hai cay trong. Thuoc duoc\ndang ky trubenh suong mai khoai tay,vang\nrungla cao su.\nBenh suong mai khoai tay:2kg/ha pha voi\n320-400lit nuoc.\nhien.\nThoian cach ly:7ngay.\nSBK:2172/CNDKT-BVTV\nHSD:2namke tuNSX\nNSX\n220925\nNSC/SL:\n261225/09\n心"
+    },
+    {
+      "index": 65,
+      "filename": "photo_1723_0.jpg",
+      "file_size_kb": 226.5,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 9,
+      "avg_score": 0.8948,
+      "timing": {
+        "det_elapse_ms": 604.0,
+        "cls_elapse_ms": 39.2,
+        "rec_elapse_ms": 1666.0,
+        "total_elapse_ms": 2345.7
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "Huong danantoan:exatamtay treemkhnght",
+        "uocanuong trong khiu dung san phamnayhi",
+        "tip xuchoac chuan bi thuoc:Tranhhit phaithuoc"
+      ],
+      "full_text": "Huong danantoan:exatamtay treemkhnght\nuocanuong trong khiu dung san phamnayhi\ntip xuchoac chuan bi thuoc:Tranhhit phaithuoc\nde thuoctipxucvaimieng,davamat.Mangbaoh\nao dong phu hop.Neu bi dinh thuoc:Ngay lap tuo\nsachse.\ndingnoiquy dinh.\nSan pham cua:\nAGRIA S.A.-BULGARIA"
+    },
+    {
+      "index": 66,
+      "filename": "photo_1724_0.jpg",
+      "file_size_kb": 166.8,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 8,
+      "avg_score": 0.8543,
+      "timing": {
+        "det_elapse_ms": 670.9,
+        "cls_elapse_ms": 18.3,
+        "rec_elapse_ms": 1107.9,
+        "total_elapse_ms": 1828.1
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "C6thecohalneunutphailhit phai",
+        "THUOCTRU SAU",
+        "LION RAY200SC"
+      ],
+      "full_text": "C6thecohalneunutphailhit phai\nTHUOCTRU SAU\nLION RAY200SC\nTHANHPHAN:Imidacloprid 200g/+Additives 800g/\nHAGUC NHANH-TIEU DIETGON\nKHONG LO BINONG\nDactr\nRUOIVANGOPHANAGHAYOXI"
+    },
+    {
+      "index": 67,
+      "filename": "photo_1725_0.jpg",
+      "file_size_kb": 177.6,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 31,
+      "avg_score": 0.8238,
+      "timing": {
+        "det_elapse_ms": 616.9,
+        "cls_elapse_ms": 114.8,
+        "rec_elapse_ms": 4114.3,
+        "total_elapse_ms": 4898.4
+      },
+      "keywords_found": [
+        "bvtv",
+        "phun",
+        "ml"
+      ],
+      "sample_lines": [
+        "LION RAY 200SC",
+        "HUONG DAN SU DUNG",
+        "Hoatchatidaclopidlathuctsauthhemiugcnieucongtydngky"
+      ],
+      "full_text": "LION RAY 200SC\nHUONG DAN SU DUNG\nHoatchatidaclopidlathuctsauthhemiugcnieucongtydngky\ntBqq\nxanh hai rau mau;\nCachphaha0ltucchobinh25litnuccothetanglieueumat\nsaunhieu.Lieuludng:500m/ha.Lugngnucphun:500-600lithaPhunkhi\nrepmdixuathienmatkhoang5-6con/dt\nThoi gian cach ly:7ngay.\nHUONGDANANToAN:Dexatamtaytreem.Dockynhantuoctruockhisidung\nKhonghtnngongidgay\nthuoctixicdmieng,davatMangbaohlaoongpupNeubidinh\nthucgayltdiqunbidinckpabiitcbang\nnuocGiitrngbaggcucdnhan.ebaginntoantraxat\nan,treemvadongvatBobaogoisausudungdungniquydinh.\nSdCAPcuhucdvamthaanucachithat5phteunuth\nthpaehta\nsi dieu tritheo tieu ching.\nNhasanxuatLianyungangAviliv\nAdd:Duigou Pont Chemical Indusin\nJiangsu,China.\nDdnvgiacOnONGTYCPCONGNGHEATDETNAM\nSDK:8005/CNDKT-BVTV.\nHSD:2nam.NXS:XemtenbaobiScunglaSX\nDdnvidangkynhapkhauvaphanphoitlVietNam:\nCONG TY TNHH TCT HA NOI\nDjachi:S61A,Ngach143/269,Dudng Nguyen Chinh,\nThe tich thye:\nP.ThinhLiet,Q.Hoang Mai,HaNoi.\n240ml\nDT:0918161326-0981315688"
+    },
+    {
+      "index": 68,
+      "filename": "photo_1726_0.jpg",
+      "file_size_kb": 177.8,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 34,
+      "avg_score": 0.889,
+      "timing": {
+        "det_elapse_ms": 614.1,
+        "cls_elapse_ms": 103.4,
+        "rec_elapse_ms": 4749.2,
+        "total_elapse_ms": 5521.4
+      },
+      "keywords_found": [
+        "bvtv",
+        "phun",
+        "ml"
+      ],
+      "sample_lines": [
+        "LION RAY 200SC",
+        "HUONG DAN SU DUNG",
+        "Hoatchatmidacloprid lathuoctusauthehemoidudcnhieucongtydangky"
+      ],
+      "full_text": "LION RAY 200SC\nHUONG DAN SU DUNG\nHoatchatmidacloprid lathuoctusauthehemoidudcnhieucongtydangky\ntqamqi\nxanh hai rau mau;\nLION RAY20oSC dudc dangkyde tru rep sapbot hong/san\nCach pha:Pha 20ml thuoc cho binh 25 lit nuoc,co the tang lieu neu mat do\nsau nhieu.Lieu luong:500m/ha.Ludng nudc phun:500-600 lit/ha.Phun khi\nrepmoixuathienmatdokhoang5-6con/dot\nThoi gian cach ly:7 ngay.\nHUONGDANANToAN:Dexatam taytreem.Dockynhan thuoc truockhi su dung.\nKhong hutthucanuong tronghisdungsanphamnayranhhitphaithu\nthuoc tiepxucvoiming,davamatMangbaoholao dong phuhop.Neubi dinh\nthuocngaylaptuccdiquanaobidinhthuoc,iakyphanbidinhthucbangnhi\nnuoc.Gikintrong baogolgocducdannhan.ebaogoindiantoan,tranhxathuc\nan,treemva dongvat.Bobaogoi sau su dung dung ndi quy dinh.\nsdAPdivaahaacha5u\nthuocphaiduangaybenhnhantoibenhviengannhatkemtheonhanthuocdebac\nsi dieu tri theo trieu chung.\nNha san xuat:Lianyungang Avive\n净t09/02/202\nAdd:Duigou Port Chemical Indusi\nGuaanan Count\nJiangsu,China.\nDon vi giacong:CONG TY CP CONGNGHE ATD METNAM\nSDK:8005/CNDKT-BVTV.\nHSD:2nam.NXS:Xem tren bao bi.S616cungla NSx\nDon vidang ky,nhap khau vaphan phoi tai Viet Nam:\nCONG TY TNHH TCT HA NOI\nDja chi:S61A,Ngach 143/269,Duang Nguyen Chinh,\nP.Thinh Liet,Q.Hoang Mai,HaNoi\nThe tich thue:\nDT:0918161326-0981315688\n240ml"
+    },
+    {
+      "index": 69,
+      "filename": "photo_1727_0.jpg",
+      "file_size_kb": 160.2,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 10,
+      "avg_score": 0.8807,
+      "timing": {
+        "det_elapse_ms": 613.8,
+        "cls_elapse_ms": 36.7,
+        "rec_elapse_ms": 1201.3,
+        "total_elapse_ms": 1884.0
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "CANH BAO:",
+        "C6thec6haineunuotphalhitphai",
+        "lc6 the c6 hai khi tiep xuc voi da"
+      ],
+      "full_text": "CANH BAO:\nC6thec6haineunuotphalhitphai\nlc6 the c6 hai khi tiep xuc voi da\nTHUOC TRU SAU\nLION RAY200SC\nTHANH PHAN:Imidacloprid 200g/I+Additives 800g/\nHA GUCNHANH-TIEU DIETGON\nKHONG LO BINONG\nDactri\nRUOIVNGHANANGHAYOT"
+    },
+    {
+      "index": 70,
+      "filename": "photo_1728_0.jpg",
+      "file_size_kb": 151.6,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 7,
+      "avg_score": 0.9455,
+      "timing": {
+        "det_elapse_ms": 588.1,
+        "cls_elapse_ms": 28.7,
+        "rec_elapse_ms": 593.8,
+        "total_elapse_ms": 1239.7
+      },
+      "keywords_found": [
+        "ml"
+      ],
+      "sample_lines": [
+        "ER",
+        "MOVENTO",
+        "150OD"
+      ],
+      "full_text": "ER\nMOVENTO\n150OD\nTHUOC TRU SAU\nThe tich thuc: 100ml\nLUU DAN 2 CHIEU\nDACTRIREP SAP"
+    },
+    {
+      "index": 71,
+      "filename": "photo_1729_0.jpg",
+      "file_size_kb": 136.8,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 10,
+      "avg_score": 0.9408,
+      "timing": {
+        "det_elapse_ms": 588.2,
+        "cls_elapse_ms": 33.9,
+        "rec_elapse_ms": 737.0,
+        "total_elapse_ms": 1389.1
+      },
+      "keywords_found": [
+        "ml"
+      ],
+      "sample_lines": [
+        "120",
+        "BA",
+        "BAYER"
+      ],
+      "full_text": "120\nBA\nBAYER\nER\nMOVENTO\n150OD\nTHUOC TRU SAU\nThe tich thyc:100 ml\nLUU DAN 2 CHIEU\nDAC TRI REP SAP"
+    },
+    {
+      "index": 72,
+      "filename": "photo_1731_0.jpg",
+      "file_size_kb": 178.2,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 13,
+      "avg_score": 0.7758,
+      "timing": {
+        "det_elapse_ms": 581.0,
+        "cls_elapse_ms": 78.6,
+        "rec_elapse_ms": 1160.2,
+        "total_elapse_ms": 1860.2
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "THUOC TRU SAO",
+        "GINHBAO:",
+        "Shanfuruotphai"
+      ],
+      "full_text": "THUOC TRU SAO\nGINHBAO:\nShanfuruotphai\ninuhiephh\nMASTERPYR240\nThanhphan：Chlorfenapyr240g//\nHieu:\nMANGX\nCHAT LUONG TU NHATBA\nDieti\nBU\nBO CAIE\nKHG"
+    },
+    {
+      "index": 73,
+      "filename": "photo_1732_0.jpg",
+      "file_size_kb": 191.8,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 35,
+      "avg_score": 0.8147,
+      "timing": {
+        "det_elapse_ms": 592.4,
+        "cls_elapse_ms": 148.4,
+        "rec_elapse_ms": 2600.2,
+        "total_elapse_ms": 3411.3
+      },
+      "keywords_found": [
+        "bvtv"
+      ],
+      "sample_lines": [
+        "THUOC TRU SAU",
+        "HUONG DAN AN TOAE",
+        "Dexatam tay vi cian"
+      ],
+      "full_text": "THUOC TRU SAU\nHUONG DAN AN TOAE\nDexatam tay vi cian\nMASTERPYR 240 SC\nBocky nhan tuc uc\nKhong hitt\nKhitiep xichoachu\nTranh:hithai\nANGXA\nMang:baoholao dng\nNoubi dnhthuN\nnhieu thuoc, Roaky phn\nSaukhisu dungRach\nholao dong\nCHAT LUONGTUNHATBAN\nCAT GIUUUN\nSUDUN6-0125\nDactri:\nGinKintrong agr\nBO VANG\nKhongsudngaba\nDebaogoinann\nBO CANH TO.\nBobaogoisaukhis\nRAY XANH.\nSO CAP COU\nNHEN DO.\nThuocdinvaoma\nNeunuotphituo\nBO XIT MUOI\nnhanthuocbacsidut\nDangky:CongtyTg\nDC:S6351/3AnDungg\nNhasanutHen\nSDK:7587/CNDKT-BVTV"
+    },
+    {
+      "index": 74,
+      "filename": "photo_1733_0.jpg",
+      "file_size_kb": 173.2,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 20,
+      "avg_score": 0.819,
+      "timing": {
+        "det_elapse_ms": 597.3,
+        "cls_elapse_ms": 90.5,
+        "rec_elapse_ms": 1880.8,
+        "total_elapse_ms": 2608.6
+      },
+      "keywords_found": [
+        "bvtv",
+        "ml"
+      ],
+      "sample_lines": [
+        "HUONG DANAN TOAN CHUNG",
+        "Dexatam tay voicia tre em",
+        "Docky nhanthuoctruc khidung"
+      ],
+      "full_text": "HUONG DANAN TOAN CHUNG\nDexatam tay voicia tre em\nDocky nhanthuoctruc khidung\nKking huthunungtrong khsdung anhm\nKkiepxichochuanbithuoc:\nTanhht phtthtipxuvmingd\nMang:baoho lao dong phuhop\nNeubidinhthuc:Ngaylaptuccoiquanaoidinhban\nnhiuthuoc;uakyphanbidinhthuocbangnhieunuoc.\nSaukhisdungRuahantayvatmraRuasachbao\nholao dong.\nCAT GIUSUDUNG VA XULYBAO GOIAU\n5/10 gMas\nGinkn tong baogfgo dugcedan nhan.\nSd CAP CUU\nbingky:CngtTNHAgroVet\nSDK:7587/CNDKT-BVTV\nNSX:xem trenbaobi\nThe tich thuc:\n200ml"
+    },
+    {
+      "index": 75,
+      "filename": "photo_1734_0.jpg",
+      "file_size_kb": 158.4,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 22,
+      "avg_score": 0.7933,
+      "timing": {
+        "det_elapse_ms": 653.4,
+        "cls_elapse_ms": 89.2,
+        "rec_elapse_ms": 2168.7,
+        "total_elapse_ms": 2951.6
+      },
+      "keywords_found": [
+        "ml"
+      ],
+      "sample_lines": [
+        "Hoat chat Chlortena",
+        "trong danhmuc thucatr",
+        "bo canh to,bo xt"
+      ],
+      "full_text": "Hoat chat Chlortena\ntrong danhmuc thucatr\nbo canh to,bo xt\nnicvdiming.da\ngie,saucun la,d\nsau keo mua thu,t\nhuabaganaobidinhban\nthu,lua,ngo,raum\ntucbang nhieunudc.\nainlaRla sachbao\nIALIBAOGOISAU\nHUONG O\natntemvadongvat\nSan pham dangkymd\nCach dung: pha 15m\nLieu lugng:0.4 iha\nLurgng nutcpu:0-\nThdi gian cachy.7ng\nCONG TYTO\nThe tich thuc:\n200ml\nVIETNHAT"
+    },
+    {
+      "index": 76,
+      "filename": "photo_1735_0.jpg",
+      "file_size_kb": 177.0,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 9,
+      "avg_score": 0.8877,
+      "timing": {
+        "det_elapse_ms": 598.8,
+        "cls_elapse_ms": 34.4,
+        "rec_elapse_ms": 884.0,
+        "total_elapse_ms": 1550.6
+      },
+      "keywords_found": [
+        "cam"
+      ],
+      "sample_lines": [
+        "CONG DUNG",
+        "gie,saucunldthndngauhang",
+        "sau keomua thu,tenche,hoa,quatcamh"
+      ],
+      "full_text": "CONG DUNG\ngie,saucunldthndngauhang\nsau keomua thu,tenche,hoa,quatcamh\nthu,lua,ngo, rau mau..\nHUONG DAN SU DUNG\nLieu ludng: 0.4 lit/ha\nDon vi Phan phoi:\nVIETNHAT\nDien thoai:0988300756"
+    },
+    {
+      "index": 77,
+      "filename": "photo_1736_0.jpg",
+      "file_size_kb": 170.3,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 21,
+      "avg_score": 0.9151,
+      "timing": {
+        "det_elapse_ms": 612.3,
+        "cls_elapse_ms": 83.2,
+        "rec_elapse_ms": 1787.6,
+        "total_elapse_ms": 2520.4
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "THUOC TRU SAU",
+        "Nhom5GHS",
+        "Canh bao"
+      ],
+      "full_text": "THUOC TRU SAU\nNhom5GHS\nCanh bao\nCothe co haineunu6t,hipha\nC6 thecohai khi tiep xicvlida\nNOFARA35WG\nHieu\nTRi VANG\nTHANH PHAN: Thiamethoxam:.35% w/w\nPh.gia...............\n65%w/w\nLUU DAN 2 CHIE\nGUC NHANH\nNEW\nLETNHANH GON\nKHONG LO BI NOG\nHIEU QUA\nTRIETDE\nREODAI\nTIEU DIET SACH BOTRi GAYHAI\nThong tin"
+    },
+    {
+      "index": 78,
+      "filename": "photo_1737_0.jpg",
+      "file_size_kb": 194.1,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 31,
+      "avg_score": 0.8603,
+      "timing": {
+        "det_elapse_ms": 609.2,
+        "cls_elapse_ms": 91.3,
+        "rec_elapse_ms": 3838.1,
+        "total_elapse_ms": 4612.1
+      },
+      "keywords_found": [
+        "bvtv",
+        "phun"
+      ],
+      "sample_lines": [
+        "DOC KI HUONG DAN TRUOC KHI DONG",
+        "CONGDUNG:",
+        "HUONG DAN SU DUNG:"
+      ],
+      "full_text": "DOC KI HUONG DAN TRUOC KHI DONG\nCONGDUNG:\nHUONG DAN SU DUNG:\n-Lieu luong:20g/ha.\n-Luong nuoc phun:320-500 lit/ha.\n-Thoi gian cach ly:14 ngay\nHUONGDAN AN TOAN:\nKHuGRuachan tayvatmraRuasachtrang bibaooladong.\nCATGIU,SUDUNGVAXULYBAOGOISAUSUDUNG:\nDebagiintotrahxathn,trmadgatabigisasdngngniqy.\nbenhnhantibenhvengannhatkemthnhanthucdbacsidiutrithetriuchng.\nDK:669/CNDKT-BVTV\nyquyenNK,Dangky:Cong tyTNHHTMNong Phat.DT:0338448489\nKHOILUONGTINH:\nDiachi:387NguyenTrongTuyn,Q.TanBinhTP.HChiMinh,VitNam.\n100G\nNha san xuat:Jiangsu Eastern Agrochemical Co.,Ltd.\nEiachi:186DongTai road,HangTumingTwn,Jiangsu,China.\nhgghain\nDien.thoai:0272.3759505\nXuatxu:VietNam.\nHan sr dung:2namke tungay san xuat\nNysanxtanghangganxuta\nHop tac phan phoi:\nVietDuc\nUNGCINANG\nDien thoai:0974326386\nankhisu dung\nA网E\n网\nNSX:25/07/2026"
+    },
+    {
+      "index": 79,
+      "filename": "photo_1738_0.jpg",
+      "file_size_kb": 198.8,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 30,
+      "avg_score": 0.8947,
+      "timing": {
+        "det_elapse_ms": 626.2,
+        "cls_elapse_ms": 96.1,
+        "rec_elapse_ms": 4275.7,
+        "total_elapse_ms": 5089.1
+      },
+      "keywords_found": [
+        "bvtv"
+      ],
+      "sample_lines": [
+        "DOC Ki HUONG DAN TRUOC KHI DUNG",
+        "CONG DUNG:",
+        "chuyen trong cayhiuluckeodaiThucdugcdang ky trubotri/lua"
+      ],
+      "full_text": "DOC Ki HUONG DAN TRUOC KHI DUNG\nCONG DUNG:\nchuyen trong cayhiuluckeodaiThucdugcdang ky trubotri/lua\nHUONG DAN SU DUNG:\n-Lieuluong:20g/ha.\n-Thoi gian cach ly: 14 ngay\nHUONG DAN AN TOAN:\nCATGIU,SUDUNGVAXU LYBAOGOI SAU SUDUNG:\nDebaginantontrahtrengtabgiudngnniuy\nSCAPCUThucdintprnchihthtuuthithaidgay\nbenhnhantoibenhvien gannhat, kem theonhan thucdebacsideutritheo trieuchng.\nSDK:669/CNDKT-BVTV\nUyquyenNK,Dang ky:Cong tyTNHHTMNong Phat.DT:0338448489\nDia chi387NguynTrongTuyen,Q.anBinhTP.HChMinh,VietNam.\nKHOILUONGTINH:\nNha san xuat:Jiangsu Eastern Agrochemical Co.,Ltd.\n100G\nDiach86ongTradangumingTwJianguhi.\nDiachngghhiaupan\nDienthoai:0272.3759505\nXuat xi:VietNam.\nHansdung:2namketungaysanxuat\nNgaysinxuatsangchaidnggoilsanxuatmtenab\nHop tac phan phoi:\nVietDuc\nDien thoai:0974326386\nbao\nbankhi sti dung\nNSX:25/07/2026\n66"
+    },
+    {
+      "index": 80,
+      "filename": "photo_1739_0.jpg",
+      "file_size_kb": 182.8,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 10,
+      "avg_score": 0.8337,
+      "timing": {
+        "det_elapse_ms": 633.6,
+        "cls_elapse_ms": 20.5,
+        "rec_elapse_ms": 783.3,
+        "total_elapse_ms": 1470.0
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "THUOC TRU SAU",
+        "CANH BAO:Cohane",
+        "Cohalneuntyi"
+      ],
+      "full_text": "THUOC TRU SAU\nCANH BAO:Cohane\nCohalneuntyi\nACETAT250EC\nCohaiild\nep\nHieu\nREPVUONG\nPhu gia tham thau750g/lit\nSAU DUCQUA"
+    },
+    {
+      "index": 81,
+      "filename": "photo_1740_0.jpg",
+      "file_size_kb": 210.6,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 8,
+      "avg_score": 0.8702,
+      "timing": {
+        "det_elapse_ms": 598.3,
+        "cls_elapse_ms": 17.4,
+        "rec_elapse_ms": 663.4,
+        "total_elapse_ms": 1326.1
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "THUOC TRU SAU",
+        "CANHBAO:Cohnuh",
+        "Cohaineunutp"
+      ],
+      "full_text": "THUOC TRU SAU\nCANHBAO:Cohnuh\nCohaineunutp\nACETAT250EC\nCo hai khite xi\nREPVUONG\nPhugia tham thau750g/lit\nSAU DUCQUA"
+    },
+    {
+      "index": 82,
+      "filename": "photo_1741_0.jpg",
+      "file_size_kb": 182.5,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 8,
+      "avg_score": 0.899,
+      "timing": {
+        "det_elapse_ms": 621.1,
+        "cls_elapse_ms": 17.7,
+        "rec_elapse_ms": 744.1,
+        "total_elapse_ms": 1413.9
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "An tansdung:Khidung thumang day",
+        "trangthietibaoho.*SacapcuuNeubingodc",
+        "theo quy dinh."
+      ],
+      "full_text": "An tansdung:Khidung thumang day\ntrangthietibaoho.*SacapcuuNeubingodc\ntheo quy dinh.\nDockyhuong dan truoc khidung.\nChina.Xuat xur:PRC.\nDon vi phan phoi:\nVetDuc\nHotline:0974326368"
+    },
+    {
+      "index": 83,
+      "filename": "photo_1742_0.jpg",
+      "file_size_kb": 197.6,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 15,
+      "avg_score": 0.891,
+      "timing": {
+        "det_elapse_ms": 614.7,
+        "cls_elapse_ms": 60.5,
+        "rec_elapse_ms": 1421.4,
+        "total_elapse_ms": 2132.8
+      },
+      "keywords_found": [
+        "bvtv",
+        "phun",
+        "ml"
+      ],
+      "sample_lines": [
+        "HUONG DAN SU DUNG:",
+        "Acetat 25oEC la thuoc tru sau voisu kthg",
+        "gita haihoat chat cuc manh,co tac dungt"
+      ],
+      "full_text": "HUONG DAN SU DUNG:\nAcetat 25oEC la thuoc tru sau voisu kthg\ngita haihoat chat cuc manh,co tac dungt\nxuc,vi doc,luu dan va tham thau\nnuoc.Phun uot deu tan cay trong.\nLieu luong:0,4 lit/ha.\nLuong nuoc phun:500lit/ha.\nThoi gian cach ly:07 ngay.\nThetich thuc:\nSDK:7886/CNDKT-BVTV\nDong chai:Tren phieu KCS\n200ml\nHan sur dung:02 nam\nS8L6SX:010328\nNDG:22.03.2025"
+    },
+    {
+      "index": 84,
+      "filename": "photo_1743_0.jpg",
+      "file_size_kb": 192.6,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 16,
+      "avg_score": 0.8885,
+      "timing": {
+        "det_elapse_ms": 600.4,
+        "cls_elapse_ms": 44.7,
+        "rec_elapse_ms": 1357.2,
+        "total_elapse_ms": 2047.0
+      },
+      "keywords_found": [
+        "bvtv",
+        "phun",
+        "ml"
+      ],
+      "sample_lines": [
+        "HUONG DAN SU DUNG:",
+        "Acetat 25oECla thuoc tru sau voi su ket hop",
+        "giua haihoat chat cuc manh,co tac dung tep"
+      ],
+      "full_text": "HUONG DAN SU DUNG:\nAcetat 25oECla thuoc tru sau voi su ket hop\ngiua haihoat chat cuc manh,co tac dung tep\nxuic,vi doc,luu dan va tham thau.\nnudc. Phun uot deu tan cay trong.\nLieu luong: 0,4 lit/ha.\nLuong nuoc phun:500lit/ha.\nThdigian cach ly: 07 ngay.\nThetichthuc:\nSDK:7886/CNDKT-BVTV\n200ml\nDong chai:Tren phieu KCS\nHan sur dung:02 nam\nNSX/S6lo:Xem tren nhan\nNDG:22.03.2025\nS8LOSX:010325"
+    },
+    {
+      "index": 85,
+      "filename": "photo_1744_0.jpg",
+      "file_size_kb": 163.0,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 15,
+      "avg_score": 0.8673,
+      "timing": {
+        "det_elapse_ms": 585.7,
+        "cls_elapse_ms": 32.5,
+        "rec_elapse_ms": 1537.4,
+        "total_elapse_ms": 2202.5
+      },
+      "keywords_found": [
+        "ml"
+      ],
+      "sample_lines": [
+        "THUOC TRU SAU CAD CAR",
+        "PESIEU",
+        "CANHBAO:"
+      ],
+      "full_text": "THUOC TRU SAU CAD CAR\nPESIEU\nCANHBAO:\nCohaineunuot phai\nCohai khitiep xucvelda\nCohal neuhit phai\n08009\nDACTRI:\nNHENOCANHTOAY\nVA SAU KHANG THUOC\nHoat chat:\nDiafenthiuron 500g\n+Phu giadacbiel\nThe ih that\n240ml"
+    },
+    {
+      "index": 86,
+      "filename": "photo_1745_0.jpg",
+      "file_size_kb": 166.2,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 15,
+      "avg_score": 0.8581,
+      "timing": {
+        "det_elapse_ms": 626.1,
+        "cls_elapse_ms": 50.7,
+        "rec_elapse_ms": 1447.3,
+        "total_elapse_ms": 2172.4
+      },
+      "keywords_found": [
+        "bvtv",
+        "iso"
+      ],
+      "sample_lines": [
+        "AN TOAN LAO DONG",
+        "mathayquaaihuthcxonghngrainbi",
+        "nutcsinh hoat."
+      ],
+      "full_text": "AN TOAN LAO DONG\nmathayquaaihuthcxonghngrainbi\nnutcsinh hoat.\niquanthcnikhmatxathphamxatamtaytreem.hngc\npmvathucangia suc\n0\nSan pham cuia:\nJiangsu Changlong Chemicals Co.,Ltd. PRC\n24-1167-S\nSDK:63/CNDKT-BVTV\nISO9001:2015\nSang chai va phan phoi:\nVITHACO\nHan sir dung:2nam\n25.02.26"
+    },
+    {
+      "index": 87,
+      "filename": "photo_1746_0.jpg",
+      "file_size_kb": 174.6,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 10,
+      "avg_score": 0.9046,
+      "timing": {
+        "det_elapse_ms": 585.9,
+        "cls_elapse_ms": 35.8,
+        "rec_elapse_ms": 818.3,
+        "total_elapse_ms": 1502.0
+      },
+      "keywords_found": [
+        "cam"
+      ],
+      "sample_lines": [
+        "HUONG DAN SU DUNG",
+        "CAY TRONG",
+        "SAU HAI"
+      ],
+      "full_text": "HUONG DAN SU DUNG\nCAY TRONG\nSAU HAI\nHoa hoa hong,cuc\nNhencacloibphnauduha\nDua\nBo tri\nRaumau\nbo phan trang, bo nhay\nVai. nhan,cam"
+    },
+    {
+      "index": 88,
+      "filename": "photo_1748_0.jpg",
+      "file_size_kb": 216.9,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 24,
+      "avg_score": 0.8179,
+      "timing": {
+        "det_elapse_ms": 613.4,
+        "cls_elapse_ms": 144.0,
+        "rec_elapse_ms": 2894.9,
+        "total_elapse_ms": 3713.6
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "NHENCAP",
+        "Dactrs",
+        ">Nhen Do"
+      ],
+      "full_text": "NHENCAP\nDactrs\n>Nhen Do\n>Nhen Vang\nVIPOPRO\n>Nhen Trang\nKHANGTHUOC\nXC\nNHENPRO\nNHENVIPOI\nMAT-SAOH-UNGTRUNG\nMAT:SAOI-UNGTOING\nHUCUAKEODAI\nHuouA KCOOAI\nMnVing\nNennDd\nYInVing\nhen Tring\nKHANG-THUOC\nSONHAONYHX\nNHEN PRO 02\nNHEN VIP01\nMAT-SACH-UNG TRUNG\nHIEU OUA KEODAI"
+    },
+    {
+      "index": 89,
+      "filename": "photo_1749_0.jpg",
+      "file_size_kb": 169.3,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 22,
+      "avg_score": 0.9253,
+      "timing": {
+        "det_elapse_ms": 637.8,
+        "cls_elapse_ms": 55.0,
+        "rec_elapse_ms": 2574.6,
+        "total_elapse_ms": 3327.8
+      },
+      "keywords_found": [
+        "phun",
+        "ml"
+      ],
+      "sample_lines": [
+        "THuocTRU sAu Topmite 43SC",
+        "NHEN VIP 01",
+        "Thanh phan:"
+      ],
+      "full_text": "THuocTRU sAu Topmite 43SC\nNHEN VIP 01\nThanh phan:\nBifenazate:43%w/w\nPhu gia dac biet:57%w/w\nCONG DUNG:\nTopmite 43sc la thuoc tru sau the he\nmoi phong tri hieu qua nhen do va cac\nloai nhen chich hut khac. Thuoc diet\nnhen non, nhen truong thanh va trung.\nan toan cho tat ca cac giai doan sinh\ntruong cua cay trong ke ca giai doan\ncay ra hoa.\nHUONGDAN SU DUNG:\ncay trong:Hoa hong\nDich hai: Nhen do\nLieu lugng:0.5lit/ha\nLuong nuoc:400-600lit/ha.\nPhun khi nhen moi xuat hien,matao\nkhoang 3-5con/la.Pha200mlcho2\nphuy40o litnuoc.\nThoi gian cach ly:7ngay."
+    },
+    {
+      "index": 90,
+      "filename": "photo_1750_0.jpg",
+      "file_size_kb": 162.4,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 25,
+      "avg_score": 0.9354,
+      "timing": {
+        "det_elapse_ms": 614.9,
+        "cls_elapse_ms": 106.5,
+        "rec_elapse_ms": 2842.0,
+        "total_elapse_ms": 3625.1
+      },
+      "keywords_found": [
+        "phun",
+        "ml"
+      ],
+      "sample_lines": [
+        "THUocTRU sAU Topmite 43SC",
+        "LO dIA NJHN",
+        "Thanh phan:"
+      ],
+      "full_text": "THUocTRU sAU Topmite 43SC\nLO dIA NJHN\nThanh phan:\nBifenazate:43%w/w\nPhu gia dac biet: 57%w/w\nCONG DUNG:\nTopmite 43sc la thuoc tru sau the he\nmoi phong tri hieu qua nhen do va cac\nloai nhen chich hut.khac.Thuoc diet\nnhen non, nhen truong thanh va trung,\nan toan cho tat ca cac giai doan sinh\ntruong cua cay trong ke ca giai doan\ncay ra hoa.\nHUONG DAN SU DUNG:\ncay trong: Hoa hong\nDich hai:Nhen do\nLieu luong:0.5lit/ha\nLuong nuoc:400-600 lit/ha.\nPhun khi nhen moi xuat hien, matd\nkhoang 3-5 con/la.Pha 200ml cho2\nphuy400 litnuc.\nThoi gian.cach ly:7ngay.\nThe tich thyc:\n100ml\nHotline:0339.485.866"
+    },
+    {
+      "index": 91,
+      "filename": "photo_1751_0.jpg",
+      "file_size_kb": 181.4,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 30,
+      "avg_score": 0.8496,
+      "timing": {
+        "det_elapse_ms": 613.3,
+        "cls_elapse_ms": 170.9,
+        "rec_elapse_ms": 4198.4,
+        "total_elapse_ms": 5042.1
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "NHENCAP",
+        "Dac trp",
+        "Nhen Do"
+      ],
+      "full_text": "NHENCAP\nDac trp\nNhen Do\n>Nhen Vang\nVIPOPRO\nKHANG THUOC\ng\nNHEN PRO02\nNHENVIPO\nb\ncl\nMAT·SACH-UNGTRUNG\nMAT.SAH.UNG TRUNG\nHEUOUAKEDDAI\nHEUOLAKEODAI\nDactr\nHhen Do\nNhenDo\nDHhin Vang\nNhen Vang\nVMhen Trang\nCNhen Trang\nXAILRME!\nKHANGTHUOC\nXALAME!\nKHANGTHUOG\nNHENVIPO1\nNHEN PRO 02\nMAT·SACH-UNG TRUNG\nHIEU OUA KEO DAI"
+    },
+    {
+      "index": 92,
+      "filename": "photo_1752_0.jpg",
+      "file_size_kb": 165.6,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 25,
+      "avg_score": 0.9335,
+      "timing": {
+        "det_elapse_ms": 632.1,
+        "cls_elapse_ms": 106.6,
+        "rec_elapse_ms": 3016.4,
+        "total_elapse_ms": 3798.4
+      },
+      "keywords_found": [
+        "phun",
+        "ml"
+      ],
+      "sample_lines": [
+        "THUOC TRU sAU Etoggo 2OSC",
+        "NHENPROO2",
+        "Thanh phan:"
+      ],
+      "full_text": "THUOC TRU sAU Etoggo 2OSC\nNHENPROO2\nThanh phan:\nEtoxazole:16%w/w+Abamectin:4%w/w\nPhugiadacbiet:80%w/w\nCONG DUNG:\nHon hop 2 hoat chat Etoxazole.\nAbamectinduocnhieu congty dangky\ntru:Nhen lam ung trung, sau to, sau\nxanh,bo tri, bo nhay tren cay an qua,\nlua, hoa cay canh va rau mau.\n'ETOGGo 2osc duoc dang ky chinh tru\nsau xanh da lang tren dau tuong.\nHUONG DAN SU DUNG:\n-Luong thuoc:250ml/ha.\n- Cach pha phun:Pha 10-15ml cho binh\n16-20 lit nuc phun cho 1 sao Bac'Bo\n(360m2). Phun uot deu tan la 2 mat\ntren va duoi, phun khi sau nhen moi\nxuat hien.\n-Thoi gian cach ly:7 ngay truoc khi thu\nhoach.\nThe tich thyc:\n100ml\nHotline:0339.485.866"
+    },
+    {
+      "index": 93,
+      "filename": "photo_1753_0.jpg",
+      "file_size_kb": 158.0,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 2,
+      "avg_score": 0.9325,
+      "timing": {
+        "det_elapse_ms": 613.1,
+        "cls_elapse_ms": 5.7,
+        "rec_elapse_ms": 194.0,
+        "total_elapse_ms": 840.1
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "NHENCAP",
+        "VIPOPRO"
+      ],
+      "full_text": "NHENCAP\nVIPOPRO"
+    },
+    {
+      "index": 94,
+      "filename": "photo_1754_0.jpg",
+      "file_size_kb": 176.9,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 11,
+      "avg_score": 0.9249,
+      "timing": {
+        "det_elapse_ms": 729.2,
+        "cls_elapse_ms": 56.6,
+        "rec_elapse_ms": 1145.4,
+        "total_elapse_ms": 1979.3
+      },
+      "keywords_found": [
+        "ml"
+      ],
+      "sample_lines": [
+        "CANH BAO",
+        "NHOM4GHS",
+        "THUOC TRU SAU"
+      ],
+      "full_text": "CANH BAO\nNHOM4GHS\nTHUOC TRU SAU\nBP.Newone 500C\nDIET NHEN KHANG\nCHUYEN TRI NHEN KHANG THUOC\nThanh phan:\nDiafenthiuron.....500g/\nPhu gia dacbiet:.500g/\nUNG TRUNG- CHET NHANH\nThetichthuc:240ml"
+    },
+    {
+      "index": 95,
+      "filename": "photo_1755_0.jpg",
+      "file_size_kb": 221.3,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 10,
+      "avg_score": 0.8856,
+      "timing": {
+        "det_elapse_ms": 592.4,
+        "cls_elapse_ms": 27.1,
+        "rec_elapse_ms": 1689.0,
+        "total_elapse_ms": 2353.3
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "CONG DUNG:",
+        "runhen halhiuquavakeodaiThucdudc dangkythn",
+        "dotrenhoa hong."
+      ],
+      "full_text": "CONG DUNG:\nrunhen halhiuquavakeodaiThucdudc dangkythn\ndotrenhoa hong.\nHUONG DAN ANTOAN CHUNG:\nBIEN PHAPAN TOAN:DEXA TAMVOICUATREEM.DOC\nKYNHANTHUOCTRUOCKHI DUNG,KHONGhitth\nhouongtrong khisdungsanphamnayKHITIEPXUC\nachtrangbibaoholaodong\nrla3lan.\ntheotrieuchung."
+    },
+    {
+      "index": 96,
+      "filename": "photo_1756_0.jpg",
+      "file_size_kb": 222.4,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 21,
+      "avg_score": 0.8976,
+      "timing": {
+        "det_elapse_ms": 593.3,
+        "cls_elapse_ms": 95.6,
+        "rec_elapse_ms": 1484.5,
+        "total_elapse_ms": 2227.2
+      },
+      "keywords_found": [
+        "bvtv",
+        "phun"
+      ],
+      "sample_lines": [
+        "HUONG DAN SU DUNG",
+        "GAY",
+        "SINHVAT"
+      ],
+      "full_text": "HUONG DAN SU DUNG\nGAY\nSINHVAT\nLIEU\nTRONG\nGAY HAI\nLUONG\nCACH DUING\nLugng nudc400-50\nHoa\nNhen\nlit/ha.Phun thuoci\nhong\n0.8lt/ha\nnhen moixut\ngayhai,mat do\nkhoang3-5con\nThi gian cach ly:7ngay\nSang ky:8180/CNDKT-BVTV\nVet Due\nDienthoql:0974326386"
+    },
+    {
+      "index": 97,
+      "filename": "photo_1757_0.jpg",
+      "file_size_kb": 247.8,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 12,
+      "avg_score": 0.8263,
+      "timing": {
+        "det_elapse_ms": 610.3,
+        "cls_elapse_ms": 35.5,
+        "rec_elapse_ms": 1240.5,
+        "total_elapse_ms": 1923.5
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "THUOC TRU SAU",
+        "Dau khoang Ds",
+        "98.8EC"
+      ],
+      "full_text": "THUOC TRU SAU\nDau khoang Ds\n98.8EC\n.98,8%w/W.\nThanhpheoleup.ayoi..\nPHONGTRIAUVEBUAVANHENDOTRENCACLOAICAYOM\nDon viphanphoi:\n1Lit\n1T:62213965837-099066366\nBon viang ky,\nCTY CO PHAN DONGXAN\n:lenx ues"
+    },
+    {
+      "index": 98,
+      "filename": "photo_1758_0.jpg",
+      "file_size_kb": 224.5,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 21,
+      "avg_score": 0.8597,
+      "timing": {
+        "det_elapse_ms": 642.5,
+        "cls_elapse_ms": 38.0,
+        "rec_elapse_ms": 1784.5,
+        "total_elapse_ms": 2504.6
+      },
+      "keywords_found": [
+        "bvtv",
+        "phun"
+      ],
+      "sample_lines": [
+        "CONG DUNG",
+        "tin hang thuoc.",
+        "HUONG DAN SU DUNG"
+      ],
+      "full_text": "CONG DUNG\ntin hang thuoc.\nHUONG DAN SU DUNG\nSINH VAT GAY HAI\nLIEULUONG\nCAY TRONG\nSau ve bua\n2-5itha\nCayco mi\nNhen do\nphunt600-100lit/ha.Phunut deucaytrong.hu\ndotla nonhoac nhenmdi xuathien.\nunvaolucsang omhaychiumatongphul\ntribat dunght dtr5℃cadangatd\nhahngtngqlngda\nhuong den cay trong.\nSODK:5056/CNDKT-BVTV\nNSX-SoloSX xem tenm\nSO CBHQ:46/HQDX.\nHSD:2 nam ketNSx.\nTHOIGIAN CACH LY:2NGAY"
+    },
+    {
+      "index": 99,
+      "filename": "photo_1759_0.jpg",
+      "file_size_kb": 233.6,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 15,
+      "avg_score": 0.8478,
+      "timing": {
+        "det_elapse_ms": 597.9,
+        "cls_elapse_ms": 62.5,
+        "rec_elapse_ms": 1455.5,
+        "total_elapse_ms": 2181.4
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "HUONG DAN AN TOAN",
+        "nay.",
+        "-Khip xuic hoac chuan bi thuoc:"
+      ],
+      "full_text": "HUONG DAN AN TOAN\nnay.\n-Khip xuic hoac chuan bi thuoc:\nmat.\n+ Mang:baoho lao dong phu hap.\n-Neubidinh thuoc: ngay lap tuic coi quan ao bidnh hact\nbannhieu thuoc,ruakyphanbidinhthuocbang nhint.\nNeubingo docdonuotphaithuoc,duangaynanhan\nbenh vien va nhd mang theo nhan thuoc.\nSaukhisdngRsahtrangbibalad\nchan tay va tam rua.\nCATGIU VAXU LYBAO GOI SAU SU UNG\nlanvabo dung ndiquy dinh.\n/21/21\n1312LA"
+    },
+    {
+      "index": 100,
+      "filename": "photo_1761_0.jpg",
+      "file_size_kb": 216.1,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 16,
+      "avg_score": 0.9431,
+      "timing": {
+        "det_elapse_ms": 596.1,
+        "cls_elapse_ms": 59.0,
+        "rec_elapse_ms": 2040.1,
+        "total_elapse_ms": 2749.4
+      },
+      "keywords_found": [
+        "iso"
+      ],
+      "sample_lines": [
+        "DUNG SY DIET RUOI VANG",
+        "AN PHAT",
+        "R"
+      ],
+      "full_text": "DUNG SY DIET RUOI VANG\nAN PHAT\nR\nDiet het ruoi vang -Mua mang boi thu\nCach dung:Boc tam dinh ra buoc vao canh cay.\nTac dung: Bat cacloai ruoi vang,buommat do,\nngaimat do,hieu qua cao.\n89385298430701\nNSX:20/06/2026\nBAO VE HOA MAU\nHSD:20/06/2029\nKHONG GAY DOC HAI\nISO 9001:2015\nCONG TY TNHH MTV THUONG MAI SAN XUAT AN PHAT\nDia chi: thon La Xa - xa Nguyen Luong Bang - TP. Hai Phong\nDT:0220 3735 618-D:0918 533388*Website: dungsydietchuot.c0m.vn"
+    },
+    {
+      "index": 101,
+      "filename": "photo_1762_0.jpg",
+      "file_size_kb": 221.5,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 15,
+      "avg_score": 0.9471,
+      "timing": {
+        "det_elapse_ms": 611.5,
+        "cls_elapse_ms": 45.6,
+        "rec_elapse_ms": 2087.1,
+        "total_elapse_ms": 2786.7
+      },
+      "keywords_found": [
+        "iso"
+      ],
+      "sample_lines": [
+        "DUNG SY DIET RUOI VANG",
+        "AN PHAT",
+        "Diet het ruoi vang-Mua mang boi thu"
+      ],
+      "full_text": "DUNG SY DIET RUOI VANG\nAN PHAT\nDiet het ruoi vang-Mua mang boi thu\nCach dung:Boc tam dinh ra buoc vao canh cay.\nTac dung:Bat cac loai ruoi vang,buom mat do,\nngai mat do,hieu quacao.\n819385298430701\nNSX:20/06/2026\nBAO VE HOA MAU\nHSD:20/06/2029\nKHONG GAY DOC HAI\nISO 9001:2015\nCONG TY TNHH MTV THUONG MAI SAN XUAT AN PHAT\nDia chi: thon La Xa -xa Nguyen Luong Bang- TP. Hai Phong\nDT:0220 3735 618-DD:0918 533 388 *Website: dungsydietchuot.c0m.vn"
+    },
+    {
+      "index": 102,
+      "filename": "photo_1763_0.jpg",
+      "file_size_kb": 187.7,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 14,
+      "avg_score": 0.944,
+      "timing": {
+        "det_elapse_ms": 609.6,
+        "cls_elapse_ms": 26.6,
+        "rec_elapse_ms": 2159.1,
+        "total_elapse_ms": 2856.3
+      },
+      "keywords_found": [
+        "iso"
+      ],
+      "sample_lines": [
+        "DUNG SY DIET RUOI VANG",
+        "AN PHAT",
+        "Diet het ruoi vang -Mua mang boi thu"
+      ],
+      "full_text": "DUNG SY DIET RUOI VANG\nAN PHAT\nDiet het ruoi vang -Mua mang boi thu\nCach dung:Boctam dinh rabuocvao canh cay.\nTac dung: Bat cac loai ruoi vang,buom mat do\nngai mat do,hieu qua cao.\n893852918430701\nNSX:20/06/2026\nBAO VE HOA MAU\nHSD:20/06/2029\nKHONG GAY DOC HAI\nISO 9001:2015\nCONG TY TNHH MTV THUONG MAI SAN XUAT AN PHAT\nDia chi: thon La Xa - xa Nguyen Luong Bang - TP. Hai Phong"
+    },
+    {
+      "index": 103,
+      "filename": "photo_1764_0.jpg",
+      "file_size_kb": 139.8,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 7,
+      "avg_score": 0.9094,
+      "timing": {
+        "det_elapse_ms": 681.9,
+        "cls_elapse_ms": 34.3,
+        "rec_elapse_ms": 844.4,
+        "total_elapse_ms": 1591.1
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "ANPHAT",
+        "VIET NAM",
+        "Cup vang hang Viot Nam"
+      ],
+      "full_text": "ANPHAT\nVIET NAM\nCup vang hang Viot Nam\nchat luong cao\nDUNG SY DIET RUOI VANG\nAN PHAT\nDiet cdic loai con triung bio ce hoa mau"
+    },
+    {
+      "index": 104,
+      "filename": "photo_1765_0.jpg",
+      "file_size_kb": 154.9,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 9,
+      "avg_score": 0.8957,
+      "timing": {
+        "det_elapse_ms": 636.3,
+        "cls_elapse_ms": 19.8,
+        "rec_elapse_ms": 861.6,
+        "total_elapse_ms": 1571.0
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "R",
+        "CHAT",
+        "ANPHAT"
+      ],
+      "full_text": "R\nCHAT\nANPHAT\nVIET NAM\nCupvanghangVitNam\nB\nDUNG SY DIET RUOI VANG\nAN PHAT\nDiet caic loai con triung bio ce hoa mau"
+    },
+    {
+      "index": 105,
+      "filename": "photo_1766_0.jpg",
+      "file_size_kb": 213.9,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 15,
+      "avg_score": 0.8979,
+      "timing": {
+        "det_elapse_ms": 638.1,
+        "cls_elapse_ms": 63.5,
+        "rec_elapse_ms": 2128.6,
+        "total_elapse_ms": 2875.8
+      },
+      "keywords_found": [
+        "bvtv",
+        "kg"
+      ],
+      "sample_lines": [
+        "Cohaineunuot phai",
+        "CANH BAO: Cohai neu hit phala",
+        "THUOC TRU SAU"
+      ],
+      "full_text": "Cohaineunuot phai\nCANH BAO: Cohai neu hit phala\nTHUOC TRU SAU\nBILLADEN50WG\nThanh phan:\nEmamectinbenzoate50g/kg\nPremium additives 950g/kg\nHieu\nR\nSoi Xann\nDACTRISAUKEOAUTO,SAUAH\nSAUDUCQUAUUCAUCOA\nNhap khau va phan phoi:\nCONG TY TNHH THUOC BVTV HOANG PHAT\nQien th0ai:096685 1111-0962 319898"
+    },
+    {
+      "index": 106,
+      "filename": "photo_1767_0.jpg",
+      "file_size_kb": 223.3,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 34,
+      "avg_score": 0.8902,
+      "timing": {
+        "det_elapse_ms": 655.3,
+        "cls_elapse_ms": 88.8,
+        "rec_elapse_ms": 5010.0,
+        "total_elapse_ms": 5822.5
+      },
+      "keywords_found": [
+        "bvtv",
+        "phun",
+        "kg",
+        "cam"
+      ],
+      "sample_lines": [
+        "DAC DIEM VA CONG DUNG:",
+        "Hoat chat Emamectin la thuoc tru sau sinh hoc thehemoi nhat c6 hieu",
+        "luccuaanitaing"
+      ],
+      "full_text": "DAC DIEM VA CONG DUNG:\nHoat chat Emamectin la thuoc tru sau sinh hoc thehemoi nhat c6 hieu\nluccuaanitaing\nSan phamitgaynhiemmoi trung,dantoancaodulung cucthp,hi\ngiancachlynganhuhapvoichuong trinhve sinhantoanthphm.\nHUONG DAN SU DUNG:\nThuoc triu sau BILLADEN 5oWG dugc dang ky tru sinh vat gay hai nhu:\nNhen dohai Camvoilieu luong 0.03%;Sau xanhhaibapcai voilieu luong\n0.12kg/ha.\nCach dung:Pha 10g thuoc cho binh 18 lit nuoc.\nPhun uot deu tan la cay trong.\nLuongnuocphun:400-500 lit/ha.\nThoi diem phun: Phun thuoc khi sau,nhen mdi xuat hien.\nThoi gian cach ly:07 ngay sau khi phun.\nHUONG DAN AN TOAN SU DUNG:\n*An toan laodong:Mang dbaoho laodong,khau tranggang tay khisu\ndung thuoc.Khong an,uong,hut thuoc la trong khi phun thuoc.\n*Baoquan:Catgiu thuoc trong bao bikin,denoi khomat,xa tre em,thuc\nphamva thuc n gia suc.sacuu:Thuoc dinhvao matrua bang nuoc sach\ntrongvong15phuthucdinhvaodaasachbangnucvoixaphong\nngodocdothucuananhandncasygnnhatdebacsidiutriang\ntheo nhan thuocgay ngo doc.\nDoc ky huong dan sur dung truoc khi dung.\nDang ky:Cong ty CPNong nghiepThanh Xuan.DC:S648/1E Duong Nam Thbi\n1,Thoi TamThon,HocMon,TP.HCM.\nCojin\nSDK:3537/CNDKT-BVTV\nDonggoi:Tren phieu KCS\nKhbiluong tinh:\nHan sur dung:02nam\n20g\nNgay Sx/s6lo:In tren tui\nLuuy:Soi Xamda dugcdangkySHTTkhong sao chepduoimoi hinhthuc\nNSX:010126"
+    },
+    {
+      "index": 107,
+      "filename": "photo_1768_0.jpg",
+      "file_size_kb": 208.2,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 14,
+      "avg_score": 0.8988,
+      "timing": {
+        "det_elapse_ms": 599.9,
+        "cls_elapse_ms": 42.0,
+        "rec_elapse_ms": 1421.2,
+        "total_elapse_ms": 2109.4
+      },
+      "keywords_found": [
+        "kg"
+      ],
+      "sample_lines": [
+        "CANH BAO",
+        "THUOC TRU SAU",
+        "Co the co haineu hitnuot phai"
+      ],
+      "full_text": "CANH BAO\nTHUOC TRU SAU\nCo the co haineu hitnuot phai\nC6 the cohaikhi tiep xucvai da\nTumazine5oowp\nVUA MEO\nTHANH PHAN:CYROMAZINE.\n...500G/KG（50%W/W)\nPHU GIA DAC BIE...\n.500G/KG（50%W/W)\nDAC\nDAC TINH-CONG DUNG\ndan manh trong cay.\n-Diet dugc ca trung va au trung."
+    },
+    {
+      "index": 108,
+      "filename": "photo_1769_0.jpg",
+      "file_size_kb": 213.2,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 46,
+      "avg_score": 0.9011,
+      "timing": {
+        "det_elapse_ms": 641.1,
+        "cls_elapse_ms": 164.4,
+        "rec_elapse_ms": 6005.2,
+        "total_elapse_ms": 6906.9
+      },
+      "keywords_found": [
+        "bvtv",
+        "kg"
+      ],
+      "sample_lines": [
+        "HUONG DAN SU DUNG",
+        "Cay trong",
+        "Sinh vatgay hal"
+      ],
+      "full_text": "HUONG DAN SU DUNG\nCay trong\nSinh vatgay hal\nLieuluong\nPHI\nCach dung\nCrop\nPest\nDosage\n(ngay)\nMethodof appllcation\nSu trung Gai ducla\nDuachuo\n0.5kg/\ngayhal\nCach pha:Pha gol 18g cho binh 25 lift.\nHUONG DAN AN TOAN SU DUNG\nAn toan sidung:Khong hut thuoc,anhoacuong trong khi su dung san pham\nnay.Khi tiep xuchoacchuan bi thu6c:Tranh hft phai thuc,tranh a thuc\ntiep xucvoimieng,davamat,mang bao ho lao dong phu hop.Sau khi su\ndung:Rua chan tay va tam ria,rua sach trang bi bao ho lao dong.Gio kin bao\ng6i goc dugc dan nhan.Khong su dung lai bao goi nay vi bat ky muc dich nao\nnac.Debao goi noi an toan,tranh xa thuc an,tre em va dong vat.Bo bao\neen oonp leud bunp ns nesio ong yuip anb lou bunp bunp ns ep o\nHuong dan bao quan:ndi kho rao,thoang mat,xa tam tay tre em,xa nguon\nnuoc, thuc an va dong vat.\nSo cap ctu:Neu bl dinhhoac biban nhieu thuoc ngay lap tuc col quan ao bi\ndinh,rua ky phan bi dinh thc bang nhieu nuoc.Truong hop ng doc,can\ndua ngay nan nhan di cap cuu,nha mang theo nhan thuoc.\nDOC KY HUONG DAN TRUOC KHI SU DUNG\nS6DKBVTV:7842/CNDKT-BVTV\nManufacturer:\nGuangxl Balkal Biochemical ProducCo., Ltd\nAdNafel Branch Site,Langwan Overseas Chinese Farm,\nong'an County,Guangxi Province,China.\nDon vi dang ky:\nCong ty TNHH TM TungPong\nDC:B4-T6 Toa nha Z751\nPhan Van Tri,P.10,\nQ.GOVap,TP.H6 Ch\nHSD:2nam ke tuNSx-\ngay dong gol:Xem tren bao bl\ns816x:Xemtrenbaobivokien\nKhoi\nPhan ph6i docquyen tai Viet Nam:\nHO\\NGPHT"
+    },
+    {
+      "index": 109,
+      "filename": "photo_1770_0.jpg",
+      "file_size_kb": 172.8,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 6,
+      "avg_score": 0.8918,
+      "timing": {
+        "det_elapse_ms": 626.3,
+        "cls_elapse_ms": 12.7,
+        "rec_elapse_ms": 649.4,
+        "total_elapse_ms": 1317.8
+      },
+      "keywords_found": [
+        "npk"
+      ],
+      "sample_lines": [
+        "PHAN BON HON HOP NPK",
+        "NET",
+        "TOBA"
+      ],
+      "full_text": "PHAN BON HON HOP NPK\nNET\nTOBA\nRa Re Cuc Manh\n200g\n可油加印"
+    },
+    {
+      "index": 110,
+      "filename": "photo_1771_0.jpg",
+      "file_size_kb": 170.7,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 14,
+      "avg_score": 0.8203,
+      "timing": {
+        "det_elapse_ms": 601.1,
+        "cls_elapse_ms": 59.5,
+        "rec_elapse_ms": 1518.7,
+        "total_elapse_ms": 2214.3
+      },
+      "keywords_found": [
+        "phun"
+      ],
+      "sample_lines": [
+        "Huing Dan SuDung:",
+        "ky7-10ngay phun1 lan.",
+        "tihantidotaitaoboremanh."
+      ],
+      "full_text": "Huing Dan SuDung:\nky7-10ngay phun1 lan.\ntihantidotaitaoboremanh.\nCHUY:\nmanbonla khac.Khong phun hoac tudivao luc nang gat\nHuong Dan Bao Quan:\nIeingaisidung baobivoi bat kily donao.\nCanBaoThong TinVeMoiNguy:\note c haineunuot phail.\nconec haineuroivaomat.\nBlen Phap SoCap Cuu:\nIsinghamroivaomat:\nNutpaisan pham:\nngyilyphuhop."
+    },
+    {
+      "index": 111,
+      "filename": "photo_1772_0.jpg",
+      "file_size_kb": 182.9,
+      "resolution": "960x1280",
+      "width": 960,
+      "height": 1280,
+      "success": true,
+      "error": "",
+      "total_lines": 32,
+      "avg_score": 0.8517,
+      "timing": {
+        "det_elapse_ms": 603.1,
+        "cls_elapse_ms": 160.6,
+        "rec_elapse_ms": 3439.6,
+        "total_elapse_ms": 4273.5
+      },
+      "keywords_found": [],
+      "sample_lines": [
+        "Thahh Phan:",
+        "%9",
+        "Dam tong so (N).."
+      ],
+      "full_text": "Thahh Phan:\n%9\nDam tong so (N)..\n.8%\nLan hu hieuP,O..\n.8%\nKalihuu hieu(KO..\n5%\nDoam...\ngpbuo\nCong Dung:\nGiup cay con trong vuon uom co duoc bo re khe\nchng chju sau benh,kho han hoac ngap ung.\nGiup cay trong phuc hoi nhanh va tai tao bo re da\nbisuy kiet do sau thoi gian nuoi tral,do bi dich benh,\nhay do cac dieu kien thoi tiet bat thuong nhu kho\nhan hay ngap ung.\nGiup cay han che benh vang la sinh ly do thiu\nduong chat,vi lugng.\npgnus\nCONGTYTH SAN XUAT-THUONG MAITO BA\nTOBA\nST：0286251546-028.62542-Fax0286251546\nXual xi Vit Nam\nWebsiteww.toba.vn\nTBNNH29.01-NND-NET02.1\nHOTUNE:0358.17.17.10-0904.17.719\nMSPB:18640\nHSD:24thang ktingay san xuat\nNSX:\n24.05/25\n8O LO SX:"
+    }
+  ]
+}

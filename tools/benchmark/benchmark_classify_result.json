@@ -1,0 +1,253 @@
+{
+  "total_samples": 132,
+  "correct": 112,
+  "accuracy_pct": 84.85,
+  "wall_clock_time_s": 254.22,
+  "total_inference_time_s": 254.22,
+  "avg_latency_s": 1.926,
+  "min_latency_s": 1.752,
+  "median_latency_s": 1.856,
+  "p95_latency_s": 2.307,
+  "max_latency_s": 2.599,
+  "throughput_samples_per_sec": 0.52,
+  "class_breakdown": {
+    "purchase": {
+      "total": 20,
+      "correct": 20,
+      "recall_pct": 100.0,
+      "precision_pct": 58.82,
+      "f1_score": 74.07,
+      "avg_latency_s": 1.983
+    },
+    "fertilize": {
+      "total": 18,
+      "correct": 11,
+      "recall_pct": 61.11,
+      "precision_pct": 100.0,
+      "f1_score": 75.86,
+      "avg_latency_s": 2.085
+    },
+    "spray": {
+      "total": 8,
+      "correct": 6,
+      "recall_pct": 75.0,
+      "precision_pct": 54.55,
+      "f1_score": 63.16,
+      "avg_latency_s": 2.207
+    },
+    "waste": {
+      "total": 7,
+      "correct": 7,
+      "recall_pct": 100.0,
+      "precision_pct": 87.5,
+      "f1_score": 93.33,
+      "avg_latency_s": 1.919
+    },
+    "harvest": {
+      "total": 7,
+      "correct": 7,
+      "recall_pct": 100.0,
+      "precision_pct": 100.0,
+      "f1_score": 100.0,
+      "avg_latency_s": 1.897
+    },
+    "sale": {
+      "total": 12,
+      "correct": 12,
+      "recall_pct": 100.0,
+      "precision_pct": 100.0,
+      "f1_score": 100.0,
+      "avg_latency_s": 1.814
+    },
+    "observation": {
+      "total": 10,
+      "correct": 9,
+      "recall_pct": 90.0,
+      "precision_pct": 100.0,
+      "f1_score": 94.74,
+      "avg_latency_s": 1.912
+    },
+    "general": {
+      "total": 50,
+      "correct": 40,
+      "recall_pct": 80.0,
+      "precision_pct": 100.0,
+      "f1_score": 88.89,
+      "avg_latency_s": 1.836
+    }
+  },
+  "mismatches": [
+    {
+      "index": 27,
+      "text": "bón phân dạng nước bằng thuốc sinh học nano ecotech hai lít pha năm trăm lít nước trên một héc ta mua từ công ty trách nhiệm hữu hạn quang minh t n a cho cây phát triển",
+      "expected": "fertilize",
+      "predicted": "purchase",
+      "latency_s": 2.143
+    },
+    {
+      "index": 28,
+      "text": "bón phân dạng nước nano ecotech hai lít pha năm trăm lít nước trên một héc ta mua từ công ty trách nhiệm hữu hạn quang minh t n a cho cây sinh trưởng phát triển",
+      "expected": "fertilize",
+      "predicted": "purchase",
+      "latency_s": 2.165
+    },
+    {
+      "index": 31,
+      "text": "bón phân dạng nước bằng thuốc sinh học nano ecotech mua từ công ty trách nhiệm hữu hạn quang minh t n a",
+      "expected": "fertilize",
+      "predicted": "purchase",
+      "latency_s": 1.85
+    },
+    {
+      "index": 32,
+      "text": "bón phân dạng nước n p k nano ecotech hai lít pha năm trăm lít nước trên một héc ta mua từ công ty trách nhiệm hữu hạn quang minh t n a cho cây sinh trưởng phát triển",
+      "expected": "fertilize",
+      "predicted": "purchase",
+      "latency_s": 2.137
+    },
+    {
+      "index": 35,
+      "text": "tưới nước và bón phân dạng nước bằng thuốc sinh học nano ecotech hai lít pha năm trăm lít nước trên một héc ta mua từ công ty trách nhiệm hữu hạn quang minh t n a cho cây sinh trưởng phát triển",
+      "expected": "fertilize",
+      "predicted": "purchase",
+      "latency_s": 2.599
+    },
+    {
+      "index": 36,
+      "text": "tưới phân dạng nước nano ecotech hai lít pha năm trăm lít nước trên một héc ta mua từ công ty trách nhiệm hữu hạn quang minh t n a cho cây phát triển sinh trưởng",
+      "expected": "fertilize",
+      "predicted": "purchase",
+      "latency_s": 2.126
+    },
+    {
+      "index": 37,
+      "text": "tưới nước và bón phân dạng nước bằng thuốc nano ecotech hai lít pha năm trăm lít nước trên một héc ta mua từ công ty trách nhiệm hữu hạn quang minh t n a cho cây sinh trưởng phát triển",
+      "expected": "fertilize",
+      "predicted": "purchase",
+      "latency_s": 2.586
+    },
+    {
+      "index": 42,
+      "text": "bón phân dạng nước và phun thuốc sinh học ecotech top một hai lít pha năm trăm lít nước trên một héc ta mua từ công ty trách nhiệm hữu hạn quang minh t n a và tập đoàn mind group để trị sâu ăn lá rầy nâu cách ly mười bốn ngày",
+      "expected": "spray",
+      "predicted": "purchase",
+      "latency_s": 2.15
+    },
+    {
+      "index": 43,
+      "text": "bón phân dạng nước và phun thuốc sinh học nano ecotech top một hai lít pha năm trăm lít nước trên một héc ta mua từ công ty trách nhiệm hữu hạn quang minh t n a và tập đoàn mind group để trị sâu ăn lá rầy nâu cách ly mười bốn ngày",
+      "expected": "spray",
+      "predicted": "purchase",
+      "latency_s": 2.197
+    },
+    {
+      "index": 78,
+      "text": "đi kiểm tra lô một phát hiện sâu đục thân gây hại trung bình ở gốc cần lên phương án phun thuốc phòng trừ",
+      "expected": "observation",
+      "predicted": "spray",
+      "latency_s": 1.938
+    },
+    {
+      "index": 84,
+      "text": "giai đoạn chuẩn bị đất tiếp tục với việc lắp ống nước béc tưới",
+      "expected": "general",
+      "predicted": "spray",
+      "latency_s": 2.302
+    },
+    {
+      "index": 86,
+      "text": "trong giai đoạn chuẩn bị tiến hành lắp ống nước và béc tưới",
+      "expected": "general",
+      "predicted": "purchase",
+      "latency_s": 1.803
+    },
+    {
+      "index": 87,
+      "text": "tiến hành trồng một trăm ngàn cây cà gai leo",
+      "expected": "general",
+      "predicted": "purchase",
+      "latency_s": 1.806
+    },
+    {
+      "index": 89,
+      "text": "tiếp tục làm cỏ cho cây ở giai đoạn phát triển",
+      "expected": "general",
+      "predicted": "spray",
+      "latency_s": 1.889
+    },
+    {
+      "index": 90,
+      "text": "tiến hành trồng năm mươi hai ngàn cây cà gai",
+      "expected": "general",
+      "predicted": "purchase",
+      "latency_s": 2.188
+    },
+    {
+      "index": 94,
+      "text": "tiến hành trồng và đi dặm tổng cộng một trăm hai mươi lăm ngàn năm trăm cây",
+      "expected": "general",
+      "predicted": "purchase",
+      "latency_s": 1.844
+    },
+    {
+      "index": 101,
+      "text": "rải bạt chống cỏ chuẩn bị đất",
+      "expected": "general",
+      "predicted": "spray",
+      "latency_s": 1.892
+    },
+    {
+      "index": 113,
+      "text": "trải bạt phủ cỏ",
+      "expected": "general",
+      "predicted": "waste",
+      "latency_s": 1.887
+    },
+    {
+      "index": 124,
+      "text": "rải bạt phủ cỏ và trồng một trăm ngàn cây trên một héc ta",
+      "expected": "general",
+      "predicted": "spray",
+      "latency_s": 1.87
+    },
+    {
+      "index": 129,
+      "text": "trồng năm mươi ngàn cây giống",
+      "expected": "general",
+      "predicted": "purchase",
+      "latency_s": 1.792
+    }
+  ],
+  "confusion_matrix": {
+    "purchase": {
+      "purchase": 20
+    },
+    "fertilize": {
+      "fertilize": 11,
+      "purchase": 7
+    },
+    "spray": {
+      "spray": 6,
+      "purchase": 2
+    },
+    "waste": {
+      "waste": 7
+    },
+    "harvest": {
+      "harvest": 7
+    },
+    "sale": {
+      "sale": 12
+    },
+    "observation": {
+      "observation": 9,
+      "spray": 1
+    },
+    "general": {
+      "general": 40,
+      "spray": 4,
+      "purchase": 5,
+      "waste": 1
+    }
+  }
+}
