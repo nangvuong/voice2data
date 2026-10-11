@@ -1,0 +1,4712 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Hội thoại Trợ lý AI — Nông Ký VietGAP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --page-bg: #141C15;
+    --paper: #FBF8EF;
+    --card: #FFFDF7;
+    --ink: #232A1C;
+    --ink-soft: #6E7862;
+    --ink-faint: #9BA38C;
+    --line: rgba(35, 42, 28, 0.10);
+    --header: #1F3626;
+    --header-soft: rgba(246, 241, 226, 0.72);
+    --leaf: #3F6B3F;
+    --leaf-bright: #5B8C4A;
+    --leaf-tint: #EEF5EE;
+    --gold: #B8830E;
+    --gold-bright: #D6A339;
+    --gold-tint: #FFF9EB;
+    --clay: #A6512E;
+    --clay-tint: #FBEAE1;
+    --sky: #2B6CB0;
+    --sky-tint: #EFF6FF;
+    --moss: #4C5F3A;
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    font-size: 16.5px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+  body {
+    background: var(--page-bg);
+    font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    justify-content: center;
+  }
+
+  .app-container {
+    width: 100%;
+    max-width: 500px;
+    background: var(--paper);
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.45);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ========================================================================= */
+  /* HEADER & MODE SWITCHER                                                   */
+  /* ========================================================================= */
+  .chat-header {
+    background: var(--header);
+    color: #F6F1E2;
+    padding: 14px 16px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 20;
+  }
+
+  /* Brand name — cùng kiểu với index.html */
+  .app-name-inline {
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    color: #F6F1E2;
+  }
+  .app-name-inline em { font-style: normal; color: #D6A339; }
+
+  /* User bar — cùng kiểu với index.html */
+  .conv-user-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    font-size: 0.78rem;
+    color: rgba(246, 241, 226, 0.88);
+  }
+  .conv-user-bar b { color: #D6A339; }
+  .conv-user-role {
+    background: rgba(184, 131, 14, 0.3);
+    border: 1px solid rgba(214, 163, 57, 0.4);
+    color: #FAD477;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  .header-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    color: #F6F1E2;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .btn-back:hover { background: rgba(255, 255, 255, 0.22); }
+  .header-title-box {
+    display: flex;
+    flex-direction: column;
+  }
+  .header-title {
+    font-weight: 800;
+    font-size: 0.98rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: -0.01em;
+  }
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+    box-shadow: 0 0 8px #4ade80;
+  }
+  .header-subtitle {
+    font-size: 0.72rem;
+    color: rgba(246, 241, 226, 0.75);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .state-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: rgba(214, 163, 57, 0.25);
+    color: #FAD477;
+    border: 1px solid rgba(214, 163, 57, 0.35);
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-header-tool {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #F6F1E2;
+    border-radius: 8px;
+    padding: 5px 9px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.15s;
+  }
+  .btn-header-tool:hover { background: rgba(255, 255, 255, 0.22); }
+  .btn-header-tool.active {
+    background: var(--gold);
+    border-color: var(--gold-bright);
+    color: #1F3626;
+  }
+
+  /* Segmented Mode Switcher Bar */
+  .mode-switch-bar {
+    display: flex;
+    background: rgba(0, 0, 0, 0.28);
+    border-radius: 10px;
+    padding: 3px;
+    gap: 4px;
+  }
+  .btn-mode-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    min-height: 36px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: rgba(246, 241, 226, 0.65);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn-mode-tab.active {
+    background: var(--card);
+    color: var(--header);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  }
+  .btn-mode-tab.active.siri-tab {
+    background: linear-gradient(135deg, #10B981, #059669);
+    color: #FFFFFF;
+    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
+  }
+
+  /* ========================================================================= */
+  /* DẠNG 1: CHẾ ĐỘ TRUYỀN THỐNG (TEXT - AUDIO / TEXT - IMAGE)                 */
+  /* ========================================================================= */
+  .view-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    position: relative;
+  }
+  .view-panel.hidden { display: none !important; }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    scroll-behavior: smooth;
+  }
+  .chat-messages::-webkit-scrollbar { width: 5px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: rgba(35, 42, 28, 0.15); border-radius: 4px; }
+
+  .msg-row {
+    display: flex;
+    gap: 8px;
+    max-width: 96%;
+    animation: fadeInMsg 0.22s ease;
+  }
+  @keyframes fadeInMsg {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .msg-row.assistant { align-self: flex-start; width: 100%; }
+  .msg-row.user { align-self: flex-end; flex-direction: row-reverse; max-width: 88%; }
+
+  .msg-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.82rem;
+    font-weight: 800;
+  }
+  .msg-row.assistant .msg-avatar {
+    background: linear-gradient(135deg, var(--leaf), var(--header));
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(31, 54, 38, 0.25);
+  }
+  .msg-row.user .msg-avatar {
+    background: linear-gradient(135deg, #D6A339, #B8830E);
+    color: #141C15;
+  }
+  .msg-content-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .msg-user-bubble {
+    background: linear-gradient(135deg, var(--leaf-bright), var(--leaf));
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 16px;
+    border-top-right-radius: 4px;
+    font-size: 0.93rem;
+    line-height: 1.5;
+    word-break: break-word;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  /* Tin nhắn của người dân cập nhật trực tiếp khi nói mic */
+  .msg-user-bubble.live-bubble {
+    background: linear-gradient(135deg, #10b981, var(--leaf));
+    box-shadow: 0 0 14px rgba(16, 185, 129, 0.35);
+    border: 1px dashed rgba(255, 255, 255, 0.6);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    animation: livePulseGlow 1.5s infinite alternate;
+  }
+  @keyframes livePulseGlow {
+    0% { box-shadow: 0 0 6px rgba(16, 185, 129, 0.25); }
+    100% { box-shadow: 0 0 16px rgba(16, 185, 129, 0.5); }
+  }
+  .live-stt-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 14px;
+    background: #FFFFFF;
+    margin-left: 2px;
+    vertical-align: middle;
+    animation: cursorBlink 0.8s infinite;
+  }
+  @keyframes cursorBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  .live-mic-anim {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    animation: liveMicBounce 0.8s infinite alternate;
+  }
+  @keyframes liveMicBounce {
+    0% { transform: scale(0.9); opacity: 0.7; }
+    100% { transform: scale(1.15); opacity: 1; }
+  }
+
+  /* FORM TRẢ LỜI CỦA TRỢ LÝ AI DỄ ĐỌC CHO NGƯỜI DÂN */
+  .ai-response-box {
+    background: var(--card);
+    border: 1px solid rgba(35, 42, 28, 0.12);
+    border-radius: var(--radius-lg);
+    border-top-left-radius: 4px;
+    padding: 13px 15px;
+    color: var(--ink);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    line-height: 1.55;
+  }
+  .ai-text-standard {
+    font-size: 0.94rem;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  /* Thẻ thông tin vật tư / thuốc / phân bón trực quan */
+  .farmer-info-card {
+    background: #FFFDF9;
+    border: 1.5px solid rgba(42, 99, 44, 0.25);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .farmer-info-card.pesticide {
+    border-color: rgba(186, 70, 32, 0.3);
+    background: #FFFAF8;
+  }
+  .farmer-info-card.fertilizer {
+    border-color: rgba(42, 99, 44, 0.3);
+    background: #FAFCFA;
+  }
+
+  .fic-top-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 3px 8px;
+    border-radius: 6px;
+    width: fit-content;
+  }
+  .fic-top-badge.pesticide { background: rgba(186, 70, 32, 0.12); color: var(--clay); }
+  .fic-top-badge.fertilizer { background: rgba(42, 99, 44, 0.12); color: var(--leaf); }
+  .fic-top-badge.pest { background: rgba(184, 131, 14, 0.14); color: var(--gold); }
+
+  .fic-title {
+    font-size: 1.14rem;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+  .fic-summary {
+    font-size: 0.84rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+  }
+
+  /* Các ô KPI thông số trọng tâm (Liều pha & Cách ly) siêu to rõ */
+  .fic-kpi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .fic-kpi-cell {
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .fic-kpi-cell.dosage {
+    background: var(--leaf-tint);
+    border: 1.5px solid rgba(42, 99, 44, 0.3);
+    grid-column: span 2;
+  }
+  .fic-kpi-cell.isolation {
+    background: var(--clay-tint);
+    border: 1.5px solid rgba(186, 70, 32, 0.35);
+  }
+  .fic-kpi-cell.target {
+    background: var(--sky-tint);
+    border: 1px solid rgba(37, 99, 235, 0.22);
+  }
+  .fic-kpi-cell.full { grid-column: span 2; }
+
+  .fic-kpi-lbl {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .fic-kpi-cell.dosage .fic-kpi-lbl { color: var(--leaf); }
+  .fic-kpi-cell.isolation .fic-kpi-lbl { color: var(--clay); }
+  .fic-kpi-cell.target .fic-kpi-lbl { color: var(--sky); }
+
+  .fic-kpi-val {
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1.35;
+  }
+  .fic-kpi-cell.isolation .fic-kpi-val {
+    color: #991b1b;
+    font-size: 1.15rem;
+  }
+
+  .fic-db-box {
+    padding: 8px 10px;
+    border-radius: 6px;
+    background: rgba(42, 99, 44, 0.05);
+    border: 1px solid rgba(42, 99, 44, 0.18);
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+  .fic-db-box b { color: var(--leaf); }
+
+  /* Phiếu xác nhận lưu sổ nhật ký to rõ */
+  .confirm-ticket {
+    background: #FFFDF9;
+    border: 2px solid var(--leaf);
+    border-radius: var(--radius-md);
+    padding: 13px;
+    margin-top: 4px;
+  }
+  .confirm-ticket-title {
+    color: var(--leaf);
+    font-size: 0.95rem;
+    font-weight: 800;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1.5px dashed rgba(42, 99, 44, 0.25);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .confirm-ticket-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 0.86rem;
+  }
+  .confirm-ticket-row .k { color: var(--ink-soft); font-weight: 600; }
+  .confirm-ticket-row .v { color: var(--ink); font-weight: 800; text-align: right; }
+  .confirm-btns-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .btn-confirm-yes {
+    flex: 2;
+    background: var(--leaf);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 10px;
+    font-size: 0.88rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(42, 99, 44, 0.35);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn-confirm-no {
+    flex: 1;
+    background: rgba(186, 70, 32, 0.1);
+    color: var(--clay);
+    border: 1px solid rgba(186, 70, 32, 0.25);
+    border-radius: 999px;
+    padding: 10px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .quick-reply-btns {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .btn-quick-reply {
+    background: rgba(42, 99, 44, 0.08);
+    border: 1px solid rgba(42, 99, 44, 0.22);
+    color: var(--leaf);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .btn-quick-reply:hover {
+    background: var(--leaf);
+    color: #fff;
+  }
+  .btn-quick-reply:disabled,
+  .btn-quick-reply[disabled] {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .disabled-past,
+  .disabled-past:hover,
+  button.disabled-past {
+    opacity: 0.42 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+    filter: grayscale(25%) !important;
+  }
+
+  .audio-reply-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(35, 42, 28, 0.05);
+    border: 1px solid rgba(35, 42, 28, 0.1);
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    color: var(--ink-soft);
+    cursor: pointer;
+    margin-top: 4px;
+    width: fit-content;
+  }
+  .audio-reply-badge:hover { background: rgba(42, 99, 44, 0.1); color: var(--leaf); }
+
+  /* Chip trích dẫn nguồn tài liệu VietGAP [1], [2] đồng bộ đẹp mắt */
+  .rag-cite-tag {
+    display: inline-block;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--gold, #b8830e);
+    background: rgba(184, 131, 14, 0.12);
+    border: 1px solid rgba(184, 131, 14, 0.3);
+    border-radius: 4px;
+    padding: 1px 5px;
+    margin: 0 2px;
+    line-height: 1.25;
+    vertical-align: baseline;
+  }
+
+  /* Khối gợi ý hành động nhẹ nhàng đồng bộ với giao diện chung */
+  .ai-tip-callout {
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: rgba(42, 99, 44, 0.05);
+    border-left: 3px solid var(--leaf, #2a632c);
+    border-radius: 6px;
+    font-size: 0.88rem;
+    color: var(--ink, #1f2937);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .advisory-lead-card {
+    background: #FFFFFF;
+    border: 1.5px solid rgba(42, 99, 44, 0.25);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    animation: siriCardFade 0.25s ease;
+  }
+  .advisory-lead-card.pesticide {
+    border-color: rgba(186, 70, 32, 0.3);
+    background: #FFFAF8;
+  }
+  .advisory-lead-card.pest_disease {
+    border-color: rgba(184, 131, 14, 0.35);
+    background: #FFFDF7;
+  }
+  .advisory-lead-card.fertilizer {
+    border-color: rgba(42, 99, 44, 0.3);
+    background: #F9FCF9;
+  }
+
+  .alc-lead-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed rgba(35, 42, 28, 0.15);
+  }
+  .alc-val {
+    font-size: 0.90rem;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+  .alc-val.main {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--forest);
+  }
+  .alc-val.core {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .alc-clarifying-box {
+    background: rgba(42, 99, 44, 0.08);
+    border: 1.5px solid rgba(42, 99, 44, 0.35);
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin: 6px 0 2px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    animation: siriCardFade 0.25s ease;
+  }
+  .alc-clarifying-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.80rem;
+    font-weight: 800;
+    color: var(--forest);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .alc-clarifying-text {
+    font-size: 0.94rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+
+  /* Hàng nút thông tin thêm đơn giản, dạng pill đồng bộ các trang khác */
+  .alc-nav-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .btn-alc-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: #FFFFFF;
+    border: 1px solid rgba(35, 42, 28, 0.16);
+    color: var(--ink);
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .btn-alc-nav:hover {
+    background: rgba(63, 107, 63, 0.06);
+    border-color: var(--leaf);
+    color: var(--leaf);
+    transform: translateY(-1px);
+  }
+  .btn-alc-nav.active {
+    background: rgba(63, 107, 63, 0.1);
+    border-color: var(--leaf);
+    color: var(--leaf);
+    font-weight: 700;
+  }
+  .btn-alc-nav.primary {
+    background: var(--leaf);
+    border-color: var(--leaf);
+    color: #FFFFFF;
+    font-weight: 700;
+  }
+  .btn-alc-nav.primary:hover {
+    background: var(--leaf-bright);
+    color: #FFFFFF;
+  }
+  .btn-alc-nav .alc-nav-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--leaf);
+  }
+  .btn-alc-nav.primary .alc-nav-icon {
+    color: #FFFFFF;
+  }
+  .btn-alc-nav .alc-nav-text {
+    flex: 1;
+  }
+
+  /* Khung chi tiết khi bấm nút chuyển hướng */
+  .alc-detail-box {
+    background: #FFFFFF;
+    border: 1.5px solid rgba(42, 99, 44, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    margin-top: 6px;
+    animation: siriCardFade 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .alc-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--leaf);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .alc-detail-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .alc-detail-replay {
+    cursor: pointer;
+    color: var(--leaf);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    border-radius: 6px;
+    background: rgba(42, 99, 44, 0.08);
+    transition: all 0.15s;
+  }
+  .alc-detail-replay:hover {
+    background: rgba(42, 99, 44, 0.2);
+  }
+  .alc-detail-body {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.5;
+    white-space: pre-line;
+  }
+  .alc-detail-close {
+    cursor: pointer;
+    opacity: 0.6;
+    display: inline-flex;
+    align-items: center;
+  }
+  .alc-detail-close:hover {
+    opacity: 1;
+  }
+
+  .msg-image {
+    max-width: 220px;
+    max-height: 220px;
+    border-radius: 12px;
+    margin-bottom: 6px;
+    border: 1px solid rgba(35, 42, 28, 0.1);
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+  }
+
+  /* ========================================================================= */
+  /* NÚT GỢI Ý CHỤP ẢNH ĐỒNG BỘ PHONG CÁCH CÁC TRANG KHÁC                      */
+  /* ========================================================================= */
+  .suggested-camera-bar {
+    margin-top: 10px;
+    width: 100%;
+    animation: siriCardFade 0.25s ease;
+  }
+  .btn-suggested-camera {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: #FFFFFF;
+    border: 1.5px solid var(--leaf);
+    color: var(--leaf);
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .btn-suggested-camera:hover {
+    background: var(--leaf);
+    color: #FFFFFF;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(63, 107, 63, 0.2);
+  }
+  .btn-suggested-camera .alc-nav-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--leaf);
+  }
+  .btn-suggested-camera:hover .alc-nav-icon {
+    color: #FFFFFF;
+  }
+  .btn-suggested-camera .alc-nav-text {
+    flex: 1;
+  }
+
+  /* NÚT HÀNH ĐỘNG GỢI Ý CHUYỂN TIẾP LUỒNG (VD: MUA VẬT TƯ <-> PHUN/BÓN) */
+  .suggested-actions-bar {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    animation: siriCardFade 0.25s ease;
+  }
+  .btn-suggested-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: #FFFFFF;
+    border: 1.5px solid #D6A339;
+    color: #1F3626;
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .btn-suggested-action:hover {
+    background: #FFFDF5;
+    border-color: #B38322;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(214, 163, 57, 0.25);
+  }
+  .btn-suggested-action .alc-nav-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #B38322;
+  }
+  .btn-suggested-action:hover .alc-nav-icon {
+    color: #1F3626;
+  }
+  .btn-suggested-action .alc-nav-text {
+    flex: 1;
+  }
+
+  .typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 9px 13px;
+    background: var(--card);
+    border: 1px solid rgba(35, 42, 28, 0.08);
+    border-radius: 16px;
+    border-top-left-radius: 4px;
+    align-self: flex-start;
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  }
+  .typing-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--leaf);
+    animation: typingBounce 1.4s infinite ease-in-out;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingBounce {
+    0%, 80%, 100% { transform: scale(0); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+  }
+
+  /* Traditional Input Bar */
+  .chat-input-bar {
+    background: var(--card);
+    border-top: 1px solid var(--line);
+    padding: 8px 12px 10px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.04);
+  }
+
+  .input-main-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-camera {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #FEF8E7, #FDF1D5);
+    border: 1.5px solid rgba(184, 131, 14, 0.35);
+    color: #8A6209;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .btn-camera:hover { background: var(--gold); color: #fff; }
+
+  .chat-textarea {
+    flex: 1;
+    min-height: 44px;
+    max-height: 100px;
+    padding: 11px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(35, 42, 28, 0.14);
+    background: var(--paper);
+    font-family: inherit;
+    font-size: 0.92rem;
+    color: var(--ink);
+    resize: none;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .chat-textarea:focus {
+    border-color: var(--leaf);
+    box-shadow: 0 0 0 2px rgba(42, 99, 44, 0.12);
+  }
+
+  .btn-mic {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(42, 99, 44, 0.10);
+    border: 1px solid rgba(42, 99, 44, 0.25);
+    color: var(--leaf);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .btn-mic:hover { background: var(--leaf); color: #fff; }
+  .btn-mic.recording {
+    background: #e11d48 !important;
+    color: #fff !important;
+    border-color: #f43f5e !important;
+    animation: micPulse 1.2s infinite;
+  }
+  @keyframes micPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(225, 29, 72, 0); }
+  }
+
+  .btn-send {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--leaf);
+    border: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    box-shadow: 0 4px 10px rgba(42, 99, 44, 0.3);
+  }
+  .btn-send:hover { background: #1e4a20; }
+  .btn-send:disabled, .btn-send.disabled {
+    background: #94a395 !important;
+    cursor: not-allowed !important;
+    opacity: 0.6 !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+  .chat-input:read-only {
+    background-color: #F8F9FA !important;
+    cursor: not-allowed !important;
+  }
+  .btn-siri-send:disabled,
+  .btn-confirm-yes:disabled,
+  .btn-confirm-no:disabled,
+  .btn-suggested-action:disabled,
+  .btn-suggested-camera:disabled,
+  .btn-alc-nav:disabled,
+  .btn-siri-action:disabled {
+    cursor: not-allowed !important;
+    opacity: 0.5 !important;
+    pointer-events: none !important;
+  }
+
+  /* ========================================================================= */
+  /* DẠNG 2: CHẾ ĐỘ TRỢ LÝ GIỌNG NÓI SIRI (AUDIO - AUDIO / AUDIO - IMAGE)      */
+  /* ========================================================================= */
+  /* ========================================================================= */
+  /* DẠNG 2: CHẾ ĐỘ TRỢ LÝ GIỌNG NÓI SIRI (SÁNG MÀU, TỐI GIẢN)               */
+  /* ========================================================================= */
+  .siri-view {
+    flex: 1;
+    background: radial-gradient(circle at 50% 15%, #FFFFFF 0%, var(--paper) 65%, #F4F0E3 100%);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 16px 18px 22px;
+    position: relative;
+    overflow-y: auto;
+    gap: 12px;
+  }
+
+  /* Status Pill on Top of Siri Screen */
+  .siri-status-banner {
+    background: rgba(63, 107, 63, 0.08);
+    border: 1px solid rgba(63, 107, 63, 0.16);
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--leaf);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+    flex-shrink: 0;
+  }
+
+  /* Central Stage */
+  .siri-orb-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 8px 0;
+    position: relative;
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  .siri-orb-wrap {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .siri-orb-aura {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(91, 140, 74, 0.22) 0%, rgba(91, 140, 74, 0.06) 55%, transparent 70%);
+    animation: orbAuraPulse 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .siri-orb {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--leaf-bright), var(--leaf));
+    box-shadow: 0 8px 26px rgba(63, 107, 63, 0.32), inset 0 2px 8px rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 2;
+  }
+  .siri-orb-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    transition: transform 0.2s ease;
+  }
+  .siri-orb-icon svg {
+    width: 40px;
+    height: 40px;
+    stroke-width: 2.2px;
+  }
+
+  /* Listening state: Nông dân đang nói */
+  .siri-orb-wrap.listening .siri-orb {
+    background: linear-gradient(135deg, #f87171, #dc2626);
+    box-shadow: 0 0 32px rgba(239, 68, 68, 0.5), inset 0 2px 8px rgba(255, 255, 255, 0.5);
+    transform: scale(1.08);
+  }
+  .siri-orb-wrap.listening .siri-orb-aura {
+    background: radial-gradient(circle, rgba(239, 68, 68, 0.3) 0%, rgba(239, 68, 68, 0.1) 55%, transparent 70%);
+    animation: orbAuraPulse 1s ease-in-out infinite;
+  }
+
+  /* Thinking state: AI đang suy nghĩ */
+  .siri-orb-wrap.thinking .siri-orb {
+    background: linear-gradient(135deg, #fbbf24, #d97706);
+    box-shadow: 0 0 32px rgba(217, 119, 6, 0.45), inset 0 2px 8px rgba(255, 255, 255, 0.5);
+    animation: orbSpin 2s linear infinite;
+  }
+
+  /* Speaking state: AI đang nói qua TTS */
+  .siri-orb-wrap.speaking .siri-orb {
+    background: linear-gradient(135deg, #38bdf8, #0284c7);
+    box-shadow: 0 0 32px rgba(2, 132, 199, 0.45), inset 0 2px 8px rgba(255, 255, 255, 0.5);
+    animation: orbSpeakingBounce 0.8s ease-in-out infinite alternate;
+  }
+
+  /* Waveform bars */
+  .siri-wave-bars {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 18px;
+    margin-top: 8px;
+  }
+  .siri-wave-bar {
+    width: 3.5px;
+    height: 5px;
+    background: rgba(63, 107, 63, 0.35);
+    border-radius: 999px;
+    transition: height 0.15s ease, background-color 0.2s ease;
+  }
+  .siri-orb-wrap.listening ~ .siri-wave-bars .siri-wave-bar {
+    background: #ef4444;
+    animation: waveBounce 0.6s ease-in-out infinite alternate;
+  }
+  .siri-orb-wrap.speaking ~ .siri-wave-bars .siri-wave-bar {
+    background: #0284c7;
+    animation: waveBounce 0.5s ease-in-out infinite alternate;
+  }
+
+  /* Siri Result Card: Sáng màu, tinh gọn, dạng khung hội thoại giống chat truyền thống */
+  .siri-display-card {
+    width: 100%;
+    max-width: 480px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 4px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: none;
+    animation: siriCardFade 0.25s ease;
+  }
+
+  .siri-user-transcript {
+    font-size: 0.92rem;
+    color: var(--ink);
+    background: rgba(184, 131, 14, 0.08);
+    border-left: 3px solid var(--gold);
+    padding: 8px 12px;
+    border-radius: 8px;
+    line-height: 1.45;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    animation: siriCardFade 0.2s ease;
+  }
+  .siri-user-transcript.live {
+    background: rgba(16, 185, 129, 0.08);
+    border-left: 3px solid #10B981;
+  }
+  .siri-user-transcript.live .siri-user-transcript-label {
+    color: #059669;
+  }
+  .siri-user-transcript-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .siri-user-transcript-text {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .live-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10B981;
+    box-shadow: 0 0 6px #10B981;
+    animation: livePulse 0.9s infinite alternate;
+  }
+  @keyframes livePulse {
+    0% { transform: scale(0.85); opacity: 0.6; }
+    100% { transform: scale(1.3); opacity: 1; }
+  }
+
+  .siri-ai-response-text {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 0.94rem;
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .siri-ai-response-text .msg-row.assistant {
+    width: 100%;
+    max-width: 100%;
+    align-self: flex-start;
+  }
+  .siri-ai-response-text .msg-row.user {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+    max-width: 88%;
+  }
+  .siri-ai-response-text .msg-row.assistant .msg-content-wrap {
+    max-width: calc(100% - 42px);
+  }
+  .siri-ai-response-text .typing-indicator {
+    align-self: flex-start;
+    margin: 4px 0 6px 0;
+  }
+
+  /* Action buttons in Siri Card (khi cần xác nhận lưu hoặc hành động) */
+  .siri-action-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .btn-siri-action {
+    background: rgba(35, 42, 28, 0.05);
+    border: 1px solid rgba(35, 42, 28, 0.12);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn-siri-action:hover {
+    background: rgba(35, 42, 28, 0.1);
+  }
+  .btn-siri-action.primary {
+    background: var(--leaf);
+    color: #FFFFFF;
+    border-color: var(--leaf);
+    box-shadow: 0 3px 10px rgba(63, 107, 63, 0.25);
+  }
+  .btn-siri-action.primary:hover {
+    background: var(--leaf-bright);
+  }
+
+  /* Hàng nút trung tâm ở giữa màn hình: Nút Cam bên trái - Quả cầu Mic ở giữa - Nút Viết bên phải */
+  .siri-center-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    margin: 8px 0 2px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .btn-siri-side {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #FFFDF7;
+    border: 1.5px solid rgba(63, 107, 63, 0.25);
+    color: var(--leaf);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    flex-shrink: 0;
+  }
+  .btn-siri-side:hover {
+    background: var(--leaf);
+    color: #FFFFFF;
+    border-color: var(--leaf);
+    transform: scale(1.08);
+    box-shadow: 0 6px 18px rgba(63, 107, 63, 0.25);
+  }
+  .btn-siri-side:active {
+    transform: scale(0.94);
+  }
+  .btn-siri-side.active {
+    background: var(--leaf);
+    color: #FFFFFF;
+    border-color: var(--leaf);
+    box-shadow: 0 0 0 3px rgba(63, 107, 63, 0.25);
+  }
+
+  /* Chỗ nhập text trong thẻ Siri - Hiển thị ở dưới các tin nhắn */
+  .siri-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #FFFFFF;
+    border: 1.5px solid rgba(63, 107, 63, 0.35);
+    border-radius: 14px;
+    padding: 6px 8px 6px 14px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+    margin-top: 10px;
+    width: 100%;
+    animation: siriCardFade 0.2s ease;
+  }
+  .siri-input-wrapper:focus-within {
+    border-color: var(--leaf);
+    box-shadow: 0 0 0 3px rgba(63, 107, 63, 0.2);
+  }
+  .siri-text-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--ink);
+    padding: 8px 0;
+  }
+  .siri-text-input::placeholder {
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    opacity: 0.8;
+  }
+  .btn-siri-send {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--leaf);
+    color: #FFFFFF;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .btn-siri-send:hover {
+    background: var(--leaf-bright);
+    transform: scale(1.05);
+  }
+  .btn-siri-send:active {
+    transform: scale(0.95);
+  }
+
+  /* Phần hiển thị phản hồi bên dưới các nút */
+  .siri-response-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .siri-response-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.74rem;
+    font-weight: 700;
+  }
+  .siri-ai-badge {
+    background: rgba(63, 107, 63, 0.1);
+    color: var(--leaf);
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .siri-live-status {
+    color: var(--ink-soft);
+    font-size: 0.74rem;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- ======================================================================= -->
+  <!-- HEADER & MODE SWITCHER CHÍNH                                            -->
+  <!-- ======================================================================= -->
+  <div class="chat-header">
+    <div class="header-top-row">
+      <div class="header-left">
+        <a href="/" class="btn-back" title="Quay lại trang chủ">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        </a>
+        <div class="header-title-box">
+          <div class="header-title">
+            <span class="app-name-inline">nông<em>ký</em></span>
+          </div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button type="button" class="btn-header-tool active" id="btnToggleTTS" title="Bật/Tắt phát âm phản hồi (TTS)">
+          <span id="ttsIcon" style="display:inline-flex; align-items:center;">
+            <svg class="lucide lucide-volume-2" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          </span>
+        </button>
+        <button type="button" class="btn-header-tool" id="btnResetConv" title="Làm mới cuộc trò chuyện">
+          <svg class="lucide lucide-rotate-ccw" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          <span>Làm mới</span>
+        </button>
+        <a href="/logout" class="btn-header-tool" title="Đăng xuất" style="text-decoration:none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Thoát</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- User bar: tên nông hộ & role — cùng kiểu với index.html -->
+    <div class="conv-user-bar">
+      <span class="conv-user-greeting">Nông hộ: <b>{{ farmer.full_name if farmer else 'Nông hộ VietGAP' }}</b></span>
+      {% if farmer %}
+      <span class="conv-user-role">{{ farmer.role }}</span>
+      {% endif %}
+    </div>
+
+    <!-- Nút chuyển đổi 2 Dạng Hội Thoại: Siri Voice & Chat Truyền Thống (Dạng Icon) -->
+    <div class="mode-switch-bar">
+      <button type="button" class="btn-mode-tab active siri-tab" id="tabModeSiri" onclick="switchMode('siri')" title="Chế độ Trợ lý Giọng nói">
+        <svg class="lucide lucide-mic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+      </button>
+      <button type="button" class="btn-mode-tab" id="tabModeChat" onclick="switchMode('chat')" title="Chế độ Nhắn tin Chat">
+        <svg class="lucide lucide-message-square" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Input file ẩn có capture="environment" để điện thoại tự mở thẳng camera sau -->
+  <input type="file" id="cameraFileInput" accept="image/*" capture="environment" style="display:none;">
+
+  <!-- ======================================================================= -->
+  <!-- DẠNG 2: CHẾ ĐỘ TRỢ LÝ GIỌNG NÓI SIRI (AUDIO - AUDIO / AUDIO - IMAGE)    -->
+  <!-- ======================================================================= -->
+  <div class="view-panel" id="panelSiri">
+    <div class="siri-view">
+
+
+      <!-- Khu vực trung tâm: Nút Cam bên trái - Quả cầu Mic ở giữa - Nút Viết bên phải -->
+      <div class="siri-orb-stage">
+        <div class="siri-center-controls">
+          <!-- Nút Cam: Chụp ảnh thực địa bên trái quả cầu mic -->
+          <button type="button" class="btn-siri-side" id="btnSiriCam" onclick="triggerCameraCapture()" title="Mở máy ảnh chụp bao bì vật tư hoặc sâu bệnh">
+            <svg class="lucide lucide-camera" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+          </button>
+
+          <!-- Quả cầu Mic ở giữa màn hình: Chạm để nói -->
+          <div class="siri-orb-wrap" id="siriOrbWrap" role="button" tabindex="0" onclick="toggleSiriListening()" title="Chạm để nói chuyện bằng giọng nói">
+            <div class="siri-orb-aura"></div>
+            <div class="siri-orb" id="siriOrb">
+              <span class="siri-orb-icon" id="siriOrbIcon">
+                <svg class="lucide lucide-mic" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <!-- Nút Viết: Bật/tắt ô nhập chữ bên dưới, nằm bên phải quả cầu mic -->
+          <button type="button" class="btn-siri-side" id="btnSiriWrite" onclick="toggleSiriTextInput()" title="Bấm để mở ô nhập chữ">
+            <svg class="lucide lucide-pencil" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+          </button>
+        </div>
+
+        <!-- Thanh sóng âm động -->
+        <div class="siri-wave-bars">
+          <span class="siri-wave-bar"></span>
+          <span class="siri-wave-bar"></span>
+          <span class="siri-wave-bar"></span>
+          <span class="siri-wave-bar"></span>
+          <span class="siri-wave-bar"></span>
+          <span class="siri-wave-bar"></span>
+        </div>
+      </div>
+
+      <!-- Khung hiển thị: Phản hồi của AI & Kết quả STT bên dưới các nút -->
+      <div class="siri-display-card" id="siriDisplayCard">
+
+        <!-- 1. KẾT QUẢ GIỌNG NÓI STT (Bác vừa nói) -->
+        <div class="siri-user-transcript" id="siriUserTranscript" style="display:none;">
+          <div class="siri-user-transcript-label" id="siriUserTranscriptLabel">
+            <svg class="lucide lucide-mic" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+            <span>Bác vừa nói:</span>
+          </div>
+          <div class="siri-user-transcript-text" id="siriUserTranscriptText"></div>
+        </div>
+
+        <!-- 2. PHẦN HIỂN THỊ PHẢN HỒI BÊN DƯỚI CÁC NÚT -->
+        <div class="siri-response-section" id="siriResponseSection">
+          <div class="siri-response-header">
+            <span id="siriStatusText" class="siri-live-status">Sẵn sàng</span>
+          </div>
+          <div class="siri-ai-response-text" id="siriAiResponseText">
+            <div class="msg-row assistant">
+              <div class="msg-avatar">AI</div>
+              <div class="msg-content-wrap">
+                <div class="ai-response-box">
+                  <div class="ai-text-standard">
+                    Dạ em chào bác nông dân! Em là <b>Trợ lý AI Nông Ký</b>.<br><br>
+                    Bác có thể chạm vào quả cầu để nói, hoặc bấm chọn nhanh loại hoạt động cần ghi chép bên dưới:
+                  </div>
+                  <div class="quick-reply-btns">
+                    <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký phun thuốc BVTV.')">
+                      <svg class="lucide lucide-flask-conical" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
+                      <span>Phun thuốc BVTV</span>
+                    </button>
+                    <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký bón phân.')">
+                      <svg class="lucide lucide-sprout" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-13"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>
+                      <span>Bón phân</span>
+                    </button>
+                    <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký mua vật tư nông nghiệp.')">
+                      <svg class="lucide lucide-shopping-cart" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                      <span>Mua vật tư</span>
+                    </button>
+                    <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi theo dõi sâu bệnh hại.')">
+                      <svg class="lucide lucide-bug" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/><path d="M6.53 9C4.6 8.8 3 7.1 3 5"/><path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M22 13h-4"/><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/></svg>
+                      <span>Theo dõi sâu bệnh</span>
+                    </button>
+                    <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký thu hoạch nông sản.')">
+                      <svg class="lucide lucide-package" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                      <span>Thu hoạch</span>
+                    </button>
+                    <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký bán nông sản.')">
+                      <svg class="lucide lucide-banknote" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
+                      <span>Bán nông sản</span>
+                    </button>
+                    <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký thu gom vỏ bao bì thuốc.')">
+                      <svg class="lucide lucide-trash-2" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                      <span>Xử lý vỏ bao bì</span>
+                    </button>
+                    <button type="button" class="btn-quick-reply" onclick="triggerCameraCapture()">
+                      <svg class="lucide lucide-camera" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+                      <span>Chụp ảnh thực địa</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Các nút thao tác chỉ hiện khi cần xác nhận lưu hoặc hành động tiếp theo -->
+          <div class="siri-action-bar" id="siriActionBar" style="display:none;"></div>
+        </div>
+
+        <!-- 3. CHỖ NHẬP TEXT Ở PHÍA DƯỚI (Mặc định ẩn, chỉ hiện ở DƯỚI khi bấm nút viết tay) -->
+        <div class="siri-input-wrapper" id="siriInputWrapper" style="display:none;">
+          <input type="text" id="siriTextInput" class="siri-text-input" placeholder="Bác nhập việc cần ghi hoặc câu hỏi vào đây..." autocomplete="off">
+          <button type="button" class="btn-siri-send" id="btnSiriSend" onclick="submitSiriText()" title="Gửi câu hỏi hoặc việc cần ghi">
+            <svg class="lucide lucide-send" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- DẠNG 1: CHẾ ĐỘ TRUYỀN THỐNG (TEXT - AUDIO / TEXT - IMAGE)               -->
+  <!-- ======================================================================= -->
+  <div class="view-panel hidden" id="panelChat">
+    <!-- Khung tin nhắn hội thoại dạng dòng thời gian -->
+    <div class="chat-messages" id="chatMessages">
+      <div class="msg-row assistant">
+        <div class="msg-avatar">AI</div>
+        <div class="msg-content-wrap">
+          <div class="ai-response-box">
+            <div class="ai-text-standard">
+              Dạ em chào bác nông dân! Em là <b>Trợ lý AI Nông Ký</b>.<br><br>
+              Bác có thể nhắn tin, nói chuyện hoặc bấm chọn nhanh loại hoạt động cần ghi chép bên dưới:
+            </div>
+            <div class="quick-reply-btns">
+              <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký phun thuốc BVTV.')">
+                <svg class="lucide lucide-flask-conical" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
+                <span>Phun thuốc BVTV</span>
+              </button>
+              <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký bón phân.')">
+                <svg class="lucide lucide-sprout" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-13"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>
+                <span>Bón phân</span>
+              </button>
+              <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký mua vật tư nông nghiệp.')">
+                <svg class="lucide lucide-shopping-cart" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                <span>Mua vật tư</span>
+              </button>
+              <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi theo dõi sâu bệnh hại.')">
+                <svg class="lucide lucide-bug" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/><path d="M6.53 9C4.6 8.8 3 7.1 3 5"/><path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M22 13h-4"/><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/></svg>
+                <span>Theo dõi sâu bệnh</span>
+              </button>
+              <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký thu hoạch nông sản.')">
+                <svg class="lucide lucide-package" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                <span>Thu hoạch</span>
+              </button>
+              <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký bán nông sản.')">
+                <svg class="lucide lucide-banknote" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
+                <span>Bán nông sản</span>
+              </button>
+              <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký thu gom vỏ bao bì thuốc.')">
+                <svg class="lucide lucide-trash-2" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                <span>Xử lý vỏ bao bì</span>
+              </button>
+              <button type="button" class="btn-quick-reply" onclick="triggerCameraCapture()">
+                <svg class="lucide lucide-camera" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+                <span>Chụp ảnh thực địa</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thanh nhập liệu phía dưới cho Chat Truyền Thống -->
+    <div class="chat-input-bar">
+
+      <div class="input-main-row">
+        <!-- Nút Camera mở thẳng máy ảnh thực địa -->
+        <button type="button" class="btn-camera" id="btnCamera" onclick="triggerCameraCapture()" title="Tự mở Camera chụp ảnh bao bì vật tư hoặc sâu bệnh">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </button>
+
+        <!-- Ô nhập tin nhắn văn bản -->
+        <textarea id="chatInput" class="chat-textarea" placeholder="Nhập tin nhắn hoặc nói..." rows="1"></textarea>
+
+        <!-- Nút micro ghi âm giọng nói -->
+        <button type="button" class="btn-mic" id="btnMic" title="Bấm để nói bằng giọng nói">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </button>
+
+        <!-- Nút gửi tin nhắn -->
+        <button type="button" class="btn-send" id="btnSend" title="Gửi tin nhắn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Audio Player phát TTS toàn cục -->
+<audio id="ttsAudioPlayer" style="display:none;"></audio>
+
+<script>
+  let currentMode = "siri"; // Mặc định ở chế độ Siri theo yêu cầu
+  let sessionId = "web_" + Math.random().toString(36).substring(2, 10);
+  let enableTTS = true; // Chế độ Siri luôn bật phát giọng nói tự động
+  let isRecording = false;
+  let isStopping = false;
+  let lastAudioUrl = "";
+
+  // Trạng thái Realtime STT streaming & VAD
+  let audioContext = null;
+  let scriptProcessor = null;
+  let micMediaStream = null;
+  let mediaRecorder = null;
+  let audioChunks = [];
+  let realtimeWs = null;
+  let realtimeSessionId = null;
+  let useWebSocket = false;
+  let realtimeFinalizedText = "";
+  let realtimeLiveText = "";
+  let wsCompleteResolver = null;
+  let realtimeFeedPromise = Promise.resolve();
+  let silenceCheckInterval = null;
+  let lastSpeechTime = 0;
+  let hasSpoken = false;
+  let audioNoiseFloor = 0.01;
+  let consecutiveSpeechFrames = 0;
+  let recordStartTime = 0;
+  const SILENCE_AFTER_SPEECH_MS = 2000; // 2.0s ngưng nói -> tự động chốt câu dứt khoát
+  const NO_SPEECH_MAX_TIMEOUT_MS = 7000; // 7s không có giọng nói -> tự động tắt
+  const MAX_SPEECH_RECORD_MS = 20000; // 20s tối đa cho 1 câu nói -> bảo hiểm ngắt ghi âm chống treo
+  let siriAlertTimeout = null;
+  let finalSpeechAutoStopTimer = null; // Timer tự động chốt câu ngay khi server STT báo kết thúc câu (final)
+
+  // BỘ ICON LUCIDE SVG CHUẨN (Không dùng emoji, nếu không có icon phù hợp thì không dùng)
+  const LUCIDE_ICONS = {
+    mic: `<svg class="lucide lucide-mic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>`,
+    micOrb: `<svg class="lucide lucide-mic" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>`,
+    radioOrb: `<svg class="lucide lucide-radio" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"/><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"/><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"/><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"/></svg>`,
+    loaderOrb: `<svg class="lucide lucide-loader-2" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation: orbSpin 1.5s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`,
+    volume2Orb: `<svg class="lucide lucide-volume-2" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`,
+    messageSquare: `<svg class="lucide lucide-message-square" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`,
+    volume2: `<svg class="lucide lucide-volume-2" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`,
+    volumeX: `<svg class="lucide lucide-volume-x" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>`,
+    camera: `<svg class="lucide lucide-camera" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>`,
+    purchase: `<svg class="lucide lucide-shopping-cart" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>`,
+    spray: `<svg class="lucide lucide-flask-conical" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>`,
+    fertilize: `<svg class="lucide lucide-sprout" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-13"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>`,
+    bug: `<svg class="lucide lucide-bug" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/><path d="M6.53 9C4.6 8.8 3 7.1 3 5"/><path d="M6 13H2"/><path d="M3 21c0-2.1 1.7-3.9 3.8-4"/><path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/><path d="M22 13h-4"/><path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/></svg>`,
+    harvest: `<svg class="lucide lucide-package" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>`,
+    sale: `<svg class="lucide lucide-banknote" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>`,
+    waste: `<svg class="lucide lucide-trash-2" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>`,
+    scale: `<svg class="lucide lucide-scale" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>`,
+    clock: `<svg class="lucide lucide-clock" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+    target: `<svg class="lucide lucide-target" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>`,
+    fileEdit: `<svg class="lucide lucide-file-edit" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
+    check: `<svg class="lucide lucide-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+    x: `<svg class="lucide lucide-x" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+    checkCircle: `<svg class="lucide lucide-check-circle" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>`,
+    alert: `<svg class="lucide lucide-alert-triangle" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+    shield: `<svg class="lucide lucide-shield" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>`,
+    pill: `<svg class="lucide lucide-pill" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/></svg>`,
+    sparkles: `<svg class="lucide lucide-sparkles" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>`,
+    help: `<svg class="lucide lucide-help-circle" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" x2="12.01" y1="17" y2="17"/></svg>`,
+    user: `<svg class="lucide lucide-user" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+    pencil: `<svg class="lucide lucide-pencil" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>`,
+    bookOpen: `<svg class="lucide lucide-book-open" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+    arrowRight: `<svg class="lucide lucide-arrow-right" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`
+  };
+
+  // DOM Elements
+  const panelSiri = document.getElementById("panelSiri");
+  const panelChat = document.getElementById("panelChat");
+  const tabModeSiri = document.getElementById("tabModeSiri");
+  const tabModeChat = document.getElementById("tabModeChat");
+
+  // Header Elements
+  const headerStateBadge = document.getElementById("headerStateBadge");
+  const btnToggleTTS = document.getElementById("btnToggleTTS");
+  const ttsIcon = document.getElementById("ttsIcon");
+  const btnResetConv = document.getElementById("btnResetConv");
+  const ttsAudioPlayer = document.getElementById("ttsAudioPlayer");
+  const cameraFileInput = document.getElementById("cameraFileInput");
+
+  // Siri Elements
+  const siriStatusText = document.getElementById("siriStatusText");
+  const siriOrbWrap = document.getElementById("siriOrbWrap");
+  const siriOrbIcon = document.getElementById("siriOrbIcon");
+  const siriDisplayCard = document.getElementById("siriDisplayCard");
+  const siriInputWrapper = document.getElementById("siriInputWrapper");
+  const siriTextInput = document.getElementById("siriTextInput");
+  const siriUserTranscript = document.getElementById("siriUserTranscript");
+  const siriUserTranscriptLabel = document.getElementById("siriUserTranscriptLabel");
+  const siriUserTranscriptText = document.getElementById("siriUserTranscriptText");
+  const siriAiResponseText = document.getElementById("siriAiResponseText");
+  const siriActionBar = document.getElementById("siriActionBar");
+  const btnSiriCam = document.getElementById("btnSiriCam");
+  const btnSiriWrite = document.getElementById("btnSiriWrite");
+
+  // Chat Elements
+  const chatMessages = document.getElementById("chatMessages");
+  const chatInput = document.getElementById("chatInput");
+  const btnSend = document.getElementById("btnSend");
+  const btnMic = document.getElementById("btnMic");
+
+  // =========================================================================
+  // TRẠNG THÁI KHÓA GỬI ĐỒNG THỜI (PHẢI CHỜ PHẢN HỒI MỚI ĐƯỢC GỬI TIẾP)
+  // =========================================================================
+  let isWaitingForResponse = false;
+
+  function setWaitingForResponse(isWaiting, statusMsg = "") {
+    isWaitingForResponse = Boolean(isWaiting);
+
+    // 1. Quản lý trạng thái nút gửi và ô nhập trong Chat
+    if (btnSend) {
+      btnSend.disabled = isWaiting;
+      if (isWaiting) {
+        btnSend.classList.add("disabled");
+        btnSend.title = "Đang chờ trợ lý AI trả lời, bác vui lòng đợi giây lát...";
+      } else {
+        btnSend.classList.remove("disabled");
+        btnSend.title = "Gửi tin nhắn";
+      }
+    }
+
+    if (chatInput) {
+      chatInput.readOnly = isWaiting;
+      if (isWaiting) {
+        if (!chatInput.hasAttribute("data-placeholder-orig")) {
+          chatInput.setAttribute("data-placeholder-orig", chatInput.placeholder || "Nhập câu hỏi hoặc việc cần ghi nhật ký...");
+        }
+        chatInput.placeholder = "Đang chờ AI trả lời, bác vui lòng đợi giây lát...";
+      } else {
+        const orig = chatInput.getAttribute("data-placeholder-orig") || "Nhập câu hỏi hoặc việc cần ghi nhật ký...";
+        chatInput.placeholder = orig;
+      }
+    }
+
+    // 2. Quản lý ô nhập trong Siri View
+    if (siriTextInput) {
+      siriTextInput.readOnly = isWaiting;
+      if (isWaiting) {
+        siriTextInput.placeholder = "Đang chờ AI trả lời, bác vui lòng đợi giây lát...";
+      } else {
+        siriTextInput.placeholder = "Bác nhập việc cần ghi hoặc câu hỏi vào đây...";
+      }
+    }
+
+    // 3. Khóa nút Micro và Camera tránh gửi đè
+    if (btnMic) {
+      btnMic.disabled = isWaiting;
+      btnMic.style.pointerEvents = isWaiting ? "none" : "";
+      btnMic.style.opacity = isWaiting ? "0.5" : "";
+    }
+
+    const btnCamera = document.getElementById("btnCamera");
+    if (btnCamera) {
+      btnCamera.disabled = isWaiting;
+      btnCamera.style.pointerEvents = isWaiting ? "none" : "";
+      btnCamera.style.opacity = isWaiting ? "0.5" : "";
+    }
+
+    const btnSiriCam = document.getElementById("btnSiriCam");
+    if (btnSiriCam) {
+      btnSiriCam.disabled = isWaiting;
+      btnSiriCam.style.pointerEvents = isWaiting ? "none" : "";
+      btnSiriCam.style.opacity = isWaiting ? "0.5" : "";
+    }
+
+    const btnSiriSend = document.getElementById("btnSiriSend");
+    if (btnSiriSend) {
+      btnSiriSend.disabled = isWaiting;
+      btnSiriSend.style.pointerEvents = isWaiting ? "none" : "";
+      btnSiriSend.style.opacity = isWaiting ? "0.5" : "";
+    }
+
+    // 4. Khóa quả cầu Siri
+    if (siriOrbWrap) {
+      siriOrbWrap.style.pointerEvents = isWaiting ? "none" : "";
+      siriOrbWrap.style.cursor = isWaiting ? "not-allowed" : "pointer";
+    }
+
+    // 5. Tạm khóa các nút bấm nhanh trong tin nhắn để tránh bấm đè nhiều lần
+    const allQuickBtns = document.querySelectorAll(".btn-confirm-yes, .btn-confirm-no, .btn-suggested-action, .btn-suggested-camera, .btn-alc-nav, .btn-siri-action, .btn-quick-reply");
+    allQuickBtns.forEach(btn => {
+      if (isWaiting) {
+        btn.setAttribute("disabled", "true");
+        btn.style.pointerEvents = "none";
+        btn.style.opacity = "0.5";
+      } else {
+        // Chỉ mở khóa những nút chưa từng bị khóa vĩnh viễn ở các phản hồi trước đó
+        if (!btn.classList.contains("disabled-past")) {
+          btn.removeAttribute("disabled");
+          btn.style.pointerEvents = "";
+          btn.style.opacity = "";
+        }
+      }
+    });
+
+    // 6. Hiển thị thông báo trạng thái
+    if (isWaiting) {
+      showTypingIndicator(statusMsg || "AI đang phân tích và trả lời...");
+      showSiriTypingIndicator(statusMsg || "AI đang phân tích và trả lời...");
+      if (currentMode === "siri") {
+        setSiriState("thinking");
+        siriStatusText.textContent = statusMsg || "AI đang phân tích và trả lời...";
+      }
+    } else {
+      removeTypingIndicator();
+      removeSiriTypingIndicator();
+      if (currentMode === "siri") {
+        if (!ttsAudioPlayer.paused && ttsAudioPlayer.currentTime > 0) {
+          setSiriState("speaking");
+        } else {
+          setSiriState("ready");
+        }
+      } else if (chatInput && document.activeElement !== chatInput) {
+        chatInput.focus();
+      }
+    }
+  }
+
+  // =========================================================================
+  // CHUYỂN ĐỔI GIỮA 2 CHẾ ĐỘ: SIRI VOICE VÀ CHAT TRUYỀN THỐNG
+  // =========================================================================
+  function switchMode(mode) {
+    currentMode = mode;
+    if (mode === "siri") {
+      panelSiri.classList.remove("hidden");
+      panelChat.classList.add("hidden");
+      tabModeSiri.classList.add("active", "siri-tab");
+      tabModeChat.classList.remove("active");
+      // Siri mode luôn ưu tiên đọc giọng nói
+      enableTTS = true;
+      updateTTSUi(true);
+      syncSiriFromChatMessages();
+    } else {
+      panelChat.classList.remove("hidden");
+      panelSiri.classList.add("hidden");
+      tabModeChat.classList.add("active");
+      tabModeSiri.classList.remove("active", "siri-tab");
+      scrollToBottom();
+    }
+  }
+
+  // Tự động mở camera sau chụp ảnh thực địa
+  function triggerCameraCapture() {
+    if (isWaitingForResponse || isStopping) return;
+    if (isRecording) {
+      stopRecording();
+    }
+    cameraFileInput.click();
+  }
+
+  // Cập nhật trạng thái hiển thị của nút TTS
+  function updateTTSUi(enabled) {
+    if (enabled) {
+      if (btnToggleTTS) {
+        btnToggleTTS.classList.add("active");
+        btnToggleTTS.title = "Đang bật đọc giọng nói (Bấm để tắt)";
+      }
+      if (ttsIcon) ttsIcon.innerHTML = LUCIDE_ICONS.volume2;
+    } else {
+      if (btnToggleTTS) {
+        btnToggleTTS.classList.remove("active");
+        btnToggleTTS.title = "Đang tắt đọc giọng nói (Bấm để bật)";
+      }
+      if (ttsIcon) ttsIcon.innerHTML = LUCIDE_ICONS.volumeX;
+      if (ttsAudioPlayer) ttsAudioPlayer.pause();
+    }
+  }
+
+  if (btnToggleTTS) {
+    btnToggleTTS.addEventListener("click", function() {
+      enableTTS = !enableTTS;
+      updateTTSUi(enableTTS);
+    });
+  }
+
+  // Tự động dãn ô nhập tin nhắn
+  if (chatInput) {
+    chatInput.addEventListener("input", function() {
+      this.style.height = "auto";
+      this.style.height = Math.min(this.scrollHeight, 100) + "px";
+    });
+
+    chatInput.addEventListener("keydown", function(e) {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        if (isWaitingForResponse) return;
+        sendMessage();
+      }
+    });
+  }
+
+  if (btnSend) {
+    btnSend.addEventListener("click", function(e) {
+      e.preventDefault();
+      if (isWaitingForResponse) return;
+      sendMessage();
+    });
+  }
+
+  // Làm mới cuộc trò chuyện
+  if (btnResetConv) {
+    btnResetConv.addEventListener("click", async function() {
+      if (isWaitingForResponse) return;
+      if (confirm("Bác có chắc muốn làm mới lại phiên hội thoại này không?")) {
+        // Dừng và giải phóng audio player
+        if (ttsAudioPlayer) {
+          try {
+            ttsAudioPlayer.pause();
+            ttsAudioPlayer.currentTime = 0;
+            ttsAudioPlayer.removeAttribute("src");
+            ttsAudioPlayer.load();
+          } catch(e) {}
+        }
+        lastAudioUrl = null;
+
+        const oldSessionId = sessionId;
+        try {
+          await fetch("/api/conversation/reset", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ session_id: oldSessionId })
+          });
+        } catch (e) {}
+
+        sessionId = "web_" + Math.random().toString(36).substring(2, 10);
+        setWaitingForResponse(false);
+        updateStateBadge("SẴN SÀNG");
+
+        // Reset Siri View
+        setSiriState("ready");
+        removeLiveUserMessage();
+        if (siriUserTranscript) siriUserTranscript.style.display = "none";
+        if (siriActionBar) {
+          siriActionBar.style.display = "none";
+          siriActionBar.innerHTML = "";
+        }
+        if (siriTextInput) siriTextInput.value = "";
+        if (siriInputWrapper) {
+          siriInputWrapper.style.display = "none";
+        }
+        if (btnSiriWrite) btnSiriWrite.classList.remove("active");
+        siriAiResponseText.innerHTML = getSiriWelcomeHtml();
+
+        // Reset Chat View
+        chatMessages.innerHTML = getChatWelcomeHtml();
+      }
+    });
+  }
+
+  // Dọn dẹp phiên và file audio TTS khi đóng tab, chuyển trang hoặc tải lại trang
+  function notifySessionEnd() {
+    if (!sessionId) return;
+    if (ttsAudioPlayer) {
+      try { ttsAudioPlayer.pause(); } catch(e) {}
+    }
+    const payload = JSON.stringify({ session_id: sessionId });
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon("/api/conversation/reset", new Blob([payload], { type: "application/json" }));
+    } else {
+      fetch("/api/conversation/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+        keepalive: true
+      }).catch(() => {});
+    }
+  }
+  window.addEventListener("pagehide", notifySessionEnd);
+  window.addEventListener("beforeunload", notifySessionEnd);
+
+  function renderActivityButtonsHtml() {
+    return `
+      <div class="quick-reply-btns" style="margin-top: 10px;">
+        <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký phun thuốc BVTV.')">
+          ${LUCIDE_ICONS.spray}
+          <span>Phun thuốc BVTV</span>
+        </button>
+        <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký bón phân.')">
+          ${LUCIDE_ICONS.fertilize}
+          <span>Bón phân</span>
+        </button>
+        <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký mua vật tư nông nghiệp.')">
+          ${LUCIDE_ICONS.purchase}
+          <span>Mua vật tư</span>
+        </button>
+        <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi theo dõi sâu bệnh hại.')">
+          ${LUCIDE_ICONS.bug}
+          <span>Theo dõi sâu bệnh</span>
+        </button>
+        <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký thu hoạch nông sản.')">
+          ${LUCIDE_ICONS.harvest}
+          <span>Thu hoạch</span>
+        </button>
+        <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký bán nông sản.')">
+          ${LUCIDE_ICONS.sale}
+          <span>Bán nông sản</span>
+        </button>
+        <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký thu gom vỏ bao bì thuốc.')">
+          ${LUCIDE_ICONS.waste}
+          <span>Xử lý vỏ bao bì</span>
+        </button>
+        <button type="button" class="btn-quick-reply" onclick="triggerCameraCapture()">
+          ${LUCIDE_ICONS.camera}
+          <span>Chụp ảnh thực địa</span>
+        </button>
+      </div>
+    `;
+  }
+
+  function getSiriWelcomeHtml() {
+    return `
+      <div class="msg-row assistant">
+        <div class="msg-avatar">AI</div>
+        <div class="msg-content-wrap">
+          <div class="ai-response-box">
+            <div class="ai-text-standard">
+              Dạ em chào bác nông dân! Em là <b>Trợ lý AI Nông Ký</b>.<br><br>
+              Bác có thể chạm vào quả cầu để nói, hoặc bấm chọn nhanh loại hoạt động cần ghi chép bên dưới:
+            </div>
+            ${renderActivityButtonsHtml()}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function getChatWelcomeHtml() {
+    return `
+      <div class="msg-row assistant">
+        <div class="msg-avatar">AI</div>
+        <div class="msg-content-wrap">
+          <div class="ai-response-box">
+            <div class="ai-text-standard">
+              Dạ em đã làm mới phiên trò chuyện. Bác có thể nhắn tin, nói chuyện hoặc bấm chọn nhanh loại hoạt động cần ghi chép bên dưới:
+            </div>
+            ${renderActivityButtonsHtml()}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // =========================================================================
+  // QUẢN LÝ TIN NHẮN CHẾ ĐỘ SIRI (HIỂN THỊ TỐI ĐA 2 TIN NHẮN MỚI NHẤT)
+  // =========================================================================
+  function scrollSiriToBottom() {
+    setTimeout(() => {
+      const siriView = document.querySelector(".siri-view");
+      if (siriView) {
+        siriView.scrollTop = siriView.scrollHeight;
+      }
+    }, 40);
+  }
+
+  function pruneSiriMessagesToLastTwo() {
+    if (!siriAiResponseText) return;
+    const rows = siriAiResponseText.querySelectorAll(":scope > .msg-row");
+    if (rows.length > 2) {
+      const toRemove = rows.length - 2;
+      for (let i = 0; i < toRemove; i++) {
+        rows[i].remove();
+      }
+    }
+  }
+
+  function showSiriTypingIndicator(msgText) {
+    removeSiriTypingIndicator();
+    if (!siriAiResponseText) return;
+    const ind = document.createElement("div");
+    ind.id = "siriTypingIndicator";
+    ind.className = "typing-indicator";
+    ind.innerHTML = `
+      <span class="typing-dot"></span>
+      <span class="typing-dot"></span>
+      <span class="typing-dot"></span>
+      <span style="margin-left:6px;">${escapeHtml(msgText || "AI đang phân tích và trả lời...")}</span>
+    `;
+    siriAiResponseText.appendChild(ind);
+    scrollSiriToBottom();
+  }
+
+  function removeSiriTypingIndicator() {
+    const el = document.getElementById("siriTypingIndicator");
+    if (el) el.remove();
+  }
+
+  // =========================================================================
+  // QUẢN LÝ BONG BÓNG TIN NHẮN TRỰC TIẾP CỦA NGƯỜI DÂN KHI NÓI MIC (REALTIME STT)
+  // =========================================================================
+  function updateLiveUserMessage(text, isListeningPlaceholder = false) {
+    const micSvg = LUCIDE_ICONS.mic || '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>';
+
+    // 1. Cập nhật trên màn hình Siri
+    if (siriAiResponseText) {
+      let siriRow = document.getElementById("siriLiveUserRow");
+      if (!siriRow) {
+        siriRow = document.createElement("div");
+        siriRow.id = "siriLiveUserRow";
+        siriRow.className = "msg-row user live-user-row";
+        siriRow.innerHTML = `
+          <div class="msg-avatar">Bác</div>
+          <div class="msg-content-wrap">
+            <div class="msg-user-bubble live-bubble"></div>
+          </div>
+        `;
+        const typingInd = document.getElementById("siriTypingIndicator");
+        if (typingInd) {
+          siriAiResponseText.insertBefore(siriRow, typingInd);
+        } else {
+          siriAiResponseText.appendChild(siriRow);
+        }
+        pruneSiriMessagesToLastTwo();
+      }
+      const bubble = siriRow.querySelector(".msg-user-bubble");
+      if (bubble) {
+        if (isListeningPlaceholder) {
+          bubble.innerHTML = `<span class="live-mic-anim">${micSvg}</span><span class="live-stt-text" style="opacity:0.85; font-style:italic;">${escapeHtml(text)}</span><span class="live-stt-cursor"></span>`;
+        } else {
+          bubble.innerHTML = `<span class="live-mic-anim">${micSvg}</span><span class="live-stt-text">${escapeHtml(text)}</span><span class="live-stt-cursor"></span>`;
+        }
+      }
+      scrollSiriToBottom();
+    }
+
+    // 2. Cập nhật trên màn hình Chat Truyền Thống
+    if (chatMessages) {
+      let chatRow = document.getElementById("chatLiveUserRow");
+      if (!chatRow) {
+        chatRow = document.createElement("div");
+        chatRow.id = "chatLiveUserRow";
+        chatRow.className = "msg-row user live-user-row";
+        chatRow.innerHTML = `
+          <div class="msg-avatar">Bác</div>
+          <div class="msg-content-wrap">
+            <div class="msg-user-bubble live-bubble"></div>
+          </div>
+        `;
+        const typingInd = document.getElementById("typingIndicator");
+        if (typingInd) {
+          chatMessages.insertBefore(chatRow, typingInd);
+        } else {
+          chatMessages.appendChild(chatRow);
+        }
+      }
+      const bubble = chatRow.querySelector(".msg-user-bubble");
+      if (bubble) {
+        if (isListeningPlaceholder) {
+          bubble.innerHTML = `<span class="live-mic-anim">${micSvg}</span><span class="live-stt-text" style="opacity:0.85; font-style:italic;">${escapeHtml(text)}</span><span class="live-stt-cursor"></span>`;
+        } else {
+          bubble.innerHTML = `<span class="live-mic-anim">${micSvg}</span><span class="live-stt-text">${escapeHtml(text)}</span><span class="live-stt-cursor"></span>`;
+        }
+      }
+      scrollToBottom();
+    }
+  }
+
+  function finalizeSiriLiveUserMessage(finalText) {
+    const siriRow = document.getElementById("siriLiveUserRow");
+    if (!siriRow) return false;
+    siriRow.removeAttribute("id");
+    siriRow.classList.remove("live-user-row");
+    const bubble = siriRow.querySelector(".msg-user-bubble");
+    if (bubble) {
+      bubble.classList.remove("live-bubble");
+      bubble.textContent = finalText;
+    }
+    pruneSiriMessagesToLastTwo();
+    scrollSiriToBottom();
+    return true;
+  }
+
+  function finalizeChatLiveUserMessage(finalText) {
+    const chatRow = document.getElementById("chatLiveUserRow");
+    if (!chatRow) return false;
+    chatRow.removeAttribute("id");
+    chatRow.classList.remove("live-user-row");
+    const bubble = chatRow.querySelector(".msg-user-bubble");
+    if (bubble) {
+      bubble.classList.remove("live-bubble");
+      bubble.textContent = finalText;
+    }
+    scrollToBottom();
+    return true;
+  }
+
+  function removeLiveUserMessage() {
+    const siriRow = document.getElementById("siriLiveUserRow");
+    if (siriRow) {
+      siriRow.remove();
+      pruneSiriMessagesToLastTwo();
+      scrollSiriToBottom();
+    }
+    const chatRow = document.getElementById("chatLiveUserRow");
+    if (chatRow) {
+      chatRow.remove();
+      scrollToBottom();
+    }
+  }
+
+  function appendSiriUserMessage(text) {
+    if (!siriAiResponseText) return;
+    if (finalizeSiriLiveUserMessage(text)) return;
+
+    const row = document.createElement("div");
+    row.className = "msg-row user";
+    row.innerHTML = `
+      <div class="msg-avatar">Bác</div>
+      <div class="msg-content-wrap">
+        <div class="msg-user-bubble">${escapeHtml(text)}</div>
+      </div>
+    `;
+    const typingInd = document.getElementById("siriTypingIndicator");
+    if (typingInd) {
+      siriAiResponseText.insertBefore(row, typingInd);
+    } else {
+      siriAiResponseText.appendChild(row);
+    }
+    pruneSiriMessagesToLastTwo();
+    scrollSiriToBottom();
+  }
+
+  function appendSiriUserImageMessage(imgSrc, fileName) {
+    if (!siriAiResponseText) return;
+    const row = document.createElement("div");
+    row.className = "msg-row user";
+    row.innerHTML = `
+      <div class="msg-avatar">Bác</div>
+      <div class="msg-content-wrap">
+        <div class="msg-user-bubble">
+          <img src="${imgSrc}" class="msg-image" alt="Ảnh chụp" onclick="window.open('${imgSrc}')">
+          <span style="font-size:0.78rem; opacity:0.9; display:inline-flex; align-items:center; gap:5px;">
+            ${LUCIDE_ICONS.camera} <span>${escapeHtml(fileName || "Ảnh chụp thực địa")}</span>
+          </span>
+        </div>
+      </div>
+    `;
+    const typingInd = document.getElementById("siriTypingIndicator");
+    if (typingInd) {
+      siriAiResponseText.insertBefore(row, typingInd);
+    } else {
+      siriAiResponseText.appendChild(row);
+    }
+    pruneSiriMessagesToLastTwo();
+    scrollSiriToBottom();
+  }
+
+  function appendSiriAssistantMessage(data, userQuery = "") {
+    if (!siriAiResponseText) return;
+    removeSiriTypingIndicator();
+    disablePreviousSuggestionButtons(siriAiResponseText);
+
+    const row = document.createElement("div");
+    row.className = "msg-row assistant";
+
+    const responseText = data.response_text || "";
+    const analysis = data.analysis;
+    const isConfirming = data.dialog_state === "CONFIRMING";
+    const slots = data.accumulated_slots || {};
+    const hasImageAdvisory = Boolean(data.lead_info && data.sections && data.sections.length > 0);
+
+    let contentHtml = "";
+
+    // 1. Trạng thái xác nhận lưu nhật ký -> Render Phiếu xác nhận to rõ kèm nút xác nhận
+    if (isConfirming && Object.keys(slots).length > 0) {
+      contentHtml = buildConfirmTicketHtml(data.current_activity, slots, false);
+    }
+    // 2. Có dữ liệu nhận diện vật tư/sâu bệnh từ ảnh -> Render Thẻ Thông Minh
+    else if (hasImageAdvisory) {
+      const cardId = "siri_adv_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4);
+      contentHtml = renderImageAdvisoryCard(data, cardId);
+    }
+    // 3. Tin nhắn hỏi đáp thông thường -> Trả lời rõ ràng, định dạng đẹp
+    else {
+      contentHtml = `<div class="ai-text-standard">${formatMarkdown(responseText)}</div>`;
+    }
+
+    // Nguồn tài liệu tham khảo VietGAP từ RAG (nếu có)
+    const sourcesPromptHtml = buildRagSourcesHtml(data.sources);
+
+    // Nút gợi ý chuyển tiếp luồng (VD: Mua vật tư -> Phun thuốc / Bón phân)
+    const actionsPromptHtml = buildSuggestedActionsHtml(data.suggested_actions);
+
+    // Nút gợi ý chụp ảnh nếu liên quan đến phun thuốc, bón phân, sâu bệnh
+    let camPromptHtml = "";
+    if (!hasImageAdvisory) {
+      const camAction = getSuggestedCameraAction(data, userQuery);
+      if (camAction) {
+        camPromptHtml = buildSuggestedCameraPromptHtml(camAction);
+      }
+    }
+
+    // Nút nghe lại âm thanh nếu có file
+    let audioBadgeHtml = "";
+    if (data.audio_file) {
+      const audioUrl = data.audio_file.startsWith("/") ? data.audio_file : "/" + data.audio_file;
+      audioBadgeHtml = `
+        <div class="audio-reply-badge" onclick="playAudioReply('${audioUrl}')">
+          ${LUCIDE_ICONS.volume2}
+          <span>Nghe lại câu trả lời</span>
+        </div>
+      `;
+    }
+
+    row.innerHTML = `
+      <div class="msg-avatar">AI</div>
+      <div class="msg-content-wrap">
+        <div class="ai-response-box">
+          ${contentHtml}
+          ${sourcesPromptHtml}
+          ${actionsPromptHtml}
+          ${camPromptHtml}
+          ${audioBadgeHtml}
+        </div>
+      </div>
+    `;
+
+    siriAiResponseText.appendChild(row);
+    pruneSiriMessagesToLastTwo();
+    scrollSiriToBottom();
+  }
+
+  function syncSiriFromChatMessages() {
+    if (!chatMessages || !siriAiResponseText) return;
+    const rows = chatMessages.querySelectorAll(":scope > .msg-row");
+    if (rows.length === 0) return;
+    const lastTwo = Array.from(rows).slice(-2);
+    siriAiResponseText.innerHTML = "";
+    lastTwo.forEach(row => {
+      siriAiResponseText.appendChild(row.cloneNode(true));
+    });
+    scrollSiriToBottom();
+  }
+
+  // Vô hiệu hóa vĩnh viễn tất cả các nút tương tác / gợi ý ở các phản hồi trước đó
+  function disablePreviousSuggestionButtons(container = null) {
+    const scope = container || document;
+    const allPastBtns = scope.querySelectorAll(".btn-confirm-yes, .btn-confirm-no, .btn-suggested-action, .btn-suggested-camera, .btn-alc-nav, .btn-siri-action, .btn-quick-reply");
+    allPastBtns.forEach(btn => {
+      btn.setAttribute("disabled", "true");
+      btn.classList.add("disabled-past");
+      btn.style.pointerEvents = "none";
+      btn.style.opacity = "0.42";
+      btn.style.cursor = "not-allowed";
+      btn.removeAttribute("onclick");
+    });
+  }
+
+  function sendQuickPrompt(text) {
+    if (isWaitingForResponse) return;
+    disablePreviousSuggestionButtons();
+    if (currentMode === "siri") {
+      siriSendText(text);
+    } else {
+      chatInput.value = text;
+      sendMessage();
+    }
+  }
+
+  // =========================================================================
+  // AUDIO CONTROLLER CHO SIRI & TTS SYNC
+  // =========================================================================
+  ttsAudioPlayer.addEventListener("play", function() {
+    if (currentMode === "siri") {
+      setSiriState("speaking");
+    }
+  });
+
+  ttsAudioPlayer.addEventListener("ended", function() {
+    if (currentMode === "siri") {
+      setSiriState("ready");
+    }
+  });
+
+  ttsAudioPlayer.addEventListener("pause", function() {
+    if (currentMode === "siri" && !isRecording) {
+      setSiriState("ready");
+    }
+  });
+
+  function playAudioReply(url) {
+    if (!url) return;
+    lastAudioUrl = url;
+    ttsAudioPlayer.src = url;
+    ttsAudioPlayer.play().catch(e => console.log("Không thể tự động phát âm thanh:", e));
+  }
+
+  function replayCurrentAudio() {
+    if (lastAudioUrl) {
+      playAudioReply(lastAudioUrl);
+    } else {
+      alert("Chưa có âm thanh phản hồi nào để phát lại.");
+    }
+  }
+
+  // =========================================================================
+  // QUẢN LÝ TRẠNG THÁI GIAO DIỆN SIRI (READY, LISTENING, THINKING, SPEAKING)
+  // =========================================================================
+  function setSiriState(state) {
+    siriOrbWrap.classList.remove("listening", "thinking", "speaking");
+
+    if (state === "listening") {
+      siriOrbWrap.classList.add("listening");
+      siriOrbIcon.innerHTML = LUCIDE_ICONS.radioOrb;
+      siriStatusText.textContent = "Đang lắng nghe bác nói...";
+    } else if (state === "thinking") {
+      siriOrbWrap.classList.add("thinking");
+      siriOrbIcon.innerHTML = LUCIDE_ICONS.loaderOrb;
+      siriStatusText.textContent = "AI đang phân tích và trả lời...";
+    } else if (state === "speaking") {
+      siriOrbWrap.classList.add("speaking");
+      siriOrbIcon.innerHTML = LUCIDE_ICONS.volume2Orb;
+      siriStatusText.textContent = "Trợ lý đang trả lời...";
+    } else { // ready
+      siriOrbIcon.innerHTML = LUCIDE_ICONS.micOrb;
+      siriStatusText.textContent = "Trợ lý đã sẵn sàng";
+    }
+  }
+
+  // Chạm vào Quả cầu hoặc nút Mic to trong chế độ Siri
+  function toggleSiriListening() {
+    if (isWaitingForResponse || isStopping) return;
+    if (!isRecording) {
+      startRecording();
+    } else {
+      stopRecording();
+    }
+  }
+
+  // Bật/tắt ô nhập text khi bấm nút viết
+  function toggleSiriTextInput() {
+    if (!siriInputWrapper) return;
+    const isHidden = (siriInputWrapper.style.display === "none");
+    if (isHidden) {
+      if (isRecording) {
+        stopRecording();
+      }
+      siriInputWrapper.style.display = "flex";
+      if (btnSiriWrite) btnSiriWrite.classList.add("active");
+      if (siriTextInput) {
+        siriTextInput.focus();
+        siriTextInput.select();
+      }
+      scrollSiriToBottom();
+    } else {
+      siriInputWrapper.style.display = "none";
+      if (btnSiriWrite) btnSiriWrite.classList.remove("active");
+    }
+  }
+
+  if (siriTextInput) {
+    siriTextInput.addEventListener("focus", function() {
+      scrollSiriToBottom();
+    });
+  }
+
+  function focusSiriTextInput() {
+    toggleSiriTextInput();
+  }
+
+  // Hiển thị kết quả STT / câu hỏi của người dùng dưới các nút trong chế độ Siri
+  function showSiriUserTranscript(text, type) {
+    if (!siriUserTranscript || !siriUserTranscriptText) return;
+    if (siriAlertTimeout) {
+      clearTimeout(siriAlertTimeout);
+      siriAlertTimeout = null;
+    }
+    if (!text) {
+      siriUserTranscript.style.display = "none";
+      return;
+    }
+    siriUserTranscript.style.display = "flex";
+    if (type === "live") {
+      siriUserTranscript.classList.add("live");
+      siriUserTranscript.classList.remove("alert");
+    } else if (type === "alert") {
+      siriUserTranscript.classList.remove("live");
+      siriUserTranscript.classList.add("alert");
+    } else {
+      siriUserTranscript.classList.remove("live", "alert");
+    }
+
+    if (siriUserTranscriptLabel) {
+      if (type === "text") {
+        siriUserTranscriptLabel.innerHTML = `${LUCIDE_ICONS.pencil} <span>Bác đã nhập:</span>`;
+      } else if (type === "camera") {
+        siriUserTranscriptLabel.innerHTML = `${LUCIDE_ICONS.camera} <span>Ảnh chụp thực địa:</span>`;
+      } else if (type === "live") {
+        siriUserTranscriptLabel.innerHTML = `<span class="live-dot"></span> <span>Đang nghe trực tiếp:</span>`;
+      } else if (type === "alert") {
+        siriUserTranscriptLabel.innerHTML = `<svg class="lucide lucide-info" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> <span>Thông báo:</span>`;
+      } else {
+        siriUserTranscriptLabel.innerHTML = `${LUCIDE_ICONS.mic} <span>Bác vừa nói:</span>`;
+      }
+    }
+    siriUserTranscriptText.textContent = text;
+  }
+
+  // Gửi nội dung từ ô nhập văn bản của Siri
+  async function submitSiriText() {
+    if (isWaitingForResponse) return;
+    if (!siriTextInput) return;
+    const text = siriTextInput.value.trim();
+    if (!text) return;
+
+    siriTextInput.value = "";
+
+    // Ẩn ô nhập sau khi gửi để hiển thị phản hồi và kết quả STT thoáng đãng
+    if (siriInputWrapper) {
+      siriInputWrapper.style.display = "none";
+    }
+    if (btnSiriWrite) btnSiriWrite.classList.remove("active");
+
+    await siriSendText(text, false);
+  }
+
+  siriTextInput.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (isWaitingForResponse) return;
+      submitSiriText();
+    }
+  });
+
+  // Nút micro nhỏ trong chế độ Chat Truyền Thống
+  btnMic.addEventListener("click", function(e) {
+    if (e) e.preventDefault();
+    if (isWaitingForResponse || isStopping) return;
+    if (!isRecording) {
+      startRecording();
+    } else {
+      stopRecording();
+    }
+  });
+
+  // Hỗ trợ bấm phím Enter/Space khi focus vào Quả cầu Siri
+  if (siriOrbWrap) {
+    siriOrbWrap.addEventListener("keydown", function(e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggleSiriListening();
+      }
+    });
+  }
+
+  // =========================================================================
+  // REALTIME STT STREAMING (WEBSOCKET PORT 8765 + HTTP STREAM FALLBACK)
+  // =========================================================================
+  function floatTo16BitPCM(float32Array) {
+    const buffer = new ArrayBuffer(float32Array.length * 2);
+    const view = new DataView(buffer);
+    for (let i = 0; i < float32Array.length; i++) {
+      let s = Math.max(-1, Math.min(1, float32Array[i]));
+      view.setInt16(i * 2, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+    }
+    return buffer;
+  }
+
+  function downsampleTo16k(inputBuffer, inputSampleRate) {
+    if (inputSampleRate === 16000) {
+      return floatTo16BitPCM(inputBuffer);
+    }
+    const ratio = inputSampleRate / 16000;
+    const newLength = Math.round(inputBuffer.length / ratio);
+    const result = new Float32Array(newLength);
+    let offsetResult = 0;
+    let offsetInput = 0;
+    while (offsetResult < result.length) {
+      const nextOffsetInput = Math.round((offsetResult + 1) * ratio);
+      let accum = 0, count = 0;
+      for (let i = offsetInput; i < nextOffsetInput && i < inputBuffer.length; i++) {
+        accum += inputBuffer[i];
+        count++;
+      }
+      result[offsetResult] = count > 0 ? accum / count : 0;
+      offsetResult++;
+      offsetInput = nextOffsetInput;
+    }
+    return floatTo16BitPCM(result);
+  }
+
+  let isWebSocketAvailable = true;
+  let allRecordedPcmChunks = [];
+  let pendingStreamChunks = [];
+  let httpStreamBuffer = [];
+  let isHttpFeedInFlight = false;
+
+  function pcm16ChunksToWavBlob(chunks, sampleRate = 16000) {
+    let totalLength = 0;
+    for (let i = 0; i < chunks.length; i++) totalLength += chunks[i].byteLength;
+    const buffer = new ArrayBuffer(44 + totalLength);
+    const view = new DataView(buffer);
+    function writeStr(offset, str) {
+      for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
+    }
+    writeStr(0, 'RIFF');
+    view.setUint32(4, 36 + totalLength, true);
+    writeStr(8, 'WAVE');
+    writeStr(12, 'fmt ');
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true); // PCM format
+    view.setUint16(22, 1, true); // 1 channel mono
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 2, true); // byte rate
+    view.setUint16(32, 2, true); // block align
+    view.setUint16(34, 16, true); // bits per sample
+    writeStr(36, 'data');
+    view.setUint32(40, totalLength, true);
+    let offset = 44;
+    for (let i = 0; i < chunks.length; i++) {
+      new Uint8Array(buffer, offset).set(new Uint8Array(chunks[i]));
+      offset += chunks[i].byteLength;
+    }
+    return new Blob([buffer], { type: 'audio/wav' });
+  }
+
+  function checkWebSocketCapability() {
+    const isHttps = window.location.protocol === 'https:';
+    const wsProto = isHttps ? 'wss:' : 'ws:';
+    const wsPort = 8765;
+    const wsUrl = `${wsProto}//${window.location.hostname}:${wsPort}`;
+    try {
+      const testWs = new WebSocket(wsUrl);
+      const timer = setTimeout(() => {
+        isWebSocketAvailable = false;
+        try { testWs.close(); } catch (e) {}
+      }, 500);
+      testWs.onopen = () => {
+        clearTimeout(timer);
+        isWebSocketAvailable = true;
+        try { testWs.close(); } catch (e) {}
+      };
+      testWs.onerror = () => {
+        clearTimeout(timer);
+        isWebSocketAvailable = false;
+      };
+    } catch (e) {
+      isWebSocketAvailable = false;
+    }
+  }
+  setTimeout(checkWebSocketCapability, 300);
+
+  function connectSTTWebSocket() {
+    return new Promise((resolve, reject) => {
+      if (!isWebSocketAvailable) {
+        return reject(new Error("WebSocket không khả dụng"));
+      }
+      const isHttps = window.location.protocol === 'https:';
+      const wsProto = isHttps ? 'wss:' : 'ws:';
+      const wsPort = 8765;
+      const wsUrl = `${wsProto}//${window.location.hostname}:${wsPort}`;
+
+      let ws = null;
+      let resolved = false;
+
+      const timer = setTimeout(() => {
+        if (!resolved) {
+          resolved = true;
+          isWebSocketAvailable = false;
+          try { if (ws) ws.close(); } catch (e) {}
+          reject(new Error("WebSocket timeout sau 400ms"));
+        }
+      }, 400);
+
+      try {
+        ws = new WebSocket(wsUrl);
+        ws.binaryType = 'arraybuffer';
+
+        ws.onopen = () => {};
+
+        ws.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.event === 'ready') {
+              if (!resolved) {
+                resolved = true;
+                clearTimeout(timer);
+                resolve({ ws, sessionId: data.session_id });
+              }
+            } else if (data.event === 'partial') {
+              const segText = data.text || data.raw_text || '';
+              if (segText.trim().length > 0) {
+                hasSpoken = true;
+                lastSpeechTime = Date.now();
+                if (finalSpeechAutoStopTimer) {
+                  clearTimeout(finalSpeechAutoStopTimer);
+                  finalSpeechAutoStopTimer = null;
+                }
+              }
+              const liveText = (realtimeFinalizedText ? realtimeFinalizedText + ' ' : '') + segText;
+              realtimeLiveText = liveText;
+              onRealtimeSTTUpdate(liveText, false);
+            } else if (data.event === 'final') {
+              const segText = data.text || data.raw_text || '';
+              if (segText.trim().length > 0) {
+                hasSpoken = true;
+                lastSpeechTime = Date.now();
+              }
+              realtimeFinalizedText = (realtimeFinalizedText ? realtimeFinalizedText + ' ' : '') + segText;
+              realtimeLiveText = realtimeFinalizedText;
+              onRealtimeSTTUpdate(realtimeFinalizedText, true);
+
+              // Tự động dừng ghi âm và gửi sang AI phân tích sau 700ms dứt lời
+              if (finalSpeechAutoStopTimer) clearTimeout(finalSpeechAutoStopTimer);
+              finalSpeechAutoStopTimer = setTimeout(() => {
+                const currentText = (realtimeFinalizedText || realtimeLiveText || "").trim();
+                if (isRecording && currentText) {
+                  console.log("[WebSocket STT] Đã chốt câu hoàn chỉnh -> Tự động chuyển sang AI phân tích!");
+                  stopRecording();
+                }
+              }, 700);
+            } else if (data.event === 'complete') {
+              const fullText = data.text || realtimeFinalizedText || realtimeLiveText;
+              if (wsCompleteResolver) {
+                wsCompleteResolver(fullText);
+                wsCompleteResolver = null;
+              }
+            }
+          } catch (err) {
+            console.warn("Lỗi WebSocket message:", err);
+          }
+        };
+
+        ws.onerror = (err) => {
+          if (!resolved) {
+            resolved = true;
+            clearTimeout(timer);
+            isWebSocketAvailable = false;
+            reject(err);
+          }
+        };
+
+        ws.onclose = () => {
+          if (!resolved) {
+            resolved = true;
+            clearTimeout(timer);
+            isWebSocketAvailable = false;
+            reject(new Error("WebSocket ngắt kết nối"));
+          }
+        };
+      } catch (err) {
+        if (!resolved) {
+          resolved = true;
+          clearTimeout(timer);
+          isWebSocketAvailable = false;
+          reject(err);
+        }
+      }
+    });
+  }
+
+  function dispatchHttpStreamChunk() {
+    if (isHttpFeedInFlight || !realtimeSessionId || !isRecording) return;
+    if (httpStreamBuffer.length < 2) return; // Đợi đủ ~170ms để gửi gộp
+
+    let totalLen = 0;
+    for (let i = 0; i < httpStreamBuffer.length; i++) totalLen += httpStreamBuffer[i].byteLength;
+    const combined = new Uint8Array(totalLen);
+    let offset = 0;
+    for (let i = 0; i < httpStreamBuffer.length; i++) {
+      combined.set(new Uint8Array(httpStreamBuffer[i]), offset);
+      offset += httpStreamBuffer[i].byteLength;
+    }
+    httpStreamBuffer = [];
+    isHttpFeedInFlight = true;
+
+    fetch(`/api/stt/realtime/feed?session_id=${realtimeSessionId}&preserve_case=true`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/octet-stream',
+        'X-Session-ID': realtimeSessionId
+      },
+      body: combined.buffer
+    })
+    .then(res => res.json())
+    .then(feedData => {
+      if (feedData.status === 'success' && feedData.events && feedData.events.length > 0) {
+        for (const ev of feedData.events) {
+          const segText = ev.text || ev.raw_text || '';
+          if (ev.event === 'partial') {
+            if (segText.trim().length > 0) {
+              hasSpoken = true;
+              lastSpeechTime = Date.now();
+              if (finalSpeechAutoStopTimer) {
+                clearTimeout(finalSpeechAutoStopTimer);
+                finalSpeechAutoStopTimer = null;
+              }
+            }
+            const liveText = (realtimeFinalizedText ? realtimeFinalizedText + ' ' : '') + segText;
+            realtimeLiveText = liveText;
+            onRealtimeSTTUpdate(liveText, false);
+          } else if (ev.event === 'final') {
+            if (segText.trim().length > 0) {
+              hasSpoken = true;
+              lastSpeechTime = Date.now();
+            }
+            realtimeFinalizedText = (realtimeFinalizedText ? realtimeFinalizedText + ' ' : '') + segText;
+            realtimeLiveText = realtimeFinalizedText;
+            onRealtimeSTTUpdate(realtimeFinalizedText, true);
+
+            // Tự động dừng ghi âm và gửi sang AI phân tích sau 700ms dứt lời
+            if (finalSpeechAutoStopTimer) clearTimeout(finalSpeechAutoStopTimer);
+            finalSpeechAutoStopTimer = setTimeout(() => {
+              const currentText = (realtimeFinalizedText || realtimeLiveText || "").trim();
+              if (isRecording && currentText) {
+                console.log("[HTTP STT] Đã chốt câu hoàn chỉnh -> Tự động chuyển sang AI phân tích!");
+                stopRecording();
+              }
+            }, 700);
+          }
+        }
+      }
+    })
+    .catch(err => {
+      console.warn("Lỗi feed HTTP STT:", err);
+    })
+    .finally(() => {
+      isHttpFeedInFlight = false;
+      if (httpStreamBuffer.length >= 2 && isRecording) {
+        dispatchHttpStreamChunk();
+      }
+    });
+  }
+
+  function onRealtimeSTTUpdate(text, isFinal) {
+    if (!text || !text.trim()) return;
+    updateLiveUserMessage(text.trim(), false);
+    if (currentMode === "siri") {
+      siriStatusText.textContent = isFinal ? "Đã nhận diện câu..." : "Đang nghe trực tiếp...";
+    } else {
+      chatInput.value = text;
+      chatInput.style.height = "auto";
+      chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + "px";
+    }
+  }
+
+  // =========================================================================
+  // GHI ÂM MICRO CHUNG (REALTIME STT CHO CẢ SIRI VÀ CHAT)
+  // =========================================================================
+  async function startRecording() {
+    if (isWaitingForResponse || isStopping || isRecording) return;
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      alert("Trình duyệt này chưa hỗ trợ ghi âm trực tiếp.");
+      return;
+    }
+
+    try {
+      ttsAudioPlayer.pause();
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          channelCount: 1,
+          sampleRate: 16000,
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true
+        }
+      });
+      micMediaStream = stream;
+
+      realtimeFinalizedText = "";
+      realtimeLiveText = "";
+      hasSpoken = false;
+      lastSpeechTime = 0;
+      audioNoiseFloor = 0.015;
+      consecutiveSpeechFrames = 0;
+      recordStartTime = Date.now();
+      isRecording = true;
+      allRecordedPcmChunks = [];
+      pendingStreamChunks = [];
+      httpStreamBuffer = [];
+      isHttpFeedInFlight = false;
+      useWebSocket = false;
+      realtimeWs = null;
+      realtimeSessionId = null;
+
+      if (finalSpeechAutoStopTimer) {
+        clearTimeout(finalSpeechAutoStopTimer);
+        finalSpeechAutoStopTimer = null;
+      }
+      if (silenceCheckInterval) {
+        clearInterval(silenceCheckInterval);
+        silenceCheckInterval = null;
+      }
+
+      btnMic.classList.add("recording");
+      if (siriInputWrapper) siriInputWrapper.style.display = "none";
+      if (btnSiriWrite) btnSiriWrite.classList.remove("active");
+      if (currentMode === "siri") {
+        setSiriState("listening");
+        if (siriUserTranscript) siriUserTranscript.style.display = "none";
+      } else {
+        chatInput.placeholder = "Đang nghe trực tiếp... Bác cứ nói tự nhiên";
+      }
+      updateLiveUserMessage("Đang lắng nghe bác nói...", true);
+
+      // 1. THIẾT LẬP THU ÂM NGAY LẬP TỨC (KHÔNG CHỜ KẾT NỐI MẠNG ĐỂ KHÔNG MẤT TỪ ĐẦU TIÊN)
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      audioContext = new AudioContextClass();
+      const sourceNode = audioContext.createMediaStreamSource(stream);
+      const sampleRate = audioContext.sampleRate;
+
+      scriptProcessor = audioContext.createScriptProcessor(4096, 1, 1);
+      const muteGain = audioContext.createGain();
+      muteGain.gain.value = 0;
+      sourceNode.connect(scriptProcessor);
+      scriptProcessor.connect(muteGain);
+      muteGain.connect(audioContext.destination);
+
+      scriptProcessor.onaudioprocess = (e) => {
+        if (!isRecording) return;
+        const inputData = e.inputBuffer.getChannelData(0);
+
+        // VAD RMS detection chuẩn xác cho trình duyệt và thiết bị di động
+        let sumSq = 0;
+        for (let i = 0; i < inputData.length; i++) {
+          sumSq += inputData[i] * inputData[i];
+        }
+        const rms = Math.sqrt(sumSq / inputData.length);
+
+        // Thích ứng mức sàn tiếng ồn môi trường nền (noise floor), giới hạn trần 0.05
+        if (rms < 0.05) {
+          audioNoiseFloor = audioNoiseFloor * 0.92 + rms * 0.08;
+        }
+
+        // Ngưỡng phát hiện tiếng nói: tối thiểu 0.026, hoặc gấp 2.2 lần tiếng ồn môi trường
+        const speechRmsThreshold = Math.max(0.026, audioNoiseFloor * 2.2);
+
+        if (rms > speechRmsThreshold) {
+          consecutiveSpeechFrames++;
+          // Cần ít nhất 3 frame liên tục (~250ms) để xác nhận tiếng nói người dùng thực sự
+          if (consecutiveSpeechFrames >= 3) {
+            hasSpoken = true;
+            lastSpeechTime = Date.now();
+          }
+        } else {
+          consecutiveSpeechFrames = 0;
+        }
+
+        const pcm16Data = downsampleTo16k(inputData, sampleRate);
+        allRecordedPcmChunks.push(pcm16Data);
+
+        if (useWebSocket && realtimeWs && realtimeWs.readyState === WebSocket.OPEN) {
+          while (pendingStreamChunks.length > 0) {
+            realtimeWs.send(pendingStreamChunks.shift());
+          }
+          realtimeWs.send(pcm16Data);
+        } else if (useWebSocket) {
+          pendingStreamChunks.push(pcm16Data);
+        } else if (realtimeSessionId) {
+          httpStreamBuffer.push(pcm16Data);
+          dispatchHttpStreamChunk();
+        } else {
+          pendingStreamChunks.push(pcm16Data);
+        }
+      };
+
+      // 2. Bộ đếm thời gian kiểm tra khoảng lặng VAD và bảo hiểm tối đa (20s)
+      silenceCheckInterval = setInterval(() => {
+        if (!isRecording) return;
+        const now = Date.now();
+
+        // Bảo hiểm ngắt cứng: Nếu ghi âm liên tục quá 20s, tự động dừng để tránh treo
+        const totalDuration = now - recordStartTime;
+        if (totalDuration >= MAX_SPEECH_RECORD_MS) {
+          console.log(`[Realtime STT VAD] Đạt giới hạn thời gian ghi âm tối đa ${MAX_SPEECH_RECORD_MS}ms, tự động chốt câu.`);
+          stopRecording();
+          return;
+        }
+
+        if (hasSpoken) {
+          const silenceDuration = now - lastSpeechTime;
+          // Nếu đã nhận diện xong trọn vẹn câu (final text), chỉ cần 800ms im lặng là chốt câu ngay!
+          const waitLimit = (realtimeFinalizedText && realtimeFinalizedText.trim()) ? 800 : SILENCE_AFTER_SPEECH_MS;
+          if (silenceDuration >= waitLimit) {
+            console.log(`[Realtime STT VAD] Dứt lời ${silenceDuration}ms (đã có câu: ${Boolean(realtimeFinalizedText)}), tự động chốt câu.`);
+            stopRecording();
+            return;
+          }
+        } else {
+          const noSpeechDuration = now - recordStartTime;
+          if (noSpeechDuration >= NO_SPEECH_MAX_TIMEOUT_MS) {
+            console.log(`[Realtime STT VAD] ${NO_SPEECH_MAX_TIMEOUT_MS}ms không có giọng nói, tự động tắt.`);
+            stopRecording();
+            return;
+          }
+          if (noSpeechDuration > 3000) {
+            if (currentMode === "siri") {
+              siriStatusText.textContent = "Bác cứ nói tự nhiên nhé, em đang nghe...";
+            } else {
+              chatInput.placeholder = "Bác cứ nói tự nhiên nhé, em đang nghe...";
+            }
+            const siriLiveRow = document.getElementById("siriLiveUserRow");
+            if (siriLiveRow) {
+              const liveSpan = siriLiveRow.querySelector(".live-stt-text");
+              if (liveSpan && liveSpan.textContent === "Đang lắng nghe bác nói...") {
+                liveSpan.textContent = "Bác cứ nói tự nhiên nhé, em đang nghe...";
+              }
+            }
+            const chatLiveRow = document.getElementById("chatLiveUserRow");
+            if (chatLiveRow) {
+              const liveSpan = chatLiveRow.querySelector(".live-stt-text");
+              if (liveSpan && liveSpan.textContent === "Đang lắng nghe bác nói...") {
+                liveSpan.textContent = "Bác cứ nói tự nhiên nhé, em đang nghe...";
+              }
+            }
+          }
+        }
+      }, 100);
+
+      // 3. Khởi tạo kết nối mạng ngầm (WebSocket trước, HTTP sau) song song khi đang thu âm
+      (async () => {
+        if (isWebSocketAvailable) {
+          try {
+            const wsSession = await connectSTTWebSocket();
+            if (!isRecording) {
+              try { wsSession.ws.close(); } catch(e) {}
+              return;
+            }
+            realtimeWs = wsSession.ws;
+            realtimeSessionId = wsSession.sessionId;
+            useWebSocket = true;
+            while (pendingStreamChunks.length > 0) {
+              realtimeWs.send(pendingStreamChunks.shift());
+            }
+            console.log("✅ Đã kết nối STT Realtime qua WebSocket:", realtimeSessionId);
+            return;
+          } catch (wsErr) {
+            console.warn("WebSocket không khả dụng, dùng HTTP REST streaming:", wsErr);
+            isWebSocketAvailable = false;
+            useWebSocket = false;
+            realtimeWs = null;
+          }
+        }
+
+        if (!isRecording) return;
+        try {
+          const startRes = await fetch('/api/stt/realtime/start', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({})
+          });
+          const startData = await startRes.json();
+          if (!isRecording) return;
+          realtimeSessionId = startData.session_id;
+          while (pendingStreamChunks.length > 0) {
+            httpStreamBuffer.push(pendingStreamChunks.shift());
+          }
+          dispatchHttpStreamChunk();
+          console.log("✅ Đã kết nối STT Realtime qua HTTP Stream:", realtimeSessionId);
+        } catch (httpErr) {
+          console.warn("Lỗi khởi tạo HTTP Stream:", httpErr);
+        }
+      })();
+
+    } catch (err) {
+      console.error("Lỗi khởi động ghi âm:", err);
+      isRecording = false;
+      btnMic.classList.remove("recording");
+      setSiriState("ready");
+      removeLiveUserMessage();
+      alert("Không thể truy cập micro. Bác vui lòng cấp quyền micro trên trình duyệt nhé!");
+    }
+  }
+
+  function startMediaRecorderFallback(stream) {
+    audioChunks = [];
+    let mimeType = 'audio/webm';
+    if (MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+      mimeType = 'audio/webm;codecs=opus';
+    } else if (MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')) {
+      mimeType = 'audio/ogg;codecs=opus';
+    }
+    try {
+      mediaRecorder = new MediaRecorder(stream, { mimeType });
+    } catch (e) {
+      mediaRecorder = new MediaRecorder(stream);
+    }
+    mediaRecorder.ondataavailable = (e) => {
+      if (e.data && e.data.size > 0) audioChunks.push(e.data);
+    };
+    mediaRecorder.onstop = async () => {
+      stream.getTracks().forEach(t => t.stop());
+
+      // ✅ ƯU TIÊN: Nếu STT realtime đã chốt được chữ → dùng ngay, không cần upload audio
+      const cachedText = (realtimeFinalizedText || realtimeLiveText || "").trim();
+      if (cachedText) {
+        console.log("[MediaRecorder.onstop] Dùng text STT realtime đã có:", cachedText);
+        // Bật trạng thái thinking
+        if (currentMode === "siri") {
+          setSiriState("thinking");
+          siriStatusText.textContent = "AI đang phân tích và trả lời...";
+          if (siriUserTranscript) siriUserTranscript.style.display = "none";
+        } else {
+          chatInput.value = "";
+          chatInput.placeholder = "AI đang phân tích và trả lời...";
+        }
+        showTypingIndicator("AI đang phân tích và trả lời...");
+        showSiriTypingIndicator("AI đang phân tích và trả lời...");
+        // Đóng phiên STT server ngầm
+        if (useWebSocket && realtimeWs) {
+          try {
+            if (realtimeWs.readyState === WebSocket.OPEN) realtimeWs.send(JSON.stringify({ action: "finish" }));
+            realtimeWs.close();
+          } catch (e) {}
+          realtimeWs = null;
+          useWebSocket = false;
+        } else if (realtimeSessionId) {
+          fetch(`/api/stt/realtime/finish?session_id=${realtimeSessionId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ session_id: realtimeSessionId, preserve_case: true })
+          }).catch(() => {});
+          realtimeSessionId = null;
+        }
+        isStopping = false;
+        if (currentMode === "siri") {
+          await siriSendText(cachedText, true);
+        } else {
+          await sendMessageWithText(cachedText);
+        }
+        return;
+      }
+
+      // FALLBACK: STT chưa có chữ → upload audio như cũ
+      const audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/wav' });
+      if (!audioBlob || audioBlob.size < 300) {
+        removeLiveUserMessage();
+        if (currentMode === "siri") {
+          setSiriState("ready");
+          showSiriUserTranscript("Thời gian nói quá ngắn. Bác chạm lại quả cầu để nói nhé!", "alert");
+        } else {
+          chatInput.placeholder = "Thời gian nói quá ngắn. Bác chạm lại micro để nói nhé!";
+          setTimeout(() => {
+            if (!isRecording && chatInput) chatInput.placeholder = "Nhập câu hỏi hoặc việc cần ghi nhật ký...";
+          }, 3500);
+        }
+        return;
+      }
+      await processAudioInput(audioBlob);
+    };
+    mediaRecorder.start(250);
+  }
+
+  async function stopRecording() {
+    console.log(`[stopRecording] Vào hàm: isStopping=${isStopping}, isRecording=${isRecording}, isWaitingForResponse=${isWaitingForResponse}`);
+    if (isStopping || !isRecording) {
+      console.warn(`[stopRecording] Guard return: isStopping=${isStopping}, isRecording=${isRecording}`);
+      return;
+    }
+    isStopping = true;
+    isRecording = false;
+
+    try {
+      // 1. Hủy ngay lập tức toàn bộ timer
+      if (finalSpeechAutoStopTimer) {
+        clearTimeout(finalSpeechAutoStopTimer);
+        finalSpeechAutoStopTimer = null;
+      }
+      if (silenceCheckInterval) {
+        clearInterval(silenceCheckInterval);
+        silenceCheckInterval = null;
+      }
+
+      btnMic.classList.remove("recording");
+      console.log("[stopRecording] Đã xóa class recording khỏi btnMic");
+
+      // 2. Ngắt toàn bộ mic và bộ xử lý âm thanh ngay lập tức (không trễ)
+      if (scriptProcessor) {
+        try { scriptProcessor.disconnect(); } catch (e) {}
+        scriptProcessor = null;
+      }
+      if (audioContext) {
+        try { audioContext.close(); } catch (e) {}
+        audioContext = null;
+      }
+      if (micMediaStream) {
+        try { micMediaStream.getTracks().forEach(t => t.stop()); } catch (e) {}
+        micMediaStream = null;
+      }
+
+      if (typeof mediaRecorder !== 'undefined' && mediaRecorder && mediaRecorder.state !== 'inactive') {
+        console.log("[stopRecording] mediaRecorder đang chạy → dừng");
+        try { mediaRecorder.stop(); } catch (e) {}
+      }
+
+      // 3. Lấy văn bản đã nhận diện được tính tới thời điểm hiện tại
+      let fullText = (realtimeLiveText || realtimeFinalizedText || "").trim();
+      const userSpoke = hasSpoken || Boolean(fullText);
+      console.log(`[stopRecording] fullText="${fullText}", userSpoke=${userSpoke}, realtimeSessionId=${realtimeSessionId}`);
+
+      // TRƯỜNG HỢP 1: NGƯỜI DÂN BẬT MIC NHƯNG KHÔNG NÓI
+      if (!userSpoke) {
+        console.log("[STT] Người dân bật mic nhưng không nói -> Đóng mic êm ái, dọn dẹp sạch sẽ.");
+        removeLiveUserMessage();
+
+        if (realtimeWs) {
+          try { realtimeWs.close(); } catch (e) {}
+          realtimeWs = null;
+        }
+        useWebSocket = false;
+
+        if (realtimeSessionId) {
+          fetch(`/api/stt/realtime/finish?session_id=${realtimeSessionId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ session_id: realtimeSessionId })
+          }).catch(() => {});
+          realtimeSessionId = null;
+        }
+
+        allRecordedPcmChunks = [];
+        httpStreamBuffer = [];
+        pendingStreamChunks = [];
+
+        if (currentMode === "siri") {
+          setSiriState("ready");
+          siriStatusText.textContent = "Chưa nhận thấy giọng nói";
+          showSiriUserTranscript("Không nhận thấy tiếng nói. Bác chạm lại quả cầu khi muốn nói nhé!", "alert");
+          if (siriAlertTimeout) clearTimeout(siriAlertTimeout);
+          siriAlertTimeout = setTimeout(() => {
+            if (!isRecording && !isWaitingForResponse && !isStopping) {
+              if (siriUserTranscript && siriUserTranscript.classList.contains("alert")) {
+                siriUserTranscript.style.display = "none";
+              }
+              if (siriStatusText && siriStatusText.textContent === "Chưa nhận thấy giọng nói") {
+                siriStatusText.textContent = "Trợ lý đã sẵn sàng";
+              }
+            }
+          }, 4000);
+        } else {
+          chatInput.placeholder = "Chưa nhận thấy tiếng nói. Bác chạm lại micro khi muốn nói nhé!";
+          setTimeout(() => {
+            if (!isRecording && chatInput) {
+              chatInput.placeholder = "Nhập câu hỏi hoặc việc cần ghi nhật ký...";
+            }
+          }, 3500);
+        }
+        return;
+      }
+
+      // TRƯỜNG HỢP 2: NGƯỜI DÂN CÓ NÓI -> BẬT NGAY TRẠNG THÁI SUY NGHĨ (QUẢ CẦU ĐỔI MÀU CAM XOAY LOADER)
+      if (currentMode === "siri") {
+        setSiriState("thinking");
+        siriStatusText.textContent = "AI đang phân tích và trả lời...";
+      } else {
+        chatInput.placeholder = "AI đang phân tích và trả lời...";
+      }
+      showTypingIndicator("AI đang phân tích và trả lời...");
+      showSiriTypingIndicator("AI đang phân tích và trả lời...");
+
+      // 2A. NẾU ĐÃ CÓ SẴN VĂN BẢN TRÍCH XUẤT ĐƯỢC: CHUYỂN NGAY SANG REQUEST CONVERSATION!
+      if (fullText) {
+        console.log(`[stopRecording] 2A: Có fullText="${fullText}", gửi ngay sang AI`);
+        // Đóng phiên STT ngầm trên máy chủ không làm treo giao diện
+        if (useWebSocket && realtimeWs) {
+          try {
+            if (realtimeWs.readyState === WebSocket.OPEN) {
+              realtimeWs.send(JSON.stringify({ action: "finish" }));
+            }
+            realtimeWs.close();
+          } catch (e) {}
+          realtimeWs = null;
+          useWebSocket = false;
+        } else if (realtimeSessionId) {
+          const sid = realtimeSessionId;
+          realtimeSessionId = null;
+          fetch(`/api/stt/realtime/finish?session_id=${sid}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ session_id: sid, preserve_case: true })
+          }).catch(() => {});
+        }
+
+        console.log(`[stopRecording] 2A: Gọi ${currentMode === 'siri' ? 'siriSendText' : 'sendMessageWithText'}, isWaitingForResponse=${isWaitingForResponse}`);
+        if (currentMode === "siri") {
+          if (siriUserTranscript) siriUserTranscript.style.display = "none";
+          await siriSendText(fullText, true);
+        } else {
+          chatInput.value = "";
+          await sendMessageWithText(fullText);
+        }
+        return;
+      }
+
+      // 2B. NẾU CHƯA CÓ VĂN BẢN: ĐỢI FINISH HOẶC GỬI AUDIO FALLBACK
+      console.log("[stopRecording] 2B: Chưa có fullText, vào nhánh finish/fallback");
+      if (useWebSocket && realtimeWs) {
+        try {
+          const waitComplete = new Promise((resolve) => {
+            wsCompleteResolver = resolve;
+            setTimeout(() => resolve(realtimeFinalizedText || realtimeLiveText), 800);
+          });
+          if (realtimeWs.readyState === WebSocket.OPEN) {
+            realtimeWs.send(JSON.stringify({ action: "finish" }));
+          }
+          const completeText = await waitComplete;
+          if (completeText && completeText.trim()) {
+            fullText = completeText.trim();
+          }
+        } catch (err) {
+          console.warn("Lỗi kết thúc WebSocket STT:", err);
+        } finally {
+          try { realtimeWs.close(); } catch (e) {}
+          realtimeWs = null;
+          useWebSocket = false;
+          realtimeSessionId = null;
+        }
+      } else if (realtimeSessionId) {
+        if (httpStreamBuffer.length > 0) {
+          let totalLen = 0;
+          for (let i = 0; i < httpStreamBuffer.length; i++) totalLen += httpStreamBuffer[i].byteLength;
+          const combined = new Uint8Array(totalLen);
+          let offset = 0;
+          for (let i = 0; i < httpStreamBuffer.length; i++) {
+            combined.set(new Uint8Array(httpStreamBuffer[i]), offset);
+            offset += httpStreamBuffer[i].byteLength;
+          }
+          httpStreamBuffer = [];
+          try {
+            const feedCtrl = new AbortController();
+            const feedTimer = setTimeout(() => feedCtrl.abort(), 800);
+            await fetch(`/api/stt/realtime/feed?session_id=${realtimeSessionId}&preserve_case=true`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/octet-stream',
+                'X-Session-ID': realtimeSessionId
+              },
+              body: combined.buffer,
+              signal: feedCtrl.signal
+            });
+            clearTimeout(feedTimer);
+          } catch (e) {}
+        }
+
+        try {
+          const finishCtrl = new AbortController();
+          const finishTimer = setTimeout(() => finishCtrl.abort(), 1000);
+          console.log("[stopRecording] 2B: Gọi /api/stt/realtime/finish");
+          const finishRes = await fetch('/api/stt/realtime/finish', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              session_id: realtimeSessionId,
+              preserve_case: true
+            }),
+            signal: finishCtrl.signal
+          });
+          clearTimeout(finishTimer);
+          const finishData = await finishRes.json();
+          console.log("[stopRecording] 2B: finish response:", finishData);
+          if (finishData.status === 'success') {
+            const finalResult = (finishData.result && (finishData.result.text || finishData.result.raw_text)) || "";
+            if (finalResult && finalResult.trim()) {
+              fullText = finalResult.trim();
+            }
+          }
+        } catch (err) {
+          console.warn("Lỗi finish HTTP STT:", err);
+        } finally {
+          realtimeSessionId = null;
+        }
+      }
+
+      // LƯỚI BẢO HIỂM HOÀN HẢO: Nếu Streaming STT chưa nhận được chữ nhưng có âm thanh ghi âm thực tế (>= 0.4s)
+      if ((!fullText || fullText.trim().length === 0) && allRecordedPcmChunks.length >= 5) {
+        console.log("[STT Fallback] Realtime STT chưa chốt được chữ, kích hoạt Audio Fallback toàn vẹn...");
+        const wavBlob = pcm16ChunksToWavBlob(allRecordedPcmChunks, 16000);
+        await processAudioInput(wavBlob);
+        return;
+      }
+
+      if (fullText) {
+        console.log(`[stopRecording] 2B kết quả: gửi fullText="${fullText}"`);
+        if (currentMode === "siri") {
+          if (siriUserTranscript) siriUserTranscript.style.display = "none";
+          await siriSendText(fullText, true);
+        } else {
+          chatInput.value = "";
+          await sendMessageWithText(fullText);
+        }
+      } else {
+        removeLiveUserMessage();
+        if (currentMode === "siri") {
+          setSiriState("ready");
+          siriStatusText.textContent = "Chưa nhận thấy giọng nói";
+          showSiriUserTranscript("Chưa nghe rõ giọng bác. Bác chạm lại quả cầu để nói nhé!", "alert");
+          if (siriAlertTimeout) clearTimeout(siriAlertTimeout);
+          siriAlertTimeout = setTimeout(() => {
+            if (!isRecording && !isWaitingForResponse && !isStopping) {
+              if (siriUserTranscript) siriUserTranscript.style.display = "none";
+              if (siriStatusText && siriStatusText.textContent === "Chưa nhận thấy giọng nói") {
+                siriStatusText.textContent = "Trợ lý đã sẵn sàng";
+              }
+            }
+          }, 4000);
+        } else {
+          chatInput.placeholder = "Chưa nghe rõ tiếng bác. Bác chạm lại micro để nói nhé!";
+          setTimeout(() => {
+            if (!isRecording && chatInput) {
+              chatInput.placeholder = "Nhập câu hỏi hoặc việc cần ghi nhật ký...";
+            }
+          }, 3500);
+        }
+      }
+    } catch (err) {
+      console.error("Lỗi trong stopRecording:", err);
+      setWaitingForResponse(false);
+      if (currentMode === "siri") {
+        setSiriState("ready");
+        siriStatusText.textContent = "Trợ lý đã sẵn sàng";
+      }
+    } finally {
+      isStopping = false;
+      console.log("[stopRecording] Hoàn tất, đã reset isStopping = false");
+    }
+  }
+
+  // GỬI AUDIO FALLBACK LÊN BACKEND XỬ LÝ (KHI KHÔNG DÙNG ĐƯỢC STREAMING)
+  async function processAudioInput(blob) {
+    if (isWaitingForResponse) return;
+    disablePreviousSuggestionButtons();
+    if (siriUserTranscript) siriUserTranscript.style.display = "none";
+
+    appendUserMessage("[Đoạn ghi âm giọng nói]");
+    appendSiriUserMessage("[Đoạn ghi âm giọng nói]");
+    setWaitingForResponse(true, "AI đang phân tích và trả lời...");
+
+    const formData = new FormData();
+    formData.append("file", blob, "voice_input.wav");
+    formData.append("session_id", sessionId);
+    formData.append("enable_tts", enableTTS);
+
+    let data;
+    try {
+      const resp = await fetch("/api/conversation/audio", {
+        method: "POST",
+        body: formData
+      });
+      data = await resp.json();
+
+      if (data.status === "success") {
+        handleAiSuccessResponse(data, data.stt_transcript || "Đoạn ghi âm", "voice");
+
+        const transcript = (data.stt_transcript || "").toLowerCase();
+        const cameraKeywords = ["chụp", "camera", "mở camera", "chụp ảnh", "chụp hình", "chụp bao", "chụp thuốc", "chụp lá", "xem ảnh"];
+        if (cameraKeywords.some(k => transcript.includes(k))) {
+          setTimeout(() => triggerCameraCapture(), 400);
+        } else {
+          checkAndAutoPromptCamera(data.response_text);
+        }
+      } else if (data.status === "warning") {
+        const warnMsg = data.response_text || data.message || "Dạ em chưa nghe rõ bác nói gì. Bác nói lại giúp em nhé!";
+        handleAiErrorResponse(warnMsg);
+      } else {
+        handleAiErrorResponse("Không thể nhận diện giọng nói: " + (data.message || "Vui lòng thử lại"));
+      }
+    } catch (netErr) {
+      console.error("Lỗi fetch /api/conversation/audio:", netErr);
+      handleAiErrorResponse("Lỗi kết nối khi gửi âm thanh. Bác kiểm tra mạng giúp em nhé!");
+    } finally {
+      setWaitingForResponse(false);
+    }
+  }
+
+  // =========================================================================
+  // GỬI TIN NHẮN VĂN BẢN (TEXT - AUDIO / TEXT - IMAGE)
+  // =========================================================================
+  async function sendMessageWithText(text) {
+    if (isWaitingForResponse) return;
+    if (!text || !text.trim()) return;
+    text = text.trim();
+    disablePreviousSuggestionButtons();
+    appendUserMessage(text);
+    appendSiriUserMessage(text);
+    checkTextCameraIntent(text);
+
+    setWaitingForResponse(true, "AI đang phân tích và trả lời...");
+
+    let data;
+    try {
+      const resp = await fetch("/api/conversation/message", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          session_id: sessionId,
+          text: text,
+          enable_tts: enableTTS
+        })
+      });
+      data = await resp.json();
+
+      if (data.status === "success") {
+        handleAiSuccessResponse(data, text, "voice");
+        checkAndAutoPromptCamera(data.response_text);
+      } else {
+        appendSimpleErrorMessage("Dạ em gặp sự cố: " + (data.message || "Vui lòng thử lại"));
+      }
+    } catch (netErr) {
+      console.error("Lỗi fetch /api/conversation/message:", netErr);
+      appendSimpleErrorMessage("Không thể kết nối với máy chủ AI. Bác kiểm tra lại mạng nhé!");
+    } finally {
+      setWaitingForResponse(false);
+    }
+  }
+
+  function sendMessage() {
+    if (isWaitingForResponse) return;
+    const text = chatInput.value.trim();
+    if (!text) return;
+    chatInput.value = "";
+    chatInput.style.height = "auto";
+    sendMessageWithText(text);
+  }
+
+  async function siriSendText(text, isVoice = false) {
+    console.log(`[siriSendText] Gọi với text="${text}", isWaitingForResponse=${isWaitingForResponse}`);
+    if (isWaitingForResponse) {
+      console.warn("[siriSendText] Bị chặn do isWaitingForResponse=true! Force reset và tiếp tục.");
+      // Nếu bị kẹt từ lần trước, reset và tiếp tục thay vì return
+      setWaitingForResponse(false);
+    }
+    disablePreviousSuggestionButtons();
+    if (siriUserTranscript) siriUserTranscript.style.display = "none";
+    appendSiriUserMessage(text);
+    appendUserMessage(text);
+    setWaitingForResponse(true, "AI đang phân tích và trả lời...");
+
+    checkTextCameraIntent(text);
+
+    let data;
+    try {
+      console.log("[siriSendText] Gọi /api/conversation/message...");
+      const resp = await fetch("/api/conversation/message", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          session_id: sessionId,
+          text: text,
+          enable_tts: true
+        })
+      });
+      data = await resp.json();
+      console.log("[siriSendText] Nhận phản hồi:", data.status);
+
+      if (data.status === "success") {
+        handleAiSuccessResponse(data, text, isVoice ? "voice" : "text");
+        checkAndAutoPromptCamera(data.response_text);
+      } else {
+        handleAiErrorResponse("Dạ em gặp sự cố: " + (data.message || "Vui lòng thử lại"));
+      }
+    } catch (netErr) {
+      console.error("Lỗi siri fetch:", netErr);
+      handleAiErrorResponse("Lỗi kết nối mạng. Bác kiểm tra lại kết nối nhé!");
+    } finally {
+      setWaitingForResponse(false);
+    }
+  }
+
+  function checkTextCameraIntent(text) {
+    const lowerText = text.toLowerCase();
+    const cameraKeywords = ["chụp", "camera", "mở camera", "chụp ảnh", "chụp hình", "chụp bao", "chụp thuốc", "chụp lá", "xem ảnh"];
+    if (cameraKeywords.some(k => lowerText.includes(k))) {
+      setTimeout(() => triggerCameraCapture(), 350);
+    }
+  }
+
+  // =========================================================================
+  // CHỤP ẢNH TỪ CAMERA & GỬI TỰ ĐỘNG (AUDIO - IMAGE & TEXT - IMAGE)
+  // =========================================================================
+  cameraFileInput.addEventListener("change", async function() {
+    if (isWaitingForResponse) {
+      this.value = "";
+      return;
+    }
+    const file = this.files[0];
+    if (!file) return;
+
+    disablePreviousSuggestionButtons();
+    if (siriUserTranscript) siriUserTranscript.style.display = "none";
+
+    // 1. Hiển thị tin nhắn ảnh của người dân ngay lập tức cho cả 2 chế độ
+    let previewUrl = "";
+    try {
+      previewUrl = URL.createObjectURL(file);
+    } catch (e) {}
+    appendUserImageMessage(previewUrl, file.name);
+    appendSiriUserImageMessage(previewUrl, file.name);
+
+    // 2. Kích hoạt trạng thái chờ (typing indicator sẽ nằm ở DƯỚI ảnh người dân)
+    setWaitingForResponse(true, "AI đang phân tích và trả lời...");
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("session_id", sessionId);
+    formData.append("enable_tts", enableTTS);
+
+    let data;
+    try {
+      const resp = await fetch("/api/conversation/image", {
+        method: "POST",
+        body: formData
+      });
+      data = await resp.json();
+
+      if (data.status === "success") {
+        handleAiSuccessResponse(data, "Ảnh chụp: " + file.name, "camera");
+      } else {
+        handleAiErrorResponse("Không thể phân tích ảnh này. Bác gửi lại ảnh rõ nét hơn nhé!");
+      }
+    } catch (netErr) {
+      console.error("Lỗi fetch /api/conversation/image:", netErr);
+      handleAiErrorResponse("Lỗi kết nối khi gửi ảnh. Bác thử lại giúp em nhé!");
+    } finally {
+      this.value = "";
+      setWaitingForResponse(false);
+    }
+  });
+
+  // =========================================================================
+  // GỢI Ý NÚT CHỤP ẢNH KHI PHUN THUỐC, BÓN PHÂN, SÂU BỆNH
+  // =========================================================================
+  function getSuggestedCameraAction(data, userQuery = "") {
+    if (!data) return null;
+
+    const dState = (data.dialog_state || "").toUpperCase();
+    const act = (data.current_activity || "").toLowerCase();
+    const resp = (data.response_text || "").toLowerCase();
+    const query = (userQuery || "").toLowerCase();
+    const text = query + " " + resp;
+    const slots = data.accumulated_slots || {};
+
+    // 1. Không hiển thị khi đang ở bước xác nhận lưu (CONFIRMING) hoặc đã lưu xong (COMMITTED)
+    if (dState === "CONFIRMING" || dState === "COMMITTED") {
+      return null;
+    }
+
+    // 2. Kiểm tra xem người dùng hoặc AI có chủ đích đề cập đến việc chụp ảnh / camera không
+    const userWantsCamera = /(?:chụp\s*ảnh|chụp\s*hình|mở\s*camera|camera|quét\s*ảnh|chụp\s*lại)/i.test(query);
+    const aiSuggestsCamera = /(?:bác|bạn)?\s*(?:hãy|có\s*thể|vui\s*lòng|nên|thử)?\s*(?:chụp\s*ảnh|chụp\s*hình|gửi\s*ảnh|quét\s*ảnh)/i.test(resp);
+
+    // 3. Nếu đang trong luồng ghi chép nhật ký (CLARIFYING / COLLECTING)
+    const isActivelyLogging = (dState === "CLARIFYING" || dState === "COLLECTING") && Boolean(act);
+
+    if (isActivelyLogging) {
+      // a. Phun thuốc: Gợi ý chụp bao bì thuốc khi chưa có tên thuốc hoặc khi được đề cập
+      if (act === "spray" || act === "waste") {
+        const hasSprayName = Boolean(slots.ten_thuoc_bvtv || slots.pesticide_name);
+        if (!hasSprayName || userWantsCamera || aiSuggestsCamera) {
+          return {
+            type: "spray",
+            title: "Chụp ảnh bao bì thuốc BVTV",
+            promptText: "Chụp ảnh bao bì thuốc BVTV"
+          };
+        }
+      }
+
+      // b. Bón phân: Gợi ý chụp bao bì phân bón khi chưa có tên phân hoặc khi được đề cập
+      if (act === "fertilize") {
+        const hasFertilizerName = Boolean(slots.ten_phan_bon || slots.fertilizer_name);
+        if (!hasFertilizerName || userWantsCamera || aiSuggestsCamera) {
+          return {
+            type: "fertilize",
+            title: "Chụp ảnh bao bì phân bón",
+            promptText: "Chụp ảnh bao bì phân bón"
+          };
+        }
+      }
+
+      // c. Mua vật tư / Hóa đơn
+      if (act === "purchase") {
+        return {
+          type: "purchase",
+          title: "Chụp ảnh bao bì vật tư hoặc hóa đơn để lấy thông tin tự động",
+          promptText: "Chụp ảnh vật tư để lấy thông tin"
+        };
+      }
+
+      // d. Theo dõi sâu bệnh
+      if (act === "observation") {
+        return {
+          type: "pest_disease",
+          title: "Chụp ảnh sâu bệnh trên cây",
+          promptText: "Chụp ảnh sâu bệnh trên cây"
+        };
+      }
+    }
+
+    // 4. Nếu KHÔNG trong luồng ghi chép: Chỉ hiển thị khi người dùng yêu cầu hoặc AI chủ động đề nghị chụp ảnh
+    if (userWantsCamera || aiSuggestsCamera) {
+      // Phân loại nút chụp ảnh phù hợp theo ngữ cảnh câu hỏi/câu trả lời
+      if (/(?:sâu\s*bệnh|sâu\s*hại|bệnh\s*hại|vàng\s*lá|loét|ghẻ|thán\s*thư|nấm|rầy|rệp|nhện|bọ|đốm\s*lá|thối\s*quả|chẩn\s*đoán|triệu\s*chứng)/i.test(text)) {
+        return {
+          type: "pest_disease",
+          title: "Chụp ảnh sâu bệnh trên cây",
+          promptText: "Chụp ảnh sâu bệnh trên cây"
+        };
+      }
+      if (/(?:phân\s*bón|phân\s*npk|phân\s*chuồng|phân\s*hữu\s*cơ|bón\s*phân)/i.test(text)) {
+        return {
+          type: "fertilize",
+          title: "Chụp ảnh bao bì phân bón",
+          promptText: "Chụp ảnh bao bì phân bón"
+        };
+      }
+      if (/(?:hóa\s*đơn|chứng\s*từ|biên\s*lai|phiếu\s*mua|mua\s*vật\s*tư)/i.test(text)) {
+        return {
+          type: "purchase",
+          title: "Chụp ảnh bao bì vật tư hoặc hóa đơn để lấy thông tin tự động",
+          promptText: "Chụp ảnh vật tư để lấy thông tin"
+        };
+      }
+      if (/(?:thuốc\s*(?:bvtv|trừ\s*sâu|trừ\s*bệnh|trừ\s*cỏ|sinh\s*học)|bao\s*bì\s*thuốc|chai\s*thuốc|gói\s*thuốc)/i.test(text)) {
+        return {
+          type: "spray",
+          title: "Chụp ảnh bao bì thuốc BVTV",
+          promptText: "Chụp ảnh bao bì thuốc BVTV"
+        };
+      }
+      return {
+        type: "general",
+        title: "Chụp ảnh để gửi AI nhận diện",
+        promptText: "Chụp ảnh gửi AI nhận diện"
+      };
+    }
+
+    // 5. Mặc định (hỏi đáp kiến thức, RAG, tra cứu luật, chitchat...): Không hiện nút chụp ảnh
+    return null;
+  }
+
+  function buildSuggestedCameraPromptHtml(camAction) {
+    if (!camAction) return "";
+    return `
+      <div class="suggested-camera-bar">
+        <button type="button" class="btn-suggested-camera" onclick="triggerCameraCapture()" title="${escapeHtml(camAction.title)}">
+          <span class="alc-nav-icon">${LUCIDE_ICONS.camera}</span>
+          <span class="alc-nav-text">${escapeHtml(camAction.promptText || camAction.title)}</span>
+        </button>
+      </div>
+    `;
+  }
+
+  function buildSuggestedActionsHtml(suggestedActions) {
+    if (!suggestedActions || !Array.isArray(suggestedActions) || suggestedActions.length === 0) return "";
+    return `
+      <div class="suggested-actions-bar">
+        ${suggestedActions.map(act => {
+          const iconSvg = LUCIDE_ICONS[act.icon] || LUCIDE_ICONS.arrowRight;
+          const promptEscaped = (act.prompt || act.label || '')
+            .replace(/\\/g, '\\\\')
+            .replace(/'/g, "\\'")
+            .replace(/"/g, '&quot;');
+          return `
+            <button type="button" class="btn-suggested-action" onclick="sendQuickPrompt('${promptEscaped}')" title="${escapeHtml(act.label)}">
+              <span class="alc-nav-icon">${iconSvg}</span>
+              <span class="alc-nav-text">${escapeHtml(act.label)}</span>
+            </button>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  function buildRagSourcesHtml(sources) {
+    // Không hiển thị nguồn tài liệu theo yêu cầu
+    return "";
+  }
+
+  // =========================================================================
+  // ĐỒNG BỘ KẾT QUẢ PHẢN HỒI CHO CẢ 2 CHẾ ĐỘ (SIRI VÀ CHAT)
+  // =========================================================================
+  function handleAiSuccessResponse(data, userQuery, queryType = "voice") {
+    updateStateBadge(data.dialog_state);
+
+    // 1. Cập nhật giao diện Chat Truyền Thống
+    appendAssistantMessage(data, userQuery);
+
+    // 2. Cập nhật giao diện Siri Voice
+    updateSiriDisplay(data, userQuery, queryType);
+
+    // 3. Tự động phát âm thanh giọng nói (TTS)
+    if (enableTTS && data.audio_file) {
+      playAudioReply(data.audio_file);
+    } else {
+      setSiriState("ready");
+    }
+  }
+
+  function handleAiErrorResponse(msg) {
+    appendSimpleErrorMessage(msg);
+    if (currentMode === "siri") {
+      setSiriState("ready");
+      removeSiriTypingIndicator();
+      const row = document.createElement("div");
+      row.className = "msg-row assistant";
+      row.innerHTML = `
+        <div class="msg-avatar">AI</div>
+        <div class="msg-content-wrap">
+          <div class="ai-response-box" style="color:var(--clay); font-size:0.9rem;">${escapeHtml(msg)}</div>
+        </div>
+      `;
+      siriAiResponseText.appendChild(row);
+      pruneSiriMessagesToLastTwo();
+      scrollSiriToBottom();
+    }
+  }
+
+  // CẬP NHẬT HIỂN THỊ TRÊN MÀN HÌNH SIRI
+  function updateSiriDisplay(data, userQuery, queryType = "voice") {
+    appendSiriAssistantMessage(data, userQuery);
+    if (siriActionBar) {
+      siriActionBar.style.display = "none";
+      siriActionBar.innerHTML = "";
+    }
+  }
+
+  // =========================================================================
+  // HIỂN THỊ TIN NHẮN TRONG CHAT TRUYỀN THỐNG (FORM DỄ ĐỌC CHO NGƯỜI DÂN)
+  // =========================================================================
+  function appendUserMessage(text) {
+    if (finalizeChatLiveUserMessage(text)) return;
+
+    const row = document.createElement("div");
+    row.className = "msg-row user";
+    row.innerHTML = `
+      <div class="msg-avatar">Bác</div>
+      <div class="msg-content-wrap">
+        <div class="msg-user-bubble">${escapeHtml(text)}</div>
+      </div>
+    `;
+    const typingInd = document.getElementById("typingIndicator");
+    if (typingInd) {
+      chatMessages.insertBefore(row, typingInd);
+    } else {
+      chatMessages.appendChild(row);
+    }
+    scrollToBottom();
+  }
+
+  function appendUserImageMessage(imgSrc, fileName) {
+    const row = document.createElement("div");
+    row.className = "msg-row user";
+    row.innerHTML = `
+      <div class="msg-avatar">Bác</div>
+      <div class="msg-content-wrap">
+        <div class="msg-user-bubble">
+          <img src="${imgSrc}" class="msg-image" alt="Ảnh chụp" onclick="window.open('${imgSrc}')">
+          <span style="font-size:0.78rem; opacity:0.9; display:inline-flex; align-items:center; gap:5px;">${LUCIDE_ICONS.camera} <span>${escapeHtml(fileName || "Ảnh chụp thực địa")}</span></span>
+        </div>
+      </div>
+    `;
+    const typingInd = document.getElementById("typingIndicator");
+    if (typingInd) {
+      chatMessages.insertBefore(row, typingInd);
+    } else {
+      chatMessages.appendChild(row);
+    }
+    scrollToBottom();
+  }
+
+  function appendAssistantMessage(data, userQuery = "") {
+    disablePreviousSuggestionButtons(chatMessages);
+    const row = document.createElement("div");
+    row.className = "msg-row assistant";
+
+    const responseText = data.response_text || "";
+    const analysis = data.analysis;
+    const isConfirming = data.dialog_state === "CONFIRMING";
+    const slots = data.accumulated_slots || {};
+    const hasImageAdvisory = Boolean(data.lead_info && data.sections && data.sections.length > 0);
+
+    let contentHtml = "";
+
+    // 1. Trạng thái xác nhận lưu nhật ký -> Render Phiếu xác nhận to rõ
+    if (isConfirming && Object.keys(slots).length > 0) {
+      contentHtml = buildConfirmTicketHtml(data.current_activity, slots);
+    }
+    // 2. Có dữ liệu nhận diện vật tư/sâu bệnh từ ảnh -> Render Thẻ Thông Minh (Thuốc/Tác dụng hoặc Bệnh/Triệu chứng + Nút chuyển hướng)
+    else if (hasImageAdvisory) {
+      const cardId = "chat_adv_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4);
+      contentHtml = renderImageAdvisoryCard(data, cardId);
+    }
+    // 3. Tin nhắn hỏi đáp thông thường -> Trả lời rõ ràng, định dạng đẹp
+    else {
+      contentHtml = `<div class="ai-text-standard">${formatMarkdown(responseText)}</div>`;
+    }
+
+    // Nguồn tài liệu tham khảo VietGAP từ RAG (nếu có)
+    const sourcesPromptHtml = buildRagSourcesHtml(data.sources);
+
+    // Nút gợi ý chuyển tiếp luồng (VD: Mua vật tư -> Phun thuốc / Bón phân)
+    const actionsPromptHtml = buildSuggestedActionsHtml(data.suggested_actions);
+
+    // Nút gợi ý chụp ảnh nếu liên quan đến phun thuốc, bón phân, sâu bệnh
+    let camPromptHtml = "";
+    if (!hasImageAdvisory) {
+      const camAction = getSuggestedCameraAction(data, userQuery);
+      if (camAction) {
+        camPromptHtml = buildSuggestedCameraPromptHtml(camAction);
+      }
+    }
+
+    // Nút nghe lại âm thanh nếu có file
+    let audioBadgeHtml = "";
+    if (data.audio_file) {
+      const audioUrl = data.audio_file.startsWith("/") ? data.audio_file : "/" + data.audio_file;
+      audioBadgeHtml = `
+        <div class="audio-reply-badge" onclick="playAudioReply('${audioUrl}')">
+          ${LUCIDE_ICONS.volume2}
+          <span>Nghe lại câu trả lời</span>
+        </div>
+      `;
+    }
+
+    row.innerHTML = `
+      <div class="msg-avatar">AI</div>
+      <div class="msg-content-wrap">
+        <div class="ai-response-box">
+          ${contentHtml}
+          ${sourcesPromptHtml}
+          ${actionsPromptHtml}
+          ${camPromptHtml}
+          ${audioBadgeHtml}
+        </div>
+      </div>
+    `;
+    chatMessages.appendChild(row);
+    scrollToBottom();
+  }
+
+  // =========================================================================
+  // THẺ PHẢN HỒI THÔNG MINH CHO ẢNH (THUỐC/TÁC DỤNG, BỆNH/TRIỆU CHỨNG + NÚT CHUYỂN HƯỚNG)
+  // =========================================================================
+  window.advisoryCardsData = window.advisoryCardsData || {};
+
+  function renderImageAdvisoryCard(data, cardId) {
+    const analysis = data.analysis || {};
+    const cat = data.category || analysis.category || "other";
+    const lead = data.lead_info || synthesizeLeadInfo(analysis);
+    const sections = data.sections || synthesizeSections(analysis);
+
+    window.advisoryCardsData[cardId] = {
+      lead: lead,
+      sections: sections,
+      activeSection: null
+    };
+
+    const clarifyingQ = data.clarifying_question;
+    let clarifyingHtml = "";
+    if (clarifyingQ) {
+      clarifyingHtml = `
+        <div class="alc-clarifying-box">
+          <div class="alc-clarifying-label">
+            ${LUCIDE_ICONS.messageSquare} <span>Trợ lý Nông Ký hỏi thêm:</span>
+          </div>
+          <div class="alc-clarifying-text">${escapeHtml(clarifyingQ)}</div>
+        </div>
+      `;
+    }
+
+    const navButtonsHtml = sections.map(sec => {
+      const icon = LUCIDE_ICONS[sec.icon] || LUCIDE_ICONS.help;
+      const questionText = sec.question || sec.label;
+      const isAction = Boolean(sec.is_action);
+      return `
+        <button type="button" class="btn-alc-nav ${isAction ? 'primary' : ''}" id="btn_${cardId}_${sec.id}" onclick="handleAdvisoryQuestionClick('${cardId}', '${sec.id}')">
+          <span class="alc-nav-icon">${icon}</span>
+          <span class="alc-nav-text">${escapeHtml(questionText)}</span>
+        </button>
+      `;
+    }).join("");
+
+    return `
+      <div class="advisory-lead-card ${cat}" id="${cardId}">
+        <!-- Khối thông tin trọng tâm ngay đầu: Tên thuốc/bệnh và tác dụng/triệu chứng, không nhãn rườm rà -->
+        <div class="alc-lead-box">
+          <div class="alc-val main">${escapeHtml(lead.item_name || 'Vật tư nông nghiệp')}</div>
+          <div class="alc-val core">${escapeHtml(lead.core_val || 'Đã nhận diện thành công')}</div>
+        </div>
+
+        ${clarifyingHtml}
+
+        <!-- Hàng nút câu hỏi chuyển hướng thông tin tiếp theo của phản hồi -->
+        <div class="alc-nav-bar">
+          ${navButtonsHtml}
+        </div>
+
+        <!-- Khung hiển thị chi tiết khi bấm nút câu hỏi -->
+        <div class="alc-detail-box" id="detail_box_${cardId}" style="display:none;">
+          <div class="alc-detail-header">
+            <span id="detail_title_${cardId}">Chi tiết thông tin</span>
+            <div class="alc-detail-actions">
+              <span class="alc-detail-replay" id="detail_replay_${cardId}" onclick="replayAdvisorySectionAudio('${cardId}')" title="Nghe lại giọng đọc">
+                ${LUCIDE_ICONS.volume2}
+              </span>
+              <span class="alc-detail-close" onclick="closeAdvisoryDetail('${cardId}')" title="Thu gọn">
+                ${LUCIDE_ICONS.x}
+              </span>
+            </div>
+          </div>
+          <div class="alc-detail-body" id="detail_body_${cardId}"></div>
+        </div>
+      </div>
+    `;
+  }
+
+  async function handleAdvisoryQuestionClick(cardId, sectionId) {
+    if (isWaitingForResponse) return;
+    const cardData = window.advisoryCardsData[cardId];
+    if (!cardData) return;
+
+    const sec = cardData.sections.find(s => s.id === sectionId);
+    if (!sec) return;
+
+    const questionText = sec.question || sec.label;
+
+    // A. NẾU LÀ NÚT HÀNH ĐỘNG GHI SỔ (ACTION)
+    if (sec.is_action) {
+      sendQuickPrompt(sec.action_prompt || questionText);
+      return;
+    }
+
+    // B. NẾU LÀ CÂU HỎI THÔNG TIN CỦA BÁC NÔNG DÂN
+    // 1. Hiển thị câu hỏi của người dân trên màn hình
+    if (siriUserTranscript) siriUserTranscript.style.display = "none";
+    appendUserMessage(questionText);
+    appendSiriUserMessage(questionText);
+
+    // 2. Mở khung chi tiết câu trả lời
+    const detailBox = document.getElementById("detail_box_" + cardId);
+    const detailTitle = document.getElementById("detail_title_" + cardId);
+    const detailBody = document.getElementById("detail_body_" + cardId);
+
+    if (detailBox && detailTitle && detailBody) {
+      cardData.activeSection = sectionId;
+      detailTitle.textContent = sec.title || questionText;
+      detailBody.innerHTML = formatMarkdown(sec.content);
+      detailBox.style.display = "flex";
+
+      // Đánh dấu active button
+      const cardEl = document.getElementById(cardId);
+      if (cardEl) {
+        cardEl.querySelectorAll(".btn-alc-nav").forEach(b => b.classList.remove("active"));
+        const btn = document.getElementById("btn_" + cardId + "_" + sectionId);
+        if (btn) btn.classList.add("active");
+      }
+
+      if (currentMode !== "siri") {
+        scrollToBottom();
+      }
+    }
+
+    // 3. Hiển thị câu trả lời của Trợ lý dưới câu hỏi trên màn hình
+    const assistantData = {
+      response_text: sec.content,
+      dialog_state: "ADVISORY",
+      current_activity: null,
+      analysis: null,
+    };
+    appendAssistantMessage(assistantData, questionText);
+    appendSiriAssistantMessage(assistantData, questionText);
+
+    // 4. ĐỌC THÔNG TIN ĐÓ BẰNG GIỌNG NÓI (TTS)
+    const spokenText = sec.spoken_text || sec.content;
+    try {
+      if (currentMode === "siri") {
+        setSiriState("thinking");
+      }
+      const resp = await fetch("/api/conversation/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: spokenText, session_id: sessionId })
+      });
+      const ttsData = await resp.json();
+      if (ttsData.status === "success" && ttsData.audio_file) {
+        playAudioReply(ttsData.audio_file);
+      } else {
+        if (currentMode === "siri") setSiriState("ready");
+      }
+    } catch (e) {
+      console.warn("Lỗi gọi TTS đọc câu trả lời:", e);
+      if (currentMode === "siri") setSiriState("ready");
+    }
+  }
+
+  function replayAdvisorySectionAudio(cardId) {
+    const cardData = window.advisoryCardsData[cardId];
+    if (!cardData || !cardData.activeSection) return;
+    const sec = cardData.sections.find(s => s.id === cardData.activeSection);
+    if (!sec) return;
+    const spokenText = sec.spoken_text || sec.content;
+    if (currentMode === "siri") setSiriState("thinking");
+    fetch("/api/conversation/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: spokenText, session_id: sessionId })
+    })
+    .then(r => r.json())
+    .then(d => {
+      if (d.status === "success" && d.audio_file) {
+        playAudioReply(d.audio_file);
+      } else {
+        if (currentMode === "siri") setSiriState("ready");
+      }
+    })
+    .catch(err => {
+      console.warn("Lỗi replay TTS:", err);
+      if (currentMode === "siri") setSiriState("ready");
+    });
+  }
+
+  function toggleAdvisoryDetail(cardId, sectionId) {
+    handleAdvisoryQuestionClick(cardId, sectionId);
+  }
+
+  function closeAdvisoryDetail(cardId) {
+    const cardData = window.advisoryCardsData[cardId];
+    if (cardData) cardData.activeSection = null;
+
+    const detailBox = document.getElementById("detail_box_" + cardId);
+    if (detailBox) detailBox.style.display = "none";
+
+    const cardEl = document.getElementById(cardId);
+    if (cardEl) {
+      cardEl.querySelectorAll(".btn-alc-nav").forEach(btn => btn.classList.remove("active"));
+    }
+  }
+
+  function synthesizeLeadInfo(analysis) {
+    const cat = analysis.category || "other";
+    const title = analysis.title || "Vật tư";
+    if (cat === "pest_disease" || analysis.pest_disease) {
+      const p = analysis.pest_disease || {};
+      return {
+        type: "pest_disease",
+        item_label: "Bệnh chẩn đoán",
+        item_name: p.pest_name || title,
+        core_label: "Triệu chứng",
+        core_val: p.symptoms || analysis.summary || "Dấu hiệu sâu bệnh hại",
+        sub_info: p.severity ? `Mức độ: ${p.severity}` : ""
+      };
+    } else if (cat === "pesticide" || analysis.pesticide) {
+      const p = analysis.pesticide || {};
+      const targets = Array.isArray(p.target_pests) ? p.target_pests.join(", ") : (p.target_pests || analysis.summary || "Phòng trừ sâu bệnh");
+      return {
+        type: "pesticide",
+        item_label: "Thuốc phát hiện",
+        item_name: p.trade_name || title,
+        core_label: "Tác dụng",
+        core_val: targets,
+        sub_info: p.active_ingredient ? `Hoạt chất: ${p.active_ingredient}` : ""
+      };
+    } else if (cat === "fertilizer" || analysis.fertilizer) {
+      const f = analysis.fertilizer || {};
+      const ben = Array.isArray(f.benefits) ? f.benefits.join(", ") : (f.benefits || analysis.summary || "Dinh dưỡng cây trồng");
+      return {
+        type: "fertilizer",
+        item_label: "Phân bón phát hiện",
+        item_name: f.trade_name || title,
+        core_label: "Tác dụng",
+        core_val: ben,
+        sub_info: f.composition_npk ? `NPK: ${f.composition_npk}` : ""
+      };
+    }
+    return {
+      type: "other",
+      item_label: "Phát hiện",
+      item_name: title,
+      core_label: "Thông tin",
+      core_val: analysis.summary || "Ảnh thực địa",
+      sub_info: ""
+    };
+  }
+
+  function synthesizeSections(analysis) {
+    const cat = analysis.category || "other";
+    const sections = [];
+    if (cat === "pesticide" || analysis.pesticide) {
+      const p = analysis.pesticide || {};
+      const dosage = p.dosage_and_usage || p.dosage_instructions || "Pha theo hướng dẫn trên bao bì.";
+      const cropsStr = p.registered_crops ? "\nCây trồng: " + (Array.isArray(p.registered_crops) ? p.registered_crops.join(", ") : p.registered_crops) : "";
+      sections.push({
+        id: "dosage",
+        question: "Thuốc này pha liều lượng thế nào?",
+        label: "Thuốc này pha liều lượng thế nào?",
+        icon: "scale",
+        title: "Liều lượng pha & Cách phun",
+        content: dosage + cropsStr,
+        spoken_text: "Về liều lượng và cách dùng: " + dosage
+      });
+      const isoStr = p.isolation_days != null ? "Thời gian cách ly (PHI): " + p.isolation_days + " ngày." : "Thời gian cách ly: Theo hướng dẫn bao bì.";
+      const safetyStr = p.safety_precautions || p.safety_warnings || "Đeo khẩu trang, găng tay khi pha và phun thuốc.";
+      sections.push({
+        id: "safety",
+        question: "Bao lâu thì được thu hoạch và có độc không?",
+        label: "Bao lâu thì được thu hoạch và có độc không?",
+        icon: "clock",
+        title: "Thời gian cách ly & An toàn",
+        content: isoStr + "\nAn toàn: " + safetyStr,
+        spoken_text: isoStr + " Bác lưu ý: " + safetyStr
+      });
+      if (p.db_match && p.db_match.matched) {
+        sections.push({
+          id: "stock",
+          question: "Kho nhà mình có sẵn loại thuốc này không?",
+          label: "Kho nhà mình có sẵn loại thuốc này không?",
+          icon: "checkCircle",
+          title: "Thuốc có trong kho",
+          content: `Có sẵn trong kho: ${p.db_match.name}`,
+          spoken_text: `Dạ trong kho trang trại có sẵn thuốc ${p.db_match.name}.`
+        });
+      }
+      sections.push({
+        id: "diary",
+        question: "Ghi việc phun thuốc này vào nhật ký giúp tôi",
+        label: "Ghi việc phun thuốc này vào nhật ký giúp tôi",
+        icon: "fileEdit",
+        is_action: true,
+        action_prompt: "Ghi việc phun thuốc này vào nhật ký giúp tôi."
+      });
+    } else if (cat === "pest_disease" || analysis.pest_disease) {
+      const p = analysis.pest_disease || {};
+      const controls = p.cultural_controls || p.biological_controls || "Cắt tỉa cành thông thoáng, thu gom lá bệnh.";
+      sections.push({
+        id: "control",
+        question: "Phòng trừ sâu bệnh này như thế nào?",
+        label: "Phòng trừ sâu bệnh này như thế nào?",
+        icon: "shield",
+        title: "Biện pháp phòng trừ & Canh tác",
+        content: controls,
+        spoken_text: "Về biện pháp phòng trừ: " + controls
+      });
+      const actives = Array.isArray(p.recommended_actives) ? p.recommended_actives.join(', ') : (p.recommended_actives || 'Theo khuyến cáo');
+      sections.push({
+        id: "medicines",
+        question: "Dùng thuốc gì để trị dứt điểm?",
+        label: "Dùng thuốc gì để trị dứt điểm?",
+        icon: "pill",
+        title: "Thuốc đặc trị đề xuất",
+        content: `Hoạt chất khuyến nghị: ${actives}`,
+        spoken_text: `Để trị dứt điểm, bác dùng các hoạt chất khuyến nghị: ${actives}.`
+      });
+      if (p.severity) {
+        sections.push({
+          id: "severity",
+          question: "Sâu bệnh này gây hại có nặng không?",
+          label: "Sâu bệnh này gây hại có nặng không?",
+          icon: "alert",
+          title: "Mức độ gây hại",
+          content: `Mức độ: ${p.severity}\nBộ phận bị hại: ${p.affected_part || 'Lá, thân, cành'}`,
+          spoken_text: `Sâu bệnh này ở mức độ ${p.severity}, gây hại chủ yếu ở ${p.affected_part || 'lá và cành'}.`
+        });
+      }
+      sections.push({
+        id: "diary",
+        question: "Ghi vào sổ theo dõi sâu bệnh giúp tôi",
+        label: "Ghi vào sổ theo dõi sâu bệnh giúp tôi",
+        icon: "fileEdit",
+        is_action: true,
+        action_prompt: "Ghi vào sổ theo dõi sâu bệnh giúp tôi."
+      });
+    } else if (cat === "fertilizer" || analysis.fertilizer) {
+      const f = analysis.fertilizer || {};
+      const dosage = f.dosage_and_usage || f.usage_instructions || "Bón theo quy trình kỹ thuật.";
+      sections.push({
+        id: "dosage",
+        question: "Phân này bón liều lượng thế nào?",
+        label: "Phân này bón liều lượng thế nào?",
+        icon: "scale",
+        title: "Liều lượng & Phương pháp bón",
+        content: dosage,
+        spoken_text: "Về liều lượng bón phân: " + dosage
+      });
+      if (f.composition_npk || f.nutrients) {
+        sections.push({
+          id: "nutrients",
+          question: "Phân này có những chất dinh dưỡng gì?",
+          label: "Phân này có những chất dinh dưỡng gì?",
+          icon: "sparkles",
+          title: "Thành phần dinh dưỡng / NPK",
+          content: `Thành phần: ${f.composition_npk || f.nutrients}`,
+          spoken_text: `Thành phần dinh dưỡng chính gồm: ${f.composition_npk || f.nutrients}.`
+        });
+      }
+      sections.push({
+        id: "diary",
+        question: "Ghi việc bón phân này vào nhật ký giúp tôi",
+        label: "Ghi việc bón phân này vào nhật ký giúp tôi",
+        icon: "fileEdit",
+        is_action: true,
+        action_prompt: "Ghi việc bón phân này vào nhật ký giúp tôi."
+      });
+    } else {
+      sections.push({
+        id: "diary",
+        question: "Ghi thông tin này vào nhật ký giúp tôi",
+        label: "Ghi thông tin này vào nhật ký giúp tôi",
+        icon: "fileEdit",
+        is_action: true,
+        action_prompt: "Ghi nhận thông tin này vào nhật ký giúp tôi."
+      });
+    }
+    return sections;
+  }
+
+  // TẠO PHIẾU XÁC NHẬN LƯU NHẬT KÝ TO RÕ, ĐẦY ĐỦ VÀ CHUẨN VIETGAP
+  function buildConfirmTicketHtml(activity, slots, hideButtons = false) {
+    let act = (activity || "").toLowerCase();
+    if (!act || act === "general") {
+      if (slots.ten_thuoc_bvtv || slots.pesticide_name) act = "spray";
+      else if (slots.ten_phan_bon || slots.fertilizer_name) act = "fertilize";
+      else if (slots.san_luong_thu_hoach) act = "harvest";
+      else if (slots.khoi_luong_tieu_thu) act = "sale";
+      else if (slots.sinh_vat_gay_hai || slots.target_pest) act = "observation";
+      else if (slots.material_name && (slots.treatment_method || slots.waste_type)) act = "waste";
+      else if (slots.material_name || slots.supplier_name) act = "purchase";
+      else act = "general";
+    }
+    const actNames = {
+      spray: "Phun thuốc BVTV",
+      fertilize: "Bón phân",
+      purchase: "Mua vật tư nông nghiệp",
+      harvest: "Thu hoạch nông sản",
+      sale: "Bán nông sản",
+      observation: "Theo dõi sâu bệnh hại",
+      waste: "Xử lý vỏ bao bì thuốc",
+      general: "Hoạt động canh tác"
+    };
+    const title = actNames[act] || "Hoạt động canh tác";
+    const dateVal = slots.activity_date || slots.purchase_date || slots.harvest_date || slots.sale_date || new Date().toISOString().split('T')[0];
+    let displayDate = dateVal;
+    if (typeof dateVal === "string" && dateVal.includes("-")) {
+      const p = dateVal.split("-");
+      if (p.length === 3) displayDate = `${p[2]}/${p[1]}/${p[0]}`;
+    }
+    const cropName = slots.crop_name || "Bưởi diễn";
+
+    let rowsHtml = "";
+    if (act === "spray") {
+      const tenThuoc = slots.ten_thuoc_bvtv || slots.pesticide_name || 'Thuốc BVTV';
+      const targetPest = slots.target_pest || slots.sinh_vat_gay_hai || 'Sâu bệnh hại';
+      const lieuLuong = slots.nong_do_va_luong_dung || 'Pha theo hướng dẫn';
+      let cachLy = slots.thoi_gian_cach_ly || 'Theo quy định';
+      if (/^\d+$/.test(String(cachLy).trim())) {
+        cachLy = cachLy + ' ngày';
+      }
+      rowsHtml = `
+        <div class="confirm-ticket-row"><span class="k">Cây trồng:</span><span class="v"><b>${escapeHtml(cropName)}</b></span></div>
+        <div class="confirm-ticket-row"><span class="k">Thuốc BVTV:</span><span class="v" style="color:var(--forest); font-weight:700;">${escapeHtml(tenThuoc)}</span></div>
+        <div class="confirm-ticket-row"><span class="k">Trị sâu bệnh:</span><span class="v">${escapeHtml(targetPest)}</span></div>
+        <div class="confirm-ticket-row"><span class="k">Liều lượng:</span><span class="v" style="color:var(--leaf); font-weight:600;">${escapeHtml(lieuLuong)}</span></div>
+        <div class="confirm-ticket-row"><span class="k">Cách ly:</span><span class="v" style="color:var(--clay); font-weight:600;">${escapeHtml(cachLy)}</span></div>
+        ${slots.dien_tich ? `<div class="confirm-ticket-row"><span class="k">Diện tích/Gốc:</span><span class="v">${escapeHtml(slots.dien_tich)}</span></div>` : ''}
+        ${slots.phuong_thuc_phun ? `<div class="confirm-ticket-row"><span class="k">Dụng cụ phun:</span><span class="v">${escapeHtml(slots.phuong_thuc_phun)}</span></div>` : ''}
+        ${slots.thoi_tiet ? `<div class="confirm-ticket-row"><span class="k">Thời tiết:</span><span class="v">${escapeHtml(slots.thoi_tiet)}</span></div>` : ''}
+      `;
+    } else if (act === "fertilize") {
+      const tenPhan = slots.ten_phan_bon || slots.fertilizer_name || 'Phân bón';
+      const luongPhan = slots.luong_phan_bon || slots.quantity || 'Đủ liều lượng';
+      rowsHtml = `
+        <div class="confirm-ticket-row"><span class="k">Cây trồng:</span><span class="v"><b>${escapeHtml(cropName)}</b></span></div>
+        <div class="confirm-ticket-row"><span class="k">Tên phân bón:</span><span class="v" style="color:var(--forest); font-weight:700;">${escapeHtml(tenPhan)}</span></div>
+        <div class="confirm-ticket-row"><span class="k">Khối lượng:</span><span class="v" style="color:var(--leaf); font-weight:600;">${escapeHtml(luongPhan)}</span></div>
+        ${slots.phuong_phap_bon ? `<div class="confirm-ticket-row"><span class="k">Cách bón:</span><span class="v">${escapeHtml(slots.phuong_phap_bon)}</span></div>` : ''}
+        ${slots.dien_tich ? `<div class="confirm-ticket-row"><span class="k">Diện tích/Cây:</span><span class="v">${escapeHtml(slots.dien_tich)}</span></div>` : ''}
+        ${slots.thoi_diem_bon ? `<div class="confirm-ticket-row"><span class="k">Giai đoạn:</span><span class="v">${escapeHtml(slots.thoi_diem_bon)}</span></div>` : ''}
+      `;
+    } else if (act === "harvest") {
+      const sanLuong = slots.san_luong_thu_hoach || slots.quantity || 'Theo thực tế';
+      rowsHtml = `
+        <div class="confirm-ticket-row"><span class="k">Nông sản:</span><span class="v"><b>${escapeHtml(cropName)}</b></span></div>
+        <div class="confirm-ticket-row"><span class="k">Sản lượng thu hoạch:</span><span class="v" style="color:var(--leaf); font-weight:700;">${escapeHtml(sanLuong)}</span></div>
+        ${slots.dia_diem_cach_so_che ? `<div class="confirm-ticket-row"><span class="k">Lô / Sơ chế:</span><span class="v">${escapeHtml(slots.dia_diem_cach_so_che)}</span></div>` : ''}
+        ${slots.chat_luong ? `<div class="confirm-ticket-row"><span class="k">Chất lượng:</span><span class="v">${escapeHtml(slots.chat_luong)}</span></div>` : ''}
+      `;
+    } else if (act === "sale") {
+      const khoiLuong = slots.khoi_luong_tieu_thu || slots.quantity || 'Theo thực tế';
+      const buyer = slots.co_so_thu_mua || slots.buyer_name || 'Thương lái / Hợp tác xã';
+      rowsHtml = `
+        <div class="confirm-ticket-row"><span class="k">Nông sản:</span><span class="v"><b>${escapeHtml(cropName)}</b></span></div>
+        <div class="confirm-ticket-row"><span class="k">Khối lượng bán:</span><span class="v" style="color:var(--leaf); font-weight:700;">${escapeHtml(khoiLuong)}</span></div>
+        <div class="confirm-ticket-row"><span class="k">Người mua / HTX:</span><span class="v"><b>${escapeHtml(buyer)}</b></span></div>
+        ${slots.unit_price ? `<div class="confirm-ticket-row"><span class="k">Đơn giá:</span><span class="v">${escapeHtml(slots.unit_price)}</span></div>` : ''}
+      `;
+    } else if (act === "purchase") {
+      const matName = slots.material_name || slots.item_name || 'Vật tư nông nghiệp';
+      const qtyStr = (slots.quantity || '') + ' ' + (slots.unit || '');
+      rowsHtml = `
+        <div class="confirm-ticket-row"><span class="k">Tên vật tư:</span><span class="v" style="color:var(--forest); font-weight:700;">${escapeHtml(matName)}</span></div>
+        <div class="confirm-ticket-row"><span class="k">Số lượng:</span><span class="v" style="color:var(--leaf); font-weight:600;">${escapeHtml(qtyStr.trim() || '1 đơn vị')}</span></div>
+        ${slots.supplier_name ? `<div class="confirm-ticket-row"><span class="k">Nơi mua / Đại lý:</span><span class="v">${escapeHtml(slots.supplier_name)}</span></div>` : ''}
+        ${slots.unit_price ? `<div class="confirm-ticket-row"><span class="k">Đơn giá:</span><span class="v">${escapeHtml(slots.unit_price)}</span></div>` : ''}
+        ${slots.invoice_no ? `<div class="confirm-ticket-row"><span class="k">Số hóa đơn:</span><span class="v">${escapeHtml(slots.invoice_no)}</span></div>` : ''}
+      `;
+    } else if (act === "observation") {
+      const pest = slots.sinh_vat_gay_hai || slots.target_pest || 'Sinh vật gây hại';
+      const sev = slots.severity || 'Cần theo dõi';
+      const action = slots.bien_phap_xu_ly || slots.action_taken || '';
+      rowsHtml = `
+        <div class="confirm-ticket-row"><span class="k">Cây trồng:</span><span class="v"><b>${escapeHtml(cropName)}</b></span></div>
+        <div class="confirm-ticket-row"><span class="k">Sinh vật gây hại:</span><span class="v" style="color:var(--clay); font-weight:700;">${escapeHtml(pest)}</span></div>
+        <div class="confirm-ticket-row"><span class="k">Mức độ xuất hiện:</span><span class="v">${escapeHtml(sev)}</span></div>
+        ${action ? `<div class="confirm-ticket-row"><span class="k">Biện pháp xử lý:</span><span class="v">${escapeHtml(action)}</span></div>` : ''}
+      `;
+    } else if (act === "waste") {
+      const mat = slots.material_name || slots.waste_type || 'Vỏ bao bì thuốc BVTV';
+      const meth = slots.treatment_method || 'Thu gom vào bể chứa chuyên dụng';
+      rowsHtml = `
+        <div class="confirm-ticket-row"><span class="k">Vỏ bao bì:</span><span class="v" style="color:var(--forest); font-weight:700;">${escapeHtml(mat)}</span></div>
+        <div class="confirm-ticket-row"><span class="k">Cách xử lý:</span><span class="v">${escapeHtml(meth)}</span></div>
+        ${slots.storage_location ? `<div class="confirm-ticket-row"><span class="k">Nơi lưu trữ:</span><span class="v">${escapeHtml(slots.storage_location)}</span></div>` : ''}
+      `;
+    } else {
+      const work = slots.cong_viec || slots.description || 'Chăm sóc vườn cây';
+      rowsHtml = `
+        <div class="confirm-ticket-row"><span class="k">Cây trồng:</span><span class="v"><b>${escapeHtml(cropName)}</b></span></div>
+        <div class="confirm-ticket-row"><span class="k">Nội dung công việc:</span><span class="v" style="color:var(--forest); font-weight:700;">${escapeHtml(work)}</span></div>
+        ${slots.dien_tich ? `<div class="confirm-ticket-row"><span class="k">Khu vực/Diện tích:</span><span class="v">${escapeHtml(slots.dien_tich)}</span></div>` : ''}
+      `;
+    }
+
+    const optFieldMap = {
+      spray: [
+        { k: 'phuong_thuc_phun', label: 'dụng cụ phun' }
+      ],
+      fertilize: [
+        { k: 'phuong_phap_bon', label: 'phương pháp bón' }
+      ],
+      purchase: [
+        { k: 'supplier_name', label: 'đại lý mua' },
+        { k: 'unit_price', label: 'giá tiền' }
+      ],
+      harvest: [
+        { k: 'dia_diem_cach_so_che', label: 'lô/cách sơ chế' },
+        { k: 'chat_luong', label: 'chất lượng' }
+      ],
+      sale: [
+        { k: 'co_so_thu_mua', label: 'thương lái/người mua' },
+        { k: 'unit_price', label: 'giá bán' }
+      ],
+      observation: [
+        { k: 'severity', label: 'mức độ hại' },
+        { k: 'bien_phap_xu_ly', label: 'biện pháp xử lý' }
+      ],
+      waste: [
+        { k: 'storage_location', label: 'nơi lưu trữ vỏ bao' }
+      ],
+      general: []
+    };
+
+    let missingOptHints = [];
+    const actOpts = optFieldMap[act] || [];
+    for (const opt of actOpts) {
+      if (!slots[opt.k]) {
+        missingOptHints.push(opt.label);
+      }
+    }
+
+    let optNoticeHtml = "";
+    if (act === "purchase") {
+      let extra = [];
+      if (!slots.supplier_name) extra.push("đại lý nơi mua");
+      if (!slots.unit_price) extra.push("giá tiền");
+      let textNotice = "";
+      if (extra.length > 0) {
+        textNotice = `💡 Bác có thể bổ sung <b>${escapeHtml(extra.join(" hoặc "))}</b>, chụp ảnh hóa đơn/chứng từ hoặc bấm nút lưu.`;
+      } else if (!slots.invoice_no && !slots.photo_url) {
+        textNotice = `📸 Bác có thể chụp ảnh hóa đơn/chứng từ bằng nút chụp bên dưới để lưu kèm vào sổ nhé!`;
+      }
+      if (textNotice) {
+        optNoticeHtml = `
+          <div style="margin-top:8px; padding:7px 11px; background:rgba(42,99,44,0.06); border:1px dashed rgba(42,99,44,0.25); border-radius:6px; font-size:0.8rem; color:var(--forest); line-height:1.4;">
+            ${textNotice}
+          </div>
+        `;
+      }
+    } else if (missingOptHints.length > 0) {
+      const hintText = missingOptHints.slice(0, 2).join(" hoặc ");
+      optNoticeHtml = `
+        <div style="margin-top:8px; padding:7px 11px; background:rgba(42,99,44,0.06); border:1px dashed rgba(42,99,44,0.25); border-radius:6px; font-size:0.8rem; color:var(--forest); line-height:1.4;">
+          💡 Bác có thể bổ sung thêm <b>${escapeHtml(hintText)}</b>, hoặc bấm nút lưu nếu đã đủ thông tin.
+        </div>
+      `;
+    }
+
+    const buttonsHtml = hideButtons ? '' : `
+      <div class="confirm-btns-row">
+        <button type="button" class="btn-confirm-yes" onclick="sendQuickPrompt('Đồng ý lưu vào sổ nhật ký.')">${LUCIDE_ICONS.check} <span>ĐỒNG Ý LƯU VÀO SỔ</span></button>
+        <button type="button" class="btn-confirm-no" onclick="sendQuickPrompt('Hủy phiên này.')">${LUCIDE_ICONS.x} <span>HỦY</span></button>
+      </div>
+    `;
+
+    return `
+      <div class="confirm-ticket">
+        <div class="confirm-ticket-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+          <span>PHIẾU XÁC NHẬN: ${escapeHtml(title)}</span>
+        </div>
+        <div style="font-size:0.8rem; color:var(--ink-soft); margin-bottom:6px;">
+          Ngày thực hiện: <b>${escapeHtml(displayDate)}</b>
+        </div>
+        <div style="background:rgba(35,42,28,0.03); padding:8px 10px; border-radius:8px;">
+          ${rowsHtml}
+        </div>
+        ${optNoticeHtml}
+        ${buttonsHtml}
+      </div>
+    `;
+  }
+
+  // Tự động kiểm tra câu trả lời của AI nếu có gợi ý chụp ảnh thì kích hoạt camera
+  function checkAndAutoPromptCamera(aiReply) {
+    // Nút gợi ý chụp ảnh chuyên dụng đã được hiển thị trực tiếp ngay dưới câu trả lời của AI
+    // Giúp người dân xem thông tin và chủ động bấm nút chụp ảnh khi sẵn sàng
+  }
+
+  function appendSimpleErrorMessage(msg) {
+    const row = document.createElement("div");
+    row.className = "msg-row assistant";
+    row.innerHTML = `
+      <div class="msg-avatar">AI</div>
+      <div class="msg-content-wrap">
+        <div class="ai-response-box" style="color:var(--clay); font-size:0.9rem;">${escapeHtml(msg)}</div>
+      </div>
+    `;
+    chatMessages.appendChild(row);
+    scrollToBottom();
+  }
+
+  function showTypingIndicator(msgText) {
+    removeTypingIndicator();
+    const ind = document.createElement("div");
+    ind.id = "typingIndicator";
+    ind.className = "typing-indicator";
+    ind.innerHTML = `
+      <span class="typing-dot"></span>
+      <span class="typing-dot"></span>
+      <span class="typing-dot"></span>
+      <span style="margin-left:6px;">${escapeHtml(msgText || "AI đang phân tích và trả lời...")}</span>
+    `;
+    chatMessages.appendChild(ind);
+    scrollToBottom();
+  }
+
+  function removeTypingIndicator() {
+    const el = document.getElementById("typingIndicator");
+    if (el) el.remove();
+  }
+
+  function scrollToBottom() {
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function updateStateBadge(state) {
+    const map = {
+      "IDLE": "SẴN SÀNG",
+      "COLLECTING": "THU THẬP",
+      "CLARIFYING": "HỎI THÊM",
+      "CONFIRMING": "XÁC NHẬN",
+      "ADVISORY": "TƯ VẤN",
+      "COMMITTED": "ĐÃ LƯU",
+      "CANCELLED": "ĐÃ HỦY"
+    };
+    if (headerStateBadge) {
+      headerStateBadge.textContent = map[state] || state || "SẴN SÀNG";
+    }
+  }
+
+  function escapeHtml(str) {
+    if (!str) return "";
+    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function formatMarkdown(text) {
+    if (!text) return "";
+    let html = escapeHtml(text);
+    html = html.replace(/\[\d+\]/g, "");
+    html = html.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    html = html.replace(/\*(.*?)\*/g, "<em>$1</em>");
+    html = html.replace(/💡\s*<em>(.*?)<\/em>/g, '<div class="ai-tip-callout"><span>💡</span> <span>$1</span></div>');
+    html = html.replace(/^[ \t]*[-*•]\s+/gm, '• ');
+    html = html.replace(/━{4,}/g, "<hr style='border:none; border-top:1px dashed rgba(35,42,28,0.15); margin:8px 0;'>");
+    html = html.replace(/\n/g, "<br>");
+    return html;
+  }
+</script>
+
+</body>
+</html>

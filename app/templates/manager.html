@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Cổng Quản Lý — Sổ Nhật Ký VietGAP (HTX Đại Đồng)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page-bg:#141C15;
+    --paper:#FBF8EF;
+    --card:#FFFDF7;
+    --ink:#232A1C;
+    --ink-soft:#6E7862;
+    --ink-faint:#9BA38C;
+    --line: rgba(35,42,28,0.12);
+    --header:#1F3626;
+    --header-soft: rgba(246,241,226,0.75);
+    --leaf:#3F6B3F;
+    --leaf-bright:#5B8C4A;
+    --clay:#A6512E;
+    --gold:#B8830E;
+    --blue:#2B6CB0;
+    --moss: #4C5F3A;
+    --moss-deep: #33421F;
+    --moss-tint: #EEF0E4;
+    --ochre: #B5842A;
+    --ochre-tint: #FBF1DD;
+    --rust: #A9532F;
+    --rust-tint: #FBEAE1;
+    --sky: #3E6E7A;
+    --sky-tint: #E7F1F1;
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    font-size: 16px;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: var(--page-bg);
+    font-family:'Be Vietnam Pro', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    display:flex; justify-content:center;
+    min-height:100vh;
+  }
+
+  .app{
+    width:100%; max-width: 860px;
+    background: var(--paper);
+    min-height:100vh;
+    position:relative;
+    box-shadow: 0 0 60px rgba(0,0,0,0.5);
+    display:flex; flex-direction:column;
+  }
+
+  /* Header */
+  .header{
+    background: var(--header);
+    padding: 18px 20px 40px;
+    color: #F6F1E2;
+    position:relative;
+  }
+  .header-top{
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  }
+  .brand-wrap{
+    display:flex; align-items:center; gap:10px;
+  }
+  .app-name{ font-size:1.25rem; font-weight:800; letter-spacing:0.01em; }
+  .app-name em{ font-style:normal; color:#D6A339; }
+  .badge-portal{
+    background: rgba(214,163,57,0.25);
+    border: 1px solid rgba(214,163,57,0.45);
+    color: #FAD477;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+
+  .header-actions{
+    display:flex; align-items:center; gap:8px;
+  }
+  .btn-nav-header{
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.22);
+    color: #F6F1E2;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .btn-nav-header:hover{ background: rgba(255,255,255,0.22); color:#fff; }
+
+  .user-bar{
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    font-size: 0.78rem;
+    color: rgba(246,241,226,0.88);
+  }
+  .user-greeting b{ color: #D6A339; }
+  .user-role{
+    background: rgba(91,140,74,0.3);
+    border: 1px solid rgba(163,230,155,0.4);
+    color: #A3E69B;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  /* Farm Card (Dạng mở rộng) */
+  .farmer-card{
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    margin: -26px 16px 0;
+    padding: 16px 18px 12px;
+    box-shadow: 0 14px 30px -14px rgba(0,0,0,0.3);
+    position:relative;
+    z-index:2;
+    border: 1px solid rgba(35,42,28,0.06);
+    transition: all 0.25s ease;
+  }
+  .farmer-top{ display:flex; gap:14px; align-items:center; cursor:pointer; user-select:none; }
+  .avatar{
+    width:52px; height:52px; border-radius:14px;
+    background: linear-gradient(135deg, var(--leaf), var(--header));
+    color:#fff; font-weight:800; font-size:1.05rem;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; box-shadow: 0 4px 12px rgba(31,54,38,0.25);
+  }
+  .farmer-meta{ flex:1; min-width:0; }
+  .farmer-name{
+    font-weight:800; font-size:0.98rem; color:var(--ink);
+    line-height:1.35; margin-bottom: 3px;
+  }
+  .farmer-address{
+    font-size:0.8rem; color:var(--ink-soft); line-height:1.3;
+    display:flex; align-items:center; gap:4px;
+  }
+  .farmer-chevron {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: rgba(35,42,28,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--leaf);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+  .farmer-chevron:hover {
+    background: rgba(63,107,63,0.14);
+  }
+  .farmer-chevron svg {
+    transition: transform 0.25s ease;
+  }
+  .farmer-card.is-expanded .farmer-chevron svg {
+    transform: rotate(180deg);
+  }
+
+  .farmer-tags{
+    display:flex; gap:8px; flex-wrap:wrap;
+    margin-top: 11px;
+  }
+  .tag{
+    display:inline-flex; align-items:center; gap:4px;
+    padding: 4px 9px; border-radius: 999px;
+    font-size: 0.72rem; font-weight: 600;
+    background: rgba(35,42,28,0.06); color: var(--ink-soft);
+  }
+  .tag.puc{ background: var(--moss-tint); color: var(--moss); font-weight:700; }
+  .tag.area{ background: var(--ochre-tint); color: var(--ochre); }
+  .tag.crop{ background: var(--sky-tint); color: var(--sky); font-weight:700; }
+
+  /* Plantation / HTX Details Expandable Body */
+  .farmer-expand-body{
+    display: none;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line);
+    animation: fadeInFarmer 0.2s ease;
+  }
+  .farmer-card.is-expanded .farmer-expand-body{
+    display: block;
+  }
+  @keyframes fadeInFarmer {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .puc-grid{
+    display:grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap:8px;
+    font-size:0.78rem;
+  }
+  .puc-item{
+    background: #FAFAF8;
+    border-radius: var(--radius-sm);
+    padding: 7px 11px;
+    border: 1px solid rgba(35,42,28,0.06);
+  }
+  .puc-item.full{ grid-column: 1 / -1; }
+  .puc-label{ color:var(--ink-soft); font-size:0.7rem; font-weight:600; margin-bottom:2px; }
+  .puc-val{ color:var(--ink); font-weight:700; font-size:0.82rem; }
+  .puc-val.hl{ color:var(--leaf); }
+
+  .btn-toggle-farmer{
+    width: 100%;
+    margin-top: 10px;
+    padding: 7px 0 3px;
+    background: transparent;
+    border: none;
+    border-top: 1px dashed rgba(35,42,28,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--leaf);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+  }
+  .btn-toggle-farmer:hover{
+    color: var(--header);
+    background: rgba(63,107,63,0.04);
+  }
+  .btn-toggle-farmer svg{
+    transition: transform 0.25s ease;
+  }
+  .farmer-card.is-expanded .btn-toggle-farmer svg{
+    transform: rotate(180deg);
+  }
+
+  /* KPI Summary Grid */
+  .kpi-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin: 16px 16px 0;
+  }
+  .kpi-card{
+    background: #ffffff;
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .kpi-label{
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+  }
+  .kpi-value{
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--ink);
+    font-family: 'IBM Plex Mono', monospace;
+    line-height: 1.1;
+  }
+  .kpi-card.spray .kpi-value{ color: var(--rust); }
+  .kpi-card.fert .kpi-value{ color: var(--ochre); }
+  .kpi-card.harvest .kpi-value{ color: var(--leaf); }
+  .kpi-card.sale .kpi-value{ color: #059669; }
+
+  /* Section */
+  .section{
+    padding: 18px 16px 0;
+  }
+  .section-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .section-title{
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0;
+  }
+  .section-subtitle{
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+
+  /* Toolbar theo đúng format ứng dụng */
+  .timeline-toolbar {
+    margin: 10px 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  @media (min-width: 640px) {
+    .timeline-toolbar {
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+    }
+    .timeline-select-group {
+      flex: 1;
+    }
+    .manager-search-wrap {
+      flex: 1;
+    }
+  }
+
+  .timeline-select-group {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  .timeline-select-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  .timeline-filter-select {
+    width: 100%;
+    height: 42px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: var(--card);
+    border: 1.5px solid rgba(35, 42, 28, 0.16);
+    border-radius: var(--radius-sm);
+    padding: 0 40px 0 14px;
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 40px;
+    cursor: pointer;
+    box-sizing: border-box;
+    box-shadow: 0 1px 2px rgba(35, 42, 28, 0.04);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  }
+  .timeline-filter-select:hover {
+    border-color: var(--leaf);
+    background-color: #ffffff;
+  }
+  .timeline-filter-select:focus {
+    outline: none;
+    border-color: var(--leaf);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(63, 107, 63, 0.14);
+  }
+  .timeline-filter-select option {
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--ink);
+    background-color: #ffffff;
+  }
+  .select-chevron-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-soft);
+  }
+
+  .manager-search-wrap {
+    position: relative;
+    width: 100%;
+  }
+  .manager-search-wrap svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-faint);
+  }
+  .manager-search-input {
+    width: 100%;
+    height: 42px;
+    border: 1.5px solid rgba(35, 42, 28, 0.16);
+    border-radius: var(--radius-sm);
+    padding: 0 14px 0 36px;
+    font-size: 0.85rem;
+    font-family: inherit;
+    background: var(--card);
+    color: var(--ink);
+    outline: none;
+    transition: all 0.15s ease;
+  }
+  .manager-search-input:focus {
+    border-color: var(--leaf);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(63, 107, 63, 0.14);
+  }
+
+  .btn-refresh{
+    background: none; border: 1px solid var(--line); cursor: pointer;
+    font-size: 0.78rem; font-weight: 600; color: var(--ink-soft);
+    padding: 6px 12px; border-radius: 999px;
+    display: inline-flex; align-items: center; gap: 5px;
+    font-family: inherit; transition: all 0.15s;
+  }
+  .btn-refresh:hover{ border-color: var(--leaf); color: var(--leaf); }
+
+  /* Timeline & Records */
+  .timeline-container{
+    padding: 4px 0 36px;
+  }
+  .timeline-day-group{
+    margin-bottom: 24px;
+  }
+  .day-heading{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .day-chevron svg{
+    display:block;
+    transition: transform 0.2s ease;
+    color: var(--leaf);
+  }
+  .timeline-day-group.is-collapsed .day-chevron svg{
+    transform: rotate(-90deg);
+  }
+  .timeline-day-group.is-collapsed .timeline{
+    display: none;
+  }
+  .day-date{
+    font-size: 0.86rem;
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: 0.01em;
+  }
+  .day-badge{
+    background: var(--moss-tint);
+    color: var(--moss);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 999px;
+  }
+  .day-line{
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* Timeline cards */
+  .timeline{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .timeline-entry{
+    display: flex;
+    flex-direction: column;
+  }
+  .timeline-card{
+    background: #ffffff;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(35, 42, 28, 0.10);
+    box-shadow: 0 2px 8px -2px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: all 0.2s ease;
+  }
+  .timeline-card:hover{
+    border-color: rgba(63, 107, 63, 0.35);
+    box-shadow: 0 4px 14px -3px rgba(0,0,0,0.08);
+  }
+
+  .card-top{
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(35, 42, 28, 0.06);
+  }
+  .title-row{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .icon-badge{
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .timeline-entry.spray .icon-badge{ background: var(--rust-tint); color: var(--rust); }
+  .timeline-entry.fertilize .icon-badge{ background: var(--ochre-tint); color: var(--ochre); }
+  .timeline-entry.purchase .icon-badge{ background: var(--moss-tint); color: var(--moss); }
+  .timeline-entry.harvest .icon-badge{ background: var(--sky-tint); color: var(--sky); }
+  .timeline-entry.sale .icon-badge{ background: #D1FAE5; color: #059669; }
+  .timeline-entry.waste .icon-badge{ background: #F1F5F9; color: #475569; }
+  .timeline-entry.general .icon-badge{ background: #EDE9FE; color: #6D28D9; }
+
+  .activity-name{
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .time-loc{
+    font-size: 0.74rem;
+    color: var(--ink-soft);
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .time-val{
+    font-weight: 700;
+    color: var(--leaf);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .card-top-right{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tag-iso{
+    background: #FFF1EE;
+    color: #C0392B;
+    border: 1px solid rgba(192, 57, 43, 0.2);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .card-chevron svg{
+    transition: transform 0.2s;
+    color: var(--ink-soft);
+  }
+  .timeline-card.is-collapsed .card-chevron svg{
+    transform: rotate(-90deg);
+  }
+  .timeline-card.is-collapsed .card-body{
+    display: none;
+  }
+
+  .card-body{
+    padding: 14px 16px;
+    background: #FAFAF7;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Grid chi tiết trích xuất */
+  .detail-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px 14px;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 12px 14px;
+    border: 1px solid rgba(35, 42, 28, 0.08);
+  }
+  .detail-field{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .detail-field-label{
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+  }
+  .detail-field-val{
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* Khối audio và STT */
+  .stt-voice-wrap{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 12px 14px;
+    border: 1px solid rgba(35, 42, 28, 0.08);
+  }
+  .stt-quote-box{
+    font-size: 0.84rem;
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.45;
+    border-left: 3px solid var(--leaf);
+    padding-left: 10px;
+  }
+  .audio-player-row{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .audio-player-row audio{
+    height: 32px;
+    width: 100%;
+    max-width: 380px;
+  }
+
+  .footer-simple{
+    text-align: center;
+    padding: 24px 14px 40px;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+  }
+
+  .empty-state{
+    text-align: center;
+    padding: 40px 16px;
+    background: #ffffff;
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--line);
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header Cổng Quản Lý -->
+  <div class="header">
+    <div class="header-top">
+      <div class="brand-wrap">
+        <span class="app-name">nông<em>ký</em></span>
+        <span class="badge-portal">QUẢN LÝ DỮ LIỆU</span>
+      </div>
+      <div class="header-actions">
+        <a href="/nongky" class="btn-nav-header" title="Về trang ghi chép của nông dân">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Ghi chép</span>
+        </a>
+        <a href="/nhat-ky" class="btn-nav-header" title="Xem Sổ nhật ký canh tác">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>Sổ nhật ký</span>
+        </a>
+        <div class="export-dropdown-wrapper" style="position:relative; display:inline-block;">
+          <button id="btnExportMenuMgr" class="btn-nav-header" style="background:#2e7d32; color:#fff; cursor:pointer;" onclick="var m=document.getElementById('exportMenuDropdownMgr'); m.style.display=(m.style.display==='none'?'block':'none'); event.stopPropagation();">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Xuất báo cáo ▾</span>
+          </button>
+          <div id="exportMenuDropdownMgr" style="display:none; position:absolute; right:0; top:115%; background:#1a3122; border:1px solid #3d6349; border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.5); z-index:9999; min-width:270px; padding:6px; font-size:0.8rem; text-align:left;">
+            <div style="padding:6px 8px; font-size:0.7rem; font-weight:700; color:#a5d6a7; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:4px;">
+              MẪU 1: NHẬT KÝ VƯỜN CÀ GAI
+            </div>
+            <a href="/api/export/excel" style="display:flex; align-items:center; gap:8px; padding:6px 8px; color:#e8f5e9; text-decoration:none; border-radius:4px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='none'">
+              <span style="background:#2e7d32; color:#fff; font-size:0.65rem; font-weight:700; padding:1px 5px; border-radius:3px;">XLSX</span>
+              <span>Xuất file Excel (.xlsx)</span>
+            </a>
+            <a href="/api/export/docx" style="display:flex; align-items:center; gap:8px; padding:6px 8px; color:#e8f5e9; text-decoration:none; border-radius:4px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='none'">
+              <span style="background:#1565c0; color:#fff; font-size:0.65rem; font-weight:700; padding:1px 5px; border-radius:3px;">DOCX</span>
+              <span>Xuất file Word (.docx)</span>
+            </a>
+            <a href="/api/export/pdf" style="display:flex; align-items:center; gap:8px; padding:6px 8px; color:#e8f5e9; text-decoration:none; border-radius:4px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='none'">
+              <span style="background:#c62828; color:#fff; font-size:0.65rem; font-weight:700; padding:1px 5px; border-radius:3px;">PDF</span>
+              <span>Xuất file PDF (.pdf)</span>
+            </a>
+
+            <div style="padding:8px 8px 4px; font-size:0.7rem; font-weight:700; color:#a5d6a7; border-top:1px solid rgba(255,255,255,0.1); border-bottom:1px solid rgba(255,255,255,0.1); margin:4px 0;">
+              MẪU 2: CÁC BẢNG THEO VIETGAP.PDF (1.5, 1.6, 1.7, 1.8)
+            </div>
+            <a href="/api/export/excel?template=vietgap" style="display:flex; align-items:center; gap:8px; padding:6px 8px; color:#e8f5e9; text-decoration:none; border-radius:4px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='none'">
+              <span style="background:#2e7d32; color:#fff; font-size:0.65rem; font-weight:700; padding:1px 5px; border-radius:3px;">XLSX</span>
+              <span>Bảng VietGAP Excel (.xlsx)</span>
+            </a>
+            <a href="/api/export/docx?template=vietgap" style="display:flex; align-items:center; gap:8px; padding:6px 8px; color:#e8f5e9; text-decoration:none; border-radius:4px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='none'">
+              <span style="background:#1565c0; color:#fff; font-size:0.65rem; font-weight:700; padding:1px 5px; border-radius:3px;">DOCX</span>
+              <span>Bảng VietGAP Word (.docx)</span>
+            </a>
+            <a href="/api/export/pdf?template=vietgap" style="display:flex; align-items:center; gap:8px; padding:6px 8px; color:#e8f5e9; text-decoration:none; border-radius:4px;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='none'">
+              <span style="background:#c62828; color:#fff; font-size:0.65rem; font-weight:700; padding:1px 5px; border-radius:3px;">PDF</span>
+              <span>Bảng VietGAP PDF (.pdf)</span>
+            </a>
+          </div>
+        </div>
+        <script>
+          window.addEventListener('click', function(e) {
+            var m = document.getElementById('exportMenuDropdownMgr');
+            if (m && m.style.display === 'block' && !e.target.closest('.export-dropdown-wrapper')) {
+              m.style.display = 'none';
+            }
+          });
+        </script>
+        <a href="/logout" class="btn-nav-header" title="Đăng xuất">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Thoát</span>
+        </a>
+      </div>
+    </div>
+
+    {% if farmer %}
+    <div class="user-bar">
+      <span class="user-greeting">Tài khoản: <b>{{ farmer.full_name }}</b> ({{ farmer.username }})</span>
+      <span class="user-role">{{ farmer.role }}</span>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Thông tin Nông trại & Hợp tác xã -->
+  <!-- Thông tin Nông trại & Hợp tác xã (Dạng mở rộng) -->
+  <div class="farmer-card" id="farmerCard">
+    <div class="farmer-top" onclick="toggleFarmerAccordion(event)" title="Chạm để mở rộng / thu gọn chi tiết HTX">
+      <div class="avatar">HTX</div>
+      <div class="farmer-meta">
+        <div class="farmer-name">{% if farmer and farmer.farm_name %}{{ farmer.farm_name }}{% else %}HỢP TÁC XÃ ĐẠI ĐỒNG{% endif %}</div>
+        <div class="farmer-address">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>{% if farmer and farmer.farm_address %}{{ farmer.farm_address }}{% else %}Xóm Độc Lập - Xã Thịnh Minh - Tỉnh Phú Thọ{% endif %}</span>
+        </div>
+      </div>
+      <div class="farmer-chevron" id="farmerChevron">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+
+    <div class="farmer-tags">
+      <span class="tag puc">Mã vùng trồng: {{ farmer.farm_code if farmer and farmer.farm_code else 'VN-HBOR-0033' }}</span>
+      <span class="tag area">Quy mô: {{ farmer.area_text if farmer and farmer.area_text else '07 HA' }}</span>
+      <span class="tag crop">Cây trồng: {{ farmer.crop_name if farmer and farmer.crop_name else 'Cà gai leo' }}</span>
+      <span class="tag" style="background:#EBF8FF; color:#2B6CB0; font-weight:700;">Tiêu chuẩn: {{ farmer.certification_body if farmer and farmer.certification_body else 'VietGAP Trồng trọt' }}</span>
+    </div>
+
+    <!-- Chi tiết thông tin Hợp tác xã & Vùng trồng dạng mở rộng -->
+    <div class="farmer-expand-body" id="farmerExpandBody">
+      <div class="puc-grid">
+        <div class="puc-item">
+          <div class="puc-label">Mã số vùng trồng (P.U.C)</div>
+          <div class="puc-val hl">{{ farmer.farm_code if farmer and farmer.farm_code else 'VN-HBOR-0033' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Quy mô diện tích</div>
+          <div class="puc-val">{{ farmer.area_text if farmer and farmer.area_text else '07 HA (70.000 m²)' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Giống cây trồng</div>
+          <div class="puc-val">{{ farmer.crop_name if farmer and farmer.crop_name else 'Cà gai leo' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Tiêu chuẩn canh tác</div>
+          <div class="puc-val hl">{{ farmer.certification_body if farmer and farmer.certification_body else 'VietGAP Trồng trọt' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Thời vụ xuống giống</div>
+          <div class="puc-val">{{ farmer.plant_date if farmer and farmer.plant_date else 'Tháng 04/2025' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Thời vụ thu hoạch</div>
+          <div class="puc-val">{{ farmer.harvest_date if farmer and farmer.harvest_date else 'Tháng 10/2025' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Giai đoạn mùa vụ</div>
+          <div class="puc-val hl" id="pucGrowthStageManager">{{ farmer.growth_stage if farmer and farmer.growth_stage else 'Sinh trưởng' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Sản lượng dự kiến</div>
+          <div class="puc-val">{{ farmer.estimated_yield if farmer and farmer.estimated_yield else '100 tấn/năm' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Sản lượng thực tế</div>
+          <div class="puc-val">{{ farmer.actual_yield if farmer and farmer.actual_yield else '84 tấn/năm' }}</div>
+        </div>
+        <div class="puc-item full">
+          <div class="puc-label">Cơ sở / Đối tác tiêu thụ</div>
+          <div class="puc-val">{{ farmer.target_market if farmer and farmer.target_market else 'Các doanh nghiệp chế biến dược liệu, thương lái trong nước' }}</div>
+        </div>
+        <div class="puc-item full">
+          <div class="puc-label">Lô canh tác</div>
+          <div class="puc-val" style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <div style="display:flex; align-items:center; gap:8px; min-width:0; flex:1; flex-wrap:wrap;">
+              <span id="locPlotNameManager" style="font-weight:700; color:var(--ink);">Lô 1 — Vườn Cà gai leo Trung tâm</span>
+              <span id="locPlotBadgeManager" style="font-size:0.72rem; color:var(--leaf); font-weight:700; background:rgba(63,107,63,0.12); border:1px solid rgba(63,107,63,0.25); border-radius:6px; padding:2px 7px; display:inline-flex; align-items:center; gap:4px;">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span id="locPlotBadgeTextManager">Đang định vị…</span>
+              </span>
+            </div>
+            <button class="loc-btn" id="locBtnManager" type="button" onclick="locateGPS(event)" style="font-family:inherit; font-size:0.74rem; font-weight:700; color:var(--leaf); background:rgba(63,107,63,0.08); border:1px solid rgba(63,107,63,0.3); padding:3px 9px; border-radius:6px; cursor:pointer;">Định vị GPS</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nút mở rộng / thu gọn -->
+    <button type="button" class="btn-toggle-farmer" id="btnToggleFarmer" onclick="toggleFarmerAccordion(event)">
+      <span id="btnToggleFarmerText">Xem chi tiết Hợp tác xã & Vùng trồng</span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+  </div>
+
+  <!-- Thống kê KPI -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Tổng hoạt động</div>
+      <div class="kpi-value" id="kpiTotal">0</div>
+    </div>
+    <div class="kpi-card spray">
+      <div class="kpi-label">Phun thuốc BVTV</div>
+      <div class="kpi-value" id="kpiSpray">0</div>
+    </div>
+    <div class="kpi-card fert">
+      <div class="kpi-label">Bón phân</div>
+      <div class="kpi-value" id="kpiFert">0</div>
+    </div>
+    <div class="kpi-card harvest">
+      <div class="kpi-label">Thu hoạch</div>
+      <div class="kpi-value" id="kpiHarvest">0</div>
+    </div>
+    <div class="kpi-card sale">
+      <div class="kpi-label">Tiêu thụ / Bán</div>
+      <div class="kpi-value" id="kpiSale">0</div>
+    </div>
+  </div>
+
+  <!-- Khu vực theo dõi nhật ký dữ liệu trích xuất -->
+  <div class="section">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Nhật ký dữ liệu trích xuất</h2>
+        <div class="section-subtitle">Dữ liệu bóc tách tự động từ giọng nói & ghi chép của nông hộ</div>
+      </div>
+      <div>
+        <button class="btn-refresh" id="refreshBtn" title="Tải lại dữ liệu">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          <span>Làm mới</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Toolbar chọn loại bảng theo đúng format ứng dụng -->
+    <div class="timeline-toolbar">
+      <div class="timeline-select-group">
+        <div class="timeline-select-wrapper">
+          <select id="timelineFilterSelect" class="timeline-filter-select" aria-label="Chọn loại bảng">
+            <option value="all" selected>Tất cả</option>
+            <option value="spray">Phun thuốc BVTV</option>
+            <option value="fertilize">Bón phân</option>
+            <option value="purchase">Mua vật tư nông nghiệp</option>
+            <option value="harvest">Thu hoạch nông sản</option>
+            <option value="sale">Tiêu thụ nông sản</option>
+            <option value="waste">Xử lý bao bì, rác thải</option>
+            <option value="general">Công việc canh tác khác</option>
+          </select>
+          <div class="select-chevron-icon">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tìm kiếm theo từ khóa trích xuất cho người quản lý -->
+      <div class="manager-search-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="managerSearchInput" class="manager-search-input" placeholder="Tìm theo tên vật tư, thuốc, phân, thương lái, người làm...">
+      </div>
+    </div>
+
+    <!-- Khung hiển thị danh sách dòng thời gian dữ liệu trích xuất -->
+    <div class="timeline-container" id="managerTimelineContainer"></div>
+  </div>
+
+  <div class="footer-simple">Nông ký điện tử VietGAP — Cổng quản lý & Giám sát dữ liệu sản xuất</div>
+
+</div>
+
+<script>
+let allManagerRecords = [];
+let currentFilterType = 'all';
+
+// Icon SVG Lucide chuẩn theo loại hoạt động
+const ICONS = {
+  spray: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>`,
+  fertilize: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-13"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>`,
+  purchase: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>`,
+  harvest: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 2 2 4-4"/><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/><path d="m7.5 4.27 9 5.15"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" y1="12" x2="12" y2="22"/></svg>`,
+  sale: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><line x1="12" x2="12" y1="8" y2="16"/><path d="M14.5 10.5c-.83-.83-2.17-.83-3 0s-.83 2.17 0 3c.83.83 2.17.83 3 0"/></svg>`,
+  waste: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/><path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/><path d="m14 16-3 3 3 3"/><path d="M8.293 13.596 5.5 9.5 9.707 3.29a1.83 1.83 0 0 1 1.557-.89h.036c.642 0 1.228.339 1.556.89l3.076 5.32"/><path d="m17.5 8 3 3-3 3"/></svg>`,
+  general: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>`
+};
+
+// Định danh metadata và tên loại hoạt động
+function getMeta(tableKey, row) {
+  const t = (tableKey || '').toLowerCase();
+  const act = (row.activity_type || '').toUpperCase();
+
+  if (t.includes('spray') || t.includes('pesticide') || act === 'PESTICIDE' || row.ten_thuoc_bvtv) {
+    return {
+      type: 'spray',
+      title: 'Phun thuốc BVTV',
+      icon: ICONS.spray,
+      detail: row.ten_thuoc_bvtv || row.pesticide_name || 'Thuốc BVTV'
+    };
+  }
+  if (t.includes('fertiliz') || act === 'FERTILIZER' || row.ten_phan_bon) {
+    return {
+      type: 'fertilize',
+      title: 'Bón phân',
+      icon: ICONS.fertilize,
+      detail: row.ten_phan_bon || row.fertilizer_name || 'Phân bón'
+    };
+  }
+  if (t.includes('purchase') || row.ten_vat_tu) {
+    return {
+      type: 'purchase',
+      title: 'Mua vật tư nông nghiệp',
+      icon: ICONS.purchase,
+      detail: row.ten_vat_tu || row.material_name || 'Vật tư'
+    };
+  }
+  if (t.includes('harvest') || act === 'HARVEST' || row.san_luong_thu_hoach) {
+    return {
+      type: 'harvest',
+      title: 'Thu hoạch nông sản',
+      icon: ICONS.harvest,
+      detail: `${row.san_luong_thu_hoach || row.quantity || ''} ${row.unit || ''}`.trim() || 'Thu hoạch'
+    };
+  }
+  if (t.includes('sale') || row.khoi_luong_tieu_thu) {
+    return {
+      type: 'sale',
+      title: 'Tiêu thụ nông sản',
+      icon: ICONS.sale,
+      detail: row.co_so_thu_mua || row.buyer_name || 'Thương lái thu mua'
+    };
+  }
+  if (t.includes('waste')) {
+    return {
+      type: 'waste',
+      title: 'Xử lý bao bì, rác thải',
+      icon: ICONS.waste,
+      detail: row.waste_type || row.loai_bao_bi || 'Bao bì thuốc'
+    };
+  }
+  return {
+    type: 'general',
+    title: 'Công việc canh tác khác',
+    icon: ICONS.general,
+    detail: row.cong_viec || row.task_name || row.description || 'Chăm sóc vườn'
+  };
+}
+
+// Trích xuất các thuộc tính chi tiết từ row
+function getFields(type, row) {
+  const fields = [];
+  const add = (label, val) => {
+    if (val && val !== '—' && val !== 'null' && val !== 'None') {
+      fields.push({ label, val: String(val) });
+    }
+  };
+
+  if (type === 'spray') {
+    add('Tên thuốc BVTV', row.ten_thuoc_bvtv || row.pesticide_name);
+    add('Đối tượng sâu bệnh', row.target_pest || row.sinh_vat_gay_hai);
+    add('Nồng độ & liều lượng', row.nong_do_va_luong_dung || (row.dose_quantity ? `${row.dose_quantity} ${row.dose_unit || ''}` : ''));
+    add('Phương pháp phun', row.application_method || row.phuong_phap_bon);
+    add('Thời gian cách ly', row.thoi_gian_cach_ly ? `${row.thoi_gian_cach_ly} ngày` : (row.isolation_days ? `${row.isolation_days} ngày` : ''));
+    add('Ngày thu an toàn', row.safe_harvest_date);
+    add('Đại lý cung cấp', row.supplier_name);
+  } else if (type === 'fertilize') {
+    add('Tên phân bón', row.ten_phan_bon || row.fertilizer_name);
+    add('Lượng bón', row.luong_phan_bon || (row.quantity ? `${row.quantity} ${row.unit || ''}` : ''));
+    add('Cách bón', row.application_method || row.phuong_phap_bon);
+    add('Giai đoạn sinh trưởng', row.growth_stage);
+    add('Nơi mua', row.supplier_name);
+  } else if (type === 'purchase') {
+    add('Tên vật tư', row.ten_vat_tu || row.material_name);
+    add('Loại vật tư', row.material_type || row.item_type);
+    add('Số lượng mua', row.so_luong_vat_tu || (row.quantity ? `${row.quantity} ${row.unit || ''}` : ''));
+    add('Nơi cung cấp', row.noi_cung_cap || row.supplier_name);
+    add('Hạn sử dụng', row.han_su_dung || row.expiry_date);
+  } else if (type === 'harvest') {
+    add('Loại nông sản', row.crop_name || 'Cà gai leo');
+    add('Sản lượng thu hoạch', row.san_luong_thu_hoach || (row.quantity ? `${row.quantity} ${row.unit || ''}` : ''));
+    add('Địa điểm & cách sơ chế', row.dia_diem_cach_so_che || row.processing_location);
+    add('Người thu hái', row.harvester_name || row.performed_by);
+  } else if (type === 'sale') {
+    add('Nơi thu mua / Thương lái', row.co_so_thu_mua || row.buyer_name);
+    add('Khối lượng xuất bán', row.khoi_luong_tieu_thu || (row.quantity ? `${row.quantity} ${row.unit || ''}` : ''));
+    add('Đơn giá', row.unit_price ? `${Number(row.unit_price).toLocaleString('vi-VN')} đ` : '');
+    add('Thành tiền', row.total_amount ? `${Number(row.total_amount).toLocaleString('vi-VN')} đ` : '');
+  } else if (type === 'waste') {
+    add('Loại rác / bao bì', row.waste_type || row.loai_bao_bi);
+    add('Nơi lưu trữ', row.storage_location || row.noi_ton_tru);
+    add('Cách xử lý', row.treatment_method || row.cach_xu_ly);
+  } else {
+    add('Nội dung công việc', row.cong_viec || row.task_name || row.description);
+    add('Giai đoạn sinh trưởng', row.growth_stage);
+    add('Sinh vật gây hại', row.sinh_vat_gay_hai || row.target_pest);
+  }
+
+  add('Người thực hiện', row.performed_by);
+  add('Thời tiết', row.weather_condition);
+  add('Ghi chú', row.note);
+
+  return fields;
+}
+
+// Tải dữ liệu từ API
+async function loadManagerData() {
+  const container = document.getElementById('managerTimelineContainer');
+  container.innerHTML = `
+    <div style="text-align:center; padding:30px 16px; color:var(--ink-soft);">
+      <div style="display:inline-block; width:24px; height:24px; border:3px solid var(--line); border-top-color:var(--leaf); border-radius:50%; animation:spin 0.8s linear infinite;"></div>
+      <div style="margin-top:8px; font-weight:600;">Đang tải dữ liệu trích xuất VietGAP...</div>
+    </div>
+  `;
+
+  try {
+    const res = await fetch('/api/logs?limit=300');
+    const data = await res.json();
+    const tables = data.tables || {};
+    const flatLogs = data.logs || [];
+
+    const targetTables = [
+      'b1_5_material_purchases',
+      'b1_6_material_usages',
+      'b1_7_waste_treatments',
+      'b1_8_harvests',
+      'b1_9_sales',
+      'cultivation_diaries'
+    ];
+
+    let combined = [];
+    const seen = new Set();
+
+    targetTables.forEach(tKey => {
+      const list = tables[tKey];
+      if (Array.isArray(list)) {
+        list.forEach(item => {
+          const uKey = `${tKey}_${item.id || item.purchase_id || item.activity_id || Math.random()}`;
+          if (!seen.has(uKey)) {
+            seen.add(uKey);
+            combined.push({ ...item, _tableKey: tKey });
+          }
+        });
+      }
+    });
+
+    if (combined.length === 0 && Array.isArray(flatLogs) && flatLogs.length > 0) {
+      combined = flatLogs.map(item => ({ ...item, _tableKey: item.table || 'b1_6_material_usages' }));
+    }
+
+    allManagerRecords = combined;
+    updateKpis();
+    renderManagerTimeline();
+  } catch (err) {
+    console.error('Lỗi tải dữ liệu quản lý:', err);
+    container.innerHTML = `
+      <div class="empty-state">
+        <div style="color:#e53e3e; font-weight:700; margin-bottom:6px;">Không thể tải dữ liệu từ CSDL</div>
+        <div style="font-size:0.84rem; color:var(--ink-soft);">Vui lòng kiểm tra kết nối mạng hoặc làm mới trang.</div>
+      </div>
+    `;
+  }
+}
+
+// Cập nhật thẻ KPI
+function updateKpis() {
+  let sprayCount = 0;
+  let fertCount = 0;
+  let harvestCount = 0;
+  let saleCount = 0;
+
+  allManagerRecords.forEach(r => {
+    const meta = getMeta(r._tableKey, r);
+    if (meta.type === 'spray') sprayCount++;
+    else if (meta.type === 'fertilize') fertCount++;
+    else if (meta.type === 'harvest') harvestCount++;
+    else if (meta.type === 'sale') saleCount++;
+  });
+
+  document.getElementById('kpiTotal').textContent = allManagerRecords.length;
+  document.getElementById('kpiSpray').textContent = sprayCount;
+  document.getElementById('kpiFert').textContent = fertCount;
+  document.getElementById('kpiHarvest').textContent = harvestCount;
+  document.getElementById('kpiSale').textContent = saleCount;
+}
+
+// Render timeline
+function renderManagerTimeline() {
+  const container = document.getElementById('managerTimelineContainer');
+  if (!container) return;
+
+  const searchInput = document.getElementById('managerSearchInput');
+  const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+  // Sắp xếp ngày mới nhất lên đầu
+  const sorted = [...allManagerRecords].sort((a, b) => {
+    const dateA = a.purchase_date || a.activity_date || a.treatment_date || a.harvest_date || a.ngay_thuc_hien || (a.created_at ? a.created_at.slice(0, 10) : '');
+    const dateB = b.purchase_date || b.activity_date || b.treatment_date || b.harvest_date || b.ngay_thuc_hien || (b.created_at ? b.created_at.slice(0, 10) : '');
+    if (dateA !== dateB) return String(dateB).localeCompare(String(dateA));
+    return String(b.created_at || '').localeCompare(String(a.created_at || ''));
+  });
+
+  // Nhóm theo ngày
+  const dayGroups = [];
+  const dayMap = new Map();
+  sorted.forEach(row => {
+    const dateKey = row.purchase_date || row.activity_date || row.treatment_date || row.harvest_date || row.ngay_thuc_hien || (row.created_at ? row.created_at.slice(0, 10) : 'Gần đây');
+    if (!dayMap.has(dateKey)) {
+      dayMap.set(dateKey, []);
+      dayGroups.push({ dateKey, records: dayMap.get(dateKey) });
+    }
+    dayMap.get(dateKey).push(row);
+  });
+
+  if (dayGroups.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div style="font-weight:700; color:var(--ink); font-size:0.95rem;">Chưa có dữ liệu nhật ký trích xuất</div>
+        <div style="font-size:0.8rem; color:var(--ink-soft); margin-top:4px;">Khi nông hộ ghi âm hoặc nhập dữ liệu, các bản ghi sẽ xuất hiện tự động tại đây.</div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = '';
+  let totalVisible = 0;
+
+  dayGroups.forEach(group => {
+    const groupEl = document.createElement('div');
+    groupEl.className = 'timeline-day-group';
+
+    const headingEl = document.createElement('div');
+    headingEl.className = 'day-heading';
+    headingEl.onclick = () => groupEl.classList.toggle('is-collapsed');
+    headingEl.innerHTML = `
+      <span class="day-chevron">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </span>
+      <span class="day-date">${group.dateKey}</span>
+      <span class="day-badge">${group.records.length}</span>
+      <span class="day-line"></span>
+    `;
+    groupEl.appendChild(headingEl);
+
+    const timelineEl = document.createElement('div');
+    timelineEl.className = 'timeline';
+
+    let visibleInDay = 0;
+
+    group.records.forEach(row => {
+      const meta = getMeta(row._tableKey, row);
+      const fields = getFields(meta.type, row);
+      const rawText = row.raw_text || row.stt_text || '';
+      const audioUrl = row.audio_url || '';
+
+      // Kiểm tra bộ lọc loại bảng
+      const matchesFilter = (currentFilterType === 'all') || (meta.type === currentFilterType);
+
+      // Kiểm tra tìm kiếm từ khóa
+      const rowText = `${meta.title} ${meta.detail} ${rawText} ${fields.map(f => f.val).join(' ')} ${row.performed_by || ''}`.toLowerCase();
+      const matchesQuery = !query || rowText.includes(query);
+
+      if (!matchesFilter || !matchesQuery) return;
+
+      visibleInDay++;
+      totalVisible++;
+
+      const entryEl = document.createElement('div');
+      entryEl.className = `timeline-entry ${meta.type}`;
+
+      // Giờ thực hiện
+      let timeStr = '';
+      if (row.created_at && row.created_at.length >= 16) {
+        timeStr = row.created_at.slice(11, 16);
+      } else if (row.activity_time) {
+        timeStr = row.activity_time.slice(0, 5);
+      }
+
+      // Tag cách ly nếu có
+      let tagIsoHtml = '';
+      if (row.thoi_gian_cach_ly || row.isolation_days) {
+        const d = row.thoi_gian_cach_ly || row.isolation_days;
+        tagIsoHtml = `<span class="tag-iso">Cách ly: ${d} ngày</span>`;
+      }
+
+      entryEl.innerHTML = `
+        <div class="timeline-card">
+          <div class="card-top" onclick="this.parentElement.classList.toggle('is-collapsed')">
+            <div class="title-row">
+              <div class="icon-badge">${meta.icon}</div>
+              <div>
+                <div class="activity-name">${meta.title} · <span style="font-weight:500; color:var(--ink-soft);">${meta.detail}</span></div>
+                <div class="time-loc">
+                  ${timeStr ? `<span class="time-val">${timeStr}</span> · ` : ''}
+                  <span>Lô A1 - Vườn Phú Thọ</span>
+                  ${row.performed_by ? ` · <span style="font-weight:600; color:var(--ink);">${row.performed_by}</span>` : ''}
+                </div>
+              </div>
+            </div>
+            <div class="card-top-right">
+              ${tagIsoHtml}
+              <span class="card-chevron">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </div>
+          </div>
+
+          <div class="card-body">
+            <!-- Grid thuộc tính trích xuất chi tiết -->
+            <div class="detail-grid">
+              ${fields.map(f => `
+                <div class="detail-field">
+                  <span class="detail-field-label">${f.label}</span>
+                  <span class="detail-field-val">${f.val}</span>
+                </div>
+              `).join('')}
+            </div>
+
+            <!-- Câu nói gốc STT & Trình phát âm thanh -->
+            ${(rawText || audioUrl) ? `
+              <div class="stt-voice-wrap">
+                ${rawText ? `
+                  <div class="stt-quote-box">“${rawText}”</div>
+                ` : ''}
+                ${audioUrl ? `
+                  <div class="audio-player-row">
+                    <span style="font-size:0.75rem; font-weight:700; color:var(--ink-soft);">Âm thanh gốc:</span>
+                    <audio controls preload="none" src="${audioUrl}"></audio>
+                  </div>
+                ` : ''}
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+
+      timelineEl.appendChild(entryEl);
+    });
+
+    if (visibleInDay > 0) {
+      groupEl.appendChild(timelineEl);
+      container.appendChild(groupEl);
+    }
+  });
+
+  if (totalVisible === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div style="font-weight:700; color:var(--ink); font-size:0.95rem;">Không tìm thấy hoạt động nào phù hợp</div>
+        <div style="font-size:0.8rem; color:var(--ink-soft); margin-top:4px;">Thử thay đổi bộ lọc loại bảng hoặc từ khóa tìm kiếm.</div>
+      </div>
+    `;
+  }
+}
+
+// Sự kiện bộ lọc loại bảng
+const filterSelect = document.getElementById('timelineFilterSelect');
+if (filterSelect) {
+  filterSelect.addEventListener('change', (e) => {
+    currentFilterType = e.target.value || 'all';
+    renderManagerTimeline();
+  });
+}
+
+// Sự kiện tìm kiếm từ khóa
+const searchInput = document.getElementById('managerSearchInput');
+if (searchInput) {
+  searchInput.addEventListener('input', renderManagerTimeline);
+}
+
+// Nút làm mới dữ liệu
+const refreshBtn = document.getElementById('refreshBtn');
+if (refreshBtn) {
+  refreshBtn.addEventListener('click', loadManagerData);
+}
+
+// Toggle mở rộng / thu gọn thông tin HTX & Vùng trồng
+function toggleFarmerAccordion(e) {
+  if (e && (e.target.closest('.loc-btn') || e.target.closest('a'))) return;
+  const card = document.getElementById('farmerCard') || document.querySelector('.farmer-card');
+  if (!card) return;
+  card.classList.toggle('is-expanded');
+  const isExp = card.classList.contains('is-expanded');
+  const textEl = document.getElementById('btnToggleFarmerText');
+  if (textEl) {
+    textEl.textContent = isExp ? 'Thu gọn thông tin Hợp tác xã' : 'Xem chi tiết Hợp tác xã & Vùng trồng';
+  }
+}
+
+const DEFAULT_PLOTS_MANAGER = [
+  { plot_id: 1, name: 'Lô 1 — Vườn Cà gai leo Trung tâm', plot_code: 'VN-HBOR-0033-L01', latitude: 20.86552, longitude: 105.32895 },
+  { plot_id: 2, name: 'Lô 2 — Vườn Cà gai leo Bãi Sông Đà', plot_code: 'VN-HBOR-0033-L02', latitude: 20.86815, longitude: 105.33210 },
+  { plot_id: 3, name: 'Lô 3 — Vườn Dược liệu Đồi Cao', plot_code: 'VN-HBOR-0033-L03', latitude: 20.86310, longitude: 105.32540 }
+];
+let farmPlotsManager = DEFAULT_PLOTS_MANAGER;
+
+fetch('/api/plots')
+  .then(r => r.json())
+  .then(d => { if (d && d.status === 'success' && Array.isArray(d.data) && d.data.length > 0) farmPlotsManager = d.data; })
+  .catch(() => {});
+
+function calcHaversineDistanceManager(lat1, lon1, lat2, lon2) {
+  const R = 6371000;
+  const phi1 = lat1 * Math.PI / 180;
+  const phi2 = lat2 * Math.PI / 180;
+  const deltaPhi = (lat2 - lat1) * Math.PI / 180;
+  const deltaLambda = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+            Math.cos(phi1) * Math.cos(phi2) *
+            Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+function locateGPS(e, isManual = true) {
+  if (e) e.stopPropagation();
+  const nameEl = document.getElementById('locPlotNameManager');
+  const badgeEl = document.getElementById('locPlotBadgeTextManager');
+  const btnEl = document.getElementById('locBtnManager');
+
+  // Nếu không phải người dùng bấm chủ động và đã có vị trí lưu trong browser -> Dùng ngay, không gọi lại GPS
+  if (!isManual) {
+    try {
+      const saved = JSON.parse(localStorage.getItem('nearest_plot') || 'null');
+      if (saved && saved.name) {
+        if (nameEl) {
+          nameEl.textContent = saved.name;
+          nameEl.title = `${saved.name} (${saved.plot_code || ''})`;
+        }
+        if (badgeEl) {
+          const distStr = saved.distStr || (saved.distance ? (saved.distance < 1000 ? `${Math.round(saved.distance)}m` : `${(saved.distance / 1000).toFixed(1)}km`) : '');
+          badgeEl.textContent = distStr ? `Gần nhất · cách ${distStr}` : 'Đã định vị';
+        }
+        if (btnEl) btnEl.textContent = 'Cập nhật';
+        return;
+      }
+    } catch (err) {
+      console.warn('Lỗi đọc nearest_plot từ localStorage:', err);
+    }
+  }
+
+  if (btnEl) btnEl.textContent = 'Đang định vị…';
+  if (badgeEl) badgeEl.textContent = 'Đang định vị…';
+
+  if (!navigator.geolocation) {
+    if (badgeEl) badgeEl.textContent = 'Lô mặc định';
+    if (btnEl) btnEl.textContent = 'Định vị GPS';
+    if (isManual) alert('Trình duyệt không hỗ trợ định vị GPS.');
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      let nearest = null;
+      let minDist = Infinity;
+
+      farmPlotsManager.forEach(p => {
+        if (p.latitude && p.longitude) {
+          const d = calcHaversineDistanceManager(lat, lng, parseFloat(p.latitude), parseFloat(p.longitude));
+          if (d < minDist) {
+            minDist = d;
+            nearest = { ...p, distance: d };
+          }
+        }
+      });
+
+      if (nearest) {
+        const distStr = minDist < 1000 ? `${Math.round(minDist)}m` : `${(minDist / 1000).toFixed(1)}km`;
+        nearest.distStr = distStr;
+        try { localStorage.setItem('nearest_plot', JSON.stringify(nearest)); } catch(err){}
+        if (nameEl) {
+          nameEl.textContent = nearest.name;
+          nameEl.title = `${nearest.name} (${nearest.plot_code || ''})`;
+        }
+        if (badgeEl) badgeEl.textContent = `Gần nhất · cách ${distStr}`;
+        if (btnEl) btnEl.textContent = 'Cập nhật';
+        if (isManual) {
+          alert(`Đã định vị thành công!\nLô gần bạn nhất: ${nearest.name}\nKhoảng cách: ${distStr}\nTọa độ GPS: ${lat.toFixed(5)}, ${lng.toFixed(5)}`);
+        }
+      }
+    },
+    (err) => {
+      console.warn('GPS error in manager:', err.message);
+      if (btnEl) btnEl.textContent = 'Định vị GPS';
+      if (badgeEl) badgeEl.textContent = 'Lô mặc định';
+      if (isManual) alert('Không thể lấy tọa độ GPS: ' + (err.message || 'Vui lòng kiểm tra quyền vị trí.'));
+    },
+    { enableHighAccuracy: true, timeout: 8000, maximumAge: 30000 }
+  );
+}
+
+// Tự động định vị khi vào trang quản lý
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => locateGPS(null, false));
+} else {
+  locateGPS(null, false);
+}
+
+// Tải dữ liệu ban đầu
+loadManagerData();
+</script>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+</body>
+</html>

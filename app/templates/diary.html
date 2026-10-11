@@ -1,0 +1,2282 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Sổ Nhật Ký Canh Tác VietGAP — HTX Đại Đồng</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page-bg:#141C15;
+    --paper:#FBF8EF;
+    --card:#FFFDF7;
+    --ink:#232A1C;
+    --ink-soft:#6E7862;
+    --ink-faint:#9BA38C;
+    --line: rgba(35,42,28,0.12);
+    --header:#1F3626;
+    --header-soft: rgba(246,241,226,0.75);
+    --leaf:#3F6B3F;
+    --leaf-bright:#5B8C4A;
+    --clay:#A6512E;
+    --gold:#B8830E;
+    --blue:#2B6CB0;
+    --moss: #4C5F3A;
+    --moss-deep: #33421F;
+    --moss-tint: #EEF0E4;
+    --ochre: #B5842A;
+    --ochre-tint: #FBF1DD;
+    --rust: #A9532F;
+    --rust-tint: #FBEAE1;
+    --sky: #3E6E7A;
+    --sky-tint: #E7F1F1;
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    font-size: 16px;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: var(--page-bg);
+    font-family:'Be Vietnam Pro', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    display:flex; justify-content:center;
+    min-height:100vh;
+  }
+
+  .app{
+    width:100%; max-width: 860px;
+    background: var(--paper);
+    min-height:100vh;
+    position:relative;
+    box-shadow: 0 0 60px rgba(0,0,0,0.5);
+    display:flex; flex-direction:column;
+  }
+
+  /* Header */
+  .header{
+    background: var(--header);
+    padding: 18px 20px 40px;
+    color: #F6F1E2;
+    position:relative;
+  }
+  .header-top{
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  }
+  .brand-wrap{
+    display:flex; align-items:center; gap:10px;
+  }
+  .app-name{ font-size:1.25rem; font-weight:800; letter-spacing:0.01em; }
+  .app-name em{ font-style:normal; color:#D6A339; }
+  .badge-portal{
+    background: rgba(91,140,74,0.25);
+    border: 1px solid rgba(163,230,155,0.4);
+    color: #A3E69B;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+
+  .header-actions{
+    display:flex; align-items:center; gap:8px;
+  }
+  .btn-nav-header{
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.22);
+    color: #F6F1E2;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .btn-nav-header:hover{ background: rgba(255,255,255,0.22); color:#fff; }
+  .btn-nav-header.primary{
+    background: #D6A339;
+    border-color: #D6A339;
+    color: #1F3626;
+    font-weight: 700;
+  }
+  .btn-nav-header.primary:hover{
+    background: #E5B44D;
+    color: #141C15;
+  }
+
+  .user-bar{
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    font-size: 0.78rem;
+    color: rgba(246,241,226,0.88);
+  }
+  .user-greeting b{ color: #D6A339; }
+  .user-role{
+    background: rgba(91,140,74,0.3);
+    border: 1px solid rgba(163,230,155,0.4);
+    color: #A3E69B;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  /* Farm Card (Dạng mở rộng) */
+  .farmer-card{
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    margin: -26px 16px 0;
+    padding: 16px 18px 12px;
+    box-shadow: 0 14px 30px -14px rgba(0,0,0,0.3);
+    position:relative;
+    z-index:2;
+    border: 1px solid rgba(35,42,28,0.06);
+    transition: all 0.25s ease;
+  }
+  .farmer-top{ display:flex; gap:14px; align-items:center; cursor:pointer; user-select:none; }
+  .avatar{
+    width:52px; height:52px; border-radius:14px;
+    background: linear-gradient(135deg, var(--leaf), var(--header));
+    color:#fff; font-weight:800; font-size:1.05rem;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; box-shadow: 0 4px 12px rgba(31,54,38,0.25);
+  }
+  .farmer-meta{ flex:1; min-width:0; }
+  .farmer-name{
+    font-weight:800; font-size:0.98rem; color:var(--ink);
+    line-height:1.35; margin-bottom: 3px;
+  }
+  .farmer-address{
+    font-size:0.8rem; color:var(--ink-soft); line-height:1.3;
+    display:flex; align-items:center; gap:4px;
+  }
+  .farmer-chevron {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: rgba(35,42,28,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--leaf);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+  .farmer-chevron:hover {
+    background: rgba(63,107,63,0.14);
+  }
+  .farmer-chevron svg {
+    transition: transform 0.25s ease;
+  }
+  .farmer-card.is-expanded .farmer-chevron svg {
+    transform: rotate(180deg);
+  }
+
+  .farmer-tags{
+    display:flex; gap:8px; flex-wrap:wrap;
+    margin-top: 11px;
+  }
+  .tag{
+    display:inline-flex; align-items:center; gap:4px;
+    padding: 4px 9px; border-radius: 999px;
+    font-size: 0.72rem; font-weight: 600;
+    background: rgba(35,42,28,0.06); color: var(--ink-soft);
+  }
+  .tag.puc{ background: var(--moss-tint); color: var(--moss); font-weight:700; }
+  .tag.crop{ background: var(--ochre-tint); color: var(--ochre); font-weight:700; }
+
+  /* Plantation / HTX Details Expandable Body */
+  .farmer-expand-body{
+    display: none;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line);
+    animation: fadeInFarmer 0.2s ease;
+  }
+  .farmer-card.is-expanded .farmer-expand-body{
+    display: block;
+  }
+  @keyframes fadeInFarmer {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .puc-grid{
+    display:grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap:8px;
+    font-size:0.78rem;
+  }
+  .puc-item{
+    background: #FAFAF8;
+    border-radius: var(--radius-sm);
+    padding: 7px 11px;
+    border: 1px solid rgba(35,42,28,0.06);
+  }
+  .puc-item.full{ grid-column: 1 / -1; }
+  .puc-label{ color:var(--ink-soft); font-size:0.7rem; font-weight:600; margin-bottom:2px; }
+  .puc-val{ color:var(--ink); font-weight:700; font-size:0.82rem; }
+  .puc-val.hl{ color:var(--leaf); }
+
+  .btn-toggle-farmer{
+    width: 100%;
+    margin-top: 10px;
+    padding: 7px 0 3px;
+    background: transparent;
+    border: none;
+    border-top: 1px dashed rgba(35,42,28,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--leaf);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s ease;
+  }
+  .btn-toggle-farmer:hover{
+    color: var(--header);
+    background: rgba(63,107,63,0.04);
+  }
+  .btn-toggle-farmer svg{
+    transition: transform 0.25s ease;
+  }
+  .farmer-card.is-expanded .btn-toggle-farmer svg{
+    transform: rotate(180deg);
+  }
+
+  /* Main Container */
+  .main-content{
+    padding: 20px 16px 80px;
+    flex: 1;
+  }
+
+  /* Section Title Bar */
+  .section-header{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom: 14px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .section-title{
+    font-size: 1.15rem; font-weight: 800; color: var(--ink); margin: 0;
+  }
+  .section-subtitle{
+    font-size: 0.76rem; color: var(--ink-soft); margin-top: 2px;
+  }
+  .btn-export-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: #2e7d32;
+    color: #ffffff;
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(46, 125, 50, 0.35);
+    transition: all 0.2s ease;
+  }
+  .btn-export-main:hover {
+    background: #256628;
+    box-shadow: 0 5px 16px rgba(46, 125, 50, 0.45);
+    transform: translateY(-1px);
+  }
+  .btn-export-main:active {
+    transform: translateY(0);
+  }
+
+  /* Toolbar */
+  .diary-toolbar{
+    display:flex; flex-direction:column; gap:10px;
+    margin-bottom: 16px;
+  }
+  .toolbar-row{
+    display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+  }
+
+  /* Select dropdown */
+  .timeline-select-wrapper {
+    position: relative;
+    display: inline-block;
+    flex: 1;
+    min-width: 200px;
+  }
+  .timeline-filter-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+    padding: 10px 38px 10px 14px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--ink);
+    background-color: #FFFFFF;
+    border: 1.5px solid rgba(63, 107, 63, 0.28);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    transition: all 0.18s ease;
+    outline: none;
+  }
+  .timeline-filter-select:hover {
+    border-color: var(--leaf);
+    box-shadow: 0 3px 8px rgba(63, 107, 63, 0.12);
+  }
+  .timeline-filter-select:focus {
+    border-color: var(--leaf);
+    box-shadow: 0 0 0 3px rgba(63, 107, 63, 0.18);
+  }
+  .select-chevron-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--leaf);
+  }
+
+  /* Search box */
+  .search-wrapper{
+    position:relative;
+    flex: 1;
+    min-width: 200px;
+  }
+  .search-input{
+    width: 100%;
+    padding: 10px 14px 10px 36px;
+    font-size: 0.86rem;
+    font-family: inherit;
+    color: var(--ink);
+    background-color: #FFFFFF;
+    border: 1.5px solid rgba(35, 42, 28, 0.16);
+    border-radius: var(--radius-md);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    outline: none;
+    transition: all 0.18s ease;
+  }
+  .search-input:focus{
+    border-color: var(--leaf);
+    box-shadow: 0 0 0 3px rgba(63, 107, 63, 0.15);
+  }
+  .search-icon{
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+  }
+
+  .btn-refresh{
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px;
+    background: #FFFFFF;
+    border: 1.5px solid rgba(35, 42, 28, 0.16);
+    border-radius: var(--radius-md);
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .btn-refresh:hover{
+    border-color: var(--leaf);
+    color: var(--leaf);
+    box-shadow: 0 2px 8px rgba(63, 107, 63, 0.15);
+  }
+
+  /* Controls Accordion Toolbar */
+  .timeline-accordion-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(35, 42, 28, 0.04);
+    border-radius: var(--radius-sm);
+    margin-bottom: 14px;
+    border: 1px solid rgba(35, 42, 28, 0.06);
+  }
+  .toolbar-stats {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    font-weight: 600;
+  }
+  .toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-toolbar-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: #FFFFFF;
+    border: 1px solid rgba(35, 42, 28, 0.15);
+    border-radius: 8px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .btn-toolbar-icon:hover {
+    background: var(--moss-tint);
+    border-color: var(--leaf);
+    color: var(--moss-deep);
+    transform: translateY(-1px);
+  }
+  .btn-toolbar-icon:active {
+    transform: translateY(0);
+  }
+  .btn-toolbar-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: #FFFFFF;
+    border: 1px solid rgba(35, 42, 28, 0.15);
+    border-radius: 8px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.15s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .btn-toolbar-toggle:hover {
+    background: var(--moss-tint);
+    border-color: var(--leaf);
+    color: var(--moss-deep);
+    transform: translateY(-1px);
+  }
+
+  /* Timeline & Records */
+  .timeline-container {
+    padding: 6px 0 24px;
+  }
+  .timeline-day-group {
+    margin-bottom: 24px;
+  }
+  .day-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    padding: 7px 12px;
+    border-radius: 10px;
+    background: rgba(35,42,28,0.035);
+    border: 1px solid rgba(35,42,28,0.05);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.15s ease;
+  }
+  .day-heading:hover {
+    background: rgba(35,42,28,0.07);
+    border-color: rgba(35,42,28,0.1);
+  }
+  .day-chevron svg {
+    display: block;
+    transition: transform 0.2s ease;
+    color: var(--leaf);
+  }
+  .timeline-day-group.is-collapsed .day-chevron svg {
+    transform: rotate(-90deg);
+  }
+  .timeline-day-group.is-collapsed .timeline {
+    display: none;
+  }
+  .day-date {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .day-badge {
+    margin-left: auto;
+    background: #FFFFFF;
+    border: 1px solid rgba(35,42,28,0.1);
+    color: var(--ink-soft);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 9px;
+    border-radius: 999px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 44px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 17px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: rgba(35,42,28,0.1);
+    border-radius: 2px;
+  }
+
+  .timeline-entry {
+    position: relative;
+    margin-bottom: 14px;
+  }
+  .timeline-entry:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Node marker on the timeline line */
+  .timeline-marker {
+    position: absolute;
+    left: -44px;
+    top: 10px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--leaf-light);
+    color: var(--leaf);
+    border: 2px solid rgba(63, 107, 63, 0.22);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04), 0 0 0 3px var(--paper);
+    z-index: 2;
+    transition: all 0.2s ease;
+  }
+  .timeline-marker svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  /* Colors for timeline markers - Đồng nhất nhận diện với thẻ loại hoạt động */
+  .timeline-entry .timeline-marker {
+    background: var(--leaf-light);
+    border-color: rgba(63, 107, 63, 0.22);
+    color: var(--leaf);
+  }
+  .timeline-entry:hover .timeline-marker {
+    background: var(--leaf);
+    border-color: var(--leaf);
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(63, 107, 63, 0.25);
+  }
+
+  /* Timeline Card: Single surface with accordion - Đồng nhất viền & điểm nhấn trái */
+  .timeline-card {
+    background: #FFFFFF;
+    border: 1.5px solid rgba(35,42,28,0.08);
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 3px 8px rgba(0,0,0,0.02);
+    transition: all 0.2s ease;
+    overflow: hidden;
+    position: relative;
+  }
+  .timeline-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3.5px;
+    background: var(--leaf);
+    opacity: 0.85;
+    transition: all 0.2s ease;
+  }
+  .timeline-card:hover {
+    border-color: rgba(63,107,63,0.35);
+    box-shadow: 0 4px 14px rgba(63,107,63,0.08);
+  }
+  .timeline-card:hover::before {
+    background: var(--leaf-bright);
+    opacity: 1;
+    width: 4px;
+  }
+
+  /* Header row inside card - Clickable accordion */
+  .tl-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 15px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease;
+  }
+  .tl-card-header:hover {
+    background: #FAFAF7;
+  }
+  .timeline-card:not(.is-collapsed) .tl-card-header {
+    background: #FAFAF7;
+    border-bottom: 1px solid rgba(35,42,28,0.06);
+  }
+
+  .tl-card-main {
+    flex: 1;
+    min-width: 0;
+  }
+  .tl-task-title {
+    font-size: 0.94rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+  }
+  .tl-card-subtitle {
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    margin-top: 3px;
+    line-height: 1.35;
+    word-break: break-word;
+  }
+
+  .tl-card-meta-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .tl-cat-pill {
+    display: none !important;
+  }
+  .tl-cat-pill.general {
+    color: #6D28D9;
+    background: #EDE9FE;
+    border-color: #DDD6FE;
+  }
+  .tl-cat-pill.spray {
+    color: #047857;
+    background: #D1FAE5;
+    border-color: #A7F3D0;
+  }
+  .tl-cat-pill.fertilize {
+    color: #B45309;
+    background: #FEF3C7;
+    border-color: #FDE68A;
+  }
+  .tl-cat-pill.purchase {
+    color: #15803D;
+    background: #DCFCE7;
+    border-color: #BBF7D0;
+  }
+  .tl-cat-pill.harvest {
+    color: #C2410C;
+    background: #FFEDD5;
+    border-color: #FED7AA;
+  }
+  .tl-cat-pill.sale {
+    color: #1D4ED8;
+    background: #DBEAFE;
+    border-color: #BFDBFE;
+  }
+  .tl-cat-pill.waste {
+    color: #475569;
+    background: #F1F5F9;
+    border-color: #E2E8F0;
+  }
+  .tl-badge-safe {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #15803D;
+    background: #DCFCE7;
+    border: 1px solid #BBF7D0;
+    padding: 1px 7px;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 0.76rem;
+  }
+  .tl-badge-warn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: #B91C1C;
+    background: #FEE2E2;
+    border: 1px solid #FECACA;
+    padding: 1px 7px;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 0.76rem;
+  }
+  .tl-qty-pill {
+    display: inline-block;
+    color: var(--ink);
+    background: rgba(35,42,28,0.07);
+    padding: 1px 8px;
+    border-radius: 5px;
+    font-weight: 700;
+  }
+  .tl-plot-pill {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--moss);
+    background: var(--moss-tint);
+    padding: 2px 7px;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .tl-time-pill {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--ink-soft);
+    background: rgba(35,42,28,0.05);
+    padding: 2px 6px;
+    border-radius: 5px;
+  }
+  .tl-chevron-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    color: var(--ink-faint);
+    transition: transform 0.2s ease, color 0.15s ease;
+  }
+  .tl-card-header:hover .tl-chevron-icon {
+    color: var(--leaf);
+  }
+  .timeline-card.is-collapsed .tl-chevron-icon svg {
+    transform: rotate(-90deg);
+  }
+  .timeline-card:not(.is-collapsed) .tl-chevron-icon svg {
+    transform: rotate(0deg);
+  }
+
+  /* Expandable Card Body */
+  .tl-card-body {
+    padding: 12px 14px 14px;
+    background: #FAFAF7;
+    border-top: 1px solid rgba(35,42,28,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .timeline-card.is-collapsed .tl-card-body {
+    display: none;
+  }
+
+  /* Bảng thông tin chi tiết mở rộng: Gọn gàng, dễ nhìn */
+  .tl-detail-table {
+    background: #FFFFFF;
+    border: 1px solid rgba(35,42,28,0.07);
+    border-radius: 10px;
+    padding: 4px 14px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0 20px;
+  }
+  @media (max-width: 640px) {
+    .tl-detail-table {
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding: 2px 12px;
+    }
+  }
+
+  .tl-detail-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(35,42,28,0.05);
+    font-size: 0.82rem;
+  }
+  .tl-detail-row:last-child {
+    border-bottom: none;
+  }
+  @media (min-width: 641px) {
+    .tl-detail-row:nth-last-child(2):nth-child(odd) {
+      border-bottom: none;
+    }
+  }
+
+  .tl-detail-label {
+    color: var(--ink-soft);
+    font-size: 0.78rem;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+  .tl-detail-value {
+    color: var(--ink);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+  }
+
+  /* Cảnh báo cách ly PHI nổi bật */
+  .tl-detail-row.is-phi {
+    grid-column: 1 / -1;
+    background: #FEF3C7;
+    border: 1px solid #FCD34D;
+    border-radius: 8px;
+    padding: 7px 12px;
+    margin: 5px 0;
+  }
+  .tl-detail-row.is-phi .tl-detail-label {
+    color: #92400E;
+    font-weight: 600;
+    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .tl-detail-row.is-phi .tl-detail-label svg {
+    color: #B45309;
+    flex-shrink: 0;
+  }
+  .tl-detail-row.is-phi .tl-detail-value {
+    color: #78350F;
+    font-weight: 700;
+    font-size: 0.88rem;
+  }
+
+  /* Voice STT Note */
+  .tl-voice-note {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #FFFFFF;
+    border: 1px solid rgba(35,42,28,0.07);
+    border-left: 3px solid var(--leaf);
+    padding: 8px 12px;
+    border-radius: 8px;
+  }
+  .tl-voice-player {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tl-voice-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .tl-voice-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--leaf);
+    letter-spacing: 0.03em;
+    margin-bottom: 2px;
+  }
+  .tl-voice-text {
+    font-size: 0.8rem;
+    color: var(--ink);
+    font-style: italic;
+    line-height: 1.4;
+    word-break: break-word;
+  }
+
+  /* Actions inside expanded body */
+  .tl-card-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 6px;
+    border-top: 1px solid rgba(35,42,28,0.05);
+    margin-top: 2px;
+  }
+  .btn-delete-entry {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    background: transparent;
+    border: 1px solid rgba(192, 57, 43, 0.2);
+    border-radius: 6px;
+    color: var(--rust);
+    font-size: 0.74rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-delete-entry:hover {
+    background: #FEE2E2;
+    border-color: #DC2626;
+    color: #B91C1C;
+  }
+
+  @media (max-width: 576px) {
+    .timeline {
+      padding-left: 36px;
+    }
+    .timeline::before {
+      left: 15px;
+    }
+    .timeline-marker {
+      left: -36px;
+      width: 32px;
+      height: 32px;
+      top: 10px;
+    }
+    .timeline-marker svg {
+      width: 15px;
+      height: 15px;
+    }
+    .timeline-card {
+      padding: 11px 13px;
+    }
+    .tl-main-title {
+      font-size: 0.92rem;
+    }
+  }
+
+  /* ========== CIRCULAR AUDIO PLAYER ========== */
+  .circular-audio-player {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    user-select: none;
+    border-radius: 50%;
+    transition: transform 0.15s ease;
+    background: #ffffff;
+    padding: 0;
+    border: none;
+    outline: none;
+    box-shadow: 0 1px 4px rgba(35, 48, 31, 0.12);
+  }
+  .circular-audio-player:hover {
+    transform: scale(1.08);
+  }
+  .circular-audio-player:active {
+    transform: scale(0.95);
+  }
+  .circular-audio-player .progress-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 34px;
+    height: 34px;
+    transform: rotate(-90deg);
+    pointer-events: none;
+  }
+  .circular-audio-player .progress-ring .ring-bg {
+    fill: #ffffff;
+    stroke: rgba(76, 95, 58, 0.2);
+    stroke-width: 2.2;
+  }
+  .circular-audio-player .progress-ring .ring-bar {
+    fill: transparent;
+    stroke: var(--leaf);
+    stroke-width: 2.8;
+    stroke-linecap: round;
+    stroke-dasharray: 87.96;
+    stroke-dashoffset: 87.96;
+    transition: stroke-dashoffset 0.1s linear, stroke 0.2s;
+  }
+  .circular-audio-player.is-playing .progress-ring .ring-bar {
+    stroke: #C94A29;
+  }
+  .circular-audio-player .btn-circular-play {
+    position: relative;
+    z-index: 1;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: none;
+    background: var(--moss-deep);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+    outline: none;
+    transition: background 0.2s ease;
+  }
+  .circular-audio-player:hover .btn-circular-play {
+    background: var(--moss);
+  }
+  .circular-audio-player.is-playing .btn-circular-play {
+    background: #C94A29;
+  }
+  .circular-audio-player .btn-circular-play .icon-pause {
+    display: none;
+  }
+  .circular-audio-player .btn-circular-play .icon-play {
+    display: block;
+    margin-left: 1.5px;
+  }
+  .circular-audio-player.is-playing .btn-circular-play .icon-play {
+    display: none;
+  }
+  .circular-audio-player.is-playing .btn-circular-play .icon-pause {
+    display: block;
+    margin-left: 0;
+  }
+
+  .voice-wave-placeholder {
+    display: flex;
+    align-items: flex-end;
+    gap: 2.5px;
+    height: 18px;
+    padding: 0 4px;
+  }
+  .voice-wave-placeholder span {
+    width: 2.5px;
+    background: var(--leaf);
+    border-radius: 2px;
+  }
+
+  /* Floating Action Button (Thêm mới) */
+  .fab-add{
+    position: fixed;
+    right: 20px;
+    bottom: 24px;
+    background: #D6A339;
+    color: #141C15;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 0.86rem;
+    text-decoration: none;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    z-index: 99;
+    transition: all 0.2s ease;
+  }
+  .fab-add:hover{
+    transform: translateY(-2px);
+    background: #E5B44D;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35);
+  }
+
+  .empty-state{
+    text-align: center;
+    padding: 46px 16px;
+    background: #ffffff;
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--line);
+    margin-top: 10px;
+  }
+  .empty-icon{
+    width: 48px; height: 48px;
+    margin: 0 auto 12px;
+    color: var(--ink-faint);
+  }
+  .empty-text{
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+
+  .footer-simple{
+    text-align: center;
+    padding: 24px 14px 40px;
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header Sổ Nhật Ký Canh Tác -->
+  <div class="header">
+    <div class="header-top">
+      <div class="brand-wrap">
+        <span class="app-name">nông<em>ký</em></span>
+        <span class="badge-portal">SỔ NHẬT KÝ CANH TÁC</span>
+      </div>
+      <div class="header-actions">
+        <a href="/nongky" class="btn-nav-header primary" title="Tạo ghi chép / thu âm nhật ký mới">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>Ghi chép</span>
+        </a>
+        <a href="/manager" class="btn-nav-header" title="Cổng Quản lý trích xuất dữ liệu">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>Quản lý</span>
+        </a>
+
+        <a href="/logout" class="btn-nav-header" title="Đăng xuất">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Thoát</span>
+        </a>
+      </div>
+    </div>
+
+    {% if farmer %}
+    <div class="user-bar">
+      <span class="user-greeting">Xin chào, <b>{{ farmer.full_name }}</b> </span>
+      <span class="user-role">{{ farmer.role }}</span>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Thông tin Nông trại & Hợp tác xã (Dạng mở rộng) -->
+  <div class="farmer-card" id="farmerCard">
+    <div class="farmer-top" onclick="toggleFarmerAccordion(event)" title="Chạm để mở rộng / thu gọn chi tiết HTX">
+      <div class="avatar">HTX</div>
+      <div class="farmer-meta">
+        <div class="farmer-name">{% if farmer and farmer.farm_name %}{{ farmer.farm_name }}{% else %}HỢP TÁC XÃ ĐẠI ĐỒNG{% endif %}</div>
+        <div class="farmer-address">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>{% if farmer and farmer.farm_address %}{{ farmer.farm_address }}{% else %}Xóm Độc Lập - Xã Thịnh Minh - Tỉnh Phú Thọ{% endif %}</span>
+        </div>
+      </div>
+      <div class="farmer-chevron" id="farmerChevron">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+
+    <div class="farmer-tags">
+      <span class="tag puc">Mã vùng trồng (PUC): {{ farmer.farm_code if farmer and farmer.farm_code else 'VN-HBOR-0033' }}</span>
+      <span class="tag">Quy mô: {{ farmer.area_text if farmer and farmer.area_text else '07 HA' }}</span>
+      <span class="tag crop">Cây trồng: {{ farmer.crop_name if farmer and farmer.crop_name else 'Bưởi diễn' }}</span>
+      <span class="tag" style="background:#EBF8FF; color:#2B6CB0; font-weight:700;">{{ farmer.certification_body if farmer and farmer.certification_body else 'VietGAP Trồng trọt' }}</span>
+    </div>
+
+    <!-- Chi tiết thông tin Hợp tác xã & Vùng trồng dạng mở rộng -->
+    <div class="farmer-expand-body" id="farmerExpandBody">
+      <div class="puc-grid">
+        <div class="puc-item">
+          <div class="puc-label">Mã số vùng trồng (P.U.C)</div>
+          <div class="puc-val hl">{{ farmer.farm_code if farmer and farmer.farm_code else 'VN-HBOR-0033' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Quy mô diện tích</div>
+          <div class="puc-val">{{ farmer.area_text if farmer and farmer.area_text else '07 HA (70.000 m²)' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Giống cây trồng</div>
+          <div class="puc-val">{{ farmer.crop_name if farmer and farmer.crop_name else 'Bưởi diễn' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Tiêu chuẩn canh tác</div>
+          <div class="puc-val hl">{{ farmer.certification_body if farmer and farmer.certification_body else 'VietGAP Trồng trọt' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Thời vụ xuống giống</div>
+          <div class="puc-val">{{ farmer.plant_date if farmer and farmer.plant_date else 'Tháng 04/2025' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Thời vụ thu hoạch</div>
+          <div class="puc-val">{{ farmer.harvest_date if farmer and farmer.harvest_date else 'Tháng 10/2025' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Giai đoạn mùa vụ</div>
+          <div class="puc-val hl" id="pucGrowthStageDiary">{{ farmer.growth_stage if farmer and farmer.growth_stage else 'Sinh trưởng' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Sản lượng dự kiến</div>
+          <div class="puc-val">{{ farmer.estimated_yield if farmer and farmer.estimated_yield else '100 tấn/năm' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Sản lượng thực tế</div>
+          <div class="puc-val">{{ farmer.actual_yield if farmer and farmer.actual_yield else '84 tấn/năm' }}</div>
+        </div>
+        <div class="puc-item full">
+          <div class="puc-label">Cơ sở / Đối tác tiêu thụ</div>
+          <div class="puc-val">{{ farmer.target_market if farmer and farmer.target_market else 'Các doanh nghiệp chế biến, siêu thị và thương lái trong nước' }}</div>
+        </div>
+        <div class="puc-item full">
+          <div class="puc-label">Lô canh tác</div>
+          <div class="puc-val" style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+            <div style="display:flex; align-items:center; gap:8px; min-width:0; flex:1; flex-wrap:wrap;">
+              <span id="locPlotNameDiary" style="font-weight:700; color:var(--ink);">Lô 1 — Vườn Bưởi diễn Trung tâm</span>
+              <span id="locPlotBadgeDiary" style="font-size:0.72rem; color:var(--leaf); font-weight:700; background:rgba(63,107,63,0.12); border:1px solid rgba(63,107,63,0.25); border-radius:6px; padding:2px 7px; display:inline-flex; align-items:center; gap:4px;">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span id="locPlotBadgeTextDiary">Đang định vị…</span>
+              </span>
+            </div>
+            <button class="loc-btn" id="locBtnDiary" type="button" onclick="locateGPS(event)" style="font-family:inherit; font-size:0.74rem; font-weight:700; color:var(--leaf); background:rgba(63,107,63,0.08); border:1px solid rgba(63,107,63,0.3); padding:3px 9px; border-radius:6px; cursor:pointer;">Định vị GPS</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nút mở rộng / thu gọn -->
+    <button type="button" class="btn-toggle-farmer" id="btnToggleFarmer" onclick="toggleFarmerAccordion(event)">
+      <span id="btnToggleFarmerText">Xem chi tiết Hợp tác xã & Vùng trồng</span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+  </div>
+
+  <!-- Nội dung trang Sổ nhật ký canh tác -->
+  <div class="main-content">
+    
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Nhật ký canh tác</h2>
+        <div class="section-subtitle">Theo tiêu chuẩn VietGAP</div>
+      </div>
+      <div class="export-dropdown-wrapper" style="position:relative; display:inline-block;">
+        <button id="btnExportMenu" class="btn-export-main" onclick="var m=document.getElementById('exportMenuDropdown'); m.style.display=(m.style.display==='none'?'block':'none'); event.stopPropagation();" title="Xuất dữ liệu ra file Excel, Word, PDF">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Xuất báo cáo ▾</span>
+        </button>
+        <div id="exportMenuDropdown" style="display:none; position:absolute; right:0; top:calc(100% + 6px); background:#1a3122; border:1px solid #3d6349; border-radius:10px; box-shadow:0 12px 32px rgba(0,0,0,0.4); z-index:9999; min-width:275px; padding:8px; font-size:0.8rem; text-align:left;">
+          <div style="padding:6px 8px; font-size:0.7rem; font-weight:700; color:#a5d6a7; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:4px; letter-spacing:0.04em;">
+            MẪU 1: NHẬT KÝ VƯỜN CÀ GAI
+          </div>
+          <a href="/api/export/excel" style="display:flex; align-items:center; gap:8px; padding:7px 9px; color:#e8f5e9; text-decoration:none; border-radius:6px; transition:background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='none'">
+            <span style="background:#2e7d32; color:#fff; font-size:0.65rem; font-weight:700; padding:2px 6px; border-radius:3px;">XLSX</span>
+            <span>Xuất file Excel (.xlsx)</span>
+          </a>
+          <a href="/api/export/docx" style="display:flex; align-items:center; gap:8px; padding:7px 9px; color:#e8f5e9; text-decoration:none; border-radius:6px; transition:background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='none'">
+            <span style="background:#1565c0; color:#fff; font-size:0.65rem; font-weight:700; padding:2px 6px; border-radius:3px;">DOCX</span>
+            <span>Xuất file Word (.docx)</span>
+          </a>
+          <a href="/api/export/pdf" style="display:flex; align-items:center; gap:8px; padding:7px 9px; color:#e8f5e9; text-decoration:none; border-radius:6px; transition:background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='none'">
+            <span style="background:#c62828; color:#fff; font-size:0.65rem; font-weight:700; padding:2px 6px; border-radius:3px;">PDF</span>
+            <span>Xuất file PDF (.pdf)</span>
+          </a>
+
+          <div style="padding:8px 8px 4px; font-size:0.7rem; font-weight:700; color:#a5d6a7; border-top:1px solid rgba(255,255,255,0.1); border-bottom:1px solid rgba(255,255,255,0.1); margin:5px 0 4px; letter-spacing:0.04em;">
+            MẪU 2: CÁC BẢNG THEO VIETGAP
+          </div>
+          <a href="/api/export/excel?template=vietgap" style="display:flex; align-items:center; gap:8px; padding:7px 9px; color:#e8f5e9; text-decoration:none; border-radius:6px;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='none'">
+            <span style="background:#2e7d32; color:#fff; font-size:0.65rem; font-weight:700; padding:2px 6px; border-radius:3px;">XLSX</span>
+            <span>Bảng VietGAP Excel (.xlsx)</span>
+          </a>
+          <a href="/api/export/docx?template=vietgap" style="display:flex; align-items:center; gap:8px; padding:7px 9px; color:#e8f5e9; text-decoration:none; border-radius:6px;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='none'">
+            <span style="background:#1565c0; color:#fff; font-size:0.65rem; font-weight:700; padding:2px 6px; border-radius:3px;">DOCX</span>
+            <span>Bảng VietGAP Word (.docx)</span>
+          </a>
+          <a href="/api/export/pdf?template=vietgap" style="display:flex; align-items:center; gap:8px; padding:7px 9px; color:#e8f5e9; text-decoration:none; border-radius:6px;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='none'">
+            <span style="background:#c62828; color:#fff; font-size:0.65rem; font-weight:700; padding:2px 6px; border-radius:3px;">PDF</span>
+            <span>Bảng VietGAP PDF (.pdf)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thanh công cụ: Chọn bảng dropdown + Tìm kiếm + Tải lại -->
+    <div class="diary-toolbar">
+      <div class="toolbar-row">
+        <!-- Dropdown chọn loại bảng -->
+        <div class="timeline-select-wrapper">
+          <select id="timelineFilterSelect" class="timeline-filter-select" aria-label="Chọn loại bảng">
+            <option value="all" selected>Tất cả hoạt động</option>
+            <option value="spray">Phun thuốc BVTV</option>
+            <option value="fertilize">Bón phân</option>
+            <option value="purchase">Mua vật tư nông nghiệp</option>
+            <option value="harvest">Thu hoạch nông sản</option>
+            <option value="sale">Tiêu thụ nông sản</option>
+            <option value="waste">Xử lý bao bì, rác thải</option>
+            <option value="general">Công việc canh tác khác</option>
+          </select>
+          <div class="select-chevron-icon">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+
+        <!-- Ô tìm kiếm từ khóa -->
+        <div class="search-wrapper">
+          <span class="search-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span>
+          <input type="text" id="timelineSearchInput" class="search-input" placeholder="Tìm theo vật tư, mã lô, ngày, hoạt động...">
+        </div>
+
+        <!-- Nút Tải lại -->
+        <button class="btn-refresh" id="refreshLogsBtn" title="Tải lại nhật ký">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Thanh Accordion Controls (Đóng/Mở ngày) -->
+    <div class="timeline-accordion-toolbar">
+      <div class="toolbar-stats" id="timelineStatsText">Đang tải nhật ký...</div>
+      <div class="toolbar-actions">
+        <button type="button" class="btn-toolbar-icon" id="btnToggleAllDays" title="Thu gọn tất cả ngày" aria-label="Thu gọn tất cả ngày">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Khung Dòng thời gian Timeline -->
+    <div class="timeline-container" id="unifiedTimelineContainer"></div>
+
+  </div>
+
+  <!-- Nút Ghi chép mới nổi (FAB) -->
+  <a href="/nongky" class="fab-add" title="Ghi chép mới">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </a>
+
+  <div class="footer-simple">Nông ký điện tử VietGAP — HTX Đại Đồng</div>
+
+</div>
+
+<script>
+// Biểu tượng Lucide SVG chuẩn
+const ICONS = {
+  // Lucide: flask-conical (Phun thuốc BVTV)
+  spray: `<svg class="lucide lucide-flask-conical" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>`,
+  // Lucide: sprout (Bón phân)
+  fertilize: `<svg class="lucide lucide-sprout" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-13"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>`,
+  // Lucide: shopping-cart (Mua vật tư)
+  purchase: `<svg class="lucide lucide-shopping-cart" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>`,
+  // Lucide: package-check (Thu hoạch nông sản)
+  harvest: `<svg class="lucide lucide-package-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 2 2 4-4"/><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/><path d="m7.5 4.27 9 5.15"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" y1="12" x2="12" y2="22"/></svg>`,
+  // Lucide: badge-dollar-sign (Tiêu thụ / Bán hàng)
+  sale: `<svg class="lucide lucide-badge-dollar-sign" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><line x1="12" x2="12" y1="8" y2="16"/><path d="M14.5 10.5c-.83-.83-2.17-.83-3 0s-.83 2.17 0 3c.83.83 2.17.83 3 0"/></svg>`,
+  // Lucide: recycle (Xử lý bao bì, rác thải)
+  waste: `<svg class="lucide lucide-recycle" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/><path d="M11 19h8.203a1.83 1.83 0 0 0 1.556-.89 1.784 1.784 0 0 0 0-1.775l-1.226-2.12"/><path d="m14 16-3 3 3 3"/><path d="M8.293 13.596 5.5 9.5 9.707 3.29a1.83 1.83 0 0 1 1.557-.89h.036c.642 0 1.228.339 1.556.89l3.076 5.32"/><path d="m17.5 8 3 3-3 3"/></svg>`,
+  // Lucide: spade (Công việc canh tác khác)
+  general: `<svg class="lucide lucide-spade" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22v-5l5-5 5 5-5 5z"/><path d="M9.5 14.5 16 8"/><path d="m17 2 5 5-.5.5a3.53 3.53 0 0 1-5 0s0 0 0 0a3.53 3.53 0 0 1 0-5L17 2"/></svg>`
+};
+
+let rawDiaryTables = {};
+let allTimelineItems = [];
+let currentFilter = 'all';
+let currentSearch = '';
+
+// Helper date & time
+function extractTime(createdAt) {
+  if (!createdAt) return '';
+  const s = String(createdAt).trim();
+  const m = s.match(/(?:T|\s)(\d{1,2}):(\d{2})/);
+  if (m) return `${m[1].padStart(2, '0')}:${m[2].padStart(2, '0')}`;
+  try {
+    const d = new Date(createdAt);
+    if (!isNaN(d.getTime())) {
+      return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    }
+  } catch(e) {}
+  return '';
+}
+
+function getRecordDate(row) {
+  const rawDate = row.purchase_date || row.activity_date || row.treatment_date || row.harvest_date || row.ngay_thuc_hien;
+  if (rawDate) {
+    const m = String(rawDate).match(/^(\d{4})[/-](\d{1,2})[/-](\d{1,2})/);
+    if (m) return `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`;
+  }
+  if (row.created_at) {
+    const m = String(row.created_at).match(/^(\d{4})[/-](\d{1,2})[/-](\d{1,2})/);
+    if (m) return `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`;
+  }
+  return 'Chưa rõ ngày';
+}
+
+function formatDayHeading(dateStr) {
+  if (!dateStr || dateStr === 'Chưa rõ ngày') return 'Ghi chép khác';
+  const match = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) return dateStr;
+  const y = parseInt(match[1], 10);
+  const m = parseInt(match[2], 10) - 1;
+  const d = parseInt(match[3], 10);
+  const dateObj = new Date(y, m, d);
+  const daysOfWeek = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+  const dayName = daysOfWeek[dateObj.getDay()] || 'Ngày';
+  const dd = String(d).padStart(2, '0');
+  const mm = String(m + 1).padStart(2, '0');
+
+  const now = new Date();
+  const todayStr = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  const yest = new Date(now);
+  yest.setDate(now.getDate() - 1);
+  const yestStr = `${yest.getFullYear()}-${String(yest.getMonth()+1).padStart(2, '0')}-${String(yest.getDate()).padStart(2, '0')}`;
+
+  let prefix = '';
+  if (dateStr === todayStr) prefix = 'Hôm nay · ';
+  else if (dateStr === yestStr) prefix = 'Hôm qua · ';
+
+  return `${prefix}${dayName}, ${dd}/${mm}/${y}`;
+}
+
+// Phân loại hoạt động & Trích xuất thông tin trọng tâm cho thẻ timeline
+function getItemMeta(tableKey, row) {
+  const tk = (tableKey || '').toLowerCase();
+  const rt = (row.table || '').toLowerCase();
+  const plot = row.plot_code || row.thua_ruong || '';
+
+  // 1. Mua vật tư
+  if (tk.includes('purchase') || rt.includes('purchase') || rt.includes('b1_5') || tk.includes('b1_5')) {
+    const mat = row.ten_vat_tu || row.material_name || row.ten_vat_tu_nhap || 'Vật tư nông nghiệp';
+    const qty = row.so_luong_vat_tu || row.so_luong_mua || (row.quantity ? (row.quantity + (row.unit ? ' ' + row.unit : '')) : '');
+    return {
+      type: 'purchase',
+      icon: ICONS.purchase,
+      typeName: 'Mua vật tư',
+      taskName: 'Mua vật tư',
+      subtitle: [mat, qty ? `SL: ${qty}` : ''].filter(Boolean).join(' · ') || 'Vật tư nông nghiệp',
+      mainTitle: mat,
+      quantity: qty,
+      plot: plot,
+      title: 'MUA VẬT TƯ'
+    };
+  }
+
+  // 2. Sử dụng phân bón, thuốc BVTV
+  if (tk.includes('usage') || rt.includes('usage') || tk.includes('pesticide') || rt.includes('pesticide') || tk.includes('fertilizer') || rt.includes('fertilizer') || tk.includes('b1_6') || rt.includes('b1_6')) {
+    const mType = String(row.material_type || '').toUpperCase();
+    const isPest = mType === 'PESTICIDE' || tk.includes('pesticide') || rt.includes('pesticide') || (row.ten_thuoc_bvtv && row.ten_thuoc_bvtv !== '—') || (row.pesticide_name && row.pesticide_name !== '—') || (row.thoi_gian_cach_ly && row.thoi_gian_cach_ly !== '—');
+    const isFert = mType === 'FERTILIZER' || tk.includes('fertilizer') || rt.includes('fertilizer') || (row.ten_phan_bon && row.ten_phan_bon !== '—') || (row.luong_phan_bon && row.luong_phan_bon !== '—');
+
+    if (isPest && !isFert) {
+      const pName = row.ten_thuoc_bvtv || row.pesticide_name || row.material_name || 'Thuốc BVTV';
+      const dose = row.nong_do_va_luong_dung || row.lieu_luong_thuoc || row.dosage_rate || (row.dose_quantity ? (row.dose_quantity + (row.dose_unit ? ' ' + row.dose_unit : '')) : '') || (row.quantity ? (row.quantity + (row.unit ? ' ' + row.unit : '')) : '');
+      return {
+        type: 'spray',
+        icon: ICONS.spray,
+        typeName: 'Phun thuốc BVTV',
+        taskName: 'Phun thuốc BVTV',
+        subtitle: [pName, dose].filter(Boolean).join(' · ') || 'Phòng trừ sâu bệnh',
+        mainTitle: pName,
+        quantity: dose,
+        plot: plot,
+        title: 'PHUN THUỐC BVTV'
+      };
+    }
+    if (isFert && !isPest) {
+      const fName = row.ten_phan_bon || row.material_name || 'Phân bón';
+      const fQty = row.luong_phan_bon || (row.quantity ? (row.quantity + (row.unit ? ' ' + row.unit : '')) : '');
+      return {
+        type: 'fertilize',
+        icon: ICONS.fertilize,
+        typeName: 'Bón phân',
+        taskName: 'Bón phân',
+        subtitle: [fName, fQty].filter(Boolean).join(' · ') || 'Cung cấp dinh dưỡng',
+        mainTitle: fName,
+        quantity: fQty,
+        plot: plot,
+        title: 'BÓN PHÂN'
+      };
+    }
+    const matName = row.material_name || row.ten_thuoc_bvtv || row.ten_phan_bon || 'Chăm sóc vườn cây';
+    const dose = row.nong_do_va_luong_dung || row.luong_phan_bon || (row.quantity ? (row.quantity + (row.unit ? ' ' + row.unit : '')) : '');
+    return {
+      type: isPest ? 'spray' : 'fertilize',
+      icon: isPest ? ICONS.spray : ICONS.fertilize,
+      typeName: isPest ? 'Phun thuốc BVTV' : 'Bón phân',
+      taskName: isPest ? 'Phun thuốc BVTV' : 'Bón phân',
+      subtitle: [matName, dose].filter(Boolean).join(' · ') || 'Chăm sóc vườn cây',
+      mainTitle: matName,
+      quantity: dose,
+      plot: plot,
+      title: isPest ? 'PHUN THUỐC BVTV' : 'BÓN PHÂN'
+    };
+  }
+
+  // 3. Xử lý rác thải
+  if (tk.includes('waste') || rt.includes('waste') || rt.includes('b1_7') || tk.includes('b1_7')) {
+    const wType = row.waste_type || row.loai_bao_bi_rac_thai || row.loai_bao_bi || 'Bao bì, chai lọ rác thải';
+    const wMethod = row.treatment_method || row.bien_phap_xu_ly || '';
+    return {
+      type: 'waste',
+      icon: ICONS.waste,
+      typeName: 'Xử lý rác thải',
+      taskName: 'Xử lý rác thải',
+      subtitle: [wType, wMethod].filter(Boolean).join(' · ') || 'Thu gom tiêu hủy',
+      mainTitle: wType,
+      quantity: wMethod,
+      plot: plot,
+      title: 'XỬ LÝ BAO BÌ, RÁC THẢI'
+    };
+  }
+
+  // 4. Thu hoạch nông sản
+  if (((tk.includes('harvest') || rt.includes('harvest') || rt.includes('b1_8') || tk.includes('b1_8')) && !tk.includes('sale') && !rt.includes('sale')) || rt === 'harvest_records') {
+    const crop = (row.crop_name || row.loai_nong_san || 'Thu hoạch nông sản') + (row.variety ? (' ' + row.variety) : '');
+    const qty = row.san_luong_thu_hoach || (row.quantity ? (row.quantity + (row.unit ? ' ' + row.unit : '')) : '');
+    return {
+      type: 'harvest',
+      icon: ICONS.harvest,
+      typeName: 'Thu hoạch',
+      taskName: 'Thu hoạch nông sản',
+      subtitle: [crop, qty ? `SL: ${qty}` : ''].filter(Boolean).join(' · ') || 'Thu hái sản phẩm',
+      mainTitle: crop,
+      quantity: qty,
+      plot: plot,
+      title: 'THU HOẠCH NÔNG SẢN'
+    };
+  }
+
+  // 5. Tiêu thụ nông sản
+  if (tk.includes('sale') || rt.includes('sale') || rt.includes('b1_9') || tk.includes('b1_9') || rt === 'sales_records') {
+    const crop = (row.crop_name || row.loai_nong_san || 'Nông sản') + (row.variety ? (' ' + row.variety) : '');
+    const qty = row.khoi_luong_tieu_thu || row.khoi_luong_ban || (row.quantity ? (row.quantity + (row.unit ? ' ' + row.unit : '')) : '');
+    return {
+      type: 'sale',
+      icon: ICONS.sale,
+      typeName: 'Tiêu thụ',
+      taskName: 'Tiêu thụ nông sản',
+      subtitle: [crop, qty ? `Bán: ${qty}` : ''].filter(Boolean).join(' · ') || 'Xuất bán sản phẩm',
+      mainTitle: crop,
+      quantity: qty ? `Bán: ${qty}` : '',
+      plot: plot,
+      title: 'TIÊU THỤ NÔNG SẢN'
+    };
+  }
+
+  // 6. Thu hoạch & Tiêu thụ gộp
+  if (tk.includes('harvest_sales') || rt.includes('harvest_sales')) {
+    const crop = (row.crop_name || row.loai_nong_san || 'Nông sản') + (row.variety ? (' ' + row.variety) : '');
+    const hQty = row.san_luong_thu_hoach || (row.quantity ? (row.quantity + (row.unit ? ' ' + row.unit : '')) : '');
+    const sQty = row.khoi_luong_tieu_thu || row.khoi_luong_ban || '';
+    let qtyStr = '';
+    if (hQty && sQty) qtyStr = `Thu: ${hQty} · Bán: ${sQty}`;
+    else if (hQty) qtyStr = `Thu: ${hQty}`;
+    else if (sQty) qtyStr = `Bán: ${sQty}`;
+    return {
+      type: 'harvest',
+      icon: ICONS.harvest,
+      typeName: 'Thu hoạch & Bán',
+      taskName: 'Thu hoạch & Bán',
+      subtitle: [crop, qtyStr].filter(Boolean).join(' · ') || 'Thu hoạch và xuất bán',
+      mainTitle: crop,
+      quantity: qtyStr,
+      plot: plot,
+      title: 'THU HOẠCH & TIÊU THỤ'
+    };
+  }
+
+  // 7. Công việc canh tác khác
+  const rawTask = row.cong_viec || row.task_name || row.description || '';
+  let cleanTask = (rawTask && rawTask.trim()) ? rawTask.trim() : '';
+  // Loại bỏ hậu tố (Số lượng/liều lượng: ...) nếu có
+  cleanTask = cleanTask.replace(/\s*\((?:Số lượng(?:\/liều lượng)?|Liều lượng):\s*[^)]+\)/gi, '').trim();
+
+  const qty = row.so_luong || row.so_luong_lieu_luong || (row.quantity ? (row.quantity + (row.unit ? ' ' + row.unit : '')) : '');
+  const stage = row.growth_stage || row.giai_doan || '';
+
+  const isGeneric = !cleanTask || ['công việc khác', 'công việc canh tác', 'công việc canh tác khác', 'other', 'hoạt động canh tác'].includes(cleanTask.toLowerCase());
+  const displayTitle = isGeneric ? 'Công việc khác' : cleanTask;
+
+  let subParts = [];
+  if (qty) {
+    subParts.push(`Số lượng: ${qty}`);
+  }
+  if (!subParts.length) {
+    subParts.push('Chăm sóc & quản lý vườn');
+  }
+
+  return {
+    type: 'general',
+    icon: ICONS.general,
+    typeName: 'Công việc khác',
+    taskName: displayTitle,
+    subtitle: subParts.join(' · '),
+    mainTitle: displayTitle,
+    quantity: qty,
+    plot: plot,
+    title: displayTitle
+  };
+}
+
+// Lấy danh sách các trường trích xuất chi tiết (tinh gọn, ẩn thông tin trùng lặp)
+function getExtractedFields(tableKey, row) {
+  const fields = [];
+  const add = (lbl, val) => {
+    if (val !== undefined && val !== null) {
+      const s = String(val).trim();
+      if (s !== '' && s !== '—' && s !== '-' && s.toLowerCase() !== 'không' && s.toLowerCase() !== 'none' && s.toLowerCase() !== 'null') {
+        fields.push({ label: lbl, val: s });
+      }
+    }
+  };
+
+  const tk = (tableKey || '').toLowerCase();
+  const rt = (row.table || '').toLowerCase();
+
+  if (tk.includes('purchase') || rt.includes('purchase') || rt.includes('b1_5') || tk.includes('b1_5')) {
+    add('Tên vật tư', row.ten_vat_tu || row.material_name || row.ten_vat_tu_nhap);
+    add('Số lượng', row.so_luong_vat_tu || row.so_luong_mua || (row.quantity ? (row.quantity + (row.unit ? ' ' + row.unit : '')) : ''));
+    add('Nơi mua / Đại lý', row.supplier_name || row.noi_mua_vat_tu || row.noi_cung_cap);
+    add('Mã lô / Hạn dùng', row.batch_number || row.han_su_dung || row.so_lo);
+    add('Người mua', row.buyer_name || row.nguoi_mua);
+  } else if (tk.includes('usage') || rt.includes('usage') || tk.includes('pesticide') || rt.includes('pesticide') || tk.includes('fertilizer') || rt.includes('fertilizer') || tk.includes('b1_6') || rt.includes('b1_6')) {
+    const isPest = (row.material_type === 'PESTICIDE') || (row.ten_thuoc_bvtv && row.ten_thuoc_bvtv !== '—') || row.pesticide_name;
+    if (isPest) {
+      add('Thuốc BVTV', row.ten_thuoc_bvtv || row.pesticide_name || row.material_name);
+      add('Nồng độ / Liều dùng', row.nong_do_va_luong_dung || row.nong_do_lieu_luong || row.lieu_luong_thuoc || row.dosage_rate || (row.dose_quantity ? (row.dose_quantity + (row.dose_unit ? ' ' + row.dose_unit : '')) : ''));
+      add('Lượng nước pha', row.water_volume_liters ? (row.water_volume_liters + ' lít') : (row.luong_nuoc_pha || row.luong_nuoc));
+      add('Đối tượng trừ', row.sinh_vat_gay_hai || row.target_pest);
+      add('Cách ly (PHI)', row.thoi_gian_cach_ly ? (row.thoi_gian_cach_ly + (String(row.thoi_gian_cach_ly).includes('ngày') ? '' : ' ngày')) : (row.phi_days ? (row.phi_days + ' ngày') : ''));
+      add('Cách phun / Thiết bị', row.application_method || row.equipment_method || row.phuong_phap_bon);
+      add('Lô / Thửa', row.plot_code || row.thua_ruong);
+      add('Người phun', row.nguoi_thuc_hien || row.performed_by);
+    } else {
+      add('Tên phân bón', row.ten_phan_bon || row.material_name);
+      add('Lượng bón', row.luong_phan_bon || (row.quantity ? (row.quantity + (row.unit ? ' ' + row.unit : '')) : ''));
+      add('Phương pháp bón', row.phuong_phap_bon || row.application_method || row.equipment_method);
+      add('Giai đoạn', row.growth_stage || row.giai_doan);
+      add('Lô / Thửa', row.plot_code || row.thua_ruong);
+      add('Người bón', row.nguoi_thuc_hien || row.performed_by);
+    }
+  } else if (tk.includes('waste') || rt.includes('waste') || rt.includes('b1_7') || tk.includes('b1_7')) {
+    add('Loại bao bì / Rác', row.waste_type || row.loai_bao_bi_rac_thai || row.loai_bao_bi);
+    add('Biện pháp xử lý', row.treatment_method || row.bien_phap_xu_ly || row.cach_xu_ly);
+    add('Nơi lưu giữ / Xử lý', row.location_disposal || row.storage_location || row.noi_chua_noi_xu_ly || row.noi_ton_tru);
+    add('Người thu gom', row.nguoi_thu_gom || row.created_by_name);
+  } else if (((tk.includes('harvest') || rt.includes('harvest') || rt.includes('b1_8') || tk.includes('b1_8')) && !tk.includes('sale') && !rt.includes('sale')) || rt === 'harvest_records') {
+    add('Cây trồng / Nông sản', (row.crop_name || row.loai_nong_san || '') + (row.variety ? (' ' + row.variety) : ''));
+    add('Sản lượng thu hoạch', row.san_luong_thu_hoach || (row.quantity ? (row.quantity + (row.unit ? ' ' + row.unit : '')) : ''));
+    add('Mã lô thu hoạch', row.plot_code || row.thua_ruong);
+    add('Địa điểm & Sơ chế', row.dia_diem_cach_so_che || row.processing_location || row.processing_method);
+    add('Người thu hoạch', row.harvester_name || row.nguoi_thuc_hien);
+  } else if (tk.includes('sale') || rt.includes('sale') || rt.includes('b1_9') || tk.includes('b1_9') || rt === 'sales_records') {
+    add('Nông sản', row.crop_name || row.loai_nong_san);
+    add('Khối lượng bán', row.khoi_luong_tieu_thu || row.khoi_luong_ban || (row.quantity ? (row.quantity + (row.unit ? ' ' + row.unit : '')) : ''));
+    add('Nơi tiêu thụ / Khách', row.buyer_name || row.co_so_thu_mua || row.nguoi_mua_thuong_lai);
+    add('Đơn giá / Doanh thu', row.unit_price ? (row.unit_price + ' đ' + (row.total_amount ? (' (Tổng: ' + row.total_amount + ' đ)') : '')) : '');
+  } else if (tk.includes('harvest_sales') || rt.includes('harvest_sales')) {
+    add('Sản lượng thu', row.san_luong_thu_hoach || (row.quantity ? (row.quantity + (row.unit ? ' ' + row.unit : '')) : ''));
+    add('Khối lượng bán', row.khoi_luong_tieu_thu || row.khoi_luong_ban);
+    add('Nơi thu mua', row.buyer_name || row.co_so_thu_mua);
+  } else {
+    const rawTask = row.cong_viec || row.task_name || row.description || '';
+    let cleanTask = rawTask.replace(/\s*\((?:Số lượng(?:\/liều lượng)?|Liều lượng):\s*[^)]+\)/gi, '').trim();
+    if (cleanTask) {
+      add('Nội dung công việc', cleanTask);
+    }
+    add('Số lượng / Liều lượng', row.so_luong || row.so_luong_lieu_luong || (row.quantity ? (row.quantity + (row.unit ? ' ' + row.unit : '')) : ''));
+    add('Giai đoạn sinh trưởng', row.growth_stage || row.giai_doan);
+    add('Sinh vật gây hại', row.sinh_vat_gay_hai || row.target_pest);
+    add('Thời tiết', row.weather_condition);
+    add('Lô / Thửa', row.plot_code || row.thua_ruong);
+    add('Người thực hiện', row.performed_by || row.nguoi_thuc_hien);
+  }
+  return fields;
+}
+
+// Xóa bản ghi
+async function deleteEntry(tableKey, recordId, btnEl) {
+  if (!confirm('Bạn có chắc chắn muốn xóa bản ghi hoạt động này khỏi Sổ nhật ký VietGAP?')) {
+    return;
+  }
+  btnEl.disabled = true;
+  btnEl.style.opacity = '0.5';
+
+  try {
+    const res = await fetch(`/api/diary/${tableKey}/${recordId}`, {
+      method: 'DELETE'
+    });
+    const result = await res.json();
+    if (result.status === 'success') {
+      const entryEl = btnEl.closest('.timeline-entry');
+      if (entryEl) {
+        const dayGroup = entryEl.closest('.timeline-day-group');
+        entryEl.remove();
+        if (dayGroup && !dayGroup.querySelectorAll('.timeline-entry').length) {
+          dayGroup.remove();
+        }
+      }
+      // Tải lại ngầm để cập nhật stats
+      loadTimelineData();
+    } else {
+      alert('Không thể xóa bản ghi: ' + (result.message || 'Lỗi không xác định'));
+      btnEl.disabled = false;
+      btnEl.style.opacity = '1';
+    }
+  } catch(err) {
+    console.error('Lỗi khi xóa:', err);
+    alert('Lỗi kết nối khi gửi yêu cầu xóa bản ghi.');
+    btnEl.disabled = false;
+    btnEl.style.opacity = '1';
+  }
+}
+
+// Tải dữ liệu từ API
+async function loadTimelineData() {
+  const container = document.getElementById('unifiedTimelineContainer');
+  const statsEl = document.getElementById('timelineStatsText');
+
+  if (container) {
+    container.innerHTML = `
+      <div style="text-align:center; padding:32px 16px; color:var(--ink-soft);">
+        <div style="display:inline-block; width:26px; height:26px; border:3px solid var(--line); border-top-color:var(--leaf); border-radius:50%; animation:spin 0.8s linear infinite;"></div>
+        <div style="margin-top:10px; font-weight:600; font-size:0.88rem;">Đang nạp dữ liệu nhật ký canh tác...</div>
+      </div>
+    `;
+  }
+
+  try {
+    const res = await fetch('/api/logs?limit=300');
+    const data = await res.json();
+    if (data.status === 'success') {
+      rawDiaryTables = data.tables || {};
+      allFlatLogs = data.logs || [];
+      processAndRenderTimeline();
+    } else {
+      if (container) {
+        container.innerHTML = `<div class="empty-state"><div class="empty-text">Không thể nạp dữ liệu: ${escapeHtml(data.message || 'Lỗi nạp dữ liệu')}</div></div>`;
+      }
+    }
+  } catch(err) {
+    console.error('Lỗi nạp nhật ký:', err);
+    if (container) {
+      container.innerHTML = `<div class="empty-state"><div class="empty-text">Lỗi kết nối máy chủ. Vui lòng tải lại trang.</div></div>`;
+    }
+  }
+}
+
+// Xử lý gom nhóm và kết xuất timeline
+function processAndRenderTimeline() {
+  allTimelineItems = [];
+  const tables = ['b1_5_material_purchases', 'b1_6_material_usages', 'b1_7_waste_treatments', 'b1_8_harvests', 'b1_9_sales', 'b1_8_harvest_sales', 'cultivation_diaries'];
+
+  const seenKeys = new Set();
+
+  tables.forEach(tableKey => {
+    const rows = rawDiaryTables[tableKey] || [];
+    rows.forEach(row => {
+      const recId = row.id || row.entry_id || row.purchase_id || row.usage_id || row.treatment_id || row.harvest_id || row.sale_id || Math.random();
+      const uKey = `${tableKey}_${recId}`;
+      if (seenKeys.has(uKey)) return;
+      seenKeys.add(uKey);
+
+      const meta = getItemMeta(tableKey, row);
+      const dateKey = getRecordDate(row);
+      const timeStr = extractTime(row.created_at);
+      const fields = getExtractedFields(tableKey, row);
+      const audioUrl = row.audio_path ? (row.audio_path.startsWith('/') ? row.audio_path : ('/' + row.audio_path)) : (row.audio_url || null);
+      const transcript = row.stt_transcript || row.raw_text || row.transcript || '';
+
+      allTimelineItems.push({
+        tableKey,
+        recordId: recId,
+        dateKey,
+        timeStr,
+        meta,
+        fields,
+        audioUrl,
+        transcript,
+        raw: row
+      });
+    });
+  });
+
+  // Fallback nếu các bảng target rỗng nhưng allFlatLogs có dữ liệu
+  if (allTimelineItems.length === 0 && Array.isArray(allFlatLogs) && allFlatLogs.length > 0) {
+    allFlatLogs.forEach(row => {
+      const tableKey = row.table || 'cultivation_diaries';
+      const recId = row.id || row.entry_id || row.activity_id || Math.random();
+      const meta = getItemMeta(tableKey, row);
+      const dateKey = getRecordDate(row);
+      const timeStr = extractTime(row.created_at);
+      const fields = getExtractedFields(tableKey, row);
+      const audioUrl = row.audio_url || row.audio_path || null;
+      const transcript = row.raw_text || row.stt_transcript || row.transcript || '';
+
+      allTimelineItems.push({
+        tableKey,
+        recordId: recId,
+        dateKey,
+        timeStr,
+        meta,
+        fields,
+        audioUrl,
+        transcript,
+        raw: row
+      });
+    });
+  }
+
+  // Sắp xếp ngày mới nhất lên đầu, rồi tới giờ mới nhất
+  allTimelineItems.sort((a, b) => {
+    if (a.dateKey !== b.dateKey) {
+      if (a.dateKey === 'Chưa rõ ngày') return 1;
+      if (b.dateKey === 'Chưa rõ ngày') return -1;
+      return String(b.dateKey).localeCompare(String(a.dateKey));
+    }
+    return String(b.timeStr || '').localeCompare(String(a.timeStr || ''));
+  });
+
+  renderFilteredTimeline();
+}
+
+// Circular Progress Audio Player logic
+let currentlyPlayingAudio = null;
+
+function renderCircularAudioPlayer(audioUrl) {
+  if (!audioUrl) return '';
+  return `
+    <div class="circular-audio-player" data-src="${escapeHtml(audioUrl)}" onclick="toggleCircularAudio(this, event)" title="Phát ghi âm">
+      <svg class="progress-ring" width="34" height="34" viewBox="0 0 32 32">
+        <circle class="ring-bg" cx="16" cy="16" r="14"></circle>
+        <circle class="ring-bar" cx="16" cy="16" r="14"></circle>
+      </svg>
+      <button type="button" class="btn-circular-play" aria-label="Phát ghi âm">
+        <span class="play-icon">
+          <svg class="icon-play" width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="7 4 19 12 7 20 7 4"></polygon></svg>
+          <svg class="icon-pause" width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="3.5" height="14" rx="1"></rect><rect x="14.5" y="5" width="3.5" height="14" rx="1"></rect></svg>
+        </span>
+      </button>
+      <audio preload="none" src="${escapeHtml(audioUrl)}" style="display:none;"></audio>
+    </div>
+  `;
+}
+
+function toggleCircularAudio(triggerEl, e) {
+  if (e) {
+    e.stopPropagation();
+  }
+  const player = triggerEl.classList.contains('circular-audio-player') ? triggerEl : triggerEl.closest('.circular-audio-player');
+  if (!player) return;
+  const audio = player.querySelector('audio');
+  if (!audio) return;
+
+  const ringBar = player.querySelector('.ring-bar');
+  const circumference = 87.96; // 2 * PI * 14
+
+  if (!audio._hasPlayerListeners) {
+    audio._hasPlayerListeners = true;
+    audio.addEventListener('timeupdate', () => {
+      if (ringBar && audio.duration && isFinite(audio.duration) && audio.duration > 0) {
+        const p = audio.currentTime / audio.duration;
+        ringBar.style.strokeDashoffset = String(circumference * (1 - Math.min(Math.max(p, 0), 1)));
+      }
+    });
+    audio.addEventListener('ended', () => {
+      player.classList.remove('is-playing');
+      player.setAttribute('title', 'Phát ghi âm');
+      if (ringBar) ringBar.style.strokeDashoffset = String(circumference);
+      if (currentlyPlayingAudio === audio) currentlyPlayingAudio = null;
+    });
+    audio.addEventListener('pause', () => {
+      player.classList.remove('is-playing');
+      player.setAttribute('title', 'Phát ghi âm');
+      if (currentlyPlayingAudio === audio) currentlyPlayingAudio = null;
+    });
+    audio.addEventListener('play', () => {
+      player.classList.add('is-playing');
+      player.setAttribute('title', 'Tạm dừng');
+    });
+  }
+
+  if (audio.paused) {
+    if (currentlyPlayingAudio && currentlyPlayingAudio !== audio) {
+      currentlyPlayingAudio.pause();
+    }
+    currentlyPlayingAudio = audio;
+    audio.play().catch(err => console.warn('Lỗi phát âm thanh:', err));
+  } else {
+    audio.pause();
+  }
+}
+
+// Render theo bộ lọc và tìm kiếm
+function renderFilteredTimeline() {
+  const container = document.getElementById('unifiedTimelineContainer');
+  const statsEl = document.getElementById('timelineStatsText');
+  if (!container) return;
+
+  const filtered = allTimelineItems.filter(item => {
+    if (currentFilter !== 'all' && item.meta.type !== currentFilter) {
+      return false;
+    }
+    if (currentSearch) {
+      const q = currentSearch.toLowerCase();
+      const textMatch = (item.meta.title && item.meta.title.toLowerCase().includes(q)) ||
+                        (item.meta.subtitle && item.meta.subtitle.toLowerCase().includes(q)) ||
+                        (item.meta.mainTitle && item.meta.mainTitle.toLowerCase().includes(q)) ||
+                        (item.meta.typeName && item.meta.typeName.toLowerCase().includes(q)) ||
+                        (item.transcript && item.transcript.toLowerCase().includes(q)) ||
+                        (item.dateKey && item.dateKey.toLowerCase().includes(q)) ||
+                        (item.fields && item.fields.some(f => (f.label && f.label.toLowerCase().includes(q)) || (f.val && f.val.toLowerCase().includes(q))));
+      if (!textMatch) return false;
+    }
+    return true;
+  });
+
+  if (statsEl) {
+    statsEl.innerHTML = `Hiển thị <strong>${filtered.length}</strong> hoạt động`;
+  }
+
+  if (!filtered.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        <div class="empty-text">Không tìm thấy hoạt động nào phù hợp với bộ lọc hiện tại.</div>
+      </div>
+    `;
+    return;
+  }
+
+  // Nhóm theo ngày
+  const groups = {};
+  filtered.forEach(item => {
+    if (!groups[item.dateKey]) groups[item.dateKey] = [];
+    groups[item.dateKey].push(item);
+  });
+
+  let html = '';
+  for (const dateKey of Object.keys(groups)) {
+    const items = groups[dateKey];
+    const heading = formatDayHeading(dateKey);
+
+    html += `
+      <div class="timeline-day-group" data-date="${escapeHtml(dateKey)}">
+        <div class="day-heading" onclick="toggleDayAccordion(this, event)">
+          <span class="day-chevron">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+          <span class="day-date">${escapeHtml(heading)}</span>
+          <span class="day-badge">${items.length} hoạt động</span>
+        </div>
+        <div class="timeline">
+    `;
+
+    items.forEach(item => {
+      // Lấy danh sách các trường thông tin cho bảng mở rộng xuống (đơn giản, dễ nhìn)
+      const fields = (item.fields || []).filter(f => {
+        if (!f.val) return false;
+        // Giữ lại 'Nội dung công việc' cho công việc khác để người dùng xem rõ mô tả
+        if (item.meta.type !== 'general' && f.label === 'Công việc' && item.meta.taskName && f.val.trim().toLowerCase() === item.meta.taskName.trim().toLowerCase()) {
+          return false;
+        }
+        return true;
+      });
+
+      let detailTableHtml = '';
+      if (fields.length) {
+        const phiFields = fields.filter(f => f.label.toLowerCase().includes('cách ly') || f.label.toLowerCase().includes('phi'));
+        const normalFields = fields.filter(f => !f.label.toLowerCase().includes('cách ly') && !f.label.toLowerCase().includes('phi'));
+
+        detailTableHtml = `
+          <div class="tl-detail-table">
+            ${normalFields.map(f => {
+              let valHtml = escapeHtml(f.val);
+              const lblLower = f.label.toLowerCase();
+              if (lblLower.includes('sinh vật') || lblLower.includes('dịch hại')) {
+                if (f.val.toLowerCase().includes('không') || f.val.toLowerCase().includes('sạch')) {
+                  valHtml = `<span class="tl-badge-safe"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>Không phát hiện</span>`;
+                } else {
+                  valHtml = `<span class="tl-badge-warn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>${escapeHtml(f.val)}</span>`;
+                }
+              } else if (lblLower.includes('số lượng') || lblLower.includes('liều lượng')) {
+                valHtml = `<span class="tl-qty-pill">${escapeHtml(f.val)}</span>`;
+              }
+              return `
+                <div class="tl-detail-row">
+                  <span class="tl-detail-label">${escapeHtml(f.label)}</span>
+                  <span class="tl-detail-value">${valHtml}</span>
+                </div>
+              `;
+            }).join('')}
+            ${phiFields.map(f => `
+              <div class="tl-detail-row is-phi">
+                <span class="tl-detail-label">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  ${escapeHtml(f.label)}
+                </span>
+                <span class="tl-detail-value">${escapeHtml(f.val)}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      let voiceHtml = '';
+      if (item.transcript || item.audioUrl) {
+        voiceHtml = `
+          <div class="tl-voice-note">
+            <div class="tl-voice-player">
+              ${item.audioUrl ? renderCircularAudioPlayer(item.audioUrl) : `
+                <div class="voice-wave-placeholder" title="Ghi âm giọng nói">
+                  <span style="height:6px"></span>
+                  <span style="height:12px"></span>
+                  <span style="height:8px"></span>
+                  <span style="height:14px"></span>
+                  <span style="height:6px"></span>
+                </div>
+              `}
+            </div>
+            <div class="tl-voice-content">
+              <div class="tl-voice-text">${item.transcript ? `“${escapeHtml(item.transcript)}”` : '<span style="color:var(--ink-faint); font-style:italic;">File âm thanh đính kèm</span>'}</div>
+            </div>
+          </div>
+        `;
+      }
+
+      html += `
+        <div class="timeline-entry ${item.meta.type}" data-type="${item.meta.type}">
+          <div class="timeline-marker" title="${escapeHtml(item.meta.taskName || item.meta.typeName)}">
+            ${item.meta.icon}
+          </div>
+          <div class="timeline-card is-collapsed">
+            <div class="tl-card-header" onclick="toggleCardAccordion(this, event)">
+              <div class="tl-card-main">
+                <div class="tl-task-title">${escapeHtml(item.meta.taskName || item.meta.typeName)}</div>
+                <div class="tl-card-subtitle">${escapeHtml(item.meta.subtitle)}</div>
+              </div>
+              <div class="tl-card-meta-right">
+                ${item.meta.plot ? `<span class="tl-plot-pill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${escapeHtml(item.meta.plot)}</span>` : ''}
+                ${item.timeStr ? `<span class="tl-time-pill">${escapeHtml(item.timeStr)}</span>` : ''}
+                <span class="tl-chevron-icon" title="Bấm để mở rộng xem chi tiết">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </span>
+              </div>
+            </div>
+
+            <div class="tl-card-body">
+              ${detailTableHtml}
+              ${voiceHtml}
+              <div class="tl-card-actions">
+                <button type="button" class="btn-delete-entry" title="Xóa bản ghi này" onclick="event.stopPropagation(); deleteEntry('${escapeHtml(item.tableKey)}', '${escapeHtml(String(item.recordId))}', this)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                  <span>Xóa bản ghi</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    html += `
+        </div>
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
+}
+
+// Accordion interactions
+function toggleDayAccordion(el, e) {
+  if (e) e.stopPropagation();
+  const group = el.closest('.timeline-day-group');
+  if (group) {
+    group.classList.toggle('is-collapsed');
+  }
+}
+
+function toggleCardAccordion(el, e) {
+  if (e && (e.target.closest('.btn-delete-entry') || e.target.closest('.circular-audio-player') || e.target.closest('audio'))) return;
+  const card = el.closest('.timeline-card');
+  if (card) {
+    card.classList.toggle('is-collapsed');
+  }
+}
+
+// Toggle all days
+const btnToggleAllDays = document.getElementById('btnToggleAllDays');
+if (btnToggleAllDays) {
+  btnToggleAllDays.addEventListener('click', function() {
+    const container = document.getElementById('unifiedTimelineContainer');
+    if (!container) return;
+    const groups = container.querySelectorAll('.timeline-day-group');
+    if (!groups.length) return;
+    const hasOpen = Array.from(groups).some(g => !g.classList.contains('is-collapsed'));
+    groups.forEach(g => {
+      if (hasOpen) g.classList.add('is-collapsed');
+      else g.classList.remove('is-collapsed');
+    });
+    const nextTitle = hasOpen ? 'Mở rộng tất cả ngày' : 'Thu gọn tất cả ngày';
+    this.title = nextTitle;
+    this.setAttribute('aria-label', nextTitle);
+    this.innerHTML = hasOpen
+      ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 13 12 18 17 13"/><polyline points="7 6 12 11 17 6"/></svg>'
+      : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>';
+  });
+}
+
+// Search input
+const searchInput = document.getElementById('timelineSearchInput');
+if (searchInput) {
+  searchInput.addEventListener('input', function(e) {
+    currentSearch = (e.target.value || '').trim();
+    renderFilteredTimeline();
+  });
+}
+
+// Dropdown filter
+const filterSelect = document.getElementById('timelineFilterSelect');
+if (filterSelect) {
+  filterSelect.addEventListener('change', function(e) {
+    currentFilter = e.target.value;
+    renderFilteredTimeline();
+  });
+}
+
+// Refresh button
+const refreshBtn = document.getElementById('refreshLogsBtn');
+if (refreshBtn) {
+  refreshBtn.addEventListener('click', function() {
+    loadTimelineData();
+  });
+}
+
+// Toggle mở rộng / thu gọn thông tin HTX & Vùng trồng
+function toggleFarmerAccordion(e) {
+  if (e && (e.target.closest('.loc-btn') || e.target.closest('a'))) return;
+  const card = document.getElementById('farmerCard') || document.querySelector('.farmer-card');
+  if (!card) return;
+  card.classList.toggle('is-expanded');
+  const isExp = card.classList.contains('is-expanded');
+  const textEl = document.getElementById('btnToggleFarmerText');
+  if (textEl) {
+    textEl.textContent = isExp ? 'Thu gọn thông tin Hợp tác xã' : 'Xem chi tiết Hợp tác xã & Vùng trồng';
+  }
+}
+
+const DEFAULT_PLOTS_DIARY = [
+  { plot_id: 1, name: 'Lô 1 — Vườn Cà gai leo Trung tâm', plot_code: 'VN-HBOR-0033-L01', latitude: 20.86552, longitude: 105.32895 },
+  { plot_id: 2, name: 'Lô 2 — Vườn Cà gai leo Bãi Sông Đà', plot_code: 'VN-HBOR-0033-L02', latitude: 20.86815, longitude: 105.33210 },
+  { plot_id: 3, name: 'Lô 3 — Vườn Dược liệu Đồi Cao', plot_code: 'VN-HBOR-0033-L03', latitude: 20.86310, longitude: 105.32540 }
+];
+let farmPlotsDiary = DEFAULT_PLOTS_DIARY;
+
+fetch('/api/plots')
+  .then(r => r.json())
+  .then(d => { if (d && d.status === 'success' && Array.isArray(d.data) && d.data.length > 0) farmPlotsDiary = d.data; })
+  .catch(() => {});
+
+function calcHaversineDistanceDiary(lat1, lon1, lat2, lon2) {
+  const R = 6371000;
+  const phi1 = lat1 * Math.PI / 180;
+  const phi2 = lat2 * Math.PI / 180;
+  const deltaPhi = (lat2 - lat1) * Math.PI / 180;
+  const deltaLambda = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+            Math.cos(phi1) * Math.cos(phi2) *
+            Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+function locateGPS(e, isManual = true) {
+  if (e) e.stopPropagation();
+  const nameEl = document.getElementById('locPlotNameDiary');
+  const badgeEl = document.getElementById('locPlotBadgeTextDiary');
+  const btnEl = document.getElementById('locBtnDiary');
+
+  // Nếu không phải người dùng bấm chủ động và đã có vị trí lưu trong browser -> Dùng ngay, không gọi lại GPS
+  if (!isManual) {
+    try {
+      const saved = JSON.parse(localStorage.getItem('nearest_plot') || 'null');
+      if (saved && saved.name) {
+        if (nameEl) {
+          nameEl.textContent = saved.name;
+          nameEl.title = `${saved.name} (${saved.plot_code || ''})`;
+        }
+        if (badgeEl) {
+          const distStr = saved.distStr || (saved.distance ? (saved.distance < 1000 ? `${Math.round(saved.distance)}m` : `${(saved.distance / 1000).toFixed(1)}km`) : '');
+          badgeEl.textContent = distStr ? `Gần nhất · cách ${distStr}` : 'Đã định vị';
+        }
+        if (btnEl) btnEl.textContent = 'Cập nhật';
+        return;
+      }
+    } catch (err) {
+      console.warn('Lỗi đọc nearest_plot từ localStorage:', err);
+    }
+  }
+
+  if (btnEl) btnEl.textContent = 'Đang định vị…';
+  if (badgeEl) badgeEl.textContent = 'Đang định vị…';
+
+  if (!navigator.geolocation) {
+    if (badgeEl) badgeEl.textContent = 'Lô mặc định';
+    if (btnEl) btnEl.textContent = 'Định vị GPS';
+    if (isManual) alert('Trình duyệt không hỗ trợ định vị GPS.');
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      let nearest = null;
+      let minDist = Infinity;
+
+      farmPlotsDiary.forEach(p => {
+        if (p.latitude && p.longitude) {
+          const d = calcHaversineDistanceDiary(lat, lng, parseFloat(p.latitude), parseFloat(p.longitude));
+          if (d < minDist) {
+            minDist = d;
+            nearest = { ...p, distance: d };
+          }
+        }
+      });
+
+      if (nearest) {
+        const distStr = minDist < 1000 ? `${Math.round(minDist)}m` : `${(minDist / 1000).toFixed(1)}km`;
+        nearest.distStr = distStr;
+        try { localStorage.setItem('nearest_plot', JSON.stringify(nearest)); } catch(err){}
+        if (nameEl) {
+          nameEl.textContent = nearest.name;
+          nameEl.title = `${nearest.name} (${nearest.plot_code || ''})`;
+        }
+        if (badgeEl) badgeEl.textContent = `Gần nhất · cách ${distStr}`;
+        if (btnEl) btnEl.textContent = 'Cập nhật';
+        if (isManual) {
+          alert(`Đã định vị thành công!\nLô gần bạn nhất: ${nearest.name}\nKhoảng cách: ${distStr}\nTọa độ GPS: ${lat.toFixed(5)}, ${lng.toFixed(5)}`);
+        }
+      }
+    },
+    (err) => {
+      console.warn('GPS error in diary:', err.message);
+      if (btnEl) btnEl.textContent = 'Định vị GPS';
+      if (badgeEl) badgeEl.textContent = 'Lô mặc định';
+      if (isManual) alert('Không thể lấy tọa độ GPS: ' + (err.message || 'Vui lòng kiểm tra quyền vị trí.'));
+    },
+    { enableHighAccuracy: true, timeout: 8000, maximumAge: 30000 }
+  );
+}
+
+// Tự động định vị khi vào trang sổ nhật ký
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => locateGPS(null, false));
+} else {
+  locateGPS(null, false);
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// Đóng menu xuất báo cáo khi bấm ra ngoài
+window.addEventListener('click', function(e) {
+  var m = document.getElementById('exportMenuDropdown');
+  if (m && m.style.display === 'block' && !e.target.closest('.export-dropdown-wrapper')) {
+    m.style.display = 'none';
+  }
+});
+
+// Khởi chạy nạp dữ liệu: Hỗ trợ cả khi trang đã sẵn sàng hoặc đang tải
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadTimelineData);
+} else {
+  loadTimelineData();
+}
+</script>
+
+</body>
+</html>

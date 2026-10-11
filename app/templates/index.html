@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Nông Ký — Trang chủ Hệ thống Canh tác VietGAP (HTX Đại Đồng)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page-bg:#141C15;
+    --paper:#FBF8EF;
+    --card:#FFFDF7;
+    --ink:#232A1C;
+    --ink-soft:#6E7862;
+    --ink-faint:#9BA38C;
+    --line: rgba(35,42,28,0.10);
+    --header:#1F3626;
+    --header-soft: rgba(246,241,226,0.72);
+    --leaf:#3F6B3F;
+    --leaf-bright:#5B8C4A;
+    --clay:#A6512E;
+    --gold:#B8830E;
+    --gold-bright:#D6A339;
+    --blue:#2B6CB0;
+    --moss: #4C5F3A;
+    --moss-deep: #33421F;
+    --moss-tint: #EEF0E4;
+    --ochre: #B5842A;
+    --ochre-tint: #FBF1DD;
+    --rust: #A9532F;
+    --rust-tint: #FBEAE1;
+    --sky: #3E6E7A;
+    --sky-tint: #E7F1F1;
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    font-size: 16.5px;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: var(--page-bg);
+    font-family:'Be Vietnam Pro', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    display:flex; justify-content:center;
+    min-height:100vh;
+  }
+
+  .app{
+    width:100%; max-width: 500px;
+    background: var(--paper);
+    min-height:100vh;
+    position:relative;
+    box-shadow: 0 0 60px rgba(0,0,0,0.45);
+    display:flex; flex-direction:column;
+  }
+
+  /* ---------- Header ---------- */
+  .header{
+    background: var(--header);
+    padding: 18px 20px 44px;
+    color: #F6F1E2;
+    position:relative;
+  }
+  .header-top{
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .app-name{ font-size:1.2rem; font-weight:800; letter-spacing:0.01em; }
+  .app-name em{ font-style:normal; color:#D6A339; }
+  .btn-logout{
+    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.22);
+    color: #F6F1E2;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .btn-logout:hover{ background: rgba(255,255,255,0.24); }
+  .user-bar{
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    font-size: 0.78rem;
+    color: rgba(246,241,226,0.88);
+  }
+  .user-greeting b{ color: #D6A339; }
+  .user-role{
+    background: rgba(184,131,14,0.3);
+    border: 1px solid rgba(214,163,57,0.4);
+    color: #FAD477;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  /* ---------- Farmer Card ---------- */
+  .farmer-card{
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    margin: -28px 16px 0;
+    padding: 16px 18px 12px;
+    box-shadow: 0 12px 28px -10px rgba(0,0,0,0.3);
+    position:relative;
+    z-index:2;
+    border: 1px solid rgba(35,42,28,0.06);
+    transition: all 0.25s ease;
+  }
+  .farmer-top{ display:flex; gap:12px; align-items:center; cursor:pointer; user-select:none; }
+  .avatar{
+    width:50px; height:50px; border-radius:14px;
+    background: linear-gradient(135deg, var(--leaf), var(--header));
+    color:#fff; font-weight:800; font-size:1rem;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; box-shadow: 0 4px 10px rgba(31,54,38,0.25);
+  }
+  .farmer-meta{ flex:1; min-width:0; }
+  .farmer-name{
+    font-weight:800; font-size:0.96rem; color:var(--ink);
+    line-height:1.35; margin-bottom: 3px;
+  }
+  .farmer-address{
+    font-size:0.78rem; color:var(--ink-soft); line-height:1.3;
+    display:flex; align-items:center; gap:4px;
+  }
+  .farmer-chevron {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(35,42,28,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--leaf);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+  .farmer-card.is-expanded .farmer-chevron svg {
+    transform: rotate(180deg);
+  }
+
+  .farmer-tags{
+    display:flex; gap:6px; flex-wrap:wrap;
+    margin-top: 10px;
+  }
+  .tag{
+    font-size: 0.74rem;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(63,107,63,0.10);
+    color: var(--leaf);
+    font-weight: 600;
+  }
+  .tag.puc{ background: rgba(43,108,176,0.12); color:#235A96; font-family:'IBM Plex Mono', monospace; }
+  .tag.crop{ background: rgba(184,131,14,0.14); color:#8A6209; }
+  .tag.area{ background: rgba(166,81,46,0.12); color:var(--clay); }
+
+  .farmer-expand-body{
+    display: none;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line);
+  }
+  .farmer-card.is-expanded .farmer-expand-body{
+    display: block;
+  }
+  .puc-grid{
+    display:grid; grid-template-columns: 1fr 1fr; gap:8px;
+    font-size:0.78rem;
+  }
+  .puc-item{
+    background: rgba(35,42,28,0.03);
+    border-radius: var(--radius-sm);
+    padding: 7px 10px;
+    border: 1px solid rgba(35,42,28,0.05);
+  }
+  .puc-item.full{ grid-column: span 2; }
+  .puc-label{ color:var(--ink-soft); font-size:0.7rem; font-weight:600; margin-bottom:2px; }
+  .puc-val{ color:var(--ink); font-weight:700; font-size:0.82rem; }
+  .puc-val.hl{ color:var(--leaf); }
+
+  .btn-toggle-farmer{
+    width: 100%;
+    margin-top: 10px;
+    padding: 7px 0 3px;
+    background: transparent;
+    border: none;
+    border-top: 1px dashed rgba(35,42,28,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--leaf);
+    cursor: pointer;
+  }
+
+  /* ---------- Section Lựa chọn chính (Hub Navigation) ---------- */
+  .section{
+    padding: 24px 16px 12px;
+  }
+  .section-header{
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .section-badge{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(63,107,63,0.12);
+    color: var(--leaf);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 6px;
+  }
+  .section-title{
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin: 0;
+  }
+  .section-subtitle{
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+
+  /* Thẻ điều hướng lựa chọn lớn */
+  .hub-card{
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    padding: 20px 18px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(35,42,28,0.08);
+    box-shadow: 0 4px 18px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .hub-card:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.09);
+  }
+
+  .hub-card-top{
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .hub-icon-wrap{
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  }
+  .hub-icon-diary{
+    background: linear-gradient(135deg, var(--leaf), var(--header));
+  }
+  .hub-icon-conversation{
+    background: linear-gradient(135deg, #D6A339, #B8830E);
+  }
+
+  .hub-meta{
+    flex: 1;
+    min-width: 0;
+  }
+  .hub-title{
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: var(--ink);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .hub-desc{
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+  }
+
+  .hub-card-action{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-top: 1px dashed rgba(35,42,28,0.08);
+    padding-top: 14px;
+  }
+
+  /* Nút bấm hành động */
+  .btn-hub-action{
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 22px;
+    border-radius: 999px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+  }
+  .btn-hub-diary{
+    background: linear-gradient(135deg, var(--leaf-bright), var(--leaf));
+    color: #fff;
+    box-shadow: 0 6px 18px -4px rgba(63,107,63,0.5);
+  }
+  .btn-hub-diary:hover{
+    background: linear-gradient(135deg, var(--leaf), #2d4f2d);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  .btn-hub-conversation{
+    background: linear-gradient(135deg, #D6A339, #B8830E);
+    color: #1F3626;
+    box-shadow: 0 6px 18px -4px rgba(184,131,14,0.45);
+  }
+  .btn-hub-conversation:hover{
+    background: linear-gradient(135deg, #E2B24C, #A67509);
+    color: #141C15;
+    transform: translateY(-1px);
+  }
+
+  /* ---------- Phụ lục liên kết nhanh ---------- */
+  .extra-links-section{
+    margin-top: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+  .extra-links-title{
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 10px;
+  }
+  .extra-links-group{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .extra-link-btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(35,42,28,0.04);
+    border: 1px solid rgba(35,42,28,0.09);
+    color: var(--ink-soft);
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+  .extra-link-btn:hover{
+    background: rgba(63,107,63,0.08);
+    color: var(--leaf);
+    border-color: rgba(63,107,63,0.25);
+  }
+
+  /* Footer */
+  .footer-simple{
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--ink-faint);
+    padding: 24px 16px 30px;
+    margin-top: auto;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-top">
+      <span class="app-name">nông<em>ký</em></span>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <a href="/logout" title="Đăng xuất" class="btn-logout">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Thoát</span>
+        </a>
+      </div>
+    </div>
+    {% if farmer %}
+    <div class="user-bar">
+      <span class="user-greeting">Nông hộ: <b>{{ farmer.full_name }}</b> ({{ farmer.username }})</span>
+      <span class="user-role">{{ farmer.role }}</span>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Farmer / Producer Card (Dạng mở rộng) -->
+  <div class="farmer-card" id="farmerCard">
+    <div class="farmer-top" onclick="toggleFarmerAccordion(event)" title="Chạm để mở rộng / thu gọn chi tiết HTX">
+      <div class="avatar" id="avatarInit">{% if farmer %}{{ farmer.full_name[:2].upper() }}{% else %}HTX{% endif %}</div>
+      <div class="farmer-meta">
+        <div class="farmer-name" id="farmerName">{% if farmer and farmer.farm_name %}{{ farmer.farm_name }}{% else %}HỢP TÁC XÃ ĐẠI ĐỒNG{% endif %}</div>
+        <div class="farmer-address" id="farmerAddress">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          {% if farmer and farmer.farm_address %}{{ farmer.farm_address }}{% else %}Xóm Độc Lập - Xã Thịnh Minh - Tỉnh Phú Thọ{% endif %}
+        </div>
+      </div>
+      <div class="farmer-chevron" id="farmerChevron">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+
+    <!-- Tags thông số chính -->
+    <div class="farmer-tags">
+      <span class="tag puc" title="Mã số vùng trồng">P.U.C: {{ farmer.farm_code if farmer and farmer.farm_code else 'VN-HBOR-0033' }}</span>
+      <span class="tag area" title="Diện tích canh tác">{{ farmer.area_text if farmer and farmer.area_text else '07 HA' }}</span>
+      <span class="tag crop" title="Giống cây trồng">{{ farmer.crop_name if farmer and farmer.crop_name else 'Bưởi diễn' }}</span>
+      <span class="tag" style="background:#EBF8FF; color:#2B6CB0; font-weight:700;">{{ farmer.certification_body if farmer and farmer.certification_body else 'VietGAP Trồng trọt' }}</span>
+    </div>
+
+    <!-- Chi tiết thông tin Hợp tác xã & Vùng trồng dạng mở rộng -->
+    <div class="farmer-expand-body" id="farmerExpandBody">
+      <div class="puc-grid">
+        <div class="puc-item">
+          <div class="puc-label">Mã số vùng trồng (P.U.C)</div>
+          <div class="puc-val hl">{{ farmer.farm_code if farmer and farmer.farm_code else 'VN-HBOR-0033' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Quy mô diện tích</div>
+          <div class="puc-val">{{ farmer.area_text if farmer and farmer.area_text else '07 HA (70.000 m²)' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Giống cây trồng</div>
+          <div class="puc-val">{{ farmer.crop_name if farmer and farmer.crop_name else 'Bưởi diễn' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Tiêu chuẩn canh tác</div>
+          <div class="puc-val hl">{{ farmer.certification_body if farmer and farmer.certification_body else 'VietGAP Trồng trọt' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Thời vụ xuống giống</div>
+          <div class="puc-val">{{ farmer.plant_date if farmer and farmer.plant_date else 'Tháng 04/2025' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Thời vụ thu hoạch</div>
+          <div class="puc-val">{{ farmer.harvest_date if farmer and farmer.harvest_date else 'Tháng 10/2025' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Giai đoạn mùa vụ</div>
+          <div class="puc-val hl" id="pucGrowthStage">{{ farmer.growth_stage if farmer and farmer.growth_stage else 'Sinh trưởng' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Sản lượng dự kiến</div>
+          <div class="puc-val">{{ farmer.estimated_yield if farmer and farmer.estimated_yield else '100 tấn/năm' }}</div>
+        </div>
+        <div class="puc-item">
+          <div class="puc-label">Sản lượng thực tế</div>
+          <div class="puc-val">{{ farmer.actual_yield if farmer and farmer.actual_yield else '84 tấn/năm' }}</div>
+        </div>
+        <div class="puc-item full">
+          <div class="puc-label">Lô canh tác chính</div>
+          <div class="puc-val">Lô 1 — Vườn Bưởi diễn Trung tâm</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nút mở rộng / thu gọn -->
+    <button type="button" class="btn-toggle-farmer" id="btnToggleFarmer" onclick="toggleFarmerAccordion(event)">
+      <span id="btnToggleFarmerText">Xem chi tiết Hợp tác xã & Vùng trồng</span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+  </div>
+
+  <!-- ==================== KHU VỰC TRUNG TÂM: 2 LỰA CHỌN ĐIỀU HƯỚNG CHÍNH ==================== -->
+  <div class="section">
+
+    <!-- LỰA CHỌN 1: SỔ NHẬT KÝ CANH TÁC VIETGAP (như cũ) -->
+    <div class="hub-card">
+      <div class="hub-card-top">
+        <div class="hub-icon-wrap hub-icon-diary">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </div>
+        <div class="hub-meta">
+          <div class="hub-title">
+            <span>Sổ nhật ký canh tác VietGAP</span>
+          </div>
+          <div class="hub-desc">
+            Xem các hoạt động đã làm theo thời gian, xuất báo cáo theo tiêu chuẩn VietGAP, GlobalGAP.
+          </div>
+        </div>
+      </div>
+      <div class="hub-card-action">
+        <a href="/nhat-ky" class="btn-hub-action btn-hub-diary">
+          <span>Mở sổ nhật ký</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- LỰA CHỌN 2: TRỢ LÝ HỘI THOẠI AI (CONVERSATION) (tương tự phần mở nhật ký) -->
+    <div class="hub-card">
+      <div class="hub-card-top">
+        <div class="hub-icon-wrap hub-icon-conversation">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            <circle cx="9" cy="10" r="1.2" fill="currentColor"/>
+            <circle cx="12" cy="10" r="1.2" fill="currentColor"/>
+            <circle cx="15" cy="10" r="1.2" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="hub-meta">
+          <div class="hub-title">
+            <span>Ghi nhật ký</span>
+          </div>
+          <div class="hub-desc">
+            Ghi nhật ký nhanh chóng bằng giọng nói. Hỗ trợ phát hiện và chuẩn đoán sâu bệnh, thuốc BVTV, phân bón.
+          </div>
+        </div>
+      </div>
+      <div class="hub-card-action">
+        <a href="/conversation" class="btn-hub-action btn-hub-conversation">
+          <span>Thêm hoạt động</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- LIÊN KẾT PHỤ (Dự phòng cho biểu mẫu cổ điển) -->
+    <div class="extra-links-section">
+      <div class="extra-links-title">Lựa chọn bổ sung khác</div>
+      <div class="extra-links-group">
+        <a href="/ghi-nhat-ky-cu" class="extra-link-btn" title="Giao diện thu âm mic và trích xuất form truyền thống">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          <span>Ghi âm & trích xuất cũ</span>
+        </a>
+        <a href="/them-hoat-dong" class="extra-link-btn" title="Điền biểu mẫu thủ công">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>Thêm việc thủ công</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-simple">
+    Nông ký điện tử VietGAP — HTX Đại Đồng
+  </div>
+
+</div>
+
+<script>
+  function toggleFarmerAccordion(e) {
+    if (e) e.stopPropagation();
+    const card = document.getElementById("farmerCard");
+    const isExpanded = card.classList.toggle("is-expanded");
+    const btnText = document.getElementById("btnToggleFarmerText");
+    if (btnText) {
+      btnText.textContent = isExpanded ? "Thu gọn chi tiết Hợp tác xã" : "Xem chi tiết Hợp tác xã & Vùng trồng";
+    }
+  }
+</script>
+
+</body>
+</html>

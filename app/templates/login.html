@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Đăng Nhập — Nông Ký VietGAP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page-bg:#141C15;
+    --paper:#FBF8EF;
+    --card:#FFFDF7;
+    --ink:#232A1C;
+    --ink-soft:#6E7862;
+    --ink-faint:#9BA38C;
+    --line: rgba(35,42,28,0.12);
+    --header:#1F3626;
+    --leaf:#3F6B3F;
+    --leaf-bright:#5B8C4A;
+    --clay:#A6512E;
+    --gold:#B8830E;
+    --radius-lg: 20px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+    font-size: 16px;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
+  body{
+    margin:0; padding:0;
+    background: var(--page-bg);
+    font-family:'Be Vietnam Pro', sans-serif;
+    display:flex; justify-content:center; align-items:center;
+    min-height:100vh;
+    padding: 16px;
+  }
+  .login-container{
+    width:100%; max-width: 420px;
+    background: var(--paper);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    overflow: hidden;
+    display:flex; flex-direction:column;
+  }
+  .login-header{
+    background: var(--header);
+    color: #F6F1E2;
+    padding: 28px 24px 24px;
+    text-align: center;
+    position:relative;
+  }
+  .app-logo{
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 54px; height: 54px; border-radius: 16px;
+    background: linear-gradient(135deg, var(--leaf-bright), var(--header));
+    margin-bottom: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  }
+  .app-logo svg{ color: #fff; }
+  .app-title{
+    font-size: 1.45rem; font-weight: 800; letter-spacing: 0.02em;
+    margin: 0 0 4px;
+  }
+  .app-title em{ font-style:normal; color:#D6A339; }
+  .app-subtitle{
+    font-size: 0.82rem; color: rgba(246,241,226,0.75); margin: 0;
+  }
+  .badge-db{
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(91, 140, 74, 0.25);
+    border: 1px solid rgba(182, 224, 168, 0.3);
+    color: #A3E69B;
+    font-size: 0.72rem; font-weight: 600;
+  }
+  .badge-dot{
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #4ade80; box-shadow: 0 0 6px #4ade80;
+  }
+
+  .login-body{
+    padding: 24px;
+  }
+  .form-group{
+    margin-bottom: 16px;
+  }
+  .form-label{
+    display: block; font-size: 0.82rem; font-weight: 600;
+    color: var(--ink); margin-bottom: 6px;
+  }
+  .input-wrapper{
+    position: relative;
+    display: flex; align-items: center;
+  }
+  .input-icon{
+    position: absolute; left: 14px;
+    color: var(--ink-faint); pointer-events: none;
+    display: flex; align-items: center;
+  }
+  .form-input{
+    width: 100%;
+    padding: 13px 14px 13px 42px;
+    font-family: inherit; font-size: 0.95rem;
+    color: var(--ink);
+    background: var(--card);
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius-md);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .form-input:focus{
+    border-color: var(--leaf);
+    box-shadow: 0 0 0 3px rgba(63, 107, 63, 0.15);
+  }
+  .toggle-pwd{
+    position: absolute; right: 12px;
+    background: none; border: none; padding: 4px;
+    color: var(--ink-faint); cursor: pointer;
+    display: flex; align-items: center;
+  }
+  .toggle-pwd:hover{ color: var(--ink); }
+
+  .error-box{
+    display: none;
+    background: rgba(166, 81, 46, 0.12);
+    border: 1px solid rgba(166, 81, 46, 0.25);
+    color: var(--clay);
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem; font-weight: 500;
+    margin-bottom: 16px;
+    align-items: center; gap: 8px;
+  }
+  .error-box.show{ display: flex; }
+
+  .btn-submit{
+    width: 100%; padding: 13px 16px;
+    border: none; border-radius: 999px;
+    background: var(--leaf); color: #fff;
+    font-family: inherit; font-size: 0.98rem; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+    box-shadow: 0 6px 14px rgba(63, 107, 63, 0.35);
+    transition: transform 0.1s, opacity 0.15s, background 0.15s;
+    margin-top: 8px;
+  }
+  .btn-submit:hover{ background: var(--leaf-bright); }
+  .btn-submit:active{ transform: scale(0.98); }
+  .btn-submit:disabled{ opacity: 0.6; cursor: not-allowed; }
+
+  .quick-section{
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--line);
+  }
+  .quick-title{
+    font-size: 0.74rem; font-weight: 600; text-transform: uppercase;
+    color: var(--ink-faint); letter-spacing: 0.04em;
+    margin-bottom: 10px; text-align: center;
+  }
+  .quick-grid{
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  }
+  .quick-btn{
+    background: rgba(35,42,28,0.04);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 9px 10px;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s, border-color 0.15s;
+    font-family: inherit;
+  }
+  .quick-btn:hover{
+    background: rgba(63,107,63,0.08);
+    border-color: var(--leaf);
+  }
+  .quick-role{ font-size: 0.78rem; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+  .quick-user{ font-size: 0.72rem; color: var(--ink-soft); font-family: 'IBM Plex Mono', monospace; }
+
+  .login-footer{
+    padding: 14px 24px 20px;
+    text-align: center;
+    font-size: 0.73rem; color: var(--ink-faint);
+  }
+  .spinner{
+    width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff; border-radius: 50%;
+    animation: spin 0.7s linear infinite; display: inline-block;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="login-container">
+  <div class="login-header">
+    <div class="app-logo">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2a10 10 0 0 1 10 10c0 5.523-4.477 10-10 10S2 17.523 2 12"/>
+        <path d="M7 16c2-4 5-6 9-6"/>
+        <path d="M12 10v6"/>
+      </svg>
+    </div>
+    <h1 class="app-title">nông<em>ký</em></h1>
+    <p class="app-subtitle">Sổ nhật ký canh tác điện tử VietGAP</p>
+  </div>
+
+  <div class="login-body">
+    <div class="error-box" id="errorBox">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="errorMsg">Tên đăng nhập hoặc mật khẩu không chính xác.</span>
+    </div>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label class="form-label" for="username">Tài khoản nông dân</label>
+        <div class="input-wrapper">
+          <span class="input-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
+          <input type="text" id="username" class="form-input" placeholder="Nhập tên tài khoản..." required autofocus autocomplete="username">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Mật khẩu</label>
+        <div class="input-wrapper">
+          <span class="input-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </span>
+          <input type="password" id="password" class="form-input" placeholder="Nhập mật khẩu..." required autocomplete="current-password">
+          <button type="button" class="toggle-pwd" onclick="togglePassword()" title="Hiện/ẩn mật khẩu">
+            <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <span>Đăng Nhập</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </form>
+
+    <div class="quick-section">
+      <div class="quick-title">Tài khoản mẫu thử nghiệm</div>
+      <div class="quick-grid">
+        <button type="button" class="quick-btn" onclick="fillAccount('nongdan1', '123456')">
+          <div class="quick-role">Nông dân</div>
+        </button>
+        <button type="button" class="quick-btn" onclick="fillAccount('admin', 'admin123')">
+          <div class="quick-role">Quản trị</div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-footer">
+    Hệ thống Nông Ký
+  </div>
+</div>
+
+<script>
+function togglePassword() {
+  const pwd = document.getElementById('password');
+  const icon = document.getElementById('eyeIcon');
+  if (pwd.type === 'password') {
+    pwd.type = 'text';
+    icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+  } else {
+    pwd.type = 'password';
+    icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+  }
+}
+
+function fillAccount(u, p) {
+  document.getElementById('username').value = u;
+  document.getElementById('password').value = p;
+  document.getElementById('errorBox').classList.remove('show');
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value;
+  const errorBox = document.getElementById('errorBox');
+  const errorMsg = document.getElementById('errorMsg');
+  const submitBtn = document.getElementById('submitBtn');
+
+  errorBox.classList.remove('show');
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="spinner"></span> Đang xác thực...';
+
+  try {
+    const res = await fetch('/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (res.ok && data.status === 'success') {
+      window.location.href = data.redirect || '/nongky';
+    } else {
+      errorMsg.textContent = data.message || 'Tên đăng nhập hoặc mật khẩu không chính xác.';
+      errorBox.classList.add('show');
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span>Đăng Nhập</span> <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+    }
+  } catch (err) {
+    errorMsg.textContent = 'Không thể kết nối đến máy chủ CSDL MySQL.';
+    errorBox.classList.add('show');
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<span>Đăng Nhập</span> <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+  }
+}
+</script>
+
+</body>
+</html>
