@@ -1,0 +1,221 @@
+{% extends "stt/base.html" %}
+{% set active = 'dashboard' %}
+{% block title %}Dashboard thống kê STT{% endblock %}
+{% block css %}
+<style>
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:1100px){.grid2{grid-template-columns:1fr}}
+  .bars{display:flex;align-items:flex-end;gap:6px;height:140px;padding-top:10px}
+  .bar{flex:1;background:var(--leaf);border-radius:4px 4px 0 0;position:relative;min-width:14px;transition:all 0.2s}
+  .bar:hover{background:var(--leaf-bright)}
+  .bar span{position:absolute;top:-18px;left:0;right:0;text-align:center;font-size:0.72rem;font-weight:700;color:var(--ink-soft);font-family:'IBM Plex Mono',monospace}
+  .barlbl{display:flex;gap:6px;margin-top:6px}.barlbl div{flex:1;text-align:center;font-size:0.72rem;color:var(--ink-soft);min-width:14px}
+  .legend{font-size:0.8rem;color:var(--ink-soft);display:flex;gap:16px;margin-bottom:8px;font-weight:600}
+  .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:middle}
+  .rec-row{cursor:pointer;transition:background 0.15s}.rec-row:hover{background:var(--moss-tint)}
+  .detail td{background:var(--paper);padding:14px 16px;border-bottom:2px solid var(--line)}
+  .pill{font-size:0.75rem;padding:2px 10px;border-radius:99px;font-weight:700}
+  .good{background:#d8ecd0;color:#2c5a24}.mid{background:var(--ochre-tint);color:var(--gold)}.bad{background:var(--rust-tint);color:var(--rust)}
+  .toolbar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center}.toolbar input{max-width:280px}
+  .hbar{height:8px;background:var(--moss-tint);border-radius:4px;overflow:hidden;min-width:70px}.hbar>div{height:100%;background:var(--leaf)}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="pagehead"><h1><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-3px;margin-right:8px"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>Dashboard thống kê</h1><p>Các file bạn đã test và lưu: độ chính xác, tốc độ, lỗi hay gặp, tiến triển từ điển.</p></div>
+<div class="wrap">
+  <div class="stats" id="stats"></div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>Tỉ lệ lỗi từ (WER) theo từng lần lưu</h2>
+      <div class="legend"><span><i style="background:#A6512E"></i>Thô (trước từ điển)</span><span><i style="background:#3F6B3F"></i>Sau từ điển</span></div>
+      <div id="trend"></div>
+    </div>
+    <div class="card">
+      <h2>Số file lưu theo ngày (14 ngày gần nhất)</h2>
+      <div id="days"></div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>Lỗi nhận diện hay gặp (đã học)</h2>
+      <div id="errors"></div>
+    </div>
+    <div class="card">
+      <h2>Cấu hình đã dùng & từ điển</h2>
+      <div id="usage"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Các file đã test & lưu</h2>
+    <div class="toolbar">
+      <input type="text" id="q" placeholder="Tìm theo tên file / nội dung…">
+      <select id="flt" style="width:auto"><option value="">Tất cả chỉnh sửa</option><option value="edited">Có chỉnh sửa</option><option value="clean">Không chỉnh sửa</option></select>
+      <button class="btn sm del" id="btnBulkDel" style="display:none;background:#A6512E;color:#fff" onclick="bulkDeleteRecords()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>Xoá mục đã chọn (<span id="selRecCount">0</span>)</button>
+      <a class="btn sec" href="/stt-config"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Test mới</a>
+    </div>
+    <div class="scroll" style="max-height:640px">
+      <table><thead><tr><th style="width:34px;text-align:center"><input type="checkbox" id="chkAllRecs" title="Chọn tất cả"></th><th>Thời gian</th><th>File</th><th>Độ dài</th><th>STT</th><th>WER thô</th><th>WER sau từ điển</th><th>Từ</th><th>Học</th><th style="text-align:right">Thao tác</th></tr></thead>
+      <tbody id="tb"></tbody></table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+let RECS=[];
+const werCls=v=>v==null?'':(v<=0.05?'good':v<=0.15?'mid':'bad');
+const werPill=v=>v==null?'—':`<span class="pill ${werCls(v)}">${pct(v)}</span>`;
+
+async function load(){
+  const [s,r]=await Promise.all([api('/api/stt-records/stats'),api('/api/stt-records')]);
+  RECS=r.records||[];
+  renderStats(s.stats);renderTrend(s.stats.trend);renderDays(s.stats.by_day);
+  renderErrors(s.stats.top_errors);renderUsage(s.stats);
+  renderTable();
+}
+function renderStats(s){
+  const acc=s.avg_wer_dict==null?null:Math.max(0,1-s.avg_wer_dict);
+  const items=[['File đã lưu',s.total],['Tổng thời lượng',fmtDur(s.audio_seconds)],['Tổng thời gian xử lý',fmtDur(s.process_seconds)],
+    ['RTF trung bình',s.avg_rtf==null?'—':s.avg_rtf],['Độ chính xác (sau từ điển)',acc==null?'—':pct(acc)],
+    ['WER thô TB',pct(s.avg_wer_raw)],['Có chỉnh sửa',`${s.edited}/${s.total}`],['Tổng số từ',s.words],
+    ['Cặp đã học',s.learned_entries],['Từ mới',s.new_vocab]];
+  $('stats').innerHTML=items.map(([a,b])=>`<div class="stat"><b>${b}</b>${a}</div>`).join('');
+}
+function renderTrend(t){
+  const pts=t.filter(x=>x.wer_raw!=null);
+  if(pts.length<1){$('trend').innerHTML='<div class="muted">Chưa có dữ liệu. Hãy test và lưu một file.</div>';return;}
+  const W=560,H=170,P=26,max=Math.max(0.1,...pts.map(x=>Math.max(x.wer_raw||0,x.wer_dict||0)))*1.1;
+  const X=i=>P+(pts.length===1?(W-2*P)/2:i*(W-2*P)/(pts.length-1)),Y=v=>H-P-(v/max)*(H-2*P);
+  const line=(k,c)=>{const p=pts.map((x,i)=>[X(i),Y(x[k]||0)]);
+    return `<polyline fill="none" stroke="${c}" stroke-width="2" points="${p.map(a=>a.join(',')).join(' ')}"/>`+
+      p.map((a,i)=>`<circle cx="${a[0]}" cy="${a[1]}" r="3.5" fill="${c}"><title>${esc(pts[i].file)}: ${pct(pts[i][k])}</title></circle>`).join('');};
+  let grid='';for(let i=0;i<=4;i++){const v=max*i/4,y=Y(v);grid+=`<line x1="${P}" x2="${W-P}" y1="${y}" y2="${y}" stroke="#e5e2d4"/><text x="2" y="${y+4}" font-size="10" fill="#6E7862">${(v*100).toFixed(0)}%</text>`;}
+  $('trend').innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%">${grid}${line('wer_raw','#A6512E')}${line('wer_dict','#3F6B3F')}</svg>`;
+}
+function renderDays(d){
+  if(!d.length){$('days').innerHTML='<div class="muted">Chưa có dữ liệu.</div>';return;}
+  const m=Math.max(...d.map(x=>x.count));
+  $('days').innerHTML=`<div class="bars">${d.map(x=>`<div class="bar" style="height:${Math.max(6,x.count/m*100)}%" title="${x.day}: ${x.count} file, ${fmtDur(x.audio)}"><span>${x.count}</span></div>`).join('')}</div>
+    <div class="barlbl">${d.map(x=>`<div>${x.day.slice(5)}</div>`).join('')}</div>`;
+}
+function renderErrors(e){
+  if(!e.length){$('errors').innerHTML='<div class="muted">Chưa có lỗi nào được học.</div>';return;}
+  const m=e[0].count;
+  $('errors').innerHTML=`<table><tbody>${e.map(x=>`<tr><td><del>${esc(x.wrong)}</del> → <ins>${esc(x.right)}</ins></td>
+    <td style="width:35%"><div class="hbar"><div style="width:${x.count/m*100}%"></div></div></td><td style="width:36px;text-align:right">${x.count}×</td></tr>`).join('')}</tbody></table>`;
+}
+function renderUsage(s){
+  const M=Object.entries(s.methods||{}),O=s.options||{},D=s.dictionary||{};
+  const names={use_vad:'Bật VAD',denoise:'Khử nhiễu',normalize:'Chuẩn hoá loudness',trim_silence:'Cắt lặng'};
+  $('usage').innerHTML=`<div class="lbl">Decoding method</div>${M.map(([k,v])=>`<span class="tag">${esc(k)}: ${v}</span>`).join('')||'<span class="muted">—</span>'}
+    <div class="lbl">Tuỳ chọn thường bật</div>${Object.entries(O).map(([k,v])=>`<span class="tag">${names[k]||k}: ${v}</span>`).join('')||'<span class="muted">—</span>'}
+    <div class="lbl">Từ điển hiện tại</div><span class="tag">${D.entries||0} cặp</span><span class="tag">${D.auto||0} tự học</span><span class="tag">${D.manual||0} thêm tay</span><span class="tag">${D.enabled||0} đang bật</span><span class="tag">${D.vocab||0} từ mới</span>
+    <div style="margin-top:8px"><a href="/stt-dictionary">Xem từ điển →</a></div>`;
+}
+function renderTable(){
+  const q=$('q').value.toLowerCase(),f=$('flt').value;
+  const rows=RECS.filter(r=>{
+    const matchQ = (!q||(r.filename||'').toLowerCase().includes(q)||(r.final_text||'').toLowerCase().includes(q));
+    const matchF = (!f||(f==='edited'?r.edited:!r.edited));
+    return matchQ && matchF;
+  });
+
+  $('tb').innerHTML=rows.map(r=>{
+    return `<tr class="rec-row" data-id="${r.id}">
+      <td style="text-align:center" onclick="event.stopPropagation()"><input type="checkbox" class="rec-chk" data-id="${r.id}"></td>
+      <td>${fmtTime(r.time)}</td>
+      <td><b>${esc(r.filename)}</b></td>
+      <td>${r.audio_duration!=null?r.audio_duration+'s':'—'}</td>
+      <td>${r.process_time?r.process_time+'s':'—'}</td>
+      <td>${werPill(r.wer_raw)}</td>
+      <td>${werPill(r.wer_dict)}</td>
+      <td>${r.words}</td>
+      <td>${(r.changes||[]).length}${(r.new_vocab||[]).length?` +${r.new_vocab.length} mới`:''}</td>
+      <td style="text-align:right"><button class="btn sm del" title="Xoá bản ghi này"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>Xoá</button></td>
+    </tr>`;
+  }).join('')||'<tr><td colspan="10" class="muted">Chưa có bản ghi nào.</td></tr>';
+
+  document.querySelectorAll('.rec-row').forEach(tr=>{
+    tr.onclick=()=>toggleDetail(tr);
+    tr.querySelector('.del').onclick=async e=>{
+      e.stopPropagation();
+      if(confirm('Xoá bản ghi này?')){
+        await api('/api/stt-records/'+tr.dataset.id,'DELETE');
+        toast('Đã xoá bản ghi.');
+        load();
+      }
+    };
+  });
+
+  document.querySelectorAll('.rec-chk').forEach(chk=>{
+    chk.onchange = updateRecSelectedCount;
+  });
+  updateRecSelectedCount();
+}
+
+function getSelectedRecordIds(){
+  return Array.from(document.querySelectorAll('.rec-chk:checked')).map(el=>el.dataset.id);
+}
+
+function updateRecSelectedCount(){
+  const selected = getSelectedRecordIds();
+  const count = selected.length;
+  const btn = $('btnBulkDel');
+  const countEl = $('selRecCount');
+  if(countEl) countEl.innerText = count;
+  if(btn) btn.style.display = count > 0 ? 'inline-flex' : 'none';
+  const allChk = $('chkAllRecs');
+  const allBoxes = document.querySelectorAll('.rec-chk');
+  if(allChk && allBoxes.length > 0){
+    allChk.checked = (selected.length === allBoxes.length);
+    allChk.indeterminate = (selected.length > 0 && selected.length < allBoxes.length);
+  } else if(allChk) {
+    allChk.checked = false;
+    allChk.indeterminate = false;
+  }
+}
+
+async function bulkDeleteRecords(){
+  const ids = getSelectedRecordIds();
+  if(!ids.length) return;
+  if(!confirm(`Bạn có chắc muốn xoá nhanh ${ids.length} bản ghi đã chọn? Thao tác này sẽ xoá bản ghi và file âm thanh lưu trữ liên quan.`)) return;
+  try {
+    const res = await api('/api/stt-records/bulk-delete', 'POST', { ids });
+    toast(`Đã xoá ${res.deleted || ids.length} bản ghi.`);
+    load();
+  } catch(e) {
+    alert('Lỗi xoá bản ghi: ' + e.message);
+  }
+}
+
+function toggleDetail(tr){
+  const nx=tr.nextElementSibling;
+  if(nx&&nx.classList.contains('detail')){nx.remove();return;}
+  const r=RECS.find(x=>x.id===tr.dataset.id),p=r.params||{};
+  const d=document.createElement('tr');d.className='detail';
+  d.innerHTML=`<td colspan="10">
+    ${r.audio_url?`<audio controls src="${r.audio_url}"></audio>`:''}
+    <div class="lbl">Thô → bản đã lưu</div><div class="diff">${diffHtml(r.raw_text,r.final_text)}</div>
+    <div class="lbl">Đã học</div>${(r.changes||[]).map(c=>`<span class="tag new">${esc(c.wrong)} → ${esc(c.right)}</span>`).join('')+(r.new_vocab||[]).map(w=>`<span class="tag new">từ mới: ${esc(w)}</span>`).join('')||'<span class="muted">Không có</span>'}
+    <div class="lbl">Tham số</div><span class="muted">${esc(Object.entries(p).map(([k,v])=>k+'='+v).join(' · ')||'—')}</span></td>`;
+  tr.after(d);
+}
+
+const chkAll = $('chkAllRecs');
+if(chkAll){
+  chkAll.onchange = function(){
+    const chk = this.checked;
+    document.querySelectorAll('.rec-chk').forEach(el => { el.checked = chk; });
+    updateRecSelectedCount();
+  };
+}
+
+$('q').oninput=renderTable;$('flt').onchange=renderTable;$('spkFlt').onchange=renderTable;
+load();
+</script>
+{% endblock %}

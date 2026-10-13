@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>{% block title %}STT{% endblock %} — Hệ thống STT VietGAP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --page-bg: #141C15;
+    --paper: #FBF8EF;
+    --card: #FFFDF7;
+    --ink: #232A1C;
+    --ink-soft: #6E7862;
+    --ink-faint: #9BA38C;
+    --line: rgba(35,42,28,0.12);
+    --header: #1F3626;
+    --header-soft: rgba(246,241,226,0.75);
+    --leaf: #3F6B3F;
+    --leaf-bright: #5B8C4A;
+    --clay: #A6512E;
+    --gold: #B8830E;
+    --gold-bright: #D6A339;
+    --blue: #2B6CB0;
+    --moss: #4C5F3A;
+    --moss-tint: #EEF0E4;
+    --ochre: #B5842A;
+    --ochre-tint: #FBF1DD;
+    --rust: #A9532F;
+    --rust-tint: #FBEAE1;
+    --sky: #3E6E7A;
+    --sky-tint: #E7F1F1;
+    --side-w: 240px;
+    --radius-lg: 18px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--page-bg);
+    font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    font-size: 14.5px;
+    line-height: 1.5;
+  }
+
+  /* ----- Sidebar ----- */
+  .side {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: var(--side-w);
+    background: var(--header);
+    color: #F6F1E2;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 12px;
+    z-index: 50;
+    overflow-y: auto;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.25);
+    border-right: 1px solid rgba(255,255,255,0.08);
+    transition: transform 0.25s cubic-bezier(0.16,1,0.3,1);
+  }
+  .side-brand {
+    padding: 4px 8px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+  .app-name-side {
+    font-size: 1.18rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    color: #F6F1E2;
+  }
+  .app-name-side em {
+    font-style: normal;
+    color: var(--gold-bright);
+  }
+  .side-badge {
+    display: inline-block;
+    background: rgba(91,140,74,0.25);
+    border: 1px solid rgba(163,230,155,0.4);
+    color: #A3E69B;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    margin-top: 5px;
+    letter-spacing: 0.03em;
+  }
+  .nav-sec {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(246,241,226,0.5);
+    font-weight: 700;
+    padding: 14px 8px 4px;
+  }
+  .nav a {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 9px 12px;
+    margin: 3px 0;
+    border-radius: var(--radius-sm);
+    color: rgba(246,241,226,0.85);
+    text-decoration: none;
+    font-size: 0.84rem;
+    font-weight: 500;
+    transition: all 0.15s ease;
+  }
+  .nav a:hover {
+    background: rgba(255,255,255,0.1);
+    color: #ffffff;
+  }
+  .nav a.on {
+    background: var(--leaf);
+    color: #ffffff;
+    font-weight: 700;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  }
+  .nav .ic {
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .nav .ic svg {
+    width: 16px;
+    height: 16px;
+  }
+  .side-user {
+    margin-top: auto;
+    padding: 12px 8px 4px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    font-size: 0.78rem;
+    color: rgba(246,241,226,0.85);
+  }
+  .side-user b {
+    color: var(--gold-bright);
+  }
+  .side-user a {
+    color: #F6F1E2;
+    opacity: 0.75;
+    text-decoration: underline;
+    font-size: 0.74rem;
+    display: inline-block;
+    margin-top: 4px;
+  }
+
+  /* ----- Main Content Area (Warm Paper) ----- */
+  .content {
+    margin-left: var(--side-w);
+    background: var(--paper);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 0 60px rgba(0,0,0,0.3);
+  }
+
+  /* Header chuẩn theo style diary.html & manager.html */
+  .header {
+    background: var(--header);
+    padding: 16px 24px 14px;
+    color: #F6F1E2;
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .brand-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .app-name {
+    font-size: 1.22rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    color: #F6F1E2;
+  }
+  .app-name em {
+    font-style: normal;
+    color: var(--gold-bright);
+  }
+  .badge-portal {
+    background: rgba(91,140,74,0.25);
+    border: 1px solid rgba(163,230,155,0.4);
+    color: #A3E69B;
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-nav-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.22);
+    color: #F6F1E2;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .btn-nav-header:hover {
+    background: rgba(255,255,255,0.22);
+    color: #ffffff;
+  }
+  .user-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    font-size: 0.78rem;
+    color: rgba(246,241,226,0.88);
+  }
+  .user-greeting b {
+    color: var(--gold-bright);
+  }
+  .user-role {
+    background: rgba(91,140,74,0.3);
+    border: 1px solid rgba(163,230,155,0.4);
+    color: #A3E69B;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .mobile-toggle {
+    display: none;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.22);
+    color: #fff;
+    font-size: 18px;
+    border-radius: 8px;
+    width: 34px;
+    height: 34px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Sub-Navigation Tabs Bar */
+  .nav-subtabs {
+    display: flex;
+    gap: 8px;
+    padding: 10px 24px;
+    background: #ffffff;
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .nav-subtabs a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    text-decoration: none;
+    background: var(--moss-tint);
+    border: 1px solid transparent;
+    transition: all 0.15s ease;
+  }
+  .nav-subtabs a:hover {
+    background: #e2e6d5;
+    color: var(--ink);
+  }
+  .nav-subtabs a.on {
+    background: var(--leaf);
+    color: #ffffff;
+    border-color: var(--leaf);
+    box-shadow: 0 2px 8px rgba(63,107,63,0.3);
+  }
+
+  /* Tiêu đề trang */
+  .pagehead {
+    padding: 18px 24px 8px;
+    color: var(--ink);
+  }
+  .pagehead h1 {
+    font-size: 1.32rem;
+    font-weight: 800;
+    margin: 0;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .pagehead p {
+    margin: 4px 0 0;
+    font-size: 0.84rem;
+    color: var(--ink-soft);
+  }
+
+  /* Responsive Mobile */
+  @media(max-width:860px){
+    .side { transform: translateX(-100%); }
+    body.menu-open .side { transform: none; }
+    .content { margin-left: 0; }
+    .mobile-toggle { display: inline-flex; }
+  }
+
+  /* ----- Thành phần giao diện chung (Format đồng bộ) ----- */
+  .wrap {
+    padding: 14px 24px 36px;
+    max-width: 1600px;
+  }
+  .card {
+    background: var(--card);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    border: 1px solid var(--line);
+    box-shadow: 0 2px 8px rgba(35,42,28,0.04);
+  }
+  .card h2 {
+    font-size: 0.95rem;
+    margin: 0 0 14px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn {
+    border: 0;
+    border-radius: var(--radius-sm);
+    padding: 8px 16px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: var(--leaf);
+    color: #ffffff;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    transition: all 0.15s ease;
+  }
+  .btn:hover { background: var(--leaf-bright); color: #ffffff; }
+  .btn.sec {
+    background: var(--moss-tint);
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+  .btn.sec:hover { background: #e0e4d2; color: var(--ink); }
+  .btn.del {
+    background: var(--rust-tint);
+    color: var(--rust);
+    border: 1px solid rgba(169,83,47,0.2);
+  }
+  .btn.del:hover { background: #fadad0; color: var(--rust); }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+  .btn.sm { padding: 4px 10px; font-size: 0.78rem; border-radius: 6px; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; align-items: center; }
+
+  textarea, input[type=text], input[type=number], input[type=search], select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    font-size: 0.86rem;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    background: #ffffff;
+    color: var(--ink);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  textarea:focus, input:focus, select:focus {
+    outline: none;
+    border-color: var(--leaf);
+    box-shadow: 0 0 0 3px rgba(63,107,63,0.14);
+  }
+  textarea {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    min-height: 140px;
+    resize: vertical;
+  }
+  .lbl {
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--ink-soft);
+    margin: 12px 0 6px;
+    display: block;
+  }
+  audio { width: 100%; margin-top: 8px; border-radius: 8px; }
+
+  .diff {
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    min-height: 40px;
+  }
+  del {
+    background: #f6d5cb;
+    color: var(--clay);
+    text-decoration: line-through;
+    padding: 1px 4px;
+    border-radius: 4px;
+  }
+  ins {
+    background: #d8ecd0;
+    color: #2c5a24;
+    text-decoration: none;
+    padding: 1px 4px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--moss-tint);
+    color: var(--moss);
+    margin: 2px;
+  }
+  .tag.new {
+    background: var(--ochre-tint);
+    color: var(--gold);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.84rem;
+  }
+  th {
+    padding: 9px 12px;
+    background: rgba(35,42,28,0.04);
+    color: var(--ink-soft);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--line);
+  }
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+  }
+  td input[type=text] { padding: 4px 8px; }
+
+  .stats {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+  .stat {
+    background: #ffffff;
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    min-width: 120px;
+    border: 1px solid var(--line);
+    box-shadow: 0 1px 4px rgba(35,42,28,0.03);
+  }
+  .stat b {
+    display: block;
+    font-size: 1.45rem;
+    font-weight: 800;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--ink);
+    line-height: 1.15;
+    margin-bottom: 2px;
+  }
+  .msg { font-size: 0.82rem; margin-top: 6px; }
+  .ok { color: var(--leaf); font-weight: 600; }
+  .err { color: var(--clay); font-weight: 600; }
+  .scroll { max-height: 540px; overflow: auto; }
+  .muted { color: var(--ink-soft); font-size: 0.82rem; }
+</style>
+{% block css %}{% endblock %}
+</head>
+<body>
+
+<!-- SIDEBAR ĐIỀU HƯỚNG BÊN TRÁI -->
+<aside class="side">
+  <div class="side-brand">
+    <div class="app-name-side"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-3px;margin-right:6px"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>NÔNG KÝ <em>STT</em></div>
+    <span class="side-badge">VietGAP AI Engine</span>
+  </div>
+  <nav class="nav">
+    <div class="nav-sec">HỆ THỐNG STT</div>
+    <a href="/stt-config" class="{{ 'on' if active=='config' }}"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg></span>Cấu hình & Test</a>
+    <a href="/stt/realtime" class="{{ 'on' if active=='realtime' }}"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>Test STT Realtime</a>
+    <a href="/stt-dashboard" class="{{ 'on' if active=='dashboard' }}"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg></span>Dashboard thống kê</a>
+    <a href="/stt-dictionary" class="{{ 'on' if active=='dictionary' }}"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>Từ điển đã lưu</a>
+    
+    <div class="nav-sec">ỨNG DỤNG CANH TÁC</div>
+    <a href="/nongky"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>Ghi chép nhanh</a>
+    <a href="/diary"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>Sổ Nhật ký</a>
+    <a href="/manager"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></span>Cổng Quản lý</a>
+  </nav>
+  <div class="side-user">
+    Xin chào, <b>{{ (farmer.get('name') or farmer.get('full_name') or 'Nông dân') if farmer else 'Nông dân' }}</b>
+    <br><a href="/logout">Đăng xuất</a>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT AREA (WARM PAPER STYLE) -->
+<div class="content" onclick="document.body.classList.remove('menu-open')">
+  <!-- TOP HEADER ĐỒNG BỘ VỚI DIARY & MANAGER -->
+  <header class="header">
+    <div class="header-top">
+      <div class="brand-wrap">
+        <button class="mobile-toggle" onclick="event.stopPropagation();document.body.classList.toggle('menu-open')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        <div class="app-name"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-3px;margin-right:6px"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>NÔNG KÝ <em>STT LAB</em></div>
+        <span class="badge-portal">VietGAP AI Engine</span>
+      </div>
+      <div class="header-actions">
+        <a href="/nongky" class="btn-nav-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Ghi chép</span></a>
+        <a href="/diary" class="btn-nav-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>Sổ Nhật Ký</span></a>
+        <a href="/manager" class="btn-nav-header"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg><span>Quản lý</span></a>
+        <a href="/logout" class="btn-nav-header" style="opacity:0.85"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Đăng xuất</span></a>
+      </div>
+    </div>
+    <div class="user-bar">
+      <div class="user-greeting">Xin chào, <b>{{ (farmer.get('name') or farmer.get('full_name') or 'Nông dân') if farmer else 'Nông dân' }}</b></div>
+      <span class="user-role">{{ (farmer.get('role') or 'Xã viên HTX') if farmer else 'Kỹ thuật viên' }}</span>
+    </div>
+  </header>
+
+  <!-- THANH ĐIỀU HƯỚNG TAB PHÍA TRÊN -->
+  <nav class="nav-subtabs">
+    <a href="/stt-config" class="{{ 'on' if active=='config' }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg>Cấu hình & Test Model</a>
+    <a href="/stt/realtime" class="{{ 'on' if active=='realtime' }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Test STT Realtime</a>
+    <a href="/stt-dashboard" class="{{ 'on' if active=='dashboard' }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>Dashboard Thống Kê</a>
+    <a href="/stt-dictionary" class="{{ 'on' if active=='dictionary' }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Từ Điển Đã Lưu</a>
+  </nav>
+
+  {% block content %}{% endblock %}
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function api(url,method='GET',body){
+  const r=await fetch(url,{method,headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined});
+  return r.json();
+}
+const words=t=>(t||'').split(/\s+/).filter(Boolean);
+function diffHtml(a,b){
+  const A=words(a),B=words(b),n=A.length,m=B.length;
+  const L=Array.from({length:n+1},()=>new Array(m+1).fill(0));
+  for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)
+    L[i][j]=A[i].toLowerCase()===B[j].toLowerCase()?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
+  let i=0,j=0,out=[],changed=false;
+  while(i<n&&j<m){
+    if(A[i].toLowerCase()===B[j].toLowerCase()){out.push(esc(B[j]));i++;j++;}
+    else if(L[i+1][j]>=L[i][j+1]){out.push('<del>'+esc(A[i])+'</del>');i++;changed=true;}
+    else{out.push('<ins>'+esc(B[j])+'</ins>');j++;changed=true;}
+  }
+  while(i<n){out.push('<del>'+esc(A[i++])+'</del>');changed=true;}
+  while(j<m){out.push('<ins>'+esc(B[j++])+'</ins>');changed=true;}
+  return changed?out.join(' '):(out.join(' ')||'—');
+}
+const fmtTime=t=>new Date(t*1000).toLocaleString('vi-VN');
+const pct=v=>v==null?'—':(v*100).toFixed(1)+'%';
+const fmtDur=s=>{s=Math.round(s||0);const m=Math.floor(s/60);return m?`${m}p ${s%60}s`:`${s}s`;};
+function toast(msg, type='info'){
+  let t=document.getElementById('sttToast');
+  if(!t){
+    t=document.createElement('div');
+    t.id='sttToast';
+    t.style.cssText='position:fixed;bottom:24px;right:24px;background:#1E2B1E;color:#FAF8F0;padding:11px 20px;border-radius:8px;font-size:13px;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,0.28);z-index:99999;transition:all 0.25s cubic-bezier(0.16,1,0.3,1);opacity:0;transform:translateY(12px);pointer-events:none;display:flex;align-items:center;gap:8px;border-left:4px solid #3F6B3F;font-family:\'Be Vietnam Pro\',sans-serif;';
+    document.body.appendChild(t);
+  }
+  const icon = type==='error'
+    ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:2px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+    : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:2px"><polyline points="20 6 9 17 4 12"/></svg>';
+  t.innerHTML = icon + esc(msg);
+  t.style.borderLeftColor=type==='error'?'#A6512E':'#3F6B3F';
+  t.style.opacity='1';
+  t.style.transform='translateY(0)';
+  if(window._toastT) clearTimeout(window._toastT);
+  window._toastT=setTimeout(()=>{
+    t.style.opacity='0';
+    t.style.transform='translateY(12px)';
+  },3200);
+}
+</script>
+{% block js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,1041 @@
+{% extends "stt/base.html" %}
+{% set active = 'config' %}
+{% block title %}Cấu hình & Test STT{% endblock %}
+{% block css %}
+<style>
+  .drop{border:2px dashed var(--line);border-radius:var(--radius-md);padding:22px 18px;text-align:center;color:var(--ink-soft);cursor:pointer;font-size:0.86rem;background:var(--card);transition:all .2s}
+  .drop:hover{border-color:var(--leaf);background:rgba(63,107,63,0.03)}
+  .drop.over{border-color:var(--leaf);background:var(--moss-tint)}
+  .runitem{font-size:0.8rem;border-bottom:1px solid var(--line);padding:8px 0;cursor:pointer;transition:background .15s} .runitem:hover{background:var(--moss-tint)}
+  .meta{display:flex;gap:12px;flex-wrap:wrap;font-size:0.8rem;color:var(--ink-soft);margin:6px 0} .meta b{color:var(--ink)}
+  
+  /* Cấu hình tham số nằm ngang phía trên */
+  .param-top-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-md);padding:14px 18px;box-shadow:0 2px 8px rgba(35,42,28,0.03)}
+  .param-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 10px;border-bottom:1px solid var(--line);padding-bottom:8px}
+  .param-tab-btn{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:5px 12px;font-size:0.78rem;font-weight:600;color:var(--ink-soft);cursor:pointer;transition:all .15s}
+  .param-tab-btn:hover{border-color:var(--leaf);color:var(--leaf)}
+  .param-tab-btn.active{background:var(--leaf);color:#fff;border-color:var(--leaf)}
+  .param-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:14px;margin-top:10px}
+  .param-col{background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;box-shadow:0 1px 4px rgba(35,42,28,0.02)}
+  .param-col-title{font-weight:700;font-size:0.83rem;color:var(--ink);margin-bottom:10px;padding-bottom:6px;border-bottom:1.5px solid var(--line);display:flex;align-items:center;gap:6px}
+  .param-col .row{margin:8px 0;font-size:0.82rem}
+  .param-col .row.range, .param-col .row.number, .param-col .row.select{display:flex;flex-direction:column;gap:3px}
+  .param-col .row.check{display:flex;justify-content:space-between;align-items:center;padding:4px 0;gap:8px}
+  .param-col .row-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .param-col .row-head label, .param-col .row.check label{font-size:0.8rem;color:var(--ink);line-height:1.35}
+  .param-col .hint{display:block;color:var(--ink-soft);font-size:0.71rem;font-weight:400;margin-top:1px}
+  .param-col input[type=range]{width:100%;margin:2px 0 0;accent-color:var(--leaf);cursor:pointer}
+  .param-col input[type=checkbox]{width:16px;height:16px;accent-color:var(--leaf);cursor:pointer;flex-shrink:0}
+  .param-col select, .param-col input[type=number]{padding:5px 8px;font-size:0.8rem;border:1px solid var(--line);border-radius:6px;background:var(--paper);width:100%}
+  .param-col .val{font-family:'IBM Plex Mono',monospace;font-size:0.78rem;color:var(--leaf);font-weight:700;flex-shrink:0;background:var(--moss-tint);padding:1px 6px;border-radius:4px}
+  
+  td.t{font-family:'IBM Plex Mono',monospace;white-space:nowrap;color:var(--ink-soft);vertical-align:top}
+  .spk-badge-tag{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:0.76rem;font-weight:700;color:#fff}
+  .in-tabs{display:flex;gap:6px;margin-bottom:12px;border-bottom:1px solid var(--line)}
+  .in-tab{padding:8px 14px;font-size:0.82rem;cursor:pointer;border-radius:8px 8px 0 0;color:var(--ink-soft);font-weight:600;transition:all .15s}
+  .in-tab.on{background:var(--moss-tint);color:var(--leaf);font-weight:700;border-bottom:2px solid var(--leaf)}
+  .pbar-wrap{height:8px;background:var(--moss-tint);border-radius:4px;overflow:hidden;margin:8px 0}
+  .pbar-fill{height:100%;background:var(--leaf);width:0%;transition:width .2s}
+  .batch-row{cursor:pointer;font-size:0.82rem}.batch-row:hover{background:var(--moss-tint)}.batch-row.selected{background:var(--moss-tint);font-weight:700}
+  
+  /* Thẻ chi tiết từng file trong batch (Xem từ trên xuống) */
+  .file-res-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius-md);padding:14px 18px;margin-bottom:14px;box-shadow:0 2px 8px rgba(35,42,28,0.04);transition:all .2s}
+  .file-res-card:hover{box-shadow:0 4px 16px rgba(35,42,28,0.08);border-color:rgba(63,107,63,0.3)}
+  .file-res-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+  .batch-edit-text{width:100%;min-height:76px;font-family:inherit;font-size:0.88rem;line-height:1.55;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);box-sizing:border-box;resize:vertical;transition:border-color .15s, background .15s}
+  .batch-edit-text:focus{outline:none;border-color:var(--leaf);background:#fff;box-shadow:0 0 0 3px rgba(63,107,63,0.12)}
+  .batch-spk-select{padding:4px 8px;font-size:12px;font-weight:600;border-radius:6px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;max-width:200px;transition:border-color .15s}
+  .batch-spk-select:hover{border-color:var(--leaf)}
+  .pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:0.72rem;font-weight:700}
+  .good{background:#d8ecd0;color:#2c5a24}.mid{background:var(--ochre-tint);color:var(--gold)}.bad{background:var(--rust-tint);color:var(--rust)}
+  .ext-box{background:#f0f7ef;border:1px dashed var(--leaf);border-radius:8px;padding:10px 12px;margin-top:10px;font-size:0.82rem}
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="pagehead">
+  <h1><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-3px;margin-right:8px"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg>Cấu hình & Test STT</h1>
+  <p>Cấu hình tham số mô hình ONNX, nhận diện file đơn lẻ hoặc thư mục, và chỉnh sửa cập nhật trực tiếp vào mô hình.</p>
+</div>
+
+<div class="wrap">
+  <!-- THỐNG KÊ NHANH MÔ HÌNH (ĐỒNG BỘ CÁC TRANG) -->
+  <div class="stats" id="quickStats">
+    <div class="stat"><b style="color:var(--leaf)">Zipformer</b>Mô hình STT ONNX</div>
+    <div class="stat"><b style="color:var(--gold)">Silero v4</b>Bộ tách tiếng nói VAD</div>
+    <div class="stat"><b id="statThreads" style="color:var(--sky)">4 Luồng</b>Số luồng CPU</div>
+    <div class="stat"><b id="statDecoder" style="color:var(--leaf-bright)">Modified Beam</b>Thuật toán Decoding</div>
+    <div class="stat"><b id="statHotwords" style="color:var(--ochre)">FST Biased</b>Hotwords Model ONNX</div>
+  </div>
+
+  <!-- 1. BẢNG THAM SỐ CẤU HÌNH NẰM NGANG PHÍA TRÊN -->
+  <div class="card param-top-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <h2 style="margin:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg>Cấu hình tham số mô hình ONNX & Tiền xử lý</h2>
+      </div>
+      <div class="actions" style="margin:0">
+        <button class="btn sm sec" id="btnToggleParams" type="button"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg><span id="toggleParamsText">Thu gọn tham số</span></button>
+        <button class="btn sm sec" id="btnReset" type="button">Mặc định</button>
+        <button class="btn sm sec" id="btnExport" type="button">Copy cấu hình</button>
+      </div>
+    </div>
+
+    <!-- Thanh lọc nhóm tham số -->
+    <div class="param-tabs" id="paramTabs">
+      <button class="param-tab-btn active" type="button" data-grp="all" onclick="filterParamGroup('all')">Tất cả nhóm</button>
+      <button class="param-tab-btn" type="button" data-grp="pre" onclick="filterParamGroup('pre')">1. Tiền xử lý audio (ffmpeg)</button>
+      <button class="param-tab-btn" type="button" data-grp="vad" onclick="filterParamGroup('vad')">2. VAD (Silero)</button>
+      <button class="param-tab-btn" type="button" data-grp="rec" onclick="filterParamGroup('rec')">3. Model ONNX Recognizer</button>
+    </div>
+
+    <!-- 3 Cột tham số nằm ngang cạnh nhau -->
+    <div id="paramGrid" class="param-grid">
+      <div class="param-col" data-grp="pre">
+        <div class="param-col-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>1. Tiền xử lý audio (ffmpeg)</div>
+        <div id="grp-pre"></div>
+      </div>
+      <div class="param-col" data-grp="vad">
+        <div class="param-col-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>2. VAD (Silero)</div>
+        <div id="grp-vad"></div>
+      </div>
+      <div class="param-col" data-grp="rec">
+        <div class="param-col-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 8 6 4-6 4Z"/></svg>3. Model ONNX Recognizer</div>
+        <div id="grp-rec"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. THẺ ĐẦU VÀO ÂM THANH & BATCH QUEUE -->
+  <div class="card">
+    <h2><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>Đầu vào âm thanh & Danh sách xử lý</h2>
+    <div class="in-tabs">
+      <div class="in-tab on" data-m="single">File đơn lẻ / Micro</div>
+      <div class="in-tab" data-m="folder">Tải cả thư mục từ máy</div>
+      <div class="in-tab" data-m="server">Quét thư mục máy chủ</div>
+    </div>
+
+    <!-- Mode 1: File đơn lẻ / Mic -->
+    <div id="pane-single">
+      <div class="drop" id="drop">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="margin-bottom:6px;color:var(--leaf)"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><br>
+        <b>Kéo thả hoặc bấm để chọn file âm thanh</b><br>
+        <small style="color:var(--ink-soft)">Hỗ trợ wav, mp3, m4a, ogg, webm, flac, mp4…</small>
+      </div>
+      <input type="file" id="file" accept="audio/*,video/mp4" hidden>
+      <audio id="aud" controls hidden></audio>
+      <div class="actions">
+        <button class="btn sec" id="btnRec"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>Thu âm</button>
+        <button class="btn" id="btnRun" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Xử lý & nhận diện</button>
+        <span id="runMsg" class="msg"></span>
+      </div>
+    </div>
+
+    <!-- Mode 2: Tải thư mục từ máy tính -->
+    <div id="pane-folder" hidden>
+      <div class="drop" onclick="$('folderInput').click()">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="margin-bottom:6px;color:var(--leaf)"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg><br>
+        <b>Bấm để chọn thư mục âm thanh từ máy tính</b><br>
+        <small style="color:var(--ink-soft)">Trình duyệt sẽ quét tất cả các file âm thanh có trong thư mục và thư mục con</small>
+      </div>
+      <input type="file" id="folderInput" webkitdirectory directory multiple hidden>
+    </div>
+
+    <!-- Mode 3: Quét thư mục máy chủ -->
+    <div id="pane-server" hidden>
+      <div style="display:flex;gap:6px;align-items:center">
+        <input type="text" id="srvPath" placeholder="Nhập đường dẫn trên server (ví dụ: /mnt/data/data_test_4)" value="/mnt/data/data_test_4">
+        <button class="btn" id="btnScanSrv"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Quét file</button>
+      </div>
+      <div id="srvMsg" class="msg"></div>
+    </div>
+
+    <!-- DANH SÁCH HÀNG ĐỢI XỬ LÝ HÀNG LOẠT (BATCH) -->
+    <div id="batchBox" style="display:none;margin-top:14px;border-top:1px solid var(--line);padding-top:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+        <b>Danh sách file hàng loạt (<span id="batchCount">0</span> file)</b>
+        <div class="actions" style="margin:0">
+          <label style="font-size:12px;display:flex;align-items:center;gap:4px;cursor:pointer">
+            <input type="checkbox" id="chkAutoSave" checked> Tự động lưu vào Dashboard
+          </label>
+          <button class="btn" id="btnBatchRun"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Chạy toàn bộ thư mục</button>
+          <button class="btn sec" id="btnBatchStop" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>Dừng</button>
+          <button class="btn sm del" id="btnDeleteSelectedBatch" style="display:none"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>Xoá mục chọn (<span id="selBatchCount">0</span>)</button>
+          <button class="btn sec sm" id="btnClearBatch"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>Xoá toàn bộ</button>
+          <button class="btn sec sm" id="btnExportAll" style="display:none"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Xuất tất cả (TXT)</button>
+        </div>
+      </div>
+      
+      <div class="pbar-wrap"><div class="pbar-fill" id="pbar"></div></div>
+      <div id="batchStatus" class="muted" style="font-size:12px">Sẵn sàng</div>
+
+      <!-- Chế độ xem: Danh sách chi tiết từ trên xuống / Bảng tổng quan -->
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin:12px 0 8px">
+        <div style="display:flex;gap:6px;align-items:center">
+          <button class="btn sm" id="btnViewBatchCards" style="padding:4px 10px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Xem kết quả từ trên xuống (<span id="doneCountBadge">0</span>)</button>
+          <button class="btn sm sec" id="btnViewBatchTable" style="padding:4px 10px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>Bảng tóm tắt</button>
+        </div>
+        <button class="btn sm sec" id="btnSaveAllBatch" onclick="saveAllBatchEdits()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Lưu tất cả thay đổi</button>
+      </div>
+
+      <!-- View 1: Danh sách chi tiết từng file (Xem từ trên xuống) -->
+      <div id="batchCardsView" class="scroll" style="margin-top:10px;max-height:85vh;overflow-y:auto;padding-right:4px">
+        <div id="batchCardsList"></div>
+      </div>
+
+      <!-- View 2: Bảng hàng loạt -->
+      <div id="batchTableView" class="scroll" style="display:none;max-height:360px">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:30px"><input type="checkbox" id="chkAllBatch" title="Chọn tất cả"></th>
+              <th>#</th>
+              <th>Tên file</th>
+              <th>Kích thước</th>
+              <th>Trạng thái</th>
+              <th>Kết quả nhận diện</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="batchTb"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. THẺ KẾT QUẢ & SỬA LỖI (GIAO DIỆN NGẮN GỌN) -->
+  <div class="card" id="mainResultCard">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <h2 style="margin:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Kết quả nhận diện & Chỉnh sửa trực tiếp</h2>
+        <span id="resFileBadge" class="pill good" style="display:none"></span>
+        <span id="resDurBadge" class="muted" style="font-size:12px"></span>
+      </div>
+    </div>
+
+    <!-- Audio Player -->
+    <audio id="outAudio" controls style="width:100%;margin-bottom:8px" hidden></audio>
+
+    <!-- Khung sửa trực tiếp ngắn gọn -->
+    <div style="margin-bottom:4px;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:12px;font-weight:700;color:var(--ink)">Nội dung STT (sửa trực tiếp):</span>
+      <span class="muted" style="font-size:11px">Lưu để cập nhật trực tiếp vào Model ONNX</span>
+    </div>
+    <textarea id="edit" placeholder="Văn bản nhận diện sẽ hiện ở đây…"></textarea>
+
+    <!-- Hành động ngắn gọn -->
+    <div class="actions" style="margin-top:10px">
+      <button class="btn" id="btnLearn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Lưu & Cập nhật Model ONNX</button>
+      <button class="btn sec" id="btnExtractMain"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-13"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>Trích xuất VietGAP</button>
+      <button class="btn sec" id="btnCopy"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button>
+      <button class="btn sec" id="btnRevert"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v6h6"/><path d="M3 13a9 9 0 1 0 3-7.7L3 8"/></svg>Hoàn tác</button>
+      <button class="btn sec sm" id="btnToggleTechDetails" type="button" style="margin-left:auto"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Chi tiết kỹ thuật</button>
+    </div>
+    <div class="msg" id="learnMsg"></div>
+    <div id="mainVietgapBox" class="ext-box" style="display:none"></div>
+
+    <!-- Thông số kỹ thuật (thu gọn, chỉ xem khi cần) -->
+    <div id="techDetailsBox" style="display:none;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)">
+      <div class="meta" id="meta"></div>
+      <div class="lbl" style="margin:4px 0">Chi tiết từng đoạn VAD:</div>
+      <div class="scroll" style="max-height:200px">
+        <table>
+          <thead><tr><th>Thời gian</th><th>Nội dung</th></tr></thead>
+          <tbody id="segs"></tbody>
+        </table>
+      </div>
+      <div style="margin-top:10px">
+        <b>Lịch sử lần chạy:</b>
+        <div id="runs" class="muted" style="margin-top:4px">Trống.</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+const DEFAULTS = {{ defaults | tojson }};
+
+/* ================= THAM SỐ ================= */
+const SPEC = [
+ ['pre','highpass_hz','Lọc thông cao (Hz)','Cắt tiếng ù tần số thấp; 0 = tắt','range',0,500,10],
+ ['pre','lowpass_hz','Lọc thông thấp (Hz)','0 = tắt','range',0,8000,100],
+ ['pre','denoise','Khử nhiễu (afftdn)','','check'],
+ ['pre','denoise_nr','Mức khử nhiễu (dB)','','range',1,40,1],
+ ['pre','gain_db','Tăng/giảm âm lượng (dB)','','range',-20,30,1],
+ ['pre','normalize','Chuẩn hoá loudness','','check'],
+ ['pre','trim_silence','Cắt lặng đầu/cuối','','check'],
+ ['pre','speed','Tốc độ (atempo)','Chỉ để test, 0.5–2.0','range',0.5,2,0.05],
+ ['pre','start_sec','Bắt đầu từ (giây)','','number',0],
+ ['pre','end_sec','Kết thúc ở (giây)','0 = đến hết','number',0],
+ ['vad','use_vad','Bật VAD','Tắt = decode nguyên file','check'],
+ ['vad','vad_threshold','Ngưỡng (threshold)','Cao = khắt khe hơn','range',0.05,0.95,0.05],
+ ['vad','vad_min_silence','Khoảng lặng tối thiểu (s)','Để ngắt đoạn','range',0.05,3,0.05],
+ ['vad','vad_min_speech','Tiếng nói tối thiểu (s)','Bỏ đoạn ngắn hơn','range',0.05,2,0.05],
+ ['vad','vad_max_speech','Đoạn dài tối đa (s)','Ép cắt khi nói liên tục','range',3,60,1],
+ ['vad','vad_window','Window size','','select',[256,512,768,1024]],
+ ['vad','vad_padding','Đệm hai đầu đoạn (s)','Tránh cụt đầu/đuôi từ','range',0,1,0.05],
+ ['rec','num_threads','Số luồng (threads)','Đổi → load lại model (chậm lần đầu)','range',1,8,1],
+  ['rec','decoding_method','Decoding method','','select',['greedy_search','modified_beam_search']],
+  ['rec','max_active_paths','Beam size','Chỉ cho modified_beam_search','range',1,16,1],
+];
+
+const cur = {};
+function buildParams(){
+  for(const s of SPEC){
+    const [g,k,label,hint,type,a,b,c] = s;
+    const row = document.createElement('div');
+    row.className = 'row ' + type;
+    const lab = `<label for="p_${k}"><b>${label}</b>${hint?`<small class="hint">${hint}</small>`:''}</label>`;
+    if(type==='check') {
+      row.innerHTML = lab + `<input type="checkbox" id="p_${k}">`;
+    } else if(type==='range') {
+      row.innerHTML = `<div class="row-head">${lab}<span class="val" id="v_${k}"></span></div><input type="range" id="p_${k}" min="${a}" max="${b}" step="${c}">`;
+    } else if(type==='number') {
+      row.innerHTML = `<div class="row-head">${lab}</div><input type="number" id="p_${k}" min="${a}" step="0.1">`;
+    } else if(type==='select'){
+      const opts = a.map(o => Array.isArray(o) ? `<option value="${o[0]}">${o[1]}</option>` : `<option value="${o}">${o}</option>`).join('');
+      row.innerHTML = `<div class="row-head">${lab}</div><select id="p_${k}">${opts}</select>`;
+    }
+    const container = $('grp-'+g);
+    if(container) container.appendChild(row);
+    const inputEl = row.querySelector('#p_'+k);
+    if(inputEl) inputEl.addEventListener('input', () => readParam(k,type));
+  }
+  applyParams(DEFAULTS);
+}
+
+function filterParamGroup(grp) {
+  document.querySelectorAll('.param-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.grp === grp));
+  const cols = document.querySelectorAll('.param-col');
+  cols.forEach(col => {
+    if (grp === 'all' || col.dataset.grp === grp) {
+      col.style.display = 'block';
+    } else {
+      col.style.display = 'none';
+    }
+  });
+}
+
+function applyParams(vals){
+  for(const [,k,,,type] of SPEC){
+    const el = $('p_'+k);
+    if(type==='check') el.checked = !!vals[k]; else el.value = vals[k];
+    readParam(k,type);
+  }
+}
+
+function readParam(k,type){
+  const el = $('p_'+k);
+  cur[k] = type==='check'?el.checked:(type==='select'&&(isNaN(el.value)||el.value==='')?el.value:Number(el.value));
+  const v = $('v_'+k); if(v) v.textContent = el.value;
+  if(k === 'num_threads' && $('statThreads')) $('statThreads').textContent = el.value + ' Luồng';
+  if(k === 'decoding_method' && $('statDecoder')) $('statDecoder').textContent = el.value === 'greedy_search' ? 'Greedy Search' : 'Modified Beam';
+}
+buildParams();
+
+$('btnReset').onclick = () => applyParams(DEFAULTS);
+$('btnExport').onclick = () => { navigator.clipboard.writeText(JSON.stringify(cur,null,2)); alert('Đã copy cấu hình.'); };
+
+/* ================= CHUYỂN TAB ĐẦU VÀO ================= */
+document.querySelectorAll('.in-tab').forEach(t => t.onclick = () => {
+  document.querySelectorAll('.in-tab').forEach(x => x.classList.toggle('on', x === t));
+  const m = t.dataset.m;
+  $('pane-single').hidden = m !== 'single';
+  $('pane-folder').hidden = m !== 'folder';
+  $('pane-server').hidden = m !== 'server';
+});
+
+/* ================= FILE ĐƠN LẺ & MIC ================= */
+let blob = null, fname = 'audio.wav', original = '', lastRun = null, recordId = null;
+
+function setBlob(b, n){
+  blob = b; fname = n;
+  $('aud').src = URL.createObjectURL(b); $('aud').hidden = false; $('btnRun').disabled = false;
+  $('drop').textContent = `${n} — ${(b.size/1024).toFixed(1)} KB`;
+}
+$('drop').onclick = () => $('file').click();
+$('file').onchange = e => e.target.files[0] && setBlob(e.target.files[0], e.target.files[0].name);
+$('drop').ondragover = e => { e.preventDefault(); $('drop').classList.add('over'); };
+$('drop').ondragleave = () => $('drop').classList.remove('over');
+$('drop').ondrop = e => {
+  e.preventDefault(); $('drop').classList.remove('over');
+  const f = e.dataTransfer.files[0]; f && setBlob(f, f.name);
+};
+
+let mr = null, chunks = [];
+$('btnRec').onclick = async () => {
+  if(mr && mr.state==='recording'){ mr.stop(); return; }
+  try {
+    const st = await navigator.mediaDevices.getUserMedia({audio:true});
+    mr = new MediaRecorder(st); chunks = [];
+    mr.ondataavailable = e => chunks.push(e.data);
+    mr.onstop = () => {
+      st.getTracks().forEach(t => t.stop());
+      const mt = mr.mimeType||''; const ext = mt.includes('ogg')?'ogg':mt.includes('mp4')?'m4a':'webm';
+      setBlob(new Blob(chunks,{type:mt}), 'mic.'+ext);
+      $('btnRec').innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>Thu âm';
+    };
+    mr.start(); $('btnRec').innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>Dừng';
+  } catch(e){ alert('Không truy cập được micro: ' + e.message); }
+};
+
+/* ================= IMPORT CẢ THƯ MỤC & BATCH QUEUE ================= */
+
+let batchItems = []; // { file: File|null, serverPath: string|null, name: string, size: number, status: 'pending'|'running'|'done'|'error', result: any, extracted: any, recordId: number|null }
+let batchRunning = false;
+let currentBatchIdx = -1;
+
+$('folderInput').onchange = e => {
+  const files = Array.from(e.target.files).filter(f => f.name.match(/\.(wav|mp3|m4a|ogg|webm|aac|flac|opus|mp4)$/i));
+  if (!files.length) return alert('Không tìm thấy file âm thanh nào trong thư mục được chọn.');
+  addFilesToBatch(files.map(f => ({ file: f, serverPath: null, name: f.webkitRelativePath || f.name, size: f.size })));
+};
+
+$('btnScanSrv').onclick = async () => {
+  const p = $('srvPath').value.trim();
+  if(!p) return alert('Vui lòng nhập đường dẫn thư mục.');
+  $('srvMsg').className = 'msg'; $('srvMsg').textContent = 'Đang quét thư mục...';
+  try {
+    const res = await api(`/api/stt-batch/list?path=${encodeURIComponent(p)}`);
+    if(res.status !== 'success') throw new Error(res.message);
+    if(!res.files.length) {
+      $('srvMsg').className = 'msg err'; $('srvMsg').textContent = 'Không tìm thấy file âm thanh nào trong thư mục này.';
+      return;
+    }
+    $('srvMsg').className = 'msg ok'; $('srvMsg').textContent = `Tìm thấy ${res.files.length} file âm thanh!`;
+    addFilesToBatch(res.files.map(f => ({ file: null, serverPath: f.path, name: f.name, size: f.size })));
+  } catch(e){
+    $('srvMsg').className = 'msg err'; $('srvMsg').textContent = 'Lỗi: ' + e.message;
+  }
+};
+
+function addFilesToBatch(items) {
+  items.forEach(it => {
+    batchItems.push({ ...it, status: 'pending', result: null, extracted: null });
+  });
+  renderBatch();
+  $('batchBox').style.display = 'block';
+  updateBatchFileSelector();
+}
+
+// Chuyển đổi giữa Chế độ Bảng & Chế độ Thẻ chi tiết
+$('btnViewBatchTable').onclick = () => {
+  $('batchTableView').style.display = 'block';
+  $('batchCardsView').style.display = 'none';
+  $('btnViewBatchTable').className = 'btn sm';
+  $('btnViewBatchCards').className = 'btn sm sec';
+};
+
+$('btnViewBatchCards').onclick = () => {
+  $('batchTableView').style.display = 'none';
+  $('batchCardsView').style.display = 'block';
+  $('btnViewBatchTable').className = 'btn sm sec';
+  $('btnViewBatchCards').className = 'btn sm';
+  renderBatchCards();
+};
+
+function renderBatch() {
+  $('batchCount').textContent = batchItems.length;
+  const doneCount = batchItems.filter(x => x.status === 'done').length;
+  $('doneCountBadge').textContent = doneCount;
+  const pct = batchItems.length ? (doneCount / batchItems.length * 100) : 0;
+  $('pbar').style.width = pct + '%';
+  $('batchStatus').textContent = `Đã xử lý ${doneCount}/${batchItems.length} file (${pct.toFixed(0)}%)`;
+
+  if(doneCount > 0) $('btnExportAll').style.display = 'inline-block';
+
+  $('batchTb').innerHTML = batchItems.map((it, idx) => {
+    const textPreview = it.result ? (it.result.corrected_text || it.result.raw_text || '') : '—';
+    let statusBadge = '<span class="muted">Chờ</span>';
+    if(it.status === 'running') statusBadge = '<b style="color:var(--gold)">Đang chạy...</b>';
+    else if(it.status === 'done') statusBadge = '<b style="color:var(--leaf)">Xong</b>';
+    else if(it.status === 'error') statusBadge = '<b style="color:var(--clay)">Lỗi</b>';
+
+    const isSel = idx === currentBatchIdx ? 'selected' : '';
+
+    return `
+      <tr class="batch-row ${isSel}" onclick="loadBatchItem(${idx})">
+        <td onclick="event.stopPropagation()"><input type="checkbox" class="batch-chk" data-idx="${idx}" onchange="updateBatchSelectedCount()"></td>
+        <td>${idx + 1}</td>
+        <td><b>${esc(it.name)}</b></td>
+        <td class="muted">${(it.size/1024).toFixed(0)} KB</td>
+        <td>${statusBadge}</td>
+        <td><span title="${esc(textPreview)}">${esc(textPreview.slice(0, 70))}${textPreview.length > 70 ? '...' : ''}</span></td>
+        <td onclick="event.stopPropagation()"><button class="btn sm del" onclick="removeSingleBatchItem(${idx})" title="Xoá file này khỏi danh sách"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></td>
+      </tr>
+    `;
+  }).join('');
+
+  updateBatchSelectedCount();
+  renderBatchCards();
+}
+
+function updateBatchSelectedCount() {
+  const chks = document.querySelectorAll('.batch-chk:checked');
+  const count = chks.length;
+  $('selBatchCount').textContent = count;
+  $('btnDeleteSelectedBatch').style.display = count > 0 ? 'inline-block' : 'none';
+  const allChks = document.querySelectorAll('.batch-chk');
+  if ($('chkAllBatch')) $('chkAllBatch').checked = allChks.length > 0 && count === allChks.length;
+}
+
+$('chkAllBatch').onchange = e => {
+  document.querySelectorAll('.batch-chk').forEach(c => c.checked = e.target.checked);
+  updateBatchSelectedCount();
+};
+
+function removeSingleBatchItem(idx) {
+  if (batchRunning) return alert('Đang chạy hàng loạt, vui lòng dừng trước khi xoá.');
+  batchItems.splice(idx, 1);
+  if (currentBatchIdx === idx) currentBatchIdx = -1;
+  else if (currentBatchIdx > idx) currentBatchIdx--;
+  renderBatch();
+  updateBatchFileSelector();
+}
+
+$('btnDeleteSelectedBatch').onclick = () => {
+  if (batchRunning) return alert('Đang chạy hàng loạt, vui lòng dừng trước khi xoá.');
+  const selectedIdxs = Array.from(document.querySelectorAll('.batch-chk:checked')).map(c => Number(c.dataset.idx)).sort((a,b) => b - a);
+  if (!selectedIdxs.length) return;
+  if (!confirm(`Xoá ${selectedIdxs.length} file đã chọn khỏi danh sách chờ?`)) return;
+  selectedIdxs.forEach(idx => {
+    batchItems.splice(idx, 1);
+  });
+  currentBatchIdx = -1;
+  renderBatch();
+  updateBatchFileSelector();
+};
+
+
+// Cập nhật văn bản STT khi người dùng gõ trực tiếp trong thẻ
+function onBatchTextChange(idx) {
+  const it = batchItems[idx];
+  if (!it || !it.result) return;
+  const el = document.getElementById(`batch-text-${idx}`);
+  if (el) {
+    it.result.corrected_text = el.value;
+  }
+}
+
+// Lưu chỉnh sửa văn bản STT & người nói vào Dashboard & học từ điển
+async function saveBatchItemEdit(idx, silent = false) {
+  const it = batchItems[idx];
+  if (!it || !it.result) return;
+  const r = it.result;
+  const textEl = document.getElementById(`batch-text-${idx}`);
+  if (textEl) {
+    r.corrected_text = textEl.value;
+  }
+  const finalText = (r.corrected_text !== undefined ? r.corrected_text : r.raw_text) || '';
+  const originalText = r.raw_text || finalText;
+  const msgEl = document.getElementById(`batch-msg-${idx}`);
+  const btnSave = document.getElementById(`btn-save-${idx}`);
+
+  if (btnSave) btnSave.disabled = true;
+  if (msgEl) msgEl.innerHTML = '<span class="muted" style="font-size:12px">Đang lưu...</span>';
+
+  try {
+    const payload = {
+      record_id: it.recordId || null,
+      dict_text: originalText,
+      raw_text: r.raw_text || originalText,
+      final_text: finalText,
+      filename: it.name,
+      audio_url: r.audio_url || null,
+      audio_duration: r.audio_duration || null,
+      process_time: r.process_time || 0,
+      ffmpeg_time: r.ffmpeg_time || null,
+      segments: (r.segments || []).length,
+      params: r.params || null,
+      speaker: null
+    };
+    const res = await api('/api/stt-records', 'POST', payload);
+    if (res.status === 'success') {
+      it.recordId = res.record.id;
+      const l = res.learned;
+      let learnSummary = '';
+      if (l) {
+        const count = (l.added_entries || []).length + (l.updated_entries || []).length + (l.added_vocab || []).length;
+        if (count > 0) learnSummary = ` (+học ${count} từ)`;
+      }
+      if (msgEl) {
+        msgEl.innerHTML = `<span style="color:var(--leaf);font-weight:600;font-size:12px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px;margin-right:2px"><polyline points="20 6 9 17 4 12"/></svg>Đã cập nhật Model ONNX</span>`;
+      }
+      if (!silent) toast(`Đã lưu "${it.name}" & cập nhật Model ONNX!`);
+      renderBatch();
+    } else {
+      if (msgEl) msgEl.innerHTML = `<span style="color:var(--clay);font-size:12px">Lỗi: ${esc(res.message)}</span>`;
+      if (!silent) alert('Lỗi lưu: ' + res.message);
+    }
+  } catch(e) {
+    if (msgEl) msgEl.innerHTML = `<span style="color:var(--clay);font-size:12px">Lỗi: ${esc(e.message)}</span>`;
+    if (!silent) alert('Lỗi: ' + e.message);
+  } finally {
+    if (btnSave) btnSave.disabled = false;
+  }
+}
+
+// Lưu tất cả các file đã hoàn tất
+async function saveAllBatchEdits() {
+  const doneItems = batchItems.map((it, idx) => ({ it, idx })).filter(x => x.it.status === 'done' && x.it.result);
+  if (!doneItems.length) return alert('Chưa có file nào hoàn tất để lưu.');
+  
+  const btn = $('btnSaveAllBatch');
+  if (btn) btn.disabled = true;
+  toast(`Đang lưu tất cả ${doneItems.length} file...`);
+
+  let saved = 0;
+  for (const { it, idx } of doneItems) {
+    await saveBatchItemEdit(idx, true);
+    saved++;
+  }
+
+  if (btn) btn.disabled = false;
+  toast(`Đã lưu tất cả ${saved} file thành công!`);
+}
+
+// Copy văn bản từ thẻ
+function copyBatchText(idx) {
+  const it = batchItems[idx];
+  if (!it || !it.result) return;
+  const textEl = document.getElementById(`batch-text-${idx}`);
+  const text = textEl ? textEl.value : (it.result.corrected_text || it.result.raw_text || '');
+  navigator.clipboard.writeText(text);
+  toast('Đã copy văn bản!');
+}
+
+// Render danh sách thẻ kết quả chi tiết từng file (Xem từ trên xuống)
+function renderBatchCards() {
+  const container = $('batchCardsList');
+  if (!container) return;
+
+  // Giữ lại nội dung người dùng đang nhập dở trước khi render lại
+  batchItems.forEach((it, idx) => {
+    const el = document.getElementById(`batch-text-${idx}`);
+    if (el && it.result) {
+      it.result.corrected_text = el.value;
+    }
+  });
+
+  if (!batchItems.length) {
+    container.innerHTML = '<div class="muted" style="padding:16px;text-align:center">Chưa có file nào trong danh sách. Hãy chọn file hoặc quét thư mục ở trên.</div>';
+    return;
+  }
+
+  container.innerHTML = batchItems.map((it, idx) => {
+    const r = it.result || {};
+    const text = (r.corrected_text !== undefined ? r.corrected_text : r.raw_text) || '';
+    const dur = r.audio_duration ? r.audio_duration + 's' : '—';
+    const proc = r.process_time ? r.process_time + 's' : '—';
+
+    let extHtml = '';
+    if (it.extracted) {
+      extHtml = `<div class="ext-box"><b><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-13"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>Dữ liệu VietGAP:</b> <pre style="margin:4px 0;font-size:12px;white-space:pre-wrap">${esc(JSON.stringify(it.extracted, null, 2))}</pre></div>`;
+    }
+
+    if (it.status === 'done') {
+      return `
+        <div class="file-res-card" id="card-batch-${idx}">
+          <div class="file-res-header">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span style="font-weight:700;color:var(--leaf);font-size:13px">#${idx + 1}</span>
+              <b><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>${esc(it.name)}</b>
+              <span class="muted" style="font-size:12px">${dur} · STT: ${proc}</span>
+            </div>
+            <div>
+              <span class="pill good">Xong</span>
+            </div>
+          </div>
+
+          ${r.audio_url ? `<audio controls src="${r.audio_url}" style="margin:6px 0;width:100%"></audio>` : ''}
+
+          <div style="display:flex;justify-content:space-between;align-items:center;margin:6px 0 4px">
+            <label for="batch-text-${idx}" class="lbl" style="margin:0;font-size:12px">Kết quả nhận diện STT (sửa trực tiếp):</label>
+            <span class="muted" style="font-size:11px">Sửa để cập nhật trực tiếp vào Model ONNX</span>
+          </div>
+          <textarea class="batch-edit-text" id="batch-text-${idx}" oninput="onBatchTextChange(${idx})" placeholder="Nội dung nhận diện...">${esc(text)}</textarea>
+
+          ${extHtml}
+
+          <div class="actions" style="margin-top:8px;display:flex;align-items:center;flex-wrap:wrap;gap:6px">
+            <button class="btn sm" id="btn-save-${idx}" onclick="saveBatchItemEdit(${idx})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Lưu & Cập nhật ONNX</button>
+            <button class="btn sm sec" onclick="runExtractForBatchItem(${idx})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-13"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>Trích xuất VietGAP</button>
+            <button class="btn sm sec" onclick="copyBatchText(${idx})"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy</button>
+            <button class="btn sm sec" onclick="loadBatchItem(${idx})" title="Mở chi tiết trên khung kết quả chính bên dưới"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Xem chi tiết</button>
+            <span class="msg" id="batch-msg-${idx}" style="font-size:12px;margin-left:6px"></span>
+          </div>
+        </div>
+      `;
+    } else if (it.status === 'running') {
+      return `
+        <div class="file-res-card" id="card-batch-${idx}" style="border-left:4px solid var(--gold);background:var(--paper)">
+          <div class="file-res-header">
+            <div>
+              <span style="font-weight:700;color:var(--gold);font-size:13px">#${idx + 1}</span>
+              <b>${esc(it.name)}</b>
+              <span class="muted" style="font-size:12px;margin-left:6px">${(it.size/1024).toFixed(0)} KB</span>
+            </div>
+            <div>
+              <span class="pill mid"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:-1px;animation:spin 1s linear infinite;margin-right:3px"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>Đang nhận diện...</span>
+            </div>
+          </div>
+        </div>
+      `;
+    } else if (it.status === 'error') {
+      return `
+        <div class="file-res-card" id="card-batch-${idx}" style="border-left:4px solid var(--clay)">
+          <div class="file-res-header">
+            <div>
+              <span style="font-weight:700;color:var(--clay);font-size:13px">#${idx + 1}</span>
+              <b>${esc(it.name)}</b>
+            </div>
+            <div>
+              <span class="pill bad">Lỗi</span>
+            </div>
+          </div>
+          <div style="color:var(--clay);font-size:12px;margin-top:4px">${esc(it.error || 'Lỗi không xác định')}</div>
+        </div>
+      `;
+    } else {
+      return `
+        <div class="file-res-card" id="card-batch-${idx}" style="opacity:0.85">
+          <div class="file-res-header">
+            <div>
+              <span style="font-weight:700;color:var(--soft);font-size:13px">#${idx + 1}</span>
+              <b>${esc(it.name)}</b>
+              <span class="muted" style="font-size:12px;margin-left:6px">${(it.size/1024).toFixed(0)} KB</span>
+            </div>
+            <div>
+              <span class="pill" style="background:#ECEEE9;color:var(--soft)">Chờ xử lý</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  }).join('');
+}
+
+// Trích xuất VietGAP cho từng file trong batch
+async function runExtractForBatchItem(idx) {
+  const it = batchItems[idx];
+  if (!it || !it.result) return;
+  const textEl = document.getElementById(`batch-text-${idx}`);
+  const text = (textEl ? textEl.value.trim() : '') || it.result.corrected_text || it.result.raw_text;
+  if (!text) return alert('Văn bản nhận diện rỗng!');
+
+  const msgEl = document.getElementById(`batch-msg-${idx}`);
+  if (msgEl) msgEl.innerHTML = '<span class="muted" style="font-size:12px">Đang trích xuất VietGAP...</span>';
+
+  try {
+    const res = await api('/api/extract', 'POST', { text: text });
+    if (res.status === 'success') {
+      it.extracted = res.data || res.activity || res;
+      renderBatchCards();
+      toast(`Đã trích xuất VietGAP cho "${it.name}"!`);
+    } else {
+      if (msgEl) msgEl.innerHTML = `<span style="color:var(--clay);font-size:12px">Lỗi trích xuất: ${esc(res.message)}</span>`;
+      alert('Trích xuất lỗi: ' + res.message);
+    }
+  } catch(e) {
+    if (msgEl) msgEl.innerHTML = `<span style="color:var(--clay);font-size:12px">Lỗi: ${esc(e.message)}</span>`;
+    alert('Lỗi gọi API: ' + e.message);
+  }
+}
+
+// Cập nhật bộ chọn file trong khung kết quả
+function updateBatchFileSelector() {
+  const bar = $('activeBatchFileBar');
+  const sel = $('selBatchFile');
+  if (!bar || !sel) return;
+  if (!batchItems.length) {
+    bar.style.display = 'none';
+    return;
+  }
+  bar.style.display = 'flex';
+  sel.innerHTML = batchItems.map((it, idx) => {
+    const statusMark = it.status === 'done' ? '[Xong] ' : (it.status === 'running' ? '[Đang chạy] ' : '');
+    return `<option value="${idx}" ${idx === currentBatchIdx ? 'selected' : ''}>${statusMark}${idx + 1}. ${it.name}</option>`;
+  }).join('');
+}
+
+function prevBatchItem() {
+  if (currentBatchIdx > 0) loadBatchItem(currentBatchIdx - 1);
+}
+
+function nextBatchItem() {
+  if (currentBatchIdx < batchItems.length - 1) loadBatchItem(currentBatchIdx + 1);
+}
+
+$('btnClearBatch').onclick = () => {
+  if(batchRunning && !confirm('Đang chạy xử lý hàng loạt, bạn có muốn dừng và xoá?')) return;
+  batchRunning = false;
+  batchItems = [];
+  currentBatchIdx = -1;
+  renderBatch();
+  updateBatchFileSelector();
+  $('batchBox').style.display = 'none';
+};
+
+// Nút chạy toàn bộ thư mục
+$('btnBatchRun').onclick = async () => {
+  if(batchRunning) return;
+  batchRunning = true;
+  $('btnBatchRun').disabled = true;
+  $('btnBatchStop').disabled = false;
+
+  for(let i = 0; i < batchItems.length; i++){
+    if(!batchRunning) break;
+    const it = batchItems[i];
+    if(it.status === 'done') continue;
+
+    it.status = 'running';
+    currentBatchIdx = i;
+    renderBatch();
+    updateBatchFileSelector();
+
+    const fd = new FormData();
+    for (const [k, v] of Object.entries(cur)) fd.append(k, v);
+
+    if (it.file) fd.append('audio', it.file, it.name);
+    else if (it.serverPath) fd.append('server_path', it.serverPath);
+
+    try {
+      const res = await (await fetch('/api/stt-lab/transcribe', { method: 'POST', body: fd })).json();
+      if(res.status !== 'success') throw new Error(res.message);
+      it.status = 'done';
+      it.result = res;
+
+      // HIỂN THỊ NGAY KẾT QUẢ CỦA FILE NÀY LÊN KHUNG KẾT QUẢ CHÍNH!
+      displayResult(res, it.name);
+
+      // Tự động lưu vào Dashboard nếu bật checkbox
+      if ($('chkAutoSave').checked) {
+        const saveRes = await api('/api/stt-records', 'POST', {
+          dict_text: res.corrected_text || res.raw_text,
+          raw_text: res.raw_text,
+          final_text: res.corrected_text || res.raw_text,
+          filename: it.name,
+          audio_url: res.audio_url,
+          audio_duration: res.audio_duration,
+          process_time: res.process_time,
+          ffmpeg_time: res.ffmpeg_time,
+          segments: (res.segments || []).length,
+          params: res.params,
+          speaker: null
+        });
+        if (saveRes && saveRes.status === 'success' && saveRes.record) {
+          it.recordId = saveRes.record.id;
+        }
+      }
+    } catch(err) {
+      it.status = 'error';
+      it.error = err.message;
+    }
+    renderBatch();
+    updateBatchFileSelector();
+  }
+
+  batchRunning = false;
+  $('btnBatchRun').disabled = false;
+  $('btnBatchStop').disabled = true;
+};
+
+$('btnBatchStop').onclick = () => {
+  batchRunning = false;
+  $('btnBatchStop').disabled = true;
+  $('btnBatchRun').disabled = false;
+};
+
+function loadBatchItem(idx) {
+  const it = batchItems[idx];
+  if(!it) return;
+  currentBatchIdx = idx;
+  renderBatch();
+  updateBatchFileSelector();
+  if (it.result) {
+    displayResult(it.result, it.name);
+    // Cuộn mượt đến khung chỉnh sửa
+    $('edit').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } else {
+    alert(`File "${it.name}" chưa được nhận diện. Bấm "Chạy toàn bộ thư mục" để xử lý.`);
+  }
+}
+
+// Xuất tất cả kết quả STT ra file TXT
+$('btnExportAll').onclick = () => {
+  const doneItems = batchItems.filter(it => it.status === 'done' && it.result);
+  if (!doneItems.length) return alert('Chưa có file nào hoàn tất.');
+  let content = `BÁO CÁO NHẬN DIỆN STT HÀNG LOẠT\nThời gian: ${new Date().toLocaleString('vi-VN')}\nTổng số file: ${doneItems.length}\n${'='.repeat(60)}\n\n`;
+  doneItems.forEach((it, i) => {
+    const r = it.result;
+    const text = r.corrected_text || r.raw_text || '';
+    content += `[${i + 1}] File: ${it.name} (${r.audio_duration || 0}s)\n`;
+    content += `Nội dung: ${text}\n`;
+    content += `${'-'.repeat(40)}\n\n`;
+  });
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `stt_batch_results_${new Date().toISOString().slice(0, 10)}.txt`;
+  a.click();
+};
+
+/* ================= CHẠY XỬ LÝ FILE ĐƠN LẺ ================= */
+const runs = [];
+$('btnRun').onclick = async () => {
+  const fd = new FormData();
+  fd.append('audio', blob, fname);
+  for (const [k, v] of Object.entries(cur)) fd.append(k, v);
+
+  $('btnRun').disabled = true; $('runMsg').className = 'msg'; $('runMsg').textContent = 'Đang xử lý…';
+  try {
+    const d = await (await fetch('/api/stt-lab/transcribe', { method: 'POST', body: fd })).json();
+    if(d.status !== 'success') throw new Error(d.message || 'Lỗi không xác định');
+    displayResult(d, fname);
+    runs.unshift({ t: new Date().toLocaleTimeString(), d, p: { ...cur } });
+    renderRuns();
+    $('runMsg').className = 'msg ok'; $('runMsg').textContent = 'Hoàn tất. Sửa kết quả nếu cần rồi bấm Lưu.';
+  } catch(e){
+    $('runMsg').className = 'msg err'; $('runMsg').textContent = 'Lỗi: ' + e.message;
+  } finally {
+    $('btnRun').disabled = false;
+  }
+};
+
+function displayResult(d, fileName) {
+  lastRun = { d, filename: fileName };
+  recordId = null;
+
+  original = d.corrected_text || d.raw_text || '';
+  $('edit').value = original;
+  $('learnMsg').textContent = '';
+  $('mainVietgapBox').style.display = 'none';
+
+  // Hiển thị tên file & thời lượng ở tiêu đề kết quả
+  if ($('resFileBadge')) {
+    $('resFileBadge').textContent = fileName || 'Audio';
+    $('resFileBadge').style.display = 'inline-block';
+  }
+  if ($('resDurBadge')) {
+    const durStr = d.audio_duration ? `${d.audio_duration}s` : '';
+    $('resDurBadge').textContent = durStr ? `(Thời lượng: ${durStr})` : '';
+  }
+
+  $('outAudio').src = d.audio_url; $('outAudio').hidden = false;
+
+  // Cập nhật thông số kỹ thuật (trong hộp thu gọn)
+  const rtf = d.audio_duration ? (d.process_time / d.audio_duration).toFixed(2) : '-';
+  $('meta').innerHTML = `
+    <span>Audio: <b>${d.audio_duration}s</b></span>
+    <span>ffmpeg: <b>${d.ffmpeg_time}s</b></span>
+    <span>STT ONNX: <b>${d.process_time}s</b></span>
+    <span>RTF: <b>${rtf}</b></span>
+    <span>Đoạn VAD: <b>${(d.segments||[]).length}</b></span>
+  `;
+
+  $('segs').innerHTML = (d.segments || []).map(s => `
+    <tr>
+      <td class="t">${s.start.toFixed(1)}–${s.end.toFixed(1)}s</td>
+      <td>${esc(s.text)}</td>
+    </tr>
+  `).join('');
+}
+
+function renderRuns(){
+  $('runs').innerHTML = runs.map((h, i) => `
+    <div class="runitem" data-i="${i}">
+      <b>${h.t}</b> · ${h.d.process_time}s · ${(h.d.segments||[]).length} đoạn · vad=${h.p.use_vad?h.p.vad_threshold:'off'}
+      <br><span class="muted">${esc((h.d.raw_text||'').slice(0, 100))}</span>
+    </div>
+  `).join('');
+  document.querySelectorAll('.runitem').forEach(el => el.onclick = () => applyParams(runs[el.dataset.i].p));
+}
+
+/* ================= SỬA & LƯU CẬP NHẬT MODEL ONNX ================= */
+$('btnRevert').onclick = () => { $('edit').value = original; $('learnMsg').textContent = ''; };
+$('btnCopy').onclick = () => { navigator.clipboard.writeText($('edit').value); toast('Đã copy nội dung!'); };
+
+// Nút Trích xuất VietGAP trên khung chính
+$('btnExtractMain').onclick = async () => {
+  const text = $('edit').value.trim();
+  if (!text) return alert('Văn bản nhận diện rỗng!');
+  $('mainVietgapBox').style.display = 'block';
+  $('mainVietgapBox').innerHTML = 'Đang trích xuất dữ liệu nhật ký VietGAP...';
+  try {
+    const res = await api('/api/extract', 'POST', { text: text });
+    if (res.status === 'success') {
+      const data = res.data || res.activity || res;
+      $('mainVietgapBox').innerHTML = `<b><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-13"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>Kết quả trích xuất VietGAP:</b><pre style="margin:6px 0;white-space:pre-wrap;font-size:12px">${esc(JSON.stringify(data, null, 2))}</pre>`;
+    } else {
+      $('mainVietgapBox').innerHTML = `<span style="color:var(--clay)">Lỗi trích xuất: ${esc(res.message)}</span>`;
+    }
+  } catch(e) {
+    $('mainVietgapBox').innerHTML = `<span style="color:var(--clay)">Lỗi: ${esc(e.message)}</span>`;
+  }
+};
+
+// Nút Lưu & Cập nhật Model ONNX
+$('btnLearn').onclick = async () => {
+  const corrected = $('edit').value.trim();
+  if(!corrected){ $('learnMsg').className = 'msg err'; $('learnMsg').textContent = 'Văn bản nhận diện rỗng.'; return; }
+  const d0 = lastRun && lastRun.d;
+
+  $('btnLearn').disabled = true;
+  $('learnMsg').className = 'msg';
+  $('learnMsg').textContent = 'Đang lưu và cập nhật vào mô hình ONNX...';
+
+  try {
+    const d = await api('/api/stt-records', 'POST', {
+      record_id: recordId,
+      dict_text: original || corrected,
+      raw_text: d0 ? d0.raw_text : (original || corrected),
+      final_text: corrected,
+      filename: lastRun ? lastRun.filename : '',
+      audio_url: d0 ? d0.audio_url : null,
+      audio_duration: d0 ? d0.audio_duration : null,
+      process_time: d0 ? d0.process_time : 0,
+      ffmpeg_time: d0 ? d0.ffmpeg_time : null,
+      segments: d0 ? (d0.segments||[]).length : null,
+      params: d0 ? d0.params : null,
+      speaker: null
+    });
+
+    if(d.status !== 'success'){ $('learnMsg').className = 'msg err'; $('learnMsg').textContent = d.message; return; }
+    recordId = d.record.id;
+    original = corrected;
+
+    $('learnMsg').className = 'msg ok';
+    $('learnMsg').innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:3px"><polyline points="20 6 9 17 4 12"/></svg>Đã lưu bản ghi và cập nhật trực tiếp vào <b>Mô hình ONNX</b> thành công! (<a href="/stt-dashboard">Xem Dashboard</a>)`;
+    toast('Đã lưu & cập nhật Model ONNX!');
+  } catch(e) {
+    $('learnMsg').className = 'msg err';
+    $('learnMsg').textContent = 'Lỗi: ' + e.message;
+  } finally {
+    $('btnLearn').disabled = false;
+  }
+};
+
+// Toggle ẩn/hiện cấu hình tham số nằm ngang phía trên
+if ($('btnToggleParams')) {
+  $('btnToggleParams').onclick = () => {
+    const grid = $('paramGrid');
+    const tabs = $('paramTabs');
+    const isHidden = grid.style.display === 'none';
+    grid.style.display = isHidden ? 'grid' : 'none';
+    if (tabs) tabs.style.display = isHidden ? 'flex' : 'none';
+    $('toggleParamsText').textContent = isHidden ? 'Thu gọn tham số' : 'Mở rộng tham số';
+  };
+}
+
+// Toggle ẩn/hiện chi tiết kỹ thuật ở kết quả
+if ($('btnToggleTechDetails')) {
+  $('btnToggleTechDetails').onclick = () => {
+    const box = $('techDetailsBox');
+    box.style.display = box.style.display === 'none' ? 'block' : 'none';
+  };
+}
+</script>
+{% endblock %}
