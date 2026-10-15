@@ -124,7 +124,28 @@
         <small style="color:var(--ink-soft)">Hỗ trợ wav, mp3, m4a, ogg, webm, flac, mp4…</small>
       </div>
       <input type="file" id="file" accept="audio/*,video/mp4" hidden>
-      <audio id="aud" controls hidden></audio>
+      <div class="custom-audio-player" id="audPlayer" style="display:none">
+        <button type="button" class="cap-play-btn" onclick="toggleCapAudio('audPlayer')" title="Phát / Tạm dừng">
+          <svg class="cap-icon-play" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+          <svg class="cap-icon-pause" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+        </button>
+        <div class="cap-wave" title="Sóng âm thanh"><span></span><span></span><span></span><span></span></div>
+        <span class="cap-time cap-current">0:00</span>
+        <div class="cap-progress-wrap" onclick="seekCapAudio('audPlayer', event)" onmousedown="startScrubCapAudio('audPlayer', event)" title="Tua âm thanh">
+          <div class="cap-progress-track">
+            <div class="cap-progress-buffer"></div>
+            <div class="cap-progress-fill"></div>
+            <div class="cap-progress-thumb"></div>
+          </div>
+        </div>
+        <span class="cap-time cap-total">0:00</span>
+        <button type="button" class="cap-speed-btn" onclick="cycleCapSpeed('audPlayer')" title="Đổi tốc độ phát">1x</button>
+        <button type="button" class="cap-vol-btn" onclick="toggleCapMute('audPlayer')" title="Bật/Tắt âm">
+          <svg class="cap-icon-unmuted" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          <svg class="cap-icon-muted" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+        </button>
+        <audio id="aud" preload="metadata" style="display:none"></audio>
+      </div>
       <div class="actions">
         <button class="btn sec" id="btnRec"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>Thu âm</button>
         <button class="btn" id="btnRun" disabled><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>Xử lý & nhận diện</button>
@@ -214,8 +235,29 @@
       </div>
     </div>
 
-    <!-- Audio Player -->
-    <audio id="outAudio" controls style="width:100%;margin-bottom:8px" hidden></audio>
+    <!-- Audio Player (Tiến trình phát âm thanh) -->
+    <div class="custom-audio-player" id="outAudioPlayer" style="display:none;margin-bottom:12px">
+      <button type="button" class="cap-play-btn" onclick="toggleCapAudio('outAudioPlayer')" title="Phát / Tạm dừng">
+        <svg class="cap-icon-play" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+        <svg class="cap-icon-pause" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+      </button>
+      <div class="cap-wave" title="Sóng âm thanh"><span></span><span></span><span></span><span></span></div>
+      <span class="cap-time cap-current">0:00</span>
+      <div class="cap-progress-wrap" onclick="seekCapAudio('outAudioPlayer', event)" onmousedown="startScrubCapAudio('outAudioPlayer', event)" title="Tua âm thanh">
+        <div class="cap-progress-track">
+          <div class="cap-progress-buffer"></div>
+          <div class="cap-progress-fill"></div>
+          <div class="cap-progress-thumb"></div>
+        </div>
+      </div>
+      <span class="cap-time cap-total">0:00</span>
+      <button type="button" class="cap-speed-btn" onclick="cycleCapSpeed('outAudioPlayer')" title="Đổi tốc độ phát">1x</button>
+      <button type="button" class="cap-vol-btn" onclick="toggleCapMute('outAudioPlayer')" title="Bật/Tắt âm">
+        <svg class="cap-icon-unmuted" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <svg class="cap-icon-muted" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+      </button>
+      <audio id="outAudio" preload="metadata" style="display:none"></audio>
+    </div>
 
     <!-- Khung sửa trực tiếp ngắn gọn -->
     <div style="margin-bottom:4px;display:flex;justify-content:space-between;align-items:center">
@@ -353,7 +395,9 @@ let blob = null, fname = 'audio.wav', original = '', lastRun = null, recordId = 
 
 function setBlob(b, n){
   blob = b; fname = n;
-  $('aud').src = URL.createObjectURL(b); $('aud').hidden = false; $('btnRun').disabled = false;
+  const url = URL.createObjectURL(b);
+  setCapAudioSrc('audPlayer', url);
+  $('btnRun').disabled = false;
   $('drop').textContent = `${n} — ${(b.size/1024).toFixed(1)} KB`;
 }
 $('drop').onclick = () => $('file').click();
@@ -650,7 +694,7 @@ function renderBatchCards() {
             </div>
           </div>
 
-          ${r.audio_url ? `<audio controls src="${r.audio_url}" style="margin:6px 0;width:100%"></audio>` : ''}
+          ${r.audio_url ? renderCustomAudioPlayerHtml(r.audio_url, 'batch-player-' + idx, r.audio_duration) : ''}
 
           <div style="display:flex;justify-content:space-between;align-items:center;margin:6px 0 4px">
             <label for="batch-text-${idx}" class="lbl" style="margin:0;font-size:12px">Kết quả nhận diện STT (sửa trực tiếp):</label>
@@ -924,7 +968,11 @@ function displayResult(d, fileName) {
     $('resDurBadge').textContent = durStr ? `(Thời lượng: ${durStr})` : '';
   }
 
-  $('outAudio').src = d.audio_url; $('outAudio').hidden = false;
+  if (d.audio_url) {
+    setCapAudioSrc('outAudioPlayer', d.audio_url, d.audio_duration);
+  } else if ($('outAudioPlayer')) {
+    $('outAudioPlayer').style.display = 'none';
+  }
 
   // Cập nhật thông số kỹ thuật (trong hộp thu gọn)
   const rtf = d.audio_duration ? (d.process_time / d.audio_duration).toFixed(2) : '-';
@@ -1008,8 +1056,14 @@ $('btnLearn').onclick = async () => {
     original = corrected;
 
     $('learnMsg').className = 'msg ok';
-    $('learnMsg').innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:3px"><polyline points="20 6 9 17 4 12"/></svg>Đã lưu bản ghi và cập nhật trực tiếp vào <b>Mô hình ONNX</b> thành công! (<a href="/stt-dashboard">Xem Dashboard</a>)`;
-    toast('Đã lưu & cập nhật Model ONNX!');
+    const hws = d.learned_hotwords || [];
+    if (hws.length) {
+      $('learnMsg').innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:3px"><polyline points="20 6 9 17 4 12"/></svg>Đã lưu & tự động convert <b>${hws.length} từ Hot-fix</b> vào Model ONNX: <span style="background:var(--moss-tint);padding:2px 6px;border-radius:4px;font-family:monospace;color:var(--leaf);font-weight:700">${esc(hws.join(', '))}</span> (<a href="/stt-hotwords">Xem trang Hot-fix</a>)`;
+      toast(`Đã convert ${hws.length} từ thành Hot-fix!`);
+    } else {
+      $('learnMsg').innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:3px"><polyline points="20 6 9 17 4 12"/></svg>Đã lưu bản ghi thành công! (<a href="/stt-dashboard">Xem Dashboard</a>)`;
+      toast('Đã lưu bản ghi!');
+    }
   } catch(e) {
     $('learnMsg').className = 'msg err';
     $('learnMsg').textContent = 'Lỗi: ' + e.message;

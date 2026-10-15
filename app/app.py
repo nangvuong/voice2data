@@ -47,7 +47,7 @@ from flask_cors import CORS
 import config
 from services.audio.audio_converter import resample_to_16k_mono_pcm16, AudioConversionError
 from services.engines.stt_engine import stt_engine, STTError, update_onnx_hotwords
-from services.audio.stt_dictionary import stt_dictionary
+from services.audio.hotwords_manager import hotwords_manager
 from services.audio.stt_records import stt_records
 from services.engines.ocr_engine import ocr_engine, OCRError
 from services.vietgap.material_matcher import material_matcher
@@ -630,11 +630,8 @@ def stt_dashboard():
 @app.route("/stt-dictionary")
 @app.route("/tu-dien-stt")
 def stt_dictionary_page():
-    """Trang hiển thị / quản lý các từ điển STT đã lưu."""
-    farmer = session.get("farmer")
-    if not farmer:
-        return redirect(url_for("login"))
-    return render_template("stt/dictionary.html", farmer=farmer, active="dictionary")
+    """Chuyển hướng trang từ điển cũ sang dashboard."""
+    return redirect(url_for("stt_dashboard_page"))
 
 
 @app.route("/stt/realtime")
@@ -645,6 +642,88 @@ def stt_realtime_page():
     if not farmer:
         return redirect(url_for("login"))
     return render_template("stt/realtime.html", farmer=farmer, active="realtime")
+
+
+@app.route("/stt/hotwords")
+@app.route("/stt-hotwords")
+@app.route("/tu-hotwords")
+def stt_hotwords_page():
+    """Trang quản lý từ Hot-fix (Hotwords Contextual Biasing) cho mô hình ONNX."""
+    farmer = session.get("farmer")
+    if not farmer:
+        return redirect(url_for("login"))
+    return render_template("stt/hotwords.html", farmer=farmer, active="hotwords")
+
+
+@app.route("/api/stt-hotwords", methods=["GET"])
+def api_stt_hotwords_list():
+    if not session.get("farmer"):
+        return jsonify({"status": "error", "message": "Chưa đăng nhập"}), 401
+    search = request.args.get("q")
+    category = request.args.get("cat")
+    words = hotwords_manager.list_words(search=search, category=category)
+    return jsonify({
+        "status": "success",
+        "words": words,
+        "categories": hotwords_manager.get_categories(),
+        "stats": hotwords_manager.stats(),
+    })
+
+
+@app.route("/api/stt-hotwords", methods=["POST"])
+def api_stt_hotwords_add():
+    if not session.get("farmer"):
+        return jsonify({"status": "error", "message": "Chưa đăng nhập"}), 401
+    d = request.get_json(silent=True) or {}
+    word = d.get("word", "")
+    category = d.get("category", "Chung")
+    ok, msg, item = hotwords_manager.add_word(word, category=category)
+    if not ok:
+        return jsonify({"status": "error", "message": msg}), 400
+    return jsonify({"status": "success", "message": msg, "item": item})
+
+
+@app.route("/api/stt-hotwords/batch", methods=["POST"])
+def api_stt_hotwords_batch():
+    if not session.get("farmer"):
+        return jsonify({"status": "error", "message": "Chưa đăng nhập"}), 401
+    d = request.get_json(silent=True) or {}
+    words = d.get("words", "")
+    category = d.get("category", "Chung")
+    res = hotwords_manager.add_batch(words, category=category)
+    return jsonify({"status": "success", **res})
+
+
+@app.route("/api/stt-hotwords/<path:word_id>", methods=["DELETE"])
+def api_stt_hotwords_delete(word_id):
+    if not session.get("farmer"):
+        return jsonify({"status": "error", "message": "Chưa đăng nhập"}), 401
+    ok = hotwords_manager.delete_word(word_id)
+    return jsonify({"status": "success" if ok else "error", "message": "" if ok else "Không tìm thấy từ khóa"})
+
+
+@app.route("/api/stt-hotwords/preview", methods=["GET"])
+def api_stt_hotwords_preview():
+    word = request.args.get("word", "")
+    tokens = hotwords_manager.encode_tokens(word)
+    return jsonify({"status": "success", "word": word, "tokens": tokens})
+
+
+@app.route("/api/stt-hotwords/sync", methods=["POST"])
+def api_stt_hotwords_sync():
+    if not session.get("farmer"):
+        return jsonify({"status": "error", "message": "Chưa đăng nhập"}), 401
+    count = hotwords_manager.sync_to_onnx()
+    return jsonify({"status": "success", "total_tokens": count})
+
+
+@app.route("/api/stt-hotwords/export", methods=["GET"])
+def api_stt_hotwords_export():
+    if not session.get("farmer"):
+        return jsonify({"status": "error", "message": "Chưa đăng nhập"}), 401
+    if os.path.exists(hotwords_manager.onnx_path):
+        return send_file(hotwords_manager.onnx_path, as_attachment=True, download_name="onnx_hotwords.txt")
+    return jsonify({"status": "error", "message": "Chưa có file hotwords"}), 404
 
 
 
@@ -668,12 +747,12 @@ def stt_records_list():
 def stt_records_stats():
     if not session.get("farmer"):
         return jsonify({"status": "error", "message": "Chưa đăng nhập"}), 401
-    return jsonify({"status": "success", "stats": stt_records.stats(stt_dictionary.snapshot())})
+    return jsonify({"status": "success", "stats": stt_records.stats()})
 
 
 @app.route("/api/stt-records", methods=["POST"])
 def stt_records_save():
-    """Lưu một lần test (kèm bản đã sửa) và tự động học từ điển từ phần sửa."""
+    """Lưu một lần test (kèm bản đã sửa)."""
     if not session.get("farmer"):
         return jsonify({"status": "error", "message": "Chưa đăng nhập"}), 401
     d = request.get_json(silent=True) or {}
@@ -683,15 +762,10 @@ def stt_records_save():
     if not dict_text or not final_text:
         return jsonify({"status": "error", "message": "Thiếu văn bản gốc hoặc văn bản đã sửa"}), 400
 
-    learned = stt_dictionary.learn(dict_text, final_text, source=d.get("filename", ""))
-    changes = learned["added_entries"] + learned["updated_entries"]
-
-    # Cập nhật từ vựng vào mô hình ONNX
-    new_words = list(learned.get("added_vocab", []))
-    for c in changes:
-        if c.get("right"):
-            new_words.append(c["right"])
-    total_onnx = update_onnx_hotwords(new_words)
+    # Tự động trích xuất các từ sửa khác biệt và convert thành hotwords nạp vào ONNX model
+    added_hotwords = hotwords_manager.learn_from_correction(dict_text, final_text, category="Tự học từ bản sửa")
+    new_words = [it["word"] for it in added_hotwords]
+    total_onnx = len(hotwords_manager.list_words())
 
     fields = {
         "filename": d.get("filename") or "(văn bản dán)",
@@ -699,14 +773,12 @@ def stt_records_save():
         "audio_duration": d.get("audio_duration"), "process_time": d.get("process_time") or 0,
         "ffmpeg_time": d.get("ffmpeg_time"), "segments": d.get("segments"),
         "params": d.get("params"),
-        "changes": changes, "new_vocab": learned["added_vocab"],
+        "changes": [], "new_vocab": new_words,
     }
 
     existing = stt_records.get(d["record_id"]) if d.get("record_id") else None
     if existing:
-        # Lưu lại cùng một lần test: giữ audio & gộp các thay đổi đã học
-        fields["changes"] = existing.get("changes", []) + changes
-        fields["new_vocab"] = existing.get("new_vocab", []) + learned["added_vocab"]
+        fields["new_vocab"] = existing.get("new_vocab", []) + new_words
         fields["dict_text"] = existing.get("dict_text", dict_text)
         rec = stt_records.update(existing["id"], fields)
     else:
@@ -720,9 +792,10 @@ def stt_records_save():
     return jsonify({
         "status": "success",
         "record": rec,
-        "onnx_updated": True,
+        "onnx_updated": bool(added_hotwords),
         "total_onnx_hotwords": total_onnx,
-        "learned": learned
+        "learned_hotwords": new_words,
+        "learned": {"added_entries": [], "updated_entries": [], "added_vocab": new_words}
     })
 
 
@@ -892,13 +965,14 @@ def stt_lab_transcribe():
         result = stt_engine._executor.submit(stt_engine._transcribe_tuned_sync, out_path, p).result()
         result.pop("_spans", None)
         result.pop("_sr", None)
-        corrected, applied = stt_dictionary.apply(result.get("text", ""))
+        raw_text = result.get("text", "")
+        corrected, applied = raw_text, []
 
         result.update({
             "status": "success",
-            "raw_text": result.get("text", ""),
-            "corrected_text": corrected,
-            "dictionary_applied": applied,
+            "raw_text": raw_text,
+            "corrected_text": raw_text,
+            "dictionary_applied": [],
             "ffmpeg_time": ffmpeg_time,
             "ffmpeg_filters": filters,
             "params": p,
@@ -954,87 +1028,7 @@ def stt_batch_list():
     return jsonify({"status": "success", "dir": path, "files": files, "roots": IMPORT_ROOTS})
 
 
-# ==========================================
-# STT DASHBOARD: sửa kết quả + từ điển tự học
-# ==========================================
-def _dict_auth():
-    return bool(session.get("farmer"))
 
-
-@app.route("/api/stt-dict", methods=["GET"])
-def stt_dict_get():
-    if not _dict_auth():
-        return jsonify({"status": "error", "message": "Chưa đăng nhập"}), 401
-    return jsonify({"status": "success", **stt_dictionary.snapshot()})
-
-
-@app.route("/api/stt-dict/entry", methods=["POST", "PUT", "DELETE"])
-def stt_dict_entry():
-    if not _dict_auth():
-        return jsonify({"status": "error", "message": "Chưa đăng nhập"}), 401
-    d = request.get_json(silent=True) or {}
-    try:
-        if request.method == "POST":
-            e = stt_dictionary.upsert_entry(d.get("wrong", ""), d.get("right", ""), d.get("enabled", True))
-            return jsonify({"status": "success", "entry": e})
-        if request.method == "PUT":
-            e = stt_dictionary.update_entry(d.get("old_wrong", ""), d.get("wrong"), d.get("right"), d.get("enabled"))
-            return jsonify({"status": "success", "entry": e})
-        ok = stt_dictionary.delete_entry(d.get("wrong", ""))
-        return jsonify({"status": "success" if ok else "error", "message": "" if ok else "Không tìm thấy"}), (200 if ok else 404)
-    except (ValueError, KeyError) as e:
-        return jsonify({"status": "error", "message": str(e)}), 400
-
-
-@app.route("/api/stt-dict/vocab", methods=["POST", "DELETE"])
-def stt_dict_vocab():
-    if not _dict_auth():
-        return jsonify({"status": "error", "message": "Chưa đăng nhập"}), 401
-    d = request.get_json(silent=True) or {}
-    if request.method == "POST":
-        ok = stt_dictionary.add_vocab(d.get("word", ""))
-    else:
-        ok = stt_dictionary.delete_vocab(d.get("word", ""))
-    return jsonify({"status": "success" if ok else "error"})
-
-
-@app.route("/api/stt-dict/import", methods=["POST"])
-def stt_dict_import():
-    if not _dict_auth():
-        return jsonify({"status": "error", "message": "Chưa đăng nhập"}), 401
-    d = request.get_json(silent=True) or {}
-    res = stt_dictionary.import_data(d.get("data") or {}, replace=bool(d.get("replace")))
-    return jsonify({"status": "success", "imported": res})
-
-
-@app.route("/api/stt-dict/apply", methods=["POST"])
-def stt_dict_apply():
-    """Áp dụng từ điển lên một đoạn văn bản (xem trước)."""
-    if not _dict_auth():
-        return jsonify({"status": "error", "message": "Chưa đăng nhập"}), 401
-    d = request.get_json(silent=True) or {}
-    text, applied = stt_dictionary.apply(d.get("text", ""))
-    return jsonify({"status": "success", "text": text, "applied": applied})
-
-
-@app.route("/api/stt-dict/learn", methods=["POST"])
-def stt_dict_learn():
-    """Lưu bản sửa của người dùng và tự động học từ điển từ phần khác biệt."""
-    if not _dict_auth():
-        return jsonify({"status": "error", "message": "Chưa đăng nhập"}), 401
-    d = request.get_json(silent=True) or {}
-    original, corrected = (d.get("original") or "").strip(), (d.get("corrected") or "").strip()
-    if not original or not corrected:
-        return jsonify({"status": "error", "message": "Thiếu văn bản gốc hoặc văn bản đã sửa"}), 400
-    res = stt_dictionary.learn(original, corrected, source=d.get("source", ""))
-    return jsonify({"status": "success", "learned": res})
-
-
-@app.route("/api/stt-dict/history", methods=["GET"])
-def stt_dict_history():
-    if not _dict_auth():
-        return jsonify({"status": "error", "message": "Chưa đăng nhập"}), 401
-    return jsonify({"status": "success", "history": stt_dictionary.history(100)})
 
 
 @app.route("/download-cert")
@@ -1473,13 +1467,12 @@ def transcribe_audio():
 
     try:
         run_async(resample_to_16k_mono_pcm16(raw_path, permanent_wav_path))
-        raw_text = stt_engine._transcribe_sync(permanent_wav_path)
-        text, _applied = stt_dictionary.apply(raw_text)
+        text = stt_engine._transcribe_sync(permanent_wav_path)
         audio_url = f"/static/audio/{audio_filename}"
         return jsonify({
             "status": "success",
             "text": text,
-            "raw_text": raw_text,
+            "raw_text": text,
             "audio_url": audio_url
         })
     except Exception as e:
@@ -1805,7 +1798,6 @@ def voice_to_data():
     try:
         run_async(resample_to_16k_mono_pcm16(raw_path, permanent_wav_path))
         text = stt_engine._transcribe_sync(permanent_wav_path)
-        text, _applied = stt_dictionary.apply(text)
         audio_url = f"/static/audio/{audio_filename}"
         if not text:
             return jsonify({

@@ -1,0 +1,80 @@
+[
+  {
+    "id": "bón",
+    "word": "BÓN",
+    "tokens": "B Ó N",
+    "category": "Chung",
+    "created_at": "2026-10-15 09:25:11"
+  },
+  {
+    "id": "cuốn",
+    "word": "CUỐN",
+    "tokens": "C U Ố N",
+    "category": "Chung",
+    "created_at": "2026-10-15 09:25:11"
+  },
+  {
+    "id": "lá",
+    "word": "LÁ",
+    "tokens": "L Á",
+    "category": "Chung",
+    "created_at": "2026-10-15 09:25:11"
+  },
+  {
+    "id": "npk",
+    "word": "NPK",
+    "tokens": "N P K",
+    "category": "Tự học từ bản sửa",
+    "created_at": "2026-10-15 09:25:11",
+    "updated_at": "2026-10-15 13:45:19"
+  },
+  {
+    "id": "phân",
+    "word": "PHÂN",
+    "tokens": "P H Â N",
+    "category": "Chung",
+    "created_at": "2026-10-15 09:25:11"
+  },
+  {
+    "id": "sâu",
+    "word": "SÂU",
+    "tokens": "S Â U",
+    "category": "Chung",
+    "created_at": "2026-10-15 09:25:11"
+  },
+  {
+    "id": "thuốc",
+    "word": "THUỐC",
+    "tokens": "T H U Ố C",
+    "category": "Chung",
+    "created_at": "2026-10-15 09:25:11"
+  },
+  {
+    "id": "trừ",
+    "word": "TRỪ",
+    "tokens": "T R Ừ",
+    "category": "Chung",
+    "created_at": "2026-10-15 09:25:11"
+  },
+  {
+    "id": "vietgap",
+    "word": "VIETGAP",
+    "tokens": "V I E T G A P",
+    "category": "Chung",
+    "created_at": "2026-10-15 09:25:11"
+  },
+  {
+    "id": "mancozeb",
+    "word": "Mancozeb",
+    "tokens": "M A N C O Z E B",
+    "category": "Tự học từ bản sửa",
+    "created_at": "2026-10-15 12:02:26"
+  },
+  {
+    "id": "mỗi",
+    "word": "MỖI",
+    "tokens": "M Ỗ I",
+    "category": "Tự học từ bản sửa",
+    "created_at": "2026-10-15 13:45:19"
+  }
+]

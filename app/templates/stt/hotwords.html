@@ -1,0 +1,359 @@
+{% extends "stt/base.html" %}
+{% set active = 'hotwords' %}
+{% block title %}Quản lý Từ Hot-fix (Hotwords Contextual Biasing){% endblock %}
+
+{% block css %}
+<style>
+  .hw-grid { display: grid; grid-template-columns: 360px 1fr; gap: 16px; margin-top: 14px; }
+  @media (max-width: 900px) { .hw-grid { grid-template-columns: 1fr; } }
+  
+  .card-box { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-md); padding: 18px 20px; box-shadow: 0 2px 8px rgba(35,42,28,0.03); }
+  .card-box h3 { margin: 0 0 12px 0; font-size: 0.95rem; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+  
+  .form-group { margin-bottom: 12px; }
+  .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+  .form-group input[type="text"], .form-group select, .form-group textarea {
+    width: 100%; padding: 8px 12px; font-size: 0.85rem; border: 1px solid var(--line); border-radius: 6px;
+    background: var(--paper); color: var(--ink); box-sizing: border-box; transition: border-color .15s;
+  }
+  .form-group input[type="text"]:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none; border-color: var(--leaf); background: #fff;
+  }
+  
+  .token-preview-box {
+    background: var(--moss-tint); border: 1px dashed var(--leaf); border-radius: 6px;
+    padding: 8px 12px; font-size: 0.82rem; margin-top: 8px;
+  }
+  .token-preview-val { font-family: 'IBM Plex Mono', monospace; font-weight: 700; color: var(--leaf); letter-spacing: 1px; }
+  
+  .tab-switches { display: flex; gap: 4px; margin-bottom: 14px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+  .tab-btn { background: var(--paper); border: 1px solid var(--line); padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; color: var(--ink-soft); cursor: pointer; }
+  .tab-btn.active { background: var(--leaf); color: #fff; border-color: var(--leaf); }
+  
+  .hw-search-bar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .hw-search-bar input { flex: 1; min-width: 180px; }
+  .hw-search-bar select { width: 140px; }
+  
+  .hw-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+  .hw-table th { background: var(--moss-tint); padding: 8px 12px; text-align: left; font-weight: 700; color: var(--ink); border-bottom: 2px solid var(--line); }
+  .hw-table td { padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  .hw-table tr:hover { background: rgba(63,107,63,0.03); }
+  
+  .tag-cat { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 0.72rem; font-weight: 600; background: var(--ochre-tint); color: var(--gold); }
+  .tok-badge { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; background: var(--paper); border: 1px solid var(--line); padding: 2px 6px; border-radius: 4px; color: var(--leaf); font-weight: 600; }
+  .btn-del { background: transparent; border: 1px solid var(--rust); color: var(--rust); padding: 3px 8px; border-radius: 4px; font-size: 0.72rem; cursor: pointer; transition: all .15s; }
+  .btn-del:hover { background: var(--rust); color: #fff; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="pagehead">
+  <h1>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-3px;margin-right:8px">
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+    </svg>
+    Quản lý Từ Hot-fix (Hotwords Contextual Biasing)
+  </h1>
+  <p>Thêm và quản lý các từ khóa ưu tiên được nạp trực tiếp vào bộ giải mã Beam Search của mô hình ONNX (không dùng rule thay thế chuỗi).</p>
+</div>
+
+<div class="wrap">
+  <!-- THỐNG KÊ NHANH -->
+  <div class="stats" id="hwStats">
+    <div class="stat"><b style="color:var(--leaf)" id="statTotalWords">0</b>Tổng từ Hot-fix</div>
+    <div class="stat"><b style="color:var(--sky)" id="statOnnxTokens">0</b>Chuỗi Token ONNX</div>
+    <div class="stat"><b style="color:var(--gold)" id="statBiasScore">+2.0</b>Điểm ưu tiên (Score Bias)</div>
+    <div class="stat"><b style="color:var(--leaf-bright)">Modified Beam</b>Thuật toán Decoding</div>
+  </div>
+
+  <div class="hw-grid">
+    <!-- CỘT TRÁI: FORM THÊM TỪ -->
+    <div class="card-box">
+      <div class="tab-switches">
+        <button class="tab-btn active" type="button" id="tabSingleBtn" onclick="switchAddTab('single')">Thêm từng từ</button>
+        <button class="tab-btn" type="button" id="tabBulkBtn" onclick="switchAddTab('bulk')">Thêm hàng loạt</button>
+      </div>
+
+      <!-- FORM THÊM TỪNG TỪ -->
+      <form id="formSingle" onsubmit="submitSingleWord(event)">
+        <h3>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Thêm từ khóa mới
+        </h3>
+        
+        <div class="form-group">
+          <label>Từ hoặc Cụm từ chuyên ngành</label>
+          <input type="text" id="inputWord" placeholder="VD: NPK, Carbendazim, Bón lót..." required oninput="previewToken(this.value)">
+          <div class="token-preview-box" id="previewBox" style="display:none">
+            <span style="color:var(--ink-soft);font-size:0.75rem">Mã hóa Token ONNX:</span><br>
+            <span class="token-preview-val" id="previewVal">—</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Danh mục phân loại</label>
+          <select id="selectCat">
+            <option value="Phân bón">Phân bón</option>
+            <option value="Thuốc BVTV">Thuốc BVTV</option>
+            <option value="Hoạt chất">Hoạt chất bảo vệ</option>
+            <option value="Quy trình VietGAP">Quy trình VietGAP</option>
+            <option value="Cây trồng & Giống">Cây trồng & Giống</option>
+            <option value="Chung" selected>Khác / Chung</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn" style="width:100%" id="btnSaveSingle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+          </svg>
+          Lưu từ khóa vào Model
+        </button>
+      </form>
+
+      <!-- FORM THÊM HÀNG LOẠT -->
+      <form id="formBulk" onsubmit="submitBulkWords(event)" style="display:none">
+        <h3>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+          </svg>
+          Nhập danh sách hàng loạt
+        </h3>
+
+        <div class="form-group">
+          <label>Danh sách từ (mỗi dòng hoặc cách nhau bởi dấu phẩy)</label>
+          <textarea id="bulkWordsText" rows="6" placeholder="NPK&#10;DAP&#10;Carbendazim&#10;Mancozeb&#10;Bón thúc" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Danh mục áp dụng chung</label>
+          <select id="bulkSelectCat">
+            <option value="Phân bón">Phân bón</option>
+            <option value="Thuốc BVTV">Thuốc BVTV</option>
+            <option value="Hoạt chất">Hoạt chất bảo vệ</option>
+            <option value="Quy trình VietGAP">Quy trình VietGAP</option>
+            <option value="Chung" selected>Khác / Chung</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn" style="width:100%" id="btnSaveBulk">
+          Nạp danh sách vào Model
+        </button>
+      </form>
+
+      <div style="margin-top:16px;padding-top:12px;border-top:1px dashed var(--line);font-size:0.75rem;color:var(--ink-soft);line-height:1.4">
+        <b>💡 Cơ chế hoạt động:</b><br>
+        Mỗi từ khóa lưu ở đây được chuyển thành chuỗi token tương ứng trong bảng <code>models/tokens.txt</code> và ghi vào <code>data/onnx_hotwords.txt</code>. Bộ giải mã sherpa-onnx tự động cộng điểm ưu tiên cho nhánh từ này khi nhận dạng âm thanh.
+      </div>
+    </div>
+
+    <!-- CỘT PHẢI: BẢNG DANH SÁCH TỪ KHÓA -->
+    <div class="card-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+        <h3 style="margin:0">Danh sách từ Hot-fix hiện có (<span id="countDisplay">0</span>)</h3>
+        <div style="display:flex;gap:6px">
+          <button class="btn sm sec" type="button" onclick="syncOnnxFile()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:2px"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            Đồng bộ ONNX
+          </button>
+          <a class="btn sm sec" href="/api/stt-hotwords/export" target="_blank" download="onnx_hotwords.txt">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:2px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Tải file txt
+          </a>
+        </div>
+      </div>
+
+      <div class="hw-search-bar">
+        <input type="text" id="searchInput" placeholder="Tìm theo tên từ khóa hoặc chuỗi token..." oninput="filterWords()">
+        <select id="filterCat" onchange="filterWords()">
+          <option value="all">Tất cả danh mục</option>
+        </select>
+      </div>
+
+      <div style="overflow-x:auto;max-height:540px;overflow-y:auto">
+        <table class="hw-table">
+          <thead>
+            <tr>
+              <th>Từ khóa</th>
+              <th>Mã hóa Token ONNX</th>
+              <th>Danh mục</th>
+              <th>Ngày tạo</th>
+              <th style="width:50px;text-align:center">Xóa</th>
+            </tr>
+          </thead>
+          <tbody id="wordsTableBody">
+            <tr><td colspan="5" style="text-align:center;color:var(--ink-soft);padding:24px">Đang tải danh sách...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+let ALL_WORDS = [];
+
+function switchAddTab(mode) {
+  $('tabSingleBtn').classList.toggle('active', mode === 'single');
+  $('tabBulkBtn').classList.toggle('active', mode === 'bulk');
+  $('formSingle').style.display = mode === 'single' ? 'block' : 'none';
+  $('formBulk').style.display = mode === 'bulk' ? 'block' : 'none';
+}
+
+let previewTimer = null;
+function previewToken(word) {
+  clearTimeout(previewTimer);
+  const w = (word || '').trim();
+  if (!w) {
+    $('previewBox').style.display = 'none';
+    return;
+  }
+  previewTimer = setTimeout(async () => {
+    try {
+      const res = await api('/api/stt-hotwords/preview?word=' + encodeURIComponent(w));
+      if (res.status === 'success' && res.tokens) {
+        $('previewVal').textContent = res.tokens;
+        $('previewBox').style.display = 'block';
+      } else {
+        $('previewVal').textContent = '(Không tìm thấy token hợp lệ)';
+        $('previewBox').style.display = 'block';
+      }
+    } catch(e) {}
+  }, 200);
+}
+
+async function loadWords() {
+  try {
+    const res = await api('/api/stt-hotwords');
+    if (res.status === 'success') {
+      ALL_WORDS = res.words || [];
+      $('statTotalWords').textContent = ALL_WORDS.length;
+      $('statOnnxTokens').textContent = res.stats ? res.stats.total_onnx_tokens : ALL_WORDS.length;
+      renderCategories(res.categories || []);
+      renderTable(ALL_WORDS);
+    }
+  } catch(e) {
+    alert('Lỗi nạp danh sách từ hotwords: ' + e);
+  }
+}
+
+function renderCategories(cats) {
+  const sel = $('filterCat');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="all">Tất cả danh mục</option>' + cats.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+  sel.value = cur || 'all';
+}
+
+function filterWords() {
+  const q = ($('searchInput').value || '').trim().toLowerCase();
+  const cat = $('filterCat').value;
+  const filtered = ALL_WORDS.filter(it => {
+    const matchQ = !q || (it.word || '').toLowerCase().includes(q) || (it.tokens || '').toLowerCase().includes(q);
+    const matchCat = cat === 'all' || (it.category || '').toLowerCase() === cat.toLowerCase();
+    return matchQ && matchCat;
+  });
+  renderTable(filtered);
+}
+
+function renderTable(list) {
+  $('countDisplay').textContent = list.length;
+  if (!list.length) {
+    $('wordsTableBody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--ink-soft);padding:30px">Không tìm thấy từ khóa nào phù hợp.</td></tr>';
+    return;
+  }
+  $('wordsTableBody').innerHTML = list.map(it => `
+    <tr>
+      <td><b>${esc(it.word)}</b></td>
+      <td><span class="tok-badge">${esc(it.tokens)}</span></td>
+      <td><span class="tag-cat">${esc(it.category || 'Chung')}</span></td>
+      <td style="color:var(--ink-soft);font-size:0.75rem">${esc(it.created_at || '—')}</td>
+      <td style="text-align:center">
+        <button class="btn-del" type="button" onclick="deleteWord('${esc(it.id || it.word)}', '${esc(it.word)}')">Xóa</button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function submitSingleWord(e) {
+  e.preventDefault();
+  const word = ($('inputWord').value || '').trim();
+  const cat = $('selectCat').value;
+  if (!word) return;
+
+  $('btnSaveSingle').disabled = true;
+  $('btnSaveSingle').textContent = 'Đang lưu...';
+  try {
+    const res = await api('/api/stt-hotwords', 'POST', { word: word, category: cat });
+    if (res.status === 'success') {
+      $('inputWord').value = '';
+      $('previewBox').style.display = 'none';
+      await loadWords();
+    } else {
+      alert(res.message || 'Lỗi thêm từ khóa.');
+    }
+  } catch(err) {
+    alert('Lỗi: ' + err);
+  } finally {
+    $('btnSaveSingle').disabled = false;
+    $('btnSaveSingle').textContent = 'Lưu từ khóa vào Model';
+  }
+}
+
+async function submitBulkWords(e) {
+  e.preventDefault();
+  const text = ($('bulkWordsText').value || '').trim();
+  const cat = $('bulkSelectCat').value;
+  if (!text) return;
+
+  $('btnSaveBulk').disabled = true;
+  $('btnSaveBulk').textContent = 'Đang nạp danh sách...';
+  try {
+    const res = await api('/api/stt-hotwords/batch', 'POST', { words: text, category: cat });
+    if (res.status === 'success') {
+      $('bulkWordsText').value = '';
+      alert(`Đã nạp ${res.added} từ thành công! (Bỏ qua: ${res.skipped})`);
+      await loadWords();
+    } else {
+      alert(res.message || 'Lỗi nạp danh sách.');
+    }
+  } catch(err) {
+    alert('Lỗi: ' + err);
+  } finally {
+    $('btnSaveBulk').disabled = false;
+    $('btnSaveBulk').textContent = 'Nạp danh sách vào Model';
+  }
+}
+
+async function deleteWord(id, word) {
+  if (!confirm(`Bạn có chắc muốn xóa từ khóa "${word}" khỏi bộ giải mã mô hình?`)) return;
+  try {
+    const res = await api('/api/stt-hotwords/' + encodeURIComponent(id), 'DELETE');
+    if (res.status === 'success') {
+      await loadWords();
+    } else {
+      alert(res.message || 'Lỗi xóa từ.');
+    }
+  } catch(err) {
+    alert('Lỗi: ' + err);
+  }
+}
+
+async function syncOnnxFile() {
+  try {
+    const res = await api('/api/stt-hotwords/sync', 'POST');
+    if (res.status === 'success') {
+      alert(`Đã đồng bộ thành công ${res.total_tokens} chuỗi token vào data/onnx_hotwords.txt!`);
+      await loadWords();
+    }
+  } catch(e) {
+    alert('Lỗi đồng bộ: ' + e);
+  }
+}
+
+// Khởi chạy khi tải trang
+document.addEventListener('DOMContentLoaded', loadWords);
+</script>
+{% endblock %}

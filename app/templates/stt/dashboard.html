@@ -110,12 +110,10 @@ function renderErrors(e){
     <td style="width:35%"><div class="hbar"><div style="width:${x.count/m*100}%"></div></div></td><td style="width:36px;text-align:right">${x.count}×</td></tr>`).join('')}</tbody></table>`;
 }
 function renderUsage(s){
-  const M=Object.entries(s.methods||{}),O=s.options||{},D=s.dictionary||{};
+  const M=Object.entries(s.methods||{}),O=s.options||{};
   const names={use_vad:'Bật VAD',denoise:'Khử nhiễu',normalize:'Chuẩn hoá loudness',trim_silence:'Cắt lặng'};
   $('usage').innerHTML=`<div class="lbl">Decoding method</div>${M.map(([k,v])=>`<span class="tag">${esc(k)}: ${v}</span>`).join('')||'<span class="muted">—</span>'}
-    <div class="lbl">Tuỳ chọn thường bật</div>${Object.entries(O).map(([k,v])=>`<span class="tag">${names[k]||k}: ${v}</span>`).join('')||'<span class="muted">—</span>'}
-    <div class="lbl">Từ điển hiện tại</div><span class="tag">${D.entries||0} cặp</span><span class="tag">${D.auto||0} tự học</span><span class="tag">${D.manual||0} thêm tay</span><span class="tag">${D.enabled||0} đang bật</span><span class="tag">${D.vocab||0} từ mới</span>
-    <div style="margin-top:8px"><a href="/stt-dictionary">Xem từ điển →</a></div>`;
+    <div class="lbl">Tuỳ chọn thường bật</div>${Object.entries(O).map(([k,v])=>`<span class="tag">${names[k]||k}: ${v}</span>`).join('')||'<span class="muted">—</span>'}`;
 }
 function renderTable(){
   const q=$('q').value.toLowerCase(),f=$('flt').value;
@@ -199,7 +197,7 @@ function toggleDetail(tr){
   const r=RECS.find(x=>x.id===tr.dataset.id),p=r.params||{};
   const d=document.createElement('tr');d.className='detail';
   d.innerHTML=`<td colspan="10">
-    ${r.audio_url?`<audio controls src="${r.audio_url}"></audio>`:''}
+    ${r.audio_url ? renderCustomAudioPlayerHtml(r.audio_url, 'dash-player-' + r.id, r.audio_duration) : ''}
     <div class="lbl">Thô → bản đã lưu</div><div class="diff">${diffHtml(r.raw_text,r.final_text)}</div>
     <div class="lbl">Đã học</div>${(r.changes||[]).map(c=>`<span class="tag new">${esc(c.wrong)} → ${esc(c.right)}</span>`).join('')+(r.new_vocab||[]).map(w=>`<span class="tag new">từ mới: ${esc(w)}</span>`).join('')||'<span class="muted">Không có</span>'}
     <div class="lbl">Tham số</div><span class="muted">${esc(Object.entries(p).map(([k,v])=>k+'='+v).join(' · ')||'—')}</span></td>`;

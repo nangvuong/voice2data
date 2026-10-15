@@ -510,6 +510,197 @@
   .err { color: var(--clay); font-weight: 600; }
   .scroll { max-height: 540px; overflow: auto; }
   .muted { color: var(--ink-soft); font-size: 0.82rem; }
+
+  /* ========== CUSTOM AUDIO PLAYER ========== */
+  .custom-audio-player {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    margin: 8px 0;
+    box-shadow: 0 1px 4px rgba(35, 42, 28, 0.04);
+    transition: all .2s ease;
+    user-select: none;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  .custom-audio-player:hover, .custom-audio-player.is-playing {
+    border-color: rgba(63, 107, 63, 0.4);
+    box-shadow: 0 3px 10px rgba(63, 107, 63, 0.09);
+  }
+  .cap-play-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: none;
+    background: var(--leaf);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: transform .15s ease, background .2s ease;
+    padding: 0;
+    box-shadow: 0 2px 5px rgba(63,107,63,0.25);
+  }
+  .cap-play-btn:hover {
+    background: #2E522E;
+    transform: scale(1.05);
+  }
+  .cap-play-btn:active {
+    transform: scale(0.95);
+  }
+  .custom-audio-player.is-playing .cap-play-btn {
+    background: #A6512E;
+    box-shadow: 0 2px 6px rgba(166,81,46,0.3);
+  }
+  .cap-icon-pause { display: none; }
+  .cap-icon-play { display: block; margin-left: 2px; }
+  .custom-audio-player.is-playing .cap-icon-play { display: none; }
+  .custom-audio-player.is-playing .cap-icon-pause { display: block; margin-left: 0; }
+
+  /* Sóng âm thanh sinh động */
+  .cap-wave {
+    display: flex;
+    align-items: flex-end;
+    gap: 2.5px;
+    height: 16px;
+    padding: 0 2px;
+    flex-shrink: 0;
+  }
+  .cap-wave span {
+    width: 2.5px;
+    height: 4px;
+    background: var(--ink-faint);
+    border-radius: 2px;
+    transition: height .2s, background .2s;
+  }
+  .custom-audio-player.is-playing .cap-wave span {
+    background: var(--leaf);
+    animation: capWave 1s ease-in-out infinite alternate;
+  }
+  .custom-audio-player.is-playing .cap-wave span:nth-child(1) { animation-delay: 0.1s; }
+  .custom-audio-player.is-playing .cap-wave span:nth-child(2) { animation-delay: 0.35s; }
+  .custom-audio-player.is-playing .cap-wave span:nth-child(3) { animation-delay: 0.2s; }
+  .custom-audio-player.is-playing .cap-wave span:nth-child(4) { animation-delay: 0.45s; }
+
+  @keyframes capWave {
+    0% { height: 4px; }
+    100% { height: 16px; }
+  }
+
+  /* Bộ đếm thời gian */
+  .cap-time {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    flex-shrink: 0;
+    min-width: 32px;
+    text-align: center;
+  }
+
+  /* Thanh tiến trình phát kéo thả / nhấp */
+  .cap-progress-wrap {
+    flex: 1;
+    min-width: 80px;
+    padding: 8px 0;
+    cursor: pointer;
+    position: relative;
+  }
+  .cap-progress-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(35, 42, 28, 0.09);
+    border-radius: 99px;
+    position: relative;
+    overflow: visible;
+    transition: height .15s ease;
+  }
+  .cap-progress-wrap:hover .cap-progress-track {
+    height: 8px;
+  }
+  .cap-progress-buffer {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0%;
+    background: rgba(63, 107, 63, 0.15);
+    border-radius: 99px;
+    pointer-events: none;
+  }
+  .cap-progress-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0%;
+    background: linear-gradient(90deg, #3F6B3F, #5B8C4A);
+    border-radius: 99px;
+    pointer-events: none;
+    transition: width 0.05s linear;
+  }
+  .cap-progress-thumb {
+    position: absolute;
+    left: 0%;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid var(--leaf);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.22);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform .15s ease;
+    pointer-events: none;
+  }
+  .cap-progress-wrap:hover .cap-progress-thumb,
+  .custom-audio-player.is-playing .cap-progress-thumb {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* Nút tốc độ phát */
+  .cap-speed-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--ink-soft);
+    background: rgba(35, 42, 28, 0.05);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 3px 7px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all .15s ease;
+  }
+  .cap-speed-btn:hover {
+    background: var(--moss-tint);
+    color: var(--leaf);
+    border-color: var(--leaf);
+  }
+
+  /* Nút âm lượng / tắt tiếng */
+  .cap-vol-btn {
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: color .15s ease, background .15s ease;
+  }
+  .cap-vol-btn:hover {
+    color: var(--leaf);
+    background: rgba(35,42,28,0.06);
+  }
+  .cap-icon-muted { display: none; }
+  .custom-audio-player.is-muted .cap-icon-unmuted { display: none; }
+  .custom-audio-player.is-muted .cap-icon-muted { display: block; color: var(--clay); }
 </style>
 {% block css %}{% endblock %}
 </head>
@@ -526,7 +717,7 @@
     <a href="/stt-config" class="{{ 'on' if active=='config' }}"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg></span>Cấu hình & Test</a>
     <a href="/stt/realtime" class="{{ 'on' if active=='realtime' }}"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>Test STT Realtime</a>
     <a href="/stt-dashboard" class="{{ 'on' if active=='dashboard' }}"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg></span>Dashboard thống kê</a>
-    <a href="/stt-dictionary" class="{{ 'on' if active=='dictionary' }}"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>Từ điển đã lưu</a>
+    <a href="/stt-hotwords" class="{{ 'on' if active=='hotwords' }}"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>Từ Hot-fix (Hotwords)</a>
     
     <div class="nav-sec">ỨNG DỤNG CANH TÁC</div>
     <a href="/nongky"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>Ghi chép nhanh</a>
@@ -567,7 +758,7 @@
     <a href="/stt-config" class="{{ 'on' if active=='config' }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="1" x2="7" y1="14" y2="14"/><line x1="9" x2="15" y1="8" y2="8"/><line x1="17" x2="23" y1="16" y2="16"/></svg>Cấu hình & Test Model</a>
     <a href="/stt/realtime" class="{{ 'on' if active=='realtime' }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Test STT Realtime</a>
     <a href="/stt-dashboard" class="{{ 'on' if active=='dashboard' }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>Dashboard Thống Kê</a>
-    <a href="/stt-dictionary" class="{{ 'on' if active=='dictionary' }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Từ Điển Đã Lưu</a>
+    <a href="/stt-hotwords" class="{{ 'on' if active=='hotwords' }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Từ Hot-fix (Hotwords)</a>
   </nav>
 
   {% block content %}{% endblock %}
@@ -619,6 +810,210 @@ function toast(msg, type='info'){
     t.style.opacity='0';
     t.style.transform='translateY(12px)';
   },3200);
+}
+
+/* ================= TRÌNH PHÁT AUDIO TIẾN TRÌNH (CUSTOM AUDIO PLAYER) ================= */
+let currentlyPlayingAudio = null;
+
+function fmtSec(sec) {
+  if (!sec || isNaN(sec) || !isFinite(sec) || sec < 0) return '0:00';
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  return `${m}:${s < 10 ? '0' : ''}${s}`;
+}
+
+function renderCustomAudioPlayerHtml(audioUrl, id, duration) {
+  if (!audioUrl) return '';
+  const durStr = duration ? fmtSec(duration) : '0:00';
+  return `
+    <div class="custom-audio-player" id="${id}" data-src="${esc(audioUrl)}">
+      <button type="button" class="cap-play-btn" onclick="toggleCapAudio('${id}')" title="Phát / Tạm dừng">
+        <svg class="cap-icon-play" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+        <svg class="cap-icon-pause" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+      </button>
+
+      <div class="cap-wave" title="Sóng âm thanh">
+        <span></span><span></span><span></span><span></span>
+      </div>
+
+      <span class="cap-time cap-current">0:00</span>
+
+      <div class="cap-progress-wrap" onclick="seekCapAudio('${id}', event)" onmousedown="startScrubCapAudio('${id}', event)" title="Kéo hoặc nhấp để tua nhanh">
+        <div class="cap-progress-track">
+          <div class="cap-progress-buffer"></div>
+          <div class="cap-progress-fill"></div>
+          <div class="cap-progress-thumb"></div>
+        </div>
+      </div>
+
+      <span class="cap-time cap-total">${durStr}</span>
+
+      <button type="button" class="cap-speed-btn" onclick="cycleCapSpeed('${id}')" title="Đổi tốc độ phát">1x</button>
+      <button type="button" class="cap-vol-btn" onclick="toggleCapMute('${id}')" title="Bật/Tắt âm">
+        <svg class="cap-icon-unmuted" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <svg class="cap-icon-muted" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+      </button>
+      <audio preload="metadata" src="${esc(audioUrl)}" style="display:none"></audio>
+    </div>
+  `;
+}
+
+function ensureCapAudioEvents(player) {
+  if (!player) return null;
+  const audio = player.querySelector('audio');
+  if (!audio || audio._hasCapEvents) return audio;
+  audio._hasCapEvents = true;
+
+  const currentEl = player.querySelector('.cap-current');
+  const totalEl = player.querySelector('.cap-total');
+  const fillEl = player.querySelector('.cap-progress-fill');
+  const thumbEl = player.querySelector('.cap-progress-thumb');
+  const bufferEl = player.querySelector('.cap-progress-buffer');
+
+  audio.addEventListener('timeupdate', () => {
+    if (!audio.duration || !isFinite(audio.duration) || audio.duration <= 0) return;
+    const cur = audio.currentTime || 0;
+    const dur = audio.duration;
+    if (currentEl) currentEl.textContent = fmtSec(cur);
+    const pct = Math.min(100, Math.max(0, (cur / dur) * 100));
+    if (fillEl) fillEl.style.width = pct + '%';
+    if (thumbEl) thumbEl.style.left = pct + '%';
+
+    if (bufferEl && audio.buffered.length > 0) {
+      try {
+        const bufEnd = audio.buffered.end(audio.buffered.length - 1);
+        bufferEl.style.width = Math.min(100, (bufEnd / dur) * 100) + '%';
+      } catch(e) {}
+    }
+  });
+
+  const onMeta = () => {
+    if (audio.duration && isFinite(audio.duration) && totalEl) {
+      totalEl.textContent = fmtSec(audio.duration);
+    }
+  };
+  audio.addEventListener('loadedmetadata', onMeta);
+  audio.addEventListener('durationchange', onMeta);
+
+  audio.addEventListener('play', () => {
+    if (currentlyPlayingAudio && currentlyPlayingAudio !== audio) {
+      currentlyPlayingAudio.pause();
+    }
+    currentlyPlayingAudio = audio;
+    player.classList.add('is-playing');
+  });
+
+  audio.addEventListener('pause', () => {
+    player.classList.remove('is-playing');
+    if (currentlyPlayingAudio === audio) currentlyPlayingAudio = null;
+  });
+
+  audio.addEventListener('ended', () => {
+    player.classList.remove('is-playing');
+    if (fillEl) fillEl.style.width = '0%';
+    if (thumbEl) thumbEl.style.left = '0%';
+    if (currentEl) currentEl.textContent = '0:00';
+    if (currentlyPlayingAudio === audio) currentlyPlayingAudio = null;
+  });
+
+  return audio;
+}
+
+function toggleCapAudio(playerId) {
+  const player = typeof playerId === 'string' ? document.getElementById(playerId) : playerId;
+  if (!player) return;
+  const audio = ensureCapAudioEvents(player);
+  if (!audio) return;
+
+  if (audio.paused) {
+    audio.play().catch(e => console.warn('Audio play error:', e));
+  } else {
+    audio.pause();
+  }
+}
+
+function seekCapAudio(playerId, e) {
+  const player = typeof playerId === 'string' ? document.getElementById(playerId) : playerId;
+  if (!player) return;
+  const audio = ensureCapAudioEvents(player);
+  if (!audio) return;
+
+  const wrap = player.querySelector('.cap-progress-wrap');
+  if (!wrap) return;
+  const rect = wrap.getBoundingClientRect();
+  const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+
+  const dur = (audio.duration && isFinite(audio.duration)) ? audio.duration : 0;
+  if (dur > 0) {
+    audio.currentTime = ratio * dur;
+  }
+
+  const fillEl = player.querySelector('.cap-progress-fill');
+  const thumbEl = player.querySelector('.cap-progress-thumb');
+  const currentEl = player.querySelector('.cap-current');
+  if (fillEl) fillEl.style.width = (ratio * 100) + '%';
+  if (thumbEl) thumbEl.style.left = (ratio * 100) + '%';
+  if (currentEl && dur > 0) currentEl.textContent = fmtSec(ratio * dur);
+}
+
+function startScrubCapAudio(playerId, e) {
+  e.preventDefault();
+  seekCapAudio(playerId, e);
+  const onMove = ev => seekCapAudio(playerId, ev);
+  const onUp = () => {
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', onUp);
+  };
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+}
+
+function cycleCapSpeed(playerId) {
+  const player = typeof playerId === 'string' ? document.getElementById(playerId) : playerId;
+  if (!player) return;
+  const audio = ensureCapAudioEvents(player);
+  if (!audio) return;
+  const btn = player.querySelector('.cap-speed-btn');
+  const speeds = [1.0, 1.25, 1.5, 2.0];
+  const cur = audio.playbackRate || 1.0;
+  let idx = speeds.findIndex(s => Math.abs(s - cur) < 0.05);
+  idx = (idx + 1) % speeds.length;
+  const next = speeds[idx];
+  audio.playbackRate = next;
+  if (btn) btn.textContent = next + 'x';
+}
+
+function toggleCapMute(playerId) {
+  const player = typeof playerId === 'string' ? document.getElementById(playerId) : playerId;
+  if (!player) return;
+  const audio = ensureCapAudioEvents(player);
+  if (!audio) return;
+  audio.muted = !audio.muted;
+  if (audio.muted) player.classList.add('is-muted');
+  else player.classList.remove('is-muted');
+}
+
+function setCapAudioSrc(playerId, src, duration) {
+  const player = typeof playerId === 'string' ? document.getElementById(playerId) : playerId;
+  if (!player) return;
+  const audio = ensureCapAudioEvents(player);
+  if (!audio) return;
+
+  if (!audio.paused) audio.pause();
+  audio.src = src;
+  audio.load();
+  player.style.display = 'flex';
+  player.classList.remove('is-playing');
+
+  const fillEl = player.querySelector('.cap-progress-fill');
+  const thumbEl = player.querySelector('.cap-progress-thumb');
+  const currentEl = player.querySelector('.cap-current');
+  const totalEl = player.querySelector('.cap-total');
+
+  if (fillEl) fillEl.style.width = '0%';
+  if (thumbEl) thumbEl.style.left = '0%';
+  if (currentEl) currentEl.textContent = '0:00';
+  if (duration && totalEl) totalEl.textContent = fmtSec(duration);
 }
 </script>
 {% block js %}{% endblock %}
