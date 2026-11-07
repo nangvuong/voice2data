@@ -173,3 +173,5 @@ app/uploads/*
 !app/uploads/.gitkeep
 app/app.log
 app/data/logs.json
+
+app/certs
