@@ -106,6 +106,10 @@ TTS_ENGINE = os.getenv("TTS_ENGINE", "sherpa")  # 'sherpa' hoặc 'piper'
 TTS_SPEED = float(os.getenv("TTS_SPEED", "1.0"))
 TTS_NUM_THREADS = int(os.getenv("TTS_NUM_THREADS", "4"))
 TTS_SAMPLE_RATE = int(os.getenv("TTS_SAMPLE_RATE", "22050"))
+TTS_OUTPUT_SAMPLE_RATE = int(os.getenv("TTS_OUTPUT_SAMPLE_RATE", "44100"))
+TTS_TARGET_LUFS = float(os.getenv("TTS_TARGET_LUFS", "-19.0"))
+TTS_PEAK_CEILING_DB = float(os.getenv("TTS_PEAK_CEILING_DB", "-1.5"))
+TTS_EQ_ENABLED = os.getenv("TTS_EQ_ENABLED", "true").lower() in ("true", "1", "yes")
 TTS_SERVER_PORT = int(os.getenv("TTS_SERVER_PORT", "8082"))
 
 # ----- OCR (Optical Character Recognition - RapidOCR) -----

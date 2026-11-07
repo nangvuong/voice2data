@@ -36,6 +36,7 @@ async def resample_to_16k_mono_pcm16(input_path: str, output_path: str) -> str:
         "ffmpeg",
         "-y",  # ghi đè file output nếu đã tồn tại
         "-i", input_path,
+        "-af", f"aresample={config.TARGET_SAMPLE_RATE}:resampler=soxr:precision=28:dither_method=triangular",
         "-ar", str(config.TARGET_SAMPLE_RATE),
         "-ac", "1",
         "-sample_fmt", "s16",

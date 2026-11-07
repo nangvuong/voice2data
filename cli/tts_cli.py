@@ -166,7 +166,10 @@ def main():
 
     print(f"Thành công!")
     print(f"  - File xuất:    {args.output}")
+    print(f"  - Sample Rate:  {res.raw_sample_rate} Hz -> {res.sample_rate} Hz (Sinc Resampled)")
     print(f"  - Thời lượng:   {res.duration_sec:.2f} giây")
+    print(f"  - Loudness:     {res.loudness_lufs:.2f} LUFS (Gain: {res.gain_applied_db:+.2f} dB)")
+    print(f"  - Peak Ceiling: {res.peak_dbfs:.2f} dBFS (Raw clipped: {res.raw_clipped_samples}, Post clipped: {res.post_clipped_samples})")
     print(f"  - Inference:    {res.elapsed_sec:.3f} giây")
     print(f"  - RTF:          {res.rtf:.3f} (nhanh hơn thời gian thực {1/res.rtf:.1f}x)")
 

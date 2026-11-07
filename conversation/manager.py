@@ -1389,7 +1389,7 @@ class ConversationManager:
 
             act_display = TASK_NAME_DISPLAY.get(state.current_activity, state.current_activity)
             diary_status_header = (
-                f"📝 **Em đã nhận diện ảnh và điền thông tin vào phiếu nhật ký {act_display}:**\n\n"
+                f"**Đã nhận diện hình ảnh và trích xuất vào phiếu {act_display}:**\n\n"
             )
 
             if missing:

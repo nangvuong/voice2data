@@ -1,71 +1,27 @@
-# 🌾 Nông Ký — Voice to Text to Data (Flask App with HTTPS)
+# 🌾 Nông Ký — Backend Flask (Voice to Text to Data)
 
-Ứng dụng ghi chép sổ nhật ký canh tác thông minh cho nông dân:
-**Giọng nói (Voice) ➔ Văn bản (Text qua STT Offline) ➔ Dữ liệu có cấu trúc (Data qua Local LLM trên NPU) ➔ Chuẩn hoá CSDL (Normalizer)**
-
----
-
-## 🏗️ Kiến trúc sử dụng trực tiếp các Engine từ thư mục `services/`
-
-Ứng dụng **không tạo thêm các service con trùng lặp trong thư mục `/app`**, mà tái sử dụng 100% các engine cốt lõi của hệ thống từ thư mục [`services/`](file:///root/voice_to_data/services):
-1. **`services.audio_converter` (`resample_to_16k_mono_pcm16`):**
-   - Chuyển đổi file âm thanh ghi từ trình duyệt (.webm, .mp3, .wav, .m4a) sang định dạng 16kHz mono PCM16 bằng FFmpeg.
-2. **`services.stt_engine` (`stt_engine`):**
-   - Nhận diện giọng nói tiếng Việt bằng mô hình `sherpa-onnx` kết hợp cắt khoảng lặng `Silero VAD`.
-3. **`services.llm_engine` (`llm_engine`):**
-   - Kết nối tới Local RKLLM Server (trên NPU Rockchip RK3588 qua Port 8080) để bóc tách thông tin thành các trường nông nghiệp.
-4. **`services.normalizer` (`normalize_activity_list`):**
-   - Chuẩn hoá toàn diện:
-     - Ngày tương đối (`"hôm nay"`, `"sáng nay"`, `"hôm qua"`) ➔ ngày `DD/MM/YYYY`.
-     - Đơn vị đo lường (`"hai lít trên một ha"` ➔ `2 LÍT/HA`, `"năm tạ"` ➔ `5 TẠ/HA`).
-     - Lọc phủ định sâu bệnh (`"không có sâu bệnh"` ➔ `null`).
-     - Chuẩn hoá viết hoa danh từ vật tư nông nghiệp (`"phân n p k"` ➔ `PHÂN NPK`).
+Hệ thống Edge AI Backend phục vụ ghi chép nhật ký nông nghiệp VietGAP bằng giọng nói và hình ảnh, vận hành trên bo mạch **ODROID-M2 (Rockchip RK3588 ARM64)**.
 
 ---
 
-## 🔒 Chứng chỉ SSL / HTTPS (Bắt buộc cho Micro)
-
-Để trình duyệt (Chrome, Safari trên điện thoại và máy tính) mở quyền **Microphone**, kết nối từ xa trong mạng LAN bắt buộc phải là ngữ cảnh an toàn (**HTTPS**).
-
-Bộ chứng chỉ SSL đã được khởi tạo sẵn trong thư mục `certs/`:
-- `certs/cert.pem` : Chứng chỉ SSL (SAN: `192.168.40.18`, `127.0.0.1`, `localhost`, `nongky.local`)
-- `certs/key.pem` : Private key RSA 2048-bit
-
----
-
-## 📁 Cấu trúc thư mục gọn gàng của `/app`
+## 📁 Cấu trúc thư mục `/app`
 
 ```
-/root/voice_to_data/app/
-├── app.py                # Máy chủ Flask trực tiếp gọi các engine trong services/
-├── certs/                # Thư mục chứng chỉ SSL/TLS (HTTPS)
+app/
+├── app.py                # Entrypoint khởi chạy Flask Server & Realtime STT WebSocket
+├── common.py             # Cấu hình đường dẫn (/mnt/data/...), logging, run_async, normalizer
+├── run.sh                # Script khởi chạy ứng dụng
+├── certs/                # Chứng chỉ SSL/TLS dùng chung cho cả Backend (5000) & Frontend (5001)
 │   ├── cert.pem          # Chứng chỉ SSL X.509
-│   ├── key.pem           # Private key
-│   └── openssl.cnf       # Cấu hình OpenSSL SAN
-├── templates/
-│   └── index.html        # Giao diện Nông Ký Web UI
-├── data/
-│   └── logs.json         # CSDL lưu trữ các bản ghi nhật ký canh tác
-├── uploads/              # Thư mục chứa các file âm thanh tạm thời
-├── run.sh                # Script khởi chạy ứng dụng nhanh
-└── README.md             # Tài liệu hướng dẫn
+│   └── key.pem           # Private key
+└── api/                  # Toàn bộ các module API theo chức năng (cấu trúc phẳng)
+    ├── __init__.py       # Đăng ký tập trung Blueprints & phục vụ media (/static, /uploads, /tmp, /api/health)
+    ├── auth.py           # Xác thực nông hộ (/login, /logout, /api/auth/me)
+    ├── conversation.py   # Trợ lý hội thoại AI & TTS (/api/conversation/*)
+    ├── stt.py            # Quản lý STT, Hotwords, Records, STT Lab & Realtime (/api/stt*)
+    ├── ai.py             # Nhận diện OCR, VLM, Trích xuất VietGAP & Voice-to-Data
+    ├── diary.py          # Sổ nhật ký canh tác VietGAP, danh mục, lô thửa GPS
+    └── export.py         # Xuất báo cáo (Excel, Word, PDF), mùa vụ & QR Truy xuất nguồn gốc
 ```
 
----
-
-## 🚀 Hướng dẫn truy cập & sử dụng
-
-### 1. Truy cập qua trình duyệt
-```
-https://192.168.40.18:5000
-```
-> **Thao tác khi mở lần đầu (Self-signed Cert):**
-> - **Trên Chrome / Edge:** Bấm **"Nâng cao" (Advanced)** ➔ Chọn **"Tiếp tục truy cập 192.168.40.18 (không an toàn)"**.
-> - **Trên Safari (iOS / Mac):** Bấm **"Hiển thị chi tiết" (Show Details)** ➔ Chọn **"Truy cập trang web này" (visit this website)**.
-> - Sau đó bấm **"Cho phép" (Allow)** khi trình duyệt xin quyền Microphone.
-
-### 2. Khởi chạy ứng dụng
-```bash
-cd /root/voice_to_data/app
-./run.sh
-```
+> **Lưu trữ dữ liệu Media**: Toàn bộ tệp âm thanh (`/mnt/data/audio`), hình ảnh thực địa (`/mnt/data/photos`) và tệp tải lên tạm thời (`/mnt/data/uploads`) được lưu trực tiếp trên phân vùng dữ liệu lớn `/mnt/data`.

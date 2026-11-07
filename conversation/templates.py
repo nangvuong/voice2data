@@ -576,8 +576,8 @@ def build_confirmation_message(activity_type: str, slots: Dict[str, Any]) -> str
     crop = slots.get("crop_name") or "Bưởi diễn"
 
     lines = [
-        f"📝 **PHIẾU XÁC NHẬN: {t_name.upper()}**",
-        f"📅 **Ngày thực hiện:** {date_display}",
+        f"**PHIẾU XÁC NHẬN: {t_name.upper()}**",
+        f"**Ngày thực hiện:** {date_display}",
     ]
 
     if canon == "spray":
@@ -587,87 +587,87 @@ def build_confirmation_message(activity_type: str, slots: Dict[str, Any]) -> str
         iso = slots.get("thoi_gian_cach_ly")
         iso_str = f"{iso} ngày" if str(iso).strip().isdigit() else (str(iso) if iso else "Theo quy định")
 
-        lines.append(f"🌱 **Cây trồng:** {crop}")
-        lines.append(f"💊 **Tên thuốc BVTV:** {ten_thuoc}")
-        lines.append(f"🎯 **Đối tượng phòng trừ:** {target_pest}")
-        lines.append(f"⚖️ **Nồng độ & liều lượng:** {dosage}")
-        lines.append(f"⏳ **Thời gian cách ly:** {iso_str}")
+        lines.append(f"- **Cây trồng:** {crop}")
+        lines.append(f"- **Tên thuốc BVTV:** {ten_thuoc}")
+        lines.append(f"- **Đối tượng phòng trừ:** {target_pest}")
+        lines.append(f"- **Nồng độ & liều lượng:** {dosage}")
+        lines.append(f"- **Thời gian cách ly:** {iso_str}")
         if slots.get("dien_tich"):
-            lines.append(f"📐 **Diện tích/Số gốc:** {slots.get('dien_tich')}")
+            lines.append(f"- **Diện tích/Số gốc:** {slots.get('dien_tich')}")
         if slots.get("phuong_thuc_phun"):
-            lines.append(f"🚜 **Dụng cụ/Thiết bị phun:** {slots.get('phuong_thuc_phun')}")
+            lines.append(f"- **Dụng cụ/Thiết bị phun:** {slots.get('phuong_thuc_phun')}")
         if slots.get("thoi_tiet"):
-            lines.append(f"⛅ **Thời tiết:** {slots.get('thoi_tiet')}")
+            lines.append(f"- **Thời tiết:** {slots.get('thoi_tiet')}")
 
     elif canon == "fertilize":
         ten_phan = slots.get("ten_phan_bon") or slots.get("fertilizer_name") or "Phân bón"
         luong_phan = slots.get("luong_phan_bon") or "Đủ liều lượng"
-        lines.append(f"🌱 **Cây trồng:** {crop}")
-        lines.append(f"🌾 **Tên phân bón:** {ten_phan}")
-        lines.append(f"⚖️ **Khối lượng:** {luong_phan}")
+        lines.append(f"- **Cây trồng:** {crop}")
+        lines.append(f"- **Tên phân bón:** {ten_phan}")
+        lines.append(f"- **Khối lượng:** {luong_phan}")
         if slots.get("phuong_phap_bon"):
-            lines.append(f"🚜 **Phương pháp bón:** {slots.get('phuong_phap_bon')}")
+            lines.append(f"- **Phương pháp bón:** {slots.get('phuong_phap_bon')}")
         if slots.get("dien_tich"):
-            lines.append(f"📐 **Diện tích/Số cây:** {slots.get('dien_tich')}")
+            lines.append(f"- **Diện tích/Số cây:** {slots.get('dien_tich')}")
         if slots.get("thoi_diem_bon"):
-            lines.append(f"🌿 **Giai đoạn/Thời điểm:** {slots.get('thoi_diem_bon')}")
+            lines.append(f"- **Giai đoạn/Thời điểm:** {slots.get('thoi_diem_bon')}")
 
     elif canon == "purchase":
         m_name = slots.get("material_name") or "Vật tư nông nghiệp"
         qty = slots.get("quantity") or 1
         unit = str(slots.get("unit") or "").strip()
         qty_str = f"{qty} {unit}".strip() if (unit and unit.lower() not in str(qty).lower()) else str(qty)
-        lines.append(f"📦 **Tên vật tư:** {m_name}")
-        lines.append(f"⚖️ **Số lượng:** {qty_str}")
+        lines.append(f"- **Tên vật tư:** {m_name}")
+        lines.append(f"- **Số lượng:** {qty_str}")
         if slots.get("supplier_name"):
-            lines.append(f"🏪 **Nơi mua / Đại lý:** {slots.get('supplier_name')}")
+            lines.append(f"- **Nơi mua / Đại lý:** {slots.get('supplier_name')}")
         if slots.get("unit_price"):
-            lines.append(f"💰 **Đơn giá:** {slots.get('unit_price')}")
+            lines.append(f"- **Đơn giá:** {slots.get('unit_price')}")
         if slots.get("invoice_no"):
-            lines.append(f"🧾 **Số hóa đơn:** {slots.get('invoice_no')}")
+            lines.append(f"- **Số hóa đơn:** {slots.get('invoice_no')}")
 
     elif canon == "harvest":
         san_luong = slots.get("san_luong_thu_hoach") or slots.get("quantity") or "Theo thực tế"
-        lines.append(f"🌱 **Cây trồng / Nông sản:** {crop}")
-        lines.append(f"⚖️ **Sản lượng thu hoạch:** {san_luong}")
+        lines.append(f"- **Cây trồng / Nông sản:** {crop}")
+        lines.append(f"- **Sản lượng thu hoạch:** {san_luong}")
         if slots.get("dia_diem_cach_so_che"):
-            lines.append(f"📍 **Lô thu hoạch / Sơ chế:** {slots.get('dia_diem_cach_so_che')}")
+            lines.append(f"- **Lô thu hoạch / Sơ chế:** {slots.get('dia_diem_cach_so_che')}")
         if slots.get("chat_luong"):
-            lines.append(f"✨ **Chất lượng:** {slots.get('chat_luong')}")
+            lines.append(f"- **Chất lượng:** {slots.get('chat_luong')}")
 
     elif canon == "sale":
         khoi_luong = slots.get("khoi_luong_tieu_thu") or slots.get("quantity") or "Theo thực tế"
         buyer = slots.get("co_so_thu_mua") or slots.get("buyer_name") or "Thương lái / Hợp tác xã"
-        lines.append(f"🌱 **Nông sản xuất bán:** {crop}")
-        lines.append(f"⚖️ **Khối lượng tiêu thụ:** {khoi_luong}")
-        lines.append(f"🤝 **Cơ sở thu mua / Khách:** {buyer}")
+        lines.append(f"- **Nông sản xuất bán:** {crop}")
+        lines.append(f"- **Khối lượng tiêu thụ:** {khoi_luong}")
+        lines.append(f"- **Cơ sở thu mua / Khách:** {buyer}")
         if slots.get("unit_price"):
-            lines.append(f"💰 **Đơn giá:** {slots.get('unit_price')}")
+            lines.append(f"- **Đơn giá:** {slots.get('unit_price')}")
 
     elif canon == "observation":
         sb = slots.get("sinh_vat_gay_hai") or slots.get("target_pest") or "Sinh vật gây hại"
         sev = slots.get("severity") or "Cần theo dõi"
         action = slots.get("bien_phap_xu_ly") or slots.get("action_taken") or ""
-        lines.append(f"🌱 **Cây trồng theo dõi:** {crop}")
-        lines.append(f"🐛 **Sinh vật gây hại:** {sb}")
-        lines.append(f"⚠️ **Mức độ xuất hiện:** {sev}")
+        lines.append(f"- **Cây trồng theo dõi:** {crop}")
+        lines.append(f"- **Sinh vật gây hại:** {sb}")
+        lines.append(f"- **Mức độ xuất hiện:** {sev}")
         if action:
-            lines.append(f"🛡️ **Biện pháp xử lý:** {action}")
+            lines.append(f"- **Biện pháp xử lý:** {action}")
 
     elif canon == "waste":
         vt = slots.get("material_name") or "Vỏ bao bì thuốc BVTV"
         method = slots.get("treatment_method") or "Thu gom vào bể chứa chuyên dụng"
-        lines.append(f"📦 **Vật tư / Vỏ bao bì:** {vt}")
-        lines.append(f"♻️ **Phương pháp xử lý:** {method}")
+        lines.append(f"- **Vật tư / Vỏ bao bì:** {vt}")
+        lines.append(f"- **Phương pháp xử lý:** {method}")
         if slots.get("storage_location"):
-            lines.append(f"📍 **Nơi lưu trữ:** {slots.get('storage_location')}")
+            lines.append(f"- **Nơi lưu trữ:** {slots.get('storage_location')}")
 
     else:
         task = slots.get("cong_viec") or slots.get("description") or "Chăm sóc vườn cây"
-        lines.append(f"🌱 **Cây trồng:** {crop}")
-        lines.append(f"⚒️ **Nội dung công việc:** {task}")
+        lines.append(f"- **Cây trồng:** {crop}")
+        lines.append(f"- **Nội dung công việc:** {task}")
         if slots.get("dien_tich"):
-            lines.append(f"📐 **Khu vực/Diện tích:** {slots.get('dien_tich')}")
+            lines.append(f"- **Khu vực/Diện tích:** {slots.get('dien_tich')}")
 
     missing_opts = get_missing_optional_fields(canon, slots)
     if canon == "purchase":
@@ -681,15 +681,15 @@ def build_confirmation_message(activity_type: str, slots: Dict[str, Any]) -> str
         if extra_hints:
             hint_lines.append(f"💡 *Bác có muốn ghi thêm **{' hay '.join(extra_hints)}** không ạ?*")
         if not slots.get("invoice_no") and not slots.get("photo_url"):
-            hint_lines.append("📸 *Bác có thể chụp ảnh bao bì vật tư hoặc hóa đơn bằng nút bên dưới để lấy thông tin tự động nhé!*")
-        hint_lines.append("👉 **Bác có thể nói thêm, chụp ảnh vật tư/hóa đơn, hoặc bấm ĐỒNG Ý LƯU VÀO SỔ nếu thông tin đã đủ nhé!**")
+            hint_lines.append("💡 *Bác có thể chụp ảnh bao bì vật tư hoặc hóa đơn bằng nút bên dưới để lấy thông tin tự động nhé!*")
+        hint_lines.append("**Bác có thể nói thêm, chụp ảnh vật tư/hóa đơn, hoặc bấm ĐỒNG Ý LƯU VÀO SỔ nếu thông tin đã đủ nhé!**")
         lines.append("\n" + "\n".join(hint_lines))
     elif missing_opts:
         hints = " hay ".join([opt[2] for opt in missing_opts[:2]])
         lines.append(f"\n💡 *Bác có muốn ghi thêm **{hints}** không ạ?*")
-        lines.append("👉 **Bác có thể nói thêm, hoặc bấm ĐỒNG Ý LƯU VÀO SỔ nếu thông tin đã đủ nhé!**")
+        lines.append("**Bác có thể nói thêm, hoặc bấm ĐỒNG Ý LƯU VÀO SỔ nếu thông tin đã đủ nhé!**")
     else:
-        lines.append("\n👉 **Thông tin đã rất đầy đủ! Bác kiểm tra lại rồi bấm ĐỒNG Ý LƯU VÀO SỔ nhé!**")
+        lines.append("\n**Thông tin đã đầy đủ. Bác kiểm tra lại rồi bấm ĐỒNG Ý LƯU VÀO SỔ nhé!**")
 
     return "\n".join(lines)
 
@@ -825,8 +825,8 @@ def build_lead_and_sections(analysis_dict: Dict[str, Any], prompt_for_diary: boo
 
             lead_info = {
                 "type": "pesticide_banned",
-                "type_label": "⛔ THUỐC CẤM SỬ DỤNG TẠI VIỆT NAM (VI PHẠM VIETGAP)",
-                "item_label": "⛔ Thuốc CẤM phát hiện",
+                "type_label": "THUỐC CẤM SỬ DỤNG TẠI VIỆT NAM (VI PHẠM VIETGAP)",
+                "item_label": "Thuốc CẤM phát hiện",
                 "item_name": trade_name,
                 "core_label": "Tình trạng pháp lý",
                 "core_val": f"ĐÃ BỊ CẤM SỬ DỤNG theo {legal_source}",
@@ -867,7 +867,7 @@ def build_lead_and_sections(analysis_dict: Dict[str, Any], prompt_for_diary: boo
                 "label": "Thuốc này có ghi vào nhật ký VietGAP được không?",
                 "icon": "xCircle",
                 "title": "Từ chối ghi nhật ký VietGAP",
-                "content": "⛔ **HỆ THỐNG TỪ CHỐI GHI NHẬT KÝ VỚI THUỐC CẤM:**\nTiêu chuẩn VietGAP yêu cầu 100% thuốc bảo vệ thực vật phải nằm trong danh mục được phép sử dụng tại Việt Nam. Sử dụng thuốc cấm sẽ gây nguy hiểm nghiêm trọng và bị đình chỉ chứng nhận VietGAP.",
+                "content": "**HỆ THỐNG TỪ CHỐI GHI NHẬT KÝ VỚI THUỐC CẤM:**\nTiêu chuẩn VietGAP yêu cầu 100% thuốc bảo vệ thực vật phải nằm trong danh mục được phép sử dụng tại Việt Nam. Sử dụng thuốc cấm sẽ gây nguy hiểm nghiêm trọng và bị đình chỉ chứng nhận VietGAP.",
                 "spoken_text": "Thuốc này nằm trong danh mục cấm nên hệ thống không cho phép ghi vào sổ nhật ký VietGAP đâu bác nhé!",
             })
 
@@ -1038,16 +1038,16 @@ def build_advisory_response(analysis_dict: Dict[str, Any], prompt_for_diary: boo
 
     if lead_info.get("type") == "pesticide_banned":
         lines = [
-            f"⛔ **CẢNH BÁO PHÁP LÝ VIETGAP: THUỐC ĐÃ BỊ CẤM SỬ DỤNG!**",
-            f"🌿 **{item_label}:** **{item_name}**" + (f" *({sub_info})*" if sub_info else ""),
-            f"🚨 **{core_label}:** {core_val}",
+            f"**CẢNH BÁO PHÁP LÝ VIETGAP: THUỐC ĐÃ BỊ CẤM SỬ DỤNG!**",
+            f"- **{item_label}:** **{item_name}**" + (f" *({sub_info})*" if sub_info else ""),
+            f"- **{core_label}:** {core_val}",
             f"\n💡 *Bác chạm các câu hỏi bên dưới để xem chi tiết mức độ nguy hại và các giải pháp sinh học thay thế an toàn nhé!*"
         ]
         return "\n".join(lines)
 
     lines = [
-        f"🌿 **{item_label}:** **{item_name}**" + (f" *({sub_info})*" if sub_info else ""),
-        f"🎯 **{core_label}:** {core_val}",
+        f"- **{item_label}:** **{item_name}**" + (f" *({sub_info})*" if sub_info else ""),
+        f"- **{core_label}:** {core_val}",
     ]
     if prompt_for_diary:
         lines.append("\n💡 *Bác chạm các câu hỏi bên dưới để nghe hướng dẫn hoặc ghi vào sổ nhật ký VietGAP nhé!*")
@@ -1114,7 +1114,7 @@ def build_success_message(
 
         if mat_cat == "pesticide":
             text = (
-                f"✅ **ĐÃ LƯU THÀNH CÔNG VÀO SỔ VẬT TƯ!**\n"
+                f"**ĐÃ LƯU THÀNH CÔNG VÀO SỔ VẬT TƯ**\n"
                 f"Đã ghi nhận mua {qty_str + ' ' if qty_str else ''}thuốc BVTV **{mat_name}**.\n\n"
                 f"💡 *Bác có muốn chuyển sang ghi việc đem thuốc này đi phun luôn không?*"
             )
@@ -1129,7 +1129,7 @@ def build_success_message(
             return text, actions
         elif mat_cat == "fertilizer":
             text = (
-                f"✅ **ĐÃ LƯU THÀNH CÔNG VÀO SỔ VẬT TƯ!**\n"
+                f"**ĐÃ LƯU THÀNH CÔNG VÀO SỔ VẬT TƯ**\n"
                 f"Đã ghi nhận mua {qty_str + ' ' if qty_str else ''}phân bón **{mat_name}**.\n\n"
                 f"💡 *Bác có muốn chuyển sang ghi việc đem phân này đi bón luôn không?*"
             )
@@ -1144,7 +1144,7 @@ def build_success_message(
             return text, actions
         else:
             text = (
-                f"✅ **ĐÃ LƯU THÀNH CÔNG VÀO SỔ VẬT TƯ!**\n"
+                f"**ĐÃ LƯU THÀNH CÔNG VÀO SỔ VẬT TƯ**\n"
                 f"Đã ghi nhận mua {qty_str + ' ' if qty_str else ''}vật tư **{mat_name}**.\n\n"
                 f"Bác có thể tiếp tục ghi chép công việc tiếp theo hoặc gửi ảnh mới ạ!"
             )
@@ -1153,7 +1153,7 @@ def build_success_message(
     elif canon == "spray":
         med_name = s.get("ten_thuoc_bvtv") or s.get("pesticide_name") or "thuốc BVTV"
         text = (
-            f"✅ **ĐÃ LƯU THÀNH CÔNG VÀO SỔ PHUN THUỐC BVTV!**\n"
+            f"**ĐÃ LƯU THÀNH CÔNG VÀO SỔ PHUN THUỐC BVTV**\n"
             f"Đã ghi nhận phun thuốc **{med_name}** cho {crop}.\n\n"
             f"💡 *Theo quy định VietGAP, sau khi phun xong bác nên thu gom vỏ bao bì vào bể chứa chuyên dụng. Bác có muốn ghi chép xử lý vỏ bao bì hay mua vật tư thuốc **{med_name}** không?*"
         )
@@ -1176,7 +1176,7 @@ def build_success_message(
     elif canon == "waste":
         vt = s.get("material_name") or "thuốc BVTV"
         text = (
-            f"✅ **ĐÃ LƯU THÀNH CÔNG VÀO SỔ XỬ LÝ VỎ BAO BÌ!**\n"
+            f"**ĐÃ LƯU THÀNH CÔNG VÀO SỔ XỬ LÝ VỎ BAO BÌ**\n"
             f"Đã ghi nhận thu gom và xử lý vỏ bao bì thuốc **{vt}** theo quy chuẩn VietGAP.\n\n"
             f"Bác có thể tiếp tục ghi chép công việc tiếp theo hoặc gửi ảnh mới ạ!"
         )
@@ -1185,7 +1185,7 @@ def build_success_message(
     elif canon == "fertilize":
         fert_name = s.get("ten_phan_bon") or s.get("fertilizer_name") or "phân bón"
         text = (
-            f"✅ **ĐÃ LƯU THÀNH CÔNG VÀO SỔ BÓN PHÂN!**\n"
+            f"**ĐÃ LƯU THÀNH CÔNG VÀO SỔ BÓN PHÂN**\n"
             f"Đã ghi nhận bón phân **{fert_name}** cho {crop}.\n\n"
             f"💡 *Bác có muốn ghi chép việc mua loại phân bón này vào sổ vật tư không?*"
         )
@@ -1202,7 +1202,7 @@ def build_success_message(
     else:
         t_name = TASK_NAME_DISPLAY.get(canon, "công việc")
         text = (
-            f"✅ **ĐÃ LƯU THÀNH CÔNG VÀO SỔ NHẬT KÝ!**\n"
+            f"**ĐÃ LƯU THÀNH CÔNG VÀO SỔ NHẬT KÝ**\n"
             f"Đã ghi nhận công việc {t_name}.\n"
             f"Bác có thể tiếp tục ghi chép công việc tiếp theo hoặc gửi ảnh mới ạ!"
         )
@@ -1211,7 +1211,7 @@ def build_success_message(
 
 def build_cancel_message() -> str:
     """Sinh thông báo hủy phiên."""
-    return "👌 Dạ em đã hủy phiên ghi chép này. Dữ liệu chưa lưu sẽ được bỏ qua. Khi nào cần ghi tiếp bác cứ gọi em nhé!"
+    return "Dạ em đã hủy phiên ghi chép này. Dữ liệu chưa lưu sẽ được bỏ qua. Khi nào cần ghi tiếp bác cứ gọi em nhé!"
 
 
 def build_tts_spoken_text(

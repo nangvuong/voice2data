@@ -65,7 +65,8 @@ def list_models():
                 "id": "vits-piper-vi_VN-vais1000-medium",
                 "object": "model",
                 "language": "vi_VN",
-                "sample_rate": 22050,
+                "raw_sample_rate": tts_engine.model_sample_rate,
+                "sample_rate": tts_engine.sample_rate,
                 "speakers": 1,
                 "voices": ["vais1000", "default"],
             }
@@ -192,9 +193,16 @@ def synthesize_api():
             return jsonify({
                 "success": True,
                 "format": audio_format,
+                "sample_rate": audio_result.sample_rate,
+                "raw_sample_rate": audio_result.raw_sample_rate,
                 "duration_sec": round(audio_result.duration_sec, 3),
                 "elapsed_sec": round(audio_result.elapsed_sec, 3),
                 "rtf": round(audio_result.rtf, 3),
+                "peak_dbfs": audio_result.peak_dbfs,
+                "loudness_lufs": audio_result.loudness_lufs,
+                "gain_applied_db": audio_result.gain_applied_db,
+                "raw_clipped_samples": audio_result.raw_clipped_samples,
+                "post_clipped_samples": audio_result.post_clipped_samples,
                 "engine": audio_result.engine_name,
                 "audio_base64": b64_audio,
             })
@@ -205,6 +213,9 @@ def synthesize_api():
             headers={
                 "Content-Disposition": f"inline; filename=tts_output.{audio_format}",
                 "X-Audio-Duration": str(audio_result.duration_sec),
+                "X-Audio-Sample-Rate": str(audio_result.sample_rate),
+                "X-Audio-Loudness-LUFS": str(audio_result.loudness_lufs),
+                "X-Audio-Peak-dBFS": str(audio_result.peak_dbfs),
                 "X-Inference-Time": str(audio_result.elapsed_sec),
                 "X-RTF": str(audio_result.rtf),
             }
