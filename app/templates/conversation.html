@@ -191,9 +191,10 @@
   /* Segmented Mode Switcher Bar */
   .mode-switch-bar {
     display: flex;
-    background: rgba(0, 0, 0, 0.28);
-    border-radius: 10px;
-    padding: 3px;
+    background: rgba(20, 28, 21, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 4px;
     gap: 4px;
   }
   .btn-mode-tab {
@@ -201,24 +202,27 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 12px;
-    min-height: 36px;
+    gap: 6px;
+    padding: 7px 12px;
+    min-height: 34px;
     border: none;
-    border-radius: 7px;
+    border-radius: 9px;
     background: transparent;
-    color: rgba(246, 241, 226, 0.65);
+    color: rgba(246, 241, 226, 0.7);
+    font-size: 0.78rem;
+    font-weight: 800;
     cursor: pointer;
     transition: all 0.2s ease;
   }
-  .btn-mode-tab.active {
+  .btn-mode-tab.active,
+  .btn-mode-tab.active.siri-tab {
     background: var(--card);
     color: var(--header);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
   }
-  .btn-mode-tab.active.siri-tab {
-    background: linear-gradient(135deg, #10B981, #059669);
-    color: #FFFFFF;
-    box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
+  .btn-mode-tab.active svg,
+  .btn-mode-tab.active.siri-tab svg {
+    color: var(--leaf);
   }
 
   /* ========================================================================= */
@@ -471,46 +475,140 @@
   /* Phiếu xác nhận lưu sổ nhật ký to rõ */
   .confirm-ticket {
     background: #FFFDF9;
-    border: 2px solid var(--leaf);
-    border-radius: var(--radius-md);
-    padding: 13px;
-    margin-top: 4px;
+    border: 1.5px solid var(--leaf);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(31, 54, 38, 0.08);
+    margin-top: 2px;
   }
-  .confirm-ticket-title {
-    color: var(--leaf);
-    font-size: 0.95rem;
-    font-weight: 800;
-    margin-bottom: 8px;
-    padding-bottom: 6px;
-    border-bottom: 1.5px dashed rgba(42, 99, 44, 0.25);
+  .confirm-ticket-header {
+    background: #1F3626;
+    padding: 10px 14px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .confirm-ticket-header-left {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+  }
+  .confirm-ticket-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: #3F6B3F;
+    border: 1px solid rgba(214, 163, 57, 0.4);
+    color: #FBF8EF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .confirm-ticket-sub {
+    font-size: 0.63rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #D6A339;
+    line-height: 1.2;
+  }
+  .confirm-ticket-title {
+    color: #FFFFFF;
+    font-size: 0.92rem;
+    font-weight: 800;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .confirm-ticket-date {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    padding: 3px 10px;
+    color: #F6F1E2;
+    font-size: 0.74rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .confirm-ticket-body {
+    padding: 13px 14px;
+  }
+  .confirm-hero-grid {
+    display: flex;
+    background: #F2F6F0;
+    border: 1px solid rgba(63, 107, 63, 0.2);
+    border-radius: 12px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    gap: 10px;
+  }
+  .confirm-hero-col {
+    flex: 1;
+    min-width: 0;
+  }
+  .confirm-hero-col:first-child {
+    flex: 1.3;
+    padding-right: 10px;
+    border-right: 1px solid rgba(63, 107, 63, 0.15);
+  }
+  .confirm-hero-lbl {
+    font-size: 0.69rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: #5C6B57;
+    margin-bottom: 2px;
+  }
+  .confirm-hero-val {
+    font-size: 0.93rem;
+    font-weight: 800;
+    color: #1F3626;
+    line-height: 1.3;
+  }
+  .confirm-hero-col:last-child .confirm-hero-val {
+    color: #2E5A2E;
+  }
+  .confirm-rows-box {
+    background: rgba(35, 42, 28, 0.025);
+    border: 1px solid rgba(35, 42, 28, 0.06);
+    border-radius: 12px;
+    padding: 2px 12px;
   }
   .confirm-ticket-row {
     display: flex;
     justify-content: space-between;
-    padding: 4px 0;
-    font-size: 0.86rem;
+    align-items: center;
+    padding: 7px 0;
+    font-size: 0.85rem;
+    border-bottom: 1px solid rgba(35, 42, 28, 0.06);
+    gap: 10px;
   }
-  .confirm-ticket-row .k { color: var(--ink-soft); font-weight: 600; }
-  .confirm-ticket-row .v { color: var(--ink); font-weight: 800; text-align: right; }
+  .confirm-ticket-row:last-child {
+    border-bottom: none;
+  }
+  .confirm-ticket-row .k { color: #5C6B57; font-weight: 600; }
+  .confirm-ticket-row .v { color: #1E261A; font-weight: 700; text-align: right; }
   .confirm-btns-row {
     display: flex;
     gap: 8px;
-    margin-top: 10px;
+    margin-top: 12px;
   }
   .btn-confirm-yes {
-    flex: 2;
-    background: var(--leaf);
+    flex: 2.2;
+    min-height: 44px;
+    background: #2E5A2E;
     color: #fff;
     border: none;
-    border-radius: 999px;
-    padding: 10px;
-    font-size: 0.88rem;
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 0.86rem;
     font-weight: 800;
     cursor: pointer;
-    box-shadow: 0 3px 10px rgba(42, 99, 44, 0.35);
+    box-shadow: 0 3px 10px rgba(42, 99, 44, 0.25);
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -518,18 +616,19 @@
   }
   .btn-confirm-no {
     flex: 1;
-    background: rgba(186, 70, 32, 0.1);
+    min-height: 44px;
+    background: rgba(166, 81, 46, 0.08);
     color: var(--clay);
-    border: 1px solid rgba(186, 70, 32, 0.25);
-    border-radius: 999px;
+    border: 1px solid rgba(166, 81, 46, 0.25);
+    border-radius: 12px;
     padding: 10px;
-    font-size: 0.84rem;
+    font-size: 0.83rem;
     font-weight: 700;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 5px;
   }
 
   .quick-reply-btns {
@@ -1463,7 +1562,7 @@
 <div class="app-container">
 
   <!-- ======================================================================= -->
-  <!-- HEADER & MODE SWITCHER CHÍNH                                            -->
+  <!-- HEADER GỌN GÀNG (2 HÀNG) & CHUYỂN ĐỔI CHẾ ĐỘ                             -->
   <!-- ======================================================================= -->
   <div class="chat-header">
     <div class="header-top-row">
@@ -1473,7 +1572,10 @@
         </a>
         <div class="header-title-box">
           <div class="header-title">
-            <span class="app-name-inline">nông<em>ký</em></span>
+            <span>{{ 'Chẩn Đoán Sâu Bệnh' if flow_mode == 'diagnosis' else 'Ghi Nhật Ký VietGAP' }}</span>
+          </div>
+          <div class="header-subtitle">
+            <span>Nông hộ: <b style="color: #D6A339;">{{ farmer.full_name if farmer else 'Vũ Xuân Anh' }}</b></span>
           </div>
         </div>
       </div>
@@ -1482,33 +1584,24 @@
           <span id="ttsIcon" style="display:inline-flex; align-items:center;">
             <svg class="lucide lucide-volume-2" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
           </span>
+          <span>Loa</span>
         </button>
         <button type="button" class="btn-header-tool" id="btnResetConv" title="Làm mới cuộc trò chuyện">
           <svg class="lucide lucide-rotate-ccw" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
           <span>Làm mới</span>
         </button>
-        <a href="/logout" class="btn-header-tool" title="Đăng xuất" style="text-decoration:none;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-          <span>Thoát</span>
-        </a>
       </div>
     </div>
 
-    <!-- User bar: tên nông hộ & role — cùng kiểu với index.html -->
-    <div class="conv-user-bar">
-      <span class="conv-user-greeting">Nông hộ: <b>{{ farmer.full_name if farmer else 'Nông hộ VietGAP' }}</b></span>
-      {% if farmer %}
-      <span class="conv-user-role">{{ farmer.role }}</span>
-      {% endif %}
-    </div>
-
-    <!-- Nút chuyển đổi 2 Dạng Hội Thoại: Siri Voice & Chat Truyền Thống (Dạng Icon) -->
+    <!-- Nút chuyển đổi 2 Dạng Hội Thoại: Siri Voice & Chat Truyền Thống -->
     <div class="mode-switch-bar">
       <button type="button" class="btn-mode-tab active siri-tab" id="tabModeSiri" onclick="switchMode('siri')" title="Chế độ Trợ lý Giọng nói">
-        <svg class="lucide lucide-mic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        <svg class="lucide lucide-mic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        <span>Trợ lý Giọng nói</span>
       </button>
       <button type="button" class="btn-mode-tab" id="tabModeChat" onclick="switchMode('chat')" title="Chế độ Nhắn tin Chat">
-        <svg class="lucide lucide-message-square" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <svg class="lucide lucide-message-square" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>Nhắn tin Chat</span>
       </button>
     </div>
   </div>
@@ -1580,9 +1673,45 @@
               <div class="msg-avatar">AI</div>
               <div class="msg-content-wrap">
                 <div class="ai-response-box">
+                  {% if flow_mode == 'diagnosis' %}
                   <div class="ai-text-standard">
-                    Dạ em chào bác nông dân! Em là <b>Trợ lý AI Nông Ký</b>.<br><br>
-                    Bác có thể chạm vào quả cầu để nói, hoặc bấm chọn nhanh loại hoạt động cần ghi chép bên dưới:
+                    Dạ em chào bác nông dân! Đây là chức năng <b>Chẩn đoán sâu bệnh &amp; Tư vấn kỹ thuật Bưởi VietGAP</b>.<br><br>
+                    Bác có thể <b>chụp ảnh lá, quả bưởi bị sâu bệnh</b>, chụp nhãn thuốc BVTV hoặc bấm chọn triệu chứng bên dưới để em chẩn đoán ngay nhé:
+                  </div>
+                  <div class="quick-reply-btns">
+                    <button type="button" class="btn-quick-reply" onclick="triggerCameraCapture()">
+                      <svg class="lucide lucide-camera" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+                      <span>Chụp ảnh sâu bệnh / thuốc</span>
+                    </button>
+                    <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Lá bưởi non bị xoăn, có đường ngoằn ngoèo màu trắng bạc là bệnh gì và trị thế nào?')">
+                      <svg class="lucide lucide-bug" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/></svg>
+                      <span>Lá non xoăn, đường vẽ trắng</span>
+                    </button>
+                    <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Mặt lá bưởi có nhiều chấm vàng li ti, có tơ mỏng làm lá bạc màu là bị con gì hại?')">
+                      <svg class="lucide lucide-bug" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/></svg>
+                      <span>Lá chấm vàng li ti, tơ mỏng</span>
+                    </button>
+                    <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Hoa bưởi bị rụng nhiều, quả non có vết sẹo xám quanh cuống là bị sâu bệnh gì?')">
+                      <svg class="lucide lucide-sprout" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-13"/></svg>
+                      <span>Hoa rụng nhiều, quả sẹo xám</span>
+                    </button>
+                    <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Quả bưởi sắp chín có vết chấm đen, chảy nhựa vàng rồi thối rụng là bị sao?')">
+                      <svg class="lucide lucide-bug" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/></svg>
+                      <span>Quả chấm đen, chảy nhựa rụng</span>
+                    </button>
+                    <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Cành và lá bưởi có vết đốm nâu lõm xuống, gốc cây chảy mủ là bệnh gì?')">
+                      <svg class="lucide lucide-sprout" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-13"/></svg>
+                      <span>Cành lá đốm nâu, chảy mủ</span>
+                    </button>
+                    <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Cho tôi hỏi các hoạt chất thuốc BVTV bị cấm sử dụng trên cây bưởi và quy định thời gian cách ly VietGAP?')">
+                      <svg class="lucide lucide-flask-conical" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
+                      <span>Tra cứu thuốc cấm &amp; Cách ly</span>
+                    </button>
+                  </div>
+                  {% else %}
+                  <div class="ai-text-standard">
+                    Dạ em chào bác nông dân! Đây là chức năng <b>Ghi nhật ký canh tác VietGAP</b>.<br><br>
+                    Bác có thể chạm vào quả cầu để nói, hoặc bấm chọn nhanh công việc cần ghi vào sổ bên dưới:
                   </div>
                   <div class="quick-reply-btns">
                     <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký phun thuốc BVTV.')">
@@ -1615,9 +1744,10 @@
                     </button>
                     <button type="button" class="btn-quick-reply" onclick="triggerCameraCapture()">
                       <svg class="lucide lucide-camera" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
-                      <span>Chụp ảnh thực địa</span>
+                      <span>Chụp nhãn vật tư</span>
                     </button>
                   </div>
+                  {% endif %}
                 </div>
               </div>
             </div>
@@ -1647,9 +1777,45 @@
         <div class="msg-avatar">AI</div>
         <div class="msg-content-wrap">
           <div class="ai-response-box">
+            {% if flow_mode == 'diagnosis' %}
             <div class="ai-text-standard">
-              Dạ em chào bác nông dân! Em là <b>Trợ lý AI Nông Ký</b>.<br><br>
-              Bác có thể nhắn tin, nói chuyện hoặc bấm chọn nhanh loại hoạt động cần ghi chép bên dưới:
+              Dạ em chào bác nông dân! Đây là chức năng <b>Chẩn đoán sâu bệnh &amp; Tư vấn kỹ thuật Bưởi VietGAP</b>.<br><br>
+              Bác có thể chụp ảnh lá, quả bưởi bị bệnh hoặc bấm chọn triệu chứng bên dưới để em chẩn đoán ngay nhé:
+            </div>
+            <div class="quick-reply-btns">
+              <button type="button" class="btn-quick-reply" onclick="triggerCameraCapture()">
+                <svg class="lucide lucide-camera" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+                <span>Chụp ảnh sâu bệnh / thuốc</span>
+              </button>
+              <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Lá bưởi non bị xoăn, có đường ngoằn ngoèo màu trắng bạc là bệnh gì và trị thế nào?')">
+                <svg class="lucide lucide-bug" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/></svg>
+                <span>Lá non xoăn, đường vẽ trắng</span>
+              </button>
+              <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Mặt lá bưởi có nhiều chấm vàng li ti, có tơ mỏng làm lá bạc màu là bị con gì hại?')">
+                <svg class="lucide lucide-bug" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/></svg>
+                <span>Lá chấm vàng li ti, tơ mỏng</span>
+              </button>
+              <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Hoa bưởi bị rụng nhiều, quả non có vết sẹo xám quanh cuống là bị sâu bệnh gì?')">
+                <svg class="lucide lucide-sprout" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-13"/></svg>
+                <span>Hoa rụng nhiều, quả sẹo xám</span>
+              </button>
+              <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Quả bưởi sắp chín có vết chấm đen, chảy nhựa vàng rồi thối rụng là bị sao?')">
+                <svg class="lucide lucide-bug" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m8 2 1.88 1.88"/><path d="M14.12 3.88 16 2"/><path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/><path d="M12 20v-9"/></svg>
+                <span>Quả chấm đen, chảy nhựa rụng</span>
+              </button>
+              <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Cành và lá bưởi có vết đốm nâu lõm xuống, gốc cây chảy mủ là bệnh gì?')">
+                <svg class="lucide lucide-sprout" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-13"/></svg>
+                <span>Cành lá đốm nâu, chảy mủ</span>
+              </button>
+              <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Cho tôi hỏi các hoạt chất thuốc BVTV bị cấm sử dụng trên cây bưởi và quy định thời gian cách ly VietGAP?')">
+                <svg class="lucide lucide-flask-conical" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
+                <span>Tra cứu thuốc cấm &amp; Cách ly</span>
+              </button>
+            </div>
+            {% else %}
+            <div class="ai-text-standard">
+              Dạ em chào bác nông dân! Đây là chức năng <b>Ghi nhật ký canh tác VietGAP</b>.<br><br>
+              Bác có thể nhắn tin, nói chuyện hoặc bấm chọn nhanh công việc cần ghi chép bên dưới:
             </div>
             <div class="quick-reply-btns">
               <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký phun thuốc BVTV.')">
@@ -1682,9 +1848,10 @@
               </button>
               <button type="button" class="btn-quick-reply" onclick="triggerCameraCapture()">
                 <svg class="lucide lucide-camera" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
-                <span>Chụp ảnh thực địa</span>
+                <span>Chụp nhãn vật tư</span>
               </button>
             </div>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -1721,8 +1888,9 @@
 <audio id="ttsAudioPlayer" style="display:none;"></audio>
 
 <script>
+  const FLOW_MODE = "{{ flow_mode|default('diary') }}";
   let currentMode = "siri"; // Mặc định ở chế độ Siri theo yêu cầu
-  let sessionId = "web_" + Math.random().toString(36).substring(2, 10);
+  let sessionId = (FLOW_MODE === "diagnosis" ? "diag_" : "diary_") + Math.random().toString(36).substring(2, 10);
   let enableTTS = true; // Chế độ Siri luôn bật phát giọng nói tự động
   let isRecording = false;
   let isStopping = false;
@@ -2047,7 +2215,7 @@
           });
         } catch (e) {}
 
-        sessionId = "web_" + Math.random().toString(36).substring(2, 10);
+        sessionId = (FLOW_MODE === "diagnosis" ? "diag_" : "diary_") + Math.random().toString(36).substring(2, 10);
         setWaitingForResponse(false);
         updateStateBadge("SẴN SÀNG");
 
@@ -2094,6 +2262,40 @@
   window.addEventListener("beforeunload", notifySessionEnd);
 
   function renderActivityButtonsHtml() {
+    if (FLOW_MODE === "diagnosis") {
+      return `
+        <div class="quick-reply-btns" style="margin-top: 10px;">
+          <button type="button" class="btn-quick-reply" onclick="triggerCameraCapture()">
+            ${LUCIDE_ICONS.camera}
+            <span>Chụp ảnh sâu bệnh / thuốc</span>
+          </button>
+          <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Lá bưởi non bị xoăn, có đường ngoằn ngoèo màu trắng bạc là bệnh gì và trị thế nào?')">
+            ${LUCIDE_ICONS.bug}
+            <span>Lá non xoăn, đường vẽ trắng</span>
+          </button>
+          <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Mặt lá bưởi có nhiều chấm vàng li ti, có tơ mỏng làm lá bạc màu là bị con gì hại?')">
+            ${LUCIDE_ICONS.bug}
+            <span>Lá chấm vàng li ti, tơ mỏng</span>
+          </button>
+          <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Hoa bưởi bị rụng nhiều, quả non có vết sẹo xám quanh cuống là bị sâu bệnh gì?')">
+            ${LUCIDE_ICONS.fertilize}
+            <span>Hoa rụng nhiều, quả sẹo xám</span>
+          </button>
+          <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Quả bưởi sắp chín có vết chấm đen, chảy nhựa vàng rồi thối rụng là bị sao?')">
+            ${LUCIDE_ICONS.bug}
+            <span>Quả chấm đen, chảy nhựa rụng</span>
+          </button>
+          <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Cành và lá bưởi có vết đốm nâu lõm xuống, gốc cây chảy mủ là bệnh gì?')">
+            ${LUCIDE_ICONS.fertilize}
+            <span>Cành lá đốm nâu, chảy mủ</span>
+          </button>
+          <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Cho tôi hỏi các hoạt chất thuốc BVTV bị cấm sử dụng trên cây bưởi và quy định thời gian cách ly VietGAP?')">
+            ${LUCIDE_ICONS.spray}
+            <span>Tra cứu thuốc cấm &amp; Cách ly</span>
+          </button>
+        </div>
+      `;
+    }
     return `
       <div class="quick-reply-btns" style="margin-top: 10px;">
         <button type="button" class="btn-quick-reply" onclick="sendQuickPrompt('Tôi muốn ghi nhật ký phun thuốc BVTV.')">
@@ -2126,21 +2328,23 @@
         </button>
         <button type="button" class="btn-quick-reply" onclick="triggerCameraCapture()">
           ${LUCIDE_ICONS.camera}
-          <span>Chụp ảnh thực địa</span>
+          <span>Chụp nhãn vật tư</span>
         </button>
       </div>
     `;
   }
 
   function getSiriWelcomeHtml() {
+    const welcomeText = FLOW_MODE === "diagnosis"
+      ? `Dạ em chào bác nông dân! Đây là chức năng <b>Chẩn đoán sâu bệnh &amp; Tư vấn kỹ thuật Bưởi VietGAP</b>.<br><br>Bác có thể <b>chụp ảnh lá, quả bưởi bị sâu bệnh</b>, chụp nhãn thuốc BVTV hoặc bấm chọn triệu chứng bên dưới để em chẩn đoán ngay nhé:`
+      : `Dạ em chào bác nông dân! Đây là chức năng <b>Ghi nhật ký canh tác VietGAP</b>.<br><br>Bác có thể chạm vào quả cầu để nói, hoặc bấm chọn nhanh công việc cần ghi vào sổ bên dưới:`;
     return `
       <div class="msg-row assistant">
         <div class="msg-avatar">AI</div>
         <div class="msg-content-wrap">
           <div class="ai-response-box">
             <div class="ai-text-standard">
-              Dạ em chào bác nông dân! Em là <b>Trợ lý AI Nông Ký</b>.<br><br>
-              Bác có thể chạm vào quả cầu để nói, hoặc bấm chọn nhanh loại hoạt động cần ghi chép bên dưới:
+              ${welcomeText}
             </div>
             ${renderActivityButtonsHtml()}
           </div>
@@ -2150,13 +2354,16 @@
   }
 
   function getChatWelcomeHtml() {
+    const welcomeText = FLOW_MODE === "diagnosis"
+      ? `Dạ em đã làm mới phiên chẩn đoán. Bác có thể chụp ảnh lá, quả bưởi bị sâu bệnh hoặc chọn nhanh triệu chứng bên dưới:`
+      : `Dạ em đã làm mới phiên ghi nhật ký. Bác có thể nhắn tin, nói chuyện hoặc bấm chọn nhanh công việc cần ghi chép bên dưới:`;
     return `
       <div class="msg-row assistant">
         <div class="msg-avatar">AI</div>
         <div class="msg-content-wrap">
           <div class="ai-response-box">
             <div class="ai-text-standard">
-              Dạ em đã làm mới phiên trò chuyện. Bác có thể nhắn tin, nói chuyện hoặc bấm chọn nhanh loại hoạt động cần ghi chép bên dưới:
+              ${welcomeText}
             </div>
             ${renderActivityButtonsHtml()}
           </div>
@@ -3553,6 +3760,7 @@
     formData.append("file", blob, "voice_input.wav");
     formData.append("session_id", sessionId);
     formData.append("enable_tts", enableTTS);
+    formData.append("flow_mode", FLOW_MODE);
 
     let data;
     try {
@@ -3608,7 +3816,8 @@
         body: JSON.stringify({
           session_id: sessionId,
           text: text,
-          enable_tts: enableTTS
+          enable_tts: enableTTS,
+          flow_mode: FLOW_MODE
         })
       });
       data = await resp.json();
@@ -3660,7 +3869,8 @@
         body: JSON.stringify({
           session_id: sessionId,
           text: text,
-          enable_tts: true
+          enable_tts: true,
+          flow_mode: FLOW_MODE
         })
       });
       data = await resp.json();
@@ -3717,6 +3927,7 @@
     formData.append("file", file);
     formData.append("session_id", sessionId);
     formData.append("enable_tts", enableTTS);
+    formData.append("flow_mode", FLOW_MODE);
 
     let data;
     try {
@@ -4333,14 +4544,6 @@
           spoken_text: `Dạ trong kho trang trại có sẵn thuốc ${p.db_match.name}.`
         });
       }
-      sections.push({
-        id: "diary",
-        question: "Ghi việc phun thuốc này vào nhật ký giúp tôi",
-        label: "Ghi việc phun thuốc này vào nhật ký giúp tôi",
-        icon: "fileEdit",
-        is_action: true,
-        action_prompt: "Ghi việc phun thuốc này vào nhật ký giúp tôi."
-      });
     } else if (cat === "pest_disease" || analysis.pest_disease) {
       const p = analysis.pest_disease || {};
       const controls = p.cultural_controls || p.biological_controls || "Cắt tỉa cành thông thoáng, thu gom lá bệnh.";
@@ -4374,14 +4577,6 @@
           spoken_text: `Sâu bệnh này ở mức độ ${p.severity}, gây hại chủ yếu ở ${p.affected_part || 'lá và cành'}.`
         });
       }
-      sections.push({
-        id: "diary",
-        question: "Ghi vào sổ theo dõi sâu bệnh giúp tôi",
-        label: "Ghi vào sổ theo dõi sâu bệnh giúp tôi",
-        icon: "fileEdit",
-        is_action: true,
-        action_prompt: "Ghi vào sổ theo dõi sâu bệnh giúp tôi."
-      });
     } else if (cat === "fertilizer" || analysis.fertilizer) {
       const f = analysis.fertilizer || {};
       const dosage = f.dosage_and_usage || f.usage_instructions || "Bón theo quy trình kỹ thuật.";
@@ -4405,23 +4600,6 @@
           spoken_text: `Thành phần dinh dưỡng chính gồm: ${f.composition_npk || f.nutrients}.`
         });
       }
-      sections.push({
-        id: "diary",
-        question: "Ghi việc bón phân này vào nhật ký giúp tôi",
-        label: "Ghi việc bón phân này vào nhật ký giúp tôi",
-        icon: "fileEdit",
-        is_action: true,
-        action_prompt: "Ghi việc bón phân này vào nhật ký giúp tôi."
-      });
-    } else {
-      sections.push({
-        id: "diary",
-        question: "Ghi thông tin này vào nhật ký giúp tôi",
-        label: "Ghi thông tin này vào nhật ký giúp tôi",
-        icon: "fileEdit",
-        is_action: true,
-        action_prompt: "Ghi nhận thông tin này vào nhật ký giúp tôi."
-      });
     }
     return sections;
   }
@@ -4444,9 +4622,9 @@
       fertilize: "Bón phân",
       purchase: "Mua vật tư nông nghiệp",
       harvest: "Thu hoạch nông sản",
-      sale: "Bán nông sản",
+      sale: "Xuất bán nông sản",
       observation: "Theo dõi sâu bệnh hại",
-      waste: "Xử lý vỏ bao bì thuốc",
+      waste: "Xử lý vỏ bao bì",
       general: "Hoạt động canh tác"
     };
     const title = actNames[act] || "Hoạt động canh tác";
@@ -4458,116 +4636,125 @@
     }
     const cropName = slots.crop_name || "Bưởi diễn";
 
+    const formatQtyWithUnit = (qVal, uVal) => {
+      const q = String(qVal || "").trim();
+      const u = String(uVal || "").trim();
+      if (!q) return "1 đơn vị";
+      if (u && !q.toLowerCase().includes(u.toLowerCase())) return `${q} ${u}`;
+      return q;
+    };
+
+    let heroLeft = null;
+    let heroRight = null;
     let rowsHtml = "";
+
     if (act === "spray") {
       const tenThuoc = slots.ten_thuoc_bvtv || slots.pesticide_name || 'Thuốc BVTV';
       const targetPest = slots.target_pest || slots.sinh_vat_gay_hai || 'Sâu bệnh hại';
-      const lieuLuong = slots.nong_do_va_luong_dung || 'Pha theo hướng dẫn';
-      let cachLy = slots.thoi_gian_cach_ly || 'Theo quy định';
+      const lieuLuong = slots.nong_do_va_luong_dung || 'Theo khuyến cáo';
+      let cachLy = slots.thoi_gian_cach_ly || '7 ngày';
       if (/^\d+$/.test(String(cachLy).trim())) {
         cachLy = cachLy + ' ngày';
       }
+      heroLeft = { label: 'Thuốc BVTV', value: tenThuoc };
+      heroRight = { label: 'Liều lượng pha', value: lieuLuong };
       rowsHtml = `
-        <div class="confirm-ticket-row"><span class="k">Cây trồng:</span><span class="v"><b>${escapeHtml(cropName)}</b></span></div>
-        <div class="confirm-ticket-row"><span class="k">Thuốc BVTV:</span><span class="v" style="color:var(--forest); font-weight:700;">${escapeHtml(tenThuoc)}</span></div>
-        <div class="confirm-ticket-row"><span class="k">Trị sâu bệnh:</span><span class="v">${escapeHtml(targetPest)}</span></div>
-        <div class="confirm-ticket-row"><span class="k">Liều lượng:</span><span class="v" style="color:var(--leaf); font-weight:600;">${escapeHtml(lieuLuong)}</span></div>
-        <div class="confirm-ticket-row"><span class="k">Cách ly:</span><span class="v" style="color:var(--clay); font-weight:600;">${escapeHtml(cachLy)}</span></div>
-        ${slots.dien_tich ? `<div class="confirm-ticket-row"><span class="k">Diện tích/Gốc:</span><span class="v">${escapeHtml(slots.dien_tich)}</span></div>` : ''}
-        ${slots.phuong_thuc_phun ? `<div class="confirm-ticket-row"><span class="k">Dụng cụ phun:</span><span class="v">${escapeHtml(slots.phuong_thuc_phun)}</span></div>` : ''}
-        ${slots.thoi_tiet ? `<div class="confirm-ticket-row"><span class="k">Thời tiết:</span><span class="v">${escapeHtml(slots.thoi_tiet)}</span></div>` : ''}
+        <div class="confirm-ticket-row"><span class="k">Cây trồng</span><span class="v">${escapeHtml(cropName)}</span></div>
+        <div class="confirm-ticket-row"><span class="k">Đối tượng trị</span><span class="v">${escapeHtml(targetPest)}</span></div>
+        <div class="confirm-ticket-row"><span class="k">Thời gian cách ly</span><span class="v" style="color:var(--clay); font-weight:800;">${escapeHtml(cachLy)}</span></div>
+        ${slots.dien_tich ? `<div class="confirm-ticket-row"><span class="k">Khu vực / Lô</span><span class="v">${escapeHtml(slots.dien_tich)}</span></div>` : ''}
+        ${slots.phuong_thuc_phun ? `<div class="confirm-ticket-row"><span class="k">Dụng cụ phun</span><span class="v">${escapeHtml(slots.phuong_thuc_phun)}</span></div>` : ''}
+        ${slots.thoi_tiet ? `<div class="confirm-ticket-row"><span class="k">Thời tiết</span><span class="v">${escapeHtml(slots.thoi_tiet)}</span></div>` : ''}
       `;
     } else if (act === "fertilize") {
       const tenPhan = slots.ten_phan_bon || slots.fertilizer_name || 'Phân bón';
-      const luongPhan = slots.luong_phan_bon || slots.quantity || 'Đủ liều lượng';
+      const luongPhan = slots.luong_phan_bon || slots.quantity || 'Theo quy trình';
+      heroLeft = { label: 'Loại phân bón', value: tenPhan };
+      heroRight = { label: 'Khối lượng bón', value: luongPhan };
       rowsHtml = `
-        <div class="confirm-ticket-row"><span class="k">Cây trồng:</span><span class="v"><b>${escapeHtml(cropName)}</b></span></div>
-        <div class="confirm-ticket-row"><span class="k">Tên phân bón:</span><span class="v" style="color:var(--forest); font-weight:700;">${escapeHtml(tenPhan)}</span></div>
-        <div class="confirm-ticket-row"><span class="k">Khối lượng:</span><span class="v" style="color:var(--leaf); font-weight:600;">${escapeHtml(luongPhan)}</span></div>
-        ${slots.phuong_phap_bon ? `<div class="confirm-ticket-row"><span class="k">Cách bón:</span><span class="v">${escapeHtml(slots.phuong_phap_bon)}</span></div>` : ''}
-        ${slots.dien_tich ? `<div class="confirm-ticket-row"><span class="k">Diện tích/Cây:</span><span class="v">${escapeHtml(slots.dien_tich)}</span></div>` : ''}
-        ${slots.thoi_diem_bon ? `<div class="confirm-ticket-row"><span class="k">Giai đoạn:</span><span class="v">${escapeHtml(slots.thoi_diem_bon)}</span></div>` : ''}
+        <div class="confirm-ticket-row"><span class="k">Cây trồng</span><span class="v">${escapeHtml(cropName)}</span></div>
+        ${slots.phuong_phap_bon ? `<div class="confirm-ticket-row"><span class="k">Phương pháp bón</span><span class="v">${escapeHtml(slots.phuong_phap_bon)}</span></div>` : ''}
+        ${slots.dien_tich ? `<div class="confirm-ticket-row"><span class="k">Khu vực / Diện tích</span><span class="v">${escapeHtml(slots.dien_tich)}</span></div>` : ''}
+        ${slots.thoi_diem_bon ? `<div class="confirm-ticket-row"><span class="k">Giai đoạn bón</span><span class="v">${escapeHtml(slots.thoi_diem_bon)}</span></div>` : ''}
       `;
     } else if (act === "harvest") {
       const sanLuong = slots.san_luong_thu_hoach || slots.quantity || 'Theo thực tế';
+      const loc = slots.dia_diem_cach_so_che || slots.dien_tich || '';
+      heroLeft = { label: 'Nông sản thu hoạch', value: cropName };
+      heroRight = { label: 'Sản lượng', value: sanLuong };
       rowsHtml = `
-        <div class="confirm-ticket-row"><span class="k">Nông sản:</span><span class="v"><b>${escapeHtml(cropName)}</b></span></div>
-        <div class="confirm-ticket-row"><span class="k">Sản lượng thu hoạch:</span><span class="v" style="color:var(--leaf); font-weight:700;">${escapeHtml(sanLuong)}</span></div>
-        ${slots.dia_diem_cach_so_che ? `<div class="confirm-ticket-row"><span class="k">Lô / Sơ chế:</span><span class="v">${escapeHtml(slots.dia_diem_cach_so_che)}</span></div>` : ''}
-        ${slots.chat_luong ? `<div class="confirm-ticket-row"><span class="k">Chất lượng:</span><span class="v">${escapeHtml(slots.chat_luong)}</span></div>` : ''}
+        ${slots.chat_luong ? `<div class="confirm-ticket-row"><span class="k">Phân loại chất lượng</span><span class="v">${escapeHtml(slots.chat_luong)}</span></div>` : ''}
+        ${loc ? `<div class="confirm-ticket-row"><span class="k">Khu vực / Sơ chế</span><span class="v">${escapeHtml(loc)}</span></div>` : ''}
       `;
     } else if (act === "sale") {
       const khoiLuong = slots.khoi_luong_tieu_thu || slots.quantity || 'Theo thực tế';
       const buyer = slots.co_so_thu_mua || slots.buyer_name || 'Thương lái / Hợp tác xã';
+      heroLeft = { label: 'Nông sản xuất bán', value: cropName };
+      heroRight = { label: 'Khối lượng bán', value: khoiLuong };
       rowsHtml = `
-        <div class="confirm-ticket-row"><span class="k">Nông sản:</span><span class="v"><b>${escapeHtml(cropName)}</b></span></div>
-        <div class="confirm-ticket-row"><span class="k">Khối lượng bán:</span><span class="v" style="color:var(--leaf); font-weight:700;">${escapeHtml(khoiLuong)}</span></div>
-        <div class="confirm-ticket-row"><span class="k">Người mua / HTX:</span><span class="v"><b>${escapeHtml(buyer)}</b></span></div>
-        ${slots.unit_price ? `<div class="confirm-ticket-row"><span class="k">Đơn giá:</span><span class="v">${escapeHtml(slots.unit_price)}</span></div>` : ''}
+        <div class="confirm-ticket-row"><span class="k">Đơn vị thu mua</span><span class="v">${escapeHtml(buyer)}</span></div>
+        ${slots.unit_price ? `<div class="confirm-ticket-row"><span class="k">Giá bán</span><span class="v" style="color:#B8830E;">${escapeHtml(slots.unit_price)}</span></div>` : ''}
+        ${slots.dien_tich ? `<div class="confirm-ticket-row"><span class="k">Lô thu hoạch</span><span class="v">${escapeHtml(slots.dien_tich)}</span></div>` : ''}
       `;
     } else if (act === "purchase") {
       const matName = slots.material_name || slots.item_name || 'Vật tư nông nghiệp';
-      const qtyStr = (slots.quantity || '') + ' ' + (slots.unit || '');
+      const qtyStr = formatQtyWithUnit(slots.quantity, slots.unit);
+      heroLeft = { label: 'Tên vật tư', value: matName };
+      heroRight = { label: 'Số lượng mua', value: qtyStr };
       rowsHtml = `
-        <div class="confirm-ticket-row"><span class="k">Tên vật tư:</span><span class="v" style="color:var(--forest); font-weight:700;">${escapeHtml(matName)}</span></div>
-        <div class="confirm-ticket-row"><span class="k">Số lượng:</span><span class="v" style="color:var(--leaf); font-weight:600;">${escapeHtml(qtyStr.trim() || '1 đơn vị')}</span></div>
-        ${slots.supplier_name ? `<div class="confirm-ticket-row"><span class="k">Nơi mua / Đại lý:</span><span class="v">${escapeHtml(slots.supplier_name)}</span></div>` : ''}
-        ${slots.unit_price ? `<div class="confirm-ticket-row"><span class="k">Đơn giá:</span><span class="v">${escapeHtml(slots.unit_price)}</span></div>` : ''}
-        ${slots.invoice_no ? `<div class="confirm-ticket-row"><span class="k">Số hóa đơn:</span><span class="v">${escapeHtml(slots.invoice_no)}</span></div>` : ''}
+        ${slots.material_type ? `<div class="confirm-ticket-row"><span class="k">Phân loại</span><span class="v">${escapeHtml(slots.material_type)}</span></div>` : ''}
+        ${slots.supplier_name ? `<div class="confirm-ticket-row"><span class="k">Đại lý / Nơi mua</span><span class="v">${escapeHtml(slots.supplier_name)}</span></div>` : ''}
+        ${slots.unit_price ? `<div class="confirm-ticket-row"><span class="k">Đơn giá</span><span class="v" style="color:#B8830E;">${escapeHtml(slots.unit_price)}</span></div>` : ''}
+        ${slots.invoice_no ? `<div class="confirm-ticket-row"><span class="k">Số hóa đơn</span><span class="v">${escapeHtml(slots.invoice_no)}</span></div>` : ''}
       `;
     } else if (act === "observation") {
-      const pest = slots.sinh_vat_gay_hai || slots.target_pest || 'Sinh vật gây hại';
+      const pest = slots.sinh_vat_gay_hai || slots.target_pest || 'Sâu bệnh hại';
       const sev = slots.severity || 'Cần theo dõi';
       const action = slots.bien_phap_xu_ly || slots.action_taken || '';
+      heroLeft = { label: 'Sâu bệnh phát hiện', value: pest };
+      heroRight = { label: 'Mức độ hại', value: sev };
       rowsHtml = `
-        <div class="confirm-ticket-row"><span class="k">Cây trồng:</span><span class="v"><b>${escapeHtml(cropName)}</b></span></div>
-        <div class="confirm-ticket-row"><span class="k">Sinh vật gây hại:</span><span class="v" style="color:var(--clay); font-weight:700;">${escapeHtml(pest)}</span></div>
-        <div class="confirm-ticket-row"><span class="k">Mức độ xuất hiện:</span><span class="v">${escapeHtml(sev)}</span></div>
-        ${action ? `<div class="confirm-ticket-row"><span class="k">Biện pháp xử lý:</span><span class="v">${escapeHtml(action)}</span></div>` : ''}
+        <div class="confirm-ticket-row"><span class="k">Cây trồng</span><span class="v">${escapeHtml(cropName)}</span></div>
+        ${slots.dien_tich ? `<div class="confirm-ticket-row"><span class="k">Khu vực phát hiện</span><span class="v">${escapeHtml(slots.dien_tich)}</span></div>` : ''}
+        ${action ? `<div class="confirm-ticket-row"><span class="k">Hướng xử lý</span><span class="v">${escapeHtml(action)}</span></div>` : ''}
       `;
     } else if (act === "waste") {
       const mat = slots.material_name || slots.waste_type || 'Vỏ bao bì thuốc BVTV';
-      const meth = slots.treatment_method || 'Thu gom vào bể chứa chuyên dụng';
+      const meth = slots.treatment_method || 'Thu gom vào bể chứa';
+      heroLeft = { label: 'Vật tư / Bao bì', value: mat };
+      heroRight = { label: 'Phương pháp xử lý', value: meth };
       rowsHtml = `
-        <div class="confirm-ticket-row"><span class="k">Vỏ bao bì:</span><span class="v" style="color:var(--forest); font-weight:700;">${escapeHtml(mat)}</span></div>
-        <div class="confirm-ticket-row"><span class="k">Cách xử lý:</span><span class="v">${escapeHtml(meth)}</span></div>
-        ${slots.storage_location ? `<div class="confirm-ticket-row"><span class="k">Nơi lưu trữ:</span><span class="v">${escapeHtml(slots.storage_location)}</span></div>` : ''}
+        ${slots.storage_location ? `<div class="confirm-ticket-row"><span class="k">Nơi lưu giữ</span><span class="v">${escapeHtml(slots.storage_location)}</span></div>` : ''}
       `;
     } else {
       const work = slots.cong_viec || slots.description || 'Chăm sóc vườn cây';
+      heroLeft = { label: 'Công việc canh tác', value: work };
+      heroRight = { label: 'Cây trồng', value: cropName };
       rowsHtml = `
-        <div class="confirm-ticket-row"><span class="k">Cây trồng:</span><span class="v"><b>${escapeHtml(cropName)}</b></span></div>
-        <div class="confirm-ticket-row"><span class="k">Nội dung công việc:</span><span class="v" style="color:var(--forest); font-weight:700;">${escapeHtml(work)}</span></div>
-        ${slots.dien_tich ? `<div class="confirm-ticket-row"><span class="k">Khu vực/Diện tích:</span><span class="v">${escapeHtml(slots.dien_tich)}</span></div>` : ''}
+        ${slots.dien_tich ? `<div class="confirm-ticket-row"><span class="k">Khu vực / Diện tích</span><span class="v">${escapeHtml(slots.dien_tich)}</span></div>` : ''}
       `;
     }
 
     const optFieldMap = {
-      spray: [
-        { k: 'phuong_thuc_phun', label: 'dụng cụ phun' }
-      ],
-      fertilize: [
-        { k: 'phuong_phap_bon', label: 'phương pháp bón' }
-      ],
+      spray: [{ k: 'phuong_thuc_phun', label: 'dụng cụ phun' }],
+      fertilize: [{ k: 'phuong_phap_bon', label: 'cách bón' }],
       purchase: [
         { k: 'supplier_name', label: 'đại lý mua' },
-        { k: 'unit_price', label: 'giá tiền' }
+        { k: 'unit_price', label: 'đơn giá' }
       ],
       harvest: [
-        { k: 'dia_diem_cach_so_che', label: 'lô/cách sơ chế' },
+        { k: 'dia_diem_cach_so_che', label: 'lô thu hoạch' },
         { k: 'chat_luong', label: 'chất lượng' }
       ],
       sale: [
-        { k: 'co_so_thu_mua', label: 'thương lái/người mua' },
+        { k: 'co_so_thu_mua', label: 'người mua' },
         { k: 'unit_price', label: 'giá bán' }
       ],
       observation: [
         { k: 'severity', label: 'mức độ hại' },
-        { k: 'bien_phap_xu_ly', label: 'biện pháp xử lý' }
+        { k: 'bien_phap_xu_ly', label: 'hướng xử lý' }
       ],
-      waste: [
-        { k: 'storage_location', label: 'nơi lưu trữ vỏ bao' }
-      ],
+      waste: [{ k: 'storage_location', label: 'nơi lưu trữ' }],
       general: []
     };
 
@@ -4582,29 +4769,49 @@
     let optNoticeHtml = "";
     if (act === "purchase") {
       let extra = [];
-      if (!slots.supplier_name) extra.push("đại lý nơi mua");
-      if (!slots.unit_price) extra.push("giá tiền");
+      if (!slots.supplier_name) extra.push("đại lý mua");
+      if (!slots.unit_price) extra.push("đơn giá");
       let textNotice = "";
       if (extra.length > 0) {
-        textNotice = `💡 Bác có thể bổ sung <b>${escapeHtml(extra.join(" hoặc "))}</b>, chụp ảnh hóa đơn/chứng từ hoặc bấm nút lưu.`;
+        textNotice = `Có thể nói thêm <b>${escapeHtml(extra.join(", "))}</b>, chụp ảnh hóa đơn hoặc bấm Lưu ngay.`;
       } else if (!slots.invoice_no && !slots.photo_url) {
-        textNotice = `📸 Bác có thể chụp ảnh hóa đơn/chứng từ bằng nút chụp bên dưới để lưu kèm vào sổ nhé!`;
+        textNotice = `Có thể chụp kèm ảnh hóa đơn/bao bì hoặc bấm Lưu ngay vào sổ.`;
       }
       if (textNotice) {
         optNoticeHtml = `
-          <div style="margin-top:8px; padding:7px 11px; background:rgba(42,99,44,0.06); border:1px dashed rgba(42,99,44,0.25); border-radius:6px; font-size:0.8rem; color:var(--forest); line-height:1.4;">
+          <div style="margin-top:9px; padding:7px 10px; background:rgba(63,107,63,0.06); border-radius:8px; font-size:0.78rem; color:#2B4230; line-height:1.35;">
             ${textNotice}
           </div>
         `;
       }
     } else if (missingOptHints.length > 0) {
-      const hintText = missingOptHints.slice(0, 2).join(" hoặc ");
+      const hintText = missingOptHints.slice(0, 2).join(", ");
       optNoticeHtml = `
-        <div style="margin-top:8px; padding:7px 11px; background:rgba(42,99,44,0.06); border:1px dashed rgba(42,99,44,0.25); border-radius:6px; font-size:0.8rem; color:var(--forest); line-height:1.4;">
-          💡 Bác có thể bổ sung thêm <b>${escapeHtml(hintText)}</b>, hoặc bấm nút lưu nếu đã đủ thông tin.
+        <div style="margin-top:9px; padding:7px 10px; background:rgba(63,107,63,0.06); border-radius:8px; font-size:0.78rem; color:#2B4230; line-height:1.35;">
+          Có thể nói thêm <b>${escapeHtml(hintText)}</b> hoặc bấm Lưu ngay nếu đã đúng.
         </div>
       `;
     }
+
+    const heroHtml = (heroLeft && heroRight) ? `
+      <div class="confirm-hero-grid">
+        <div class="confirm-hero-col">
+          <div class="confirm-hero-lbl">${escapeHtml(heroLeft.label)}</div>
+          <div class="confirm-hero-val">${escapeHtml(heroLeft.value)}</div>
+        </div>
+        <div class="confirm-hero-col">
+          <div class="confirm-hero-lbl">${escapeHtml(heroRight.label)}</div>
+          <div class="confirm-hero-val">${escapeHtml(heroRight.value)}</div>
+        </div>
+      </div>
+    ` : '';
+
+    const cleanRowsHtml = rowsHtml.trim();
+    const rowsBlockHtml = cleanRowsHtml ? `
+      <div class="confirm-rows-box">
+        ${cleanRowsHtml}
+      </div>
+    ` : '';
 
     const buttonsHtml = hideButtons ? '' : `
       <div class="confirm-btns-row">
@@ -4615,18 +4822,24 @@
 
     return `
       <div class="confirm-ticket">
-        <div class="confirm-ticket-title">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
-          <span>PHIẾU XÁC NHẬN: ${escapeHtml(title)}</span>
+        <div class="confirm-ticket-header">
+          <div class="confirm-ticket-header-left">
+            <div class="confirm-ticket-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+            </div>
+            <div style="min-width:0;">
+              <div class="confirm-ticket-sub">PHIẾU XÁC NHẬN VIETGAP</div>
+              <div class="confirm-ticket-title">${escapeHtml(title)}</div>
+            </div>
+          </div>
+          <div class="confirm-ticket-date">${escapeHtml(displayDate)}</div>
         </div>
-        <div style="font-size:0.8rem; color:var(--ink-soft); margin-bottom:6px;">
-          Ngày thực hiện: <b>${escapeHtml(displayDate)}</b>
+        <div class="confirm-ticket-body">
+          ${heroHtml}
+          ${rowsBlockHtml}
+          ${optNoticeHtml}
+          ${buttonsHtml}
         </div>
-        <div style="background:rgba(35,42,28,0.03); padding:8px 10px; border-radius:8px;">
-          ${rowsHtml}
-        </div>
-        ${optNoticeHtml}
-        ${buttonsHtml}
       </div>
     `;
   }

@@ -231,10 +231,13 @@ class ConversationManager:
         season_id: Optional[int] = None,
         enable_tts: bool = False,
         tts_output_path: Optional[str] = None,
+        flow_mode: str = "diary",
+        audio_url: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
         Xử lý 1 lượt nói dạng văn bản từ người dùng.
-        Trả về kết quả gồm: text phản hồi, trạng thái mới, slots hiện tại, file audio TTS (nếu bật).
+        - flow_mode == "diary": Chuyên ghi chép nhật ký VietGAP (bóc tách slot, hỏi bổ sung, xác nhận lưu sổ).
+        - flow_mode == "diagnosis": Chuyên chẩn đoán sâu bệnh & tư vấn kỹ thuật (trả lời RAG & VLM, không ép ghi nhật ký).
         """
         clean_text = normalize_text(user_text)
         if not clean_text:
@@ -246,6 +249,9 @@ class ConversationManager:
             }
 
         state = self.store.get_or_create(session_id, farmer_id=farmer_id, season_id=season_id)
+        if audio_url:
+            state.last_audio_url = audio_url
+            state.accumulated_slots["audio_url"] = audio_url
         if not state.crop_name or state.crop_name in ("Cà gai leo", "Bưởi"):
             try:
                 from services.database import get_db_connection, get_crop_name_for_farmer
@@ -305,6 +311,63 @@ class ConversationManager:
                 "audio_file": audio_result_path,
                 "suggested_actions": [],
                 "safety_guardrail": safety_ans.to_dict(),
+            }
+
+        # ---------------------------------------------------------------------
+        # LUỒNG RIÊNG: CHẨN ĐOÁN SÂU BỆNH & TƯ VẤN KỸ THUẬT (flow_mode == "diagnosis")
+        # ---------------------------------------------------------------------
+        if str(flow_mode or "").lower() == "diagnosis":
+            text_lower = clean_text.lower()
+            matched_sec = None
+            if state.last_image_analysis and state.last_image_analysis.get("sections"):
+                for sec in state.last_image_analysis["sections"]:
+                    if sec.get("is_action") or sec.get("id") == "diary":
+                        continue
+                    q_sec = (sec.get("question") or "").lower()
+                    s_id = (sec.get("id") or "").lower()
+                    if (q_sec and (q_sec == text_lower or (len(text_lower) >= 8 and (q_sec in text_lower or text_lower in q_sec)))) or (s_id and s_id == text_lower):
+                        matched_sec = sec
+                        break
+
+            if matched_sec:
+                response_text = matched_sec["content"]
+                rag_spoken_text = matched_sec.get("spoken_text") or response_text
+                action_taken = f"DIAGNOSIS_SECTION_ANSWERED_{matched_sec.get('id', '').upper()}"
+            else:
+                rag_res = await rag_engine.ask_async(
+                    question=clean_text,
+                    crop_name=state.crop_name,
+                )
+                state.last_rag_result = rag_res.to_dict()
+                response_text = rag_res.answer
+                rag_spoken_text = rag_res.spoken_text
+                action_taken = "DIAGNOSIS_RAG_ANSWERED"
+
+            state.state = DialogState.ADVISORY
+            state.current_activity = None
+            state.bridge_activity = None
+            state.bridge_slots = {}
+            state.add_turn(role="assistant", text=response_text)
+
+            audio_result_path = None
+            if enable_tts and response_text:
+                tts_text = rag_spoken_text or build_tts_spoken_text(response_text)
+                audio_result_path = self._generate_tts_audio(tts_text, tts_output_path)
+                if audio_result_path:
+                    state.register_tts_audio(audio_result_path)
+
+            return {
+                "status": "success",
+                "session_id": session_id,
+                "dialog_state": DialogState.ADVISORY.value,
+                "current_activity": None,
+                "action_taken": action_taken,
+                "response_text": response_text,
+                "accumulated_slots": {},
+                "missing_slots": [],
+                "analysis": None,
+                "audio_file": audio_result_path,
+                "suggested_actions": [],
             }
 
         # ---------------------------------------------------------------------
@@ -945,6 +1008,49 @@ class ConversationManager:
                         )
                         action_taken = "BANNED_PESTICIDE_BLOCKED"
                     else:
+                        # Nếu người dùng đã nói câu nhiều thông tin (>= 2 trường trích xuất hoặc >= 7 từ)
+                        # hoặc đã trả lời 1 lượt hỏi bổ sung (đang ở CLARIFYING), tự động điền giá trị mặc định
+                        # cho các trường còn khuyết để chuyển thẳng sang CONFIRMING, không hỏi đi hỏi lại.
+                        was_clarifying = (state.state == DialogState.CLARIFYING)
+                        word_count = len(clean_text.split())
+                        user_slot_count = len([
+                            k for k, v in state.accumulated_slots.items()
+                            if v is not None and str(v).strip() not in ("", "null", "None")
+                            and k not in ("activity_date", "purchase_date", "treatment_date", "crop_name", "pesticide_id", "fertilizer_id", "waste_type", "material_type")
+                        ])
+                        is_rich_utterance = (user_slot_count >= 2) or (word_count >= 7 and user_slot_count >= 1)
+
+                        if was_clarifying or is_rich_utterance:
+                            act_now = state.current_activity
+                            s_now = state.accumulated_slots
+                            if act_now == "spray":
+                                if s_now.get("ten_thuoc_bvtv") and not s_now.get("nong_do_va_luong_dung"):
+                                    s_now["nong_do_va_luong_dung"] = s_now.pop("_catalog_dosage", None) or "Theo liều khuyến cáo bao bì"
+                                elif was_clarifying and not s_now.get("ten_thuoc_bvtv"):
+                                    s_now["ten_thuoc_bvtv"] = "Thuốc BVTV"
+                                    if not s_now.get("nong_do_va_luong_dung"):
+                                        s_now["nong_do_va_luong_dung"] = "Theo liều khuyến cáo bao bì"
+                            elif act_now == "fertilize":
+                                if s_now.get("ten_phan_bon") and not s_now.get("luong_phan_bon"):
+                                    s_now["luong_phan_bon"] = "Theo quy trình canh tác"
+                                elif was_clarifying and not s_now.get("ten_phan_bon"):
+                                    s_now["ten_phan_bon"] = "Phân bón nông nghiệp"
+                                    if not s_now.get("luong_phan_bon"):
+                                        s_now["luong_phan_bon"] = "Theo quy trình canh tác"
+                            elif act_now == "purchase":
+                                if s_now.get("material_name") and not s_now.get("quantity"):
+                                    s_now["quantity"] = 1
+                                    if not s_now.get("unit"):
+                                        s_now["unit"] = "đơn vị"
+                            elif act_now == "harvest" and not s_now.get("san_luong_thu_hoach"):
+                                s_now["san_luong_thu_hoach"] = "Theo thực tế"
+                            elif act_now == "sale" and not s_now.get("khoi_luong_tieu_thu"):
+                                s_now["khoi_luong_tieu_thu"] = "Theo thực tế"
+                            elif act_now == "observation" and not s_now.get("sinh_vat_gay_hai"):
+                                s_now["sinh_vat_gay_hai"] = "Sâu bệnh hại trên vườn"
+                            elif act_now == "general" and not s_now.get("cong_viec"):
+                                s_now["cong_viec"] = clean_text
+
                         # Kiểm tra các trường bắt buộc còn thiếu bằng Template
                         missing = check_missing_fields(state.current_activity, state.accumulated_slots)
                         state.missing_slots = missing
@@ -1159,12 +1265,13 @@ class ConversationManager:
         farmer_id: Optional[int] = 1,
         season_id: Optional[int] = None,
         enable_tts: bool = False,
+        flow_mode: str = "diary",
+        photo_url: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
         Tiếp nhận ảnh từ người dùng:
-        1. Phân tích qua VLM Engine (Gemini 3.1 Flash Lite) và luôn trả lời thông tin kỹ thuật trong ảnh.
-        2. Nếu đang ghi nhật ký: Tự động cập nhật dữ liệu từ ảnh vào nhật ký đang ghi -> tiếp tục hỏi thiếu hoặc xin lưu.
-        3. Nếu chưa ghi nhật ký: Trả lời thông tin trong ảnh + hỏi có muốn ghi nhật ký dựa trên ảnh không -> tiếp tục hội thoại.
+        - flow_mode == "diagnosis": Phân tích sâu bệnh / vật tư qua VLM và trả lời tư vấn chuyên sâu, không ép ghi nhật ký.
+        - flow_mode == "diary": Trích xuất thông tin vật tư / công việc từ ảnh và đưa thẳng vào luồng điền / xác nhận nhật ký.
         """
         if not os.path.exists(image_path):
             return {
@@ -1189,13 +1296,16 @@ class ConversationManager:
                 logger.debug("Không lấy được crop_name từ DB: %s", _e_crop)
 
         state.last_image_path = image_path
-        state.add_turn(role="user", text=f"[Gửi ảnh: {os.path.basename(image_path)}]", image_path=image_path)
+        web_photo_url = photo_url or (f"/uploads/{os.path.basename(image_path)}" if "/uploads/" in image_path else f"/static/photos/{os.path.basename(image_path)}")
+        state.last_photo_url = web_photo_url
+        state.accumulated_slots["photo_url"] = web_photo_url
+        state.add_turn(role="user", text=f"[Gửi ảnh: {os.path.basename(image_path)}]", image_path=web_photo_url)
 
         # Phân tích ảnh qua VLM Engine — truyền tên giống cây từ phiên hội thoại
         try:
             analysis = await vlm_engine.analyze_image(
                 image_path,
-                crop_name=state.crop_name or "Bưởi",
+                crop_name=state.crop_name or "Bưởi diễn",
             )
             analysis_dict = analysis.to_dict()
             state.last_image_analysis = analysis_dict
@@ -1208,12 +1318,17 @@ class ConversationManager:
                 "dialog_state": state.state.value,
             }
 
-        # Kiểm tra xem có ĐANG TRONG TIẾN TRÌNH GHI NHẬT KÝ không
-        is_in_diary = state.state in (DialogState.COLLECTING, DialogState.CLARIFYING, DialogState.CONFIRMING) and bool(state.current_activity)
+        is_diagnosis_mode = str(flow_mode or "").lower() == "diagnosis"
+        is_in_diary = (not is_diagnosis_mode) and (
+            (state.state in (DialogState.COLLECTING, DialogState.CLARIFYING, DialogState.CONFIRMING) and bool(state.current_activity))
+            or str(flow_mode or "").lower() == "diary"
+        )
 
-        # Luôn tạo nội dung trả lời thông tin trong ảnh (kèm nút ghi nhật ký theo yêu cầu)
-        advisory_info = build_advisory_response(analysis_dict, prompt_for_diary=(not is_in_diary))
-        lead_info, sections = build_lead_and_sections(analysis_dict, prompt_for_diary=(not is_in_diary))
+        # Tạo nội dung thông tin ảnh (không kèm câu hỏi ghi nhật ký vì đã tách 2 luồng riêng)
+        advisory_info = build_advisory_response(analysis_dict, prompt_for_diary=False)
+        lead_info, sections = build_lead_and_sections(analysis_dict, prompt_for_diary=False)
+        if is_diagnosis_mode:
+            sections = [s for s in (sections or []) if not s.get("is_action") and s.get("id") != "diary"]
         analysis_dict["lead_info"] = lead_info
         analysis_dict["sections"] = sections
         state.last_image_analysis = analysis_dict
@@ -1225,6 +1340,7 @@ class ConversationManager:
         response_text = ""
         action_taken = ""
         clarifying_q = ""
+        missing = []
 
         if is_banned_image:
             # Thuốc cấm: TUYỆT ĐỐI KHÔNG ghi nhật ký, xóa slot và chuyển về ADVISORY để cảnh báo
@@ -1235,14 +1351,36 @@ class ConversationManager:
             response_text = advisory_info
             action_taken = "BANNED_PESTICIDE_IMAGE_ALERT"
 
-        elif is_in_diary:
+        elif is_diagnosis_mode:
             # -----------------------------------------------------------------
-            # HƯỚNG 1: ĐANG GHI NHẬT KÝ -> Đắp dữ liệu ảnh vào nhật ký & hỏi tiếp hoặc lưu
+            # LUỒNG CHẨN ĐOÁN SÂU BỆNH & TƯ VẤN KỸ THUẬT: Chỉ trả lời chẩn đoán & tư vấn
             # -----------------------------------------------------------------
-            target_act, img_slots = self._extract_slots_from_image(analysis_dict, state.current_activity, crop_name=state.crop_name)
+            state.accumulated_slots = {}
+            state.missing_slots = []
+            state.current_activity = None
+            state.bridge_activity = None
+            state.bridge_slots = {}
+            state.state = DialogState.ADVISORY
+            response_text = advisory_info
+            action_taken = "DIAGNOSIS_IMAGE_ANALYZED"
+
+        else:
+            # -----------------------------------------------------------------
+            # LUỒNG GHI NHẬT KÝ: Trích xuất thông tin từ ảnh vào phiếu nhật ký ngay
+            # -----------------------------------------------------------------
+            target_act, img_slots = self._extract_slots_from_image(
+                analysis_dict,
+                state.current_activity,
+                crop_name=state.crop_name,
+            )
             state.current_activity = target_act
             img_slots = canonicalize_slots(img_slots, state.current_activity)
             state.update_slots(img_slots)
+            if not state.accumulated_slots.get("crop_name"):
+                state.accumulated_slots["crop_name"] = state.crop_name or "Bưởi diễn"
+            if not state.accumulated_slots.get("activity_date"):
+                state.accumulated_slots["activity_date"] = date.today().isoformat()
+
             self._match_materials_in_slots(state)
             state.accumulated_slots = canonicalize_slots(state.accumulated_slots, state.current_activity)
 
@@ -1251,39 +1389,19 @@ class ConversationManager:
 
             act_display = TASK_NAME_DISPLAY.get(state.current_activity, state.current_activity)
             diary_status_header = (
-                f"\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                f"📝 **Em đã tự động cập nhật thông tin từ ảnh vào nhật ký {act_display} đang ghi.**\n"
+                f"📝 **Em đã nhận diện ảnh và điền thông tin vào phiếu nhật ký {act_display}:**\n\n"
             )
 
             if missing:
                 state.state = DialogState.CLARIFYING
                 clarifying_q = build_clarification_question(state.current_activity, state.accumulated_slots, missing)
-                response_text = f"{advisory_info}{diary_status_header}{clarifying_q}"
+                response_text = f"{diary_status_header}{clarifying_q}"
                 action_taken = "DIARY_UPDATED_FROM_IMAGE_CLARIFYING"
             else:
                 state.state = DialogState.CONFIRMING
                 confirm_msg = build_confirmation_message(state.current_activity, state.accumulated_slots)
-                response_text = f"{advisory_info}{diary_status_header}{confirm_msg}"
+                response_text = f"{diary_status_header}{confirm_msg}"
                 action_taken = "DIARY_UPDATED_FROM_IMAGE_CONFIRMING"
-
-        else:
-            # -----------------------------------------------------------------
-            # HƯỚNG 2: CHƯA GHI NHẬT KÝ -> Trả lời thông tin trong ảnh + kèm nút ghi nhật ký
-            # -----------------------------------------------------------------
-            # Chuẩn bị sẵn hoạt động và slots từ ảnh để nếu người dùng bấm nút ghi sổ thì tiếp tục ngay
-            suggested_act, pre_slots = self._extract_slots_from_image(analysis_dict, crop_name=state.crop_name)
-            pre_slots = canonicalize_slots(pre_slots, suggested_act)
-            state.bridge_activity = suggested_act
-            state.bridge_slots = pre_slots
-            state.current_activity = suggested_act
-            state.accumulated_slots = pre_slots
-            self._match_materials_in_slots(state)
-            state.accumulated_slots = canonicalize_slots(state.accumulated_slots, state.current_activity)
-
-            # Chuyển sang trạng thái ADVISORY (Chờ người dùng hỏi thêm hoặc bấm ghi sổ)
-            state.state = DialogState.ADVISORY
-            response_text = advisory_info
-            action_taken = "ADVISORY_WITH_DIARY_PROMPT"
 
         state.add_turn(role="assistant", text=response_text)
 
@@ -1292,7 +1410,7 @@ class ConversationManager:
             tts_text = build_tts_spoken_text(
                 response_text,
                 analysis_dict=analysis_dict,
-                dialog_state="ADVISORY" if not is_in_diary else state.state.value,
+                dialog_state="ADVISORY" if (is_diagnosis_mode or is_banned_image) else state.state.value,
                 activity_type=state.current_activity,
                 slots=state.accumulated_slots,
             )
@@ -1309,7 +1427,7 @@ class ConversationManager:
             "title": analysis_dict.get("title"),
             "action_taken": action_taken,
             "response_text": response_text,
-            "clarifying_question": clarifying_q if is_in_diary and missing else None,
+            "clarifying_question": clarifying_q if (not is_diagnosis_mode and missing) else None,
             "lead_info": lead_info,
             "sections": sections,
             "analysis": analysis_dict,
@@ -1329,6 +1447,7 @@ class ConversationManager:
         farmer_id: Optional[int] = 1,
         season_id: Optional[int] = None,
         enable_tts: bool = False,
+        flow_mode: str = "diary",
     ) -> Dict[str, Any]:
         """
         Tiếp nhận file ghi âm từ người dùng:
@@ -1344,13 +1463,20 @@ class ConversationManager:
                 "dialog_state": DialogState.IDLE.value,
             }
 
-        os.makedirs(config.TMP_DIR, exist_ok=True)
-        converted_wav = os.path.join(config.TMP_DIR, f"conv_{int(time.time()*1000)}_16k.wav")
+        audio_storage_dir = getattr(config, "AUDIO_STORAGE_DIR", "/mnt/data/audio")
+        os.makedirs(audio_storage_dir, exist_ok=True)
+        wav_filename = f"conv_{int(time.time()*1000)}.wav"
+        converted_wav = os.path.join(audio_storage_dir, wav_filename)
 
         try:
             await resample_to_16k_mono_pcm16(audio_path, converted_wav)
             transcript = await stt_engine.transcribe(converted_wav)
             if not transcript or not transcript.strip():
+                if os.path.exists(converted_wav):
+                    try:
+                        os.remove(converted_wav)
+                    except OSError:
+                        pass
                 return {
                     "status": "warning",
                     "message": "Không nhận diện được giọng nói trong bản ghi.",
@@ -1358,15 +1484,19 @@ class ConversationManager:
                     "dialog_state": DialogState.IDLE.value,
                 }
 
-            logger.info("🎙️ [STT Thành công]: '%s'", transcript)
+            audio_web_url = f"/static/audio/{wav_filename}"
+            logger.info("🎙️ [STT Thành công]: '%s' (saved: %s)", transcript, audio_web_url)
             res = await self.handle_text(
                 session_id=session_id,
                 user_text=transcript,
                 farmer_id=farmer_id,
                 season_id=season_id,
                 enable_tts=enable_tts,
+                flow_mode=flow_mode,
+                audio_url=audio_web_url,
             )
             res["stt_transcript"] = transcript
+            res["audio_url"] = audio_web_url
             return res
 
         except Exception as e:
@@ -1377,12 +1507,6 @@ class ConversationManager:
                 "response_text": "Có lỗi khi chuyển giọng nói thành văn bản. Bác thử lại nhé!",
                 "dialog_state": DialogState.IDLE.value,
             }
-        finally:
-            if os.path.exists(converted_wav):
-                try:
-                    os.remove(converted_wav)
-                except OSError:
-                    pass
 
     # =========================================================================
     # 4. KHỚP DANH MỤC & LƯU CSDL
@@ -1413,6 +1537,15 @@ class ConversationManager:
                             slots["pesticide_id"] = match_res.item_id
                             if match_res.min_isolation_days and not slots.get("thoi_gian_cach_ly"):
                                 slots["thoi_gian_cach_ly"] = match_res.min_isolation_days
+                            rag_k = match_res.rag_knowledge if isinstance(match_res.rag_knowledge, dict) else {}
+                            if not slots.get("target_pest"):
+                                cat_pest = rag_k.get("doi_tuong_phong_tru") or rag_k.get("cong_dung")
+                                if cat_pest:
+                                    slots["target_pest"] = str(cat_pest).split(".")[0].strip()
+                            if not slots.get("nong_do_va_luong_dung"):
+                                cat_dose = rag_k.get("lieu_luong_nong_do") or match_res.max_concentration
+                                if cat_dose:
+                                    slots["_catalog_dosage"] = str(cat_dose).split(".")[0].strip()
             except Exception as e:
                 logger.debug("Khớp danh mục thuốc không thành công: %s", e)
 
@@ -1486,11 +1619,20 @@ class ConversationManager:
         dialogue_history = [t.to_dict() for t in state.history]
         raw_user_text = " ".join([t.text for t in state.history if t.role == "user"])
 
+        commit_photo_url = target_slots.get("photo_url") or state.last_photo_url or ""
+        if not commit_photo_url and state.last_image_path:
+            if "/uploads/" in state.last_image_path:
+                commit_photo_url = f"/uploads/{os.path.basename(state.last_image_path)}"
+            else:
+                commit_photo_url = f"/static/photos/{os.path.basename(state.last_image_path)}"
+        commit_audio_url = target_slots.get("audio_url") or state.last_audio_url or ""
+
         payload = {
             "tables": {target_act: target_slots},
             "task_types": [target_act],
             "raw_text": raw_user_text,
-            "photo_url": state.last_image_path or "",
+            "photo_url": commit_photo_url,
+            "audio_url": commit_audio_url,
             "dialogue_history": dialogue_history,
             "session_id": state.session_id,
             "crop_name": target_slots.get("crop_name"),
@@ -1526,7 +1668,8 @@ class ConversationManager:
                     farmer_id=state.farmer_id,
                     data=payload,
                     raw_text=payload["raw_text"],
-                    photo_url=payload["photo_url"],
+                    audio_url=commit_audio_url,
+                    photo_url=commit_photo_url,
                     time_process=1.0,
                     llm_meta={
                         "engine": "gemini_conversation",

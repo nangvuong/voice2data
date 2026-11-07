@@ -261,7 +261,7 @@ def get_default_season_id(conn, user_id: Optional[Any] = None) -> int:
                 JOIN plots p ON cs.plot_id = p.plot_id
                 JOIN farm f ON p.farm_id = f.farm_id
                 WHERE f.owner_user_id = %s
-                ORDER BY cs.created_at DESC LIMIT 1;
+                ORDER BY cs.season_id ASC LIMIT 1;
                 """,
                 (user_id,),
             )
@@ -284,7 +284,7 @@ def get_default_season_id(conn, user_id: Optional[Any] = None) -> int:
             cur.execute(
                 """
                 INSERT INTO farm (owner_user_id, name, farm_code, address, certification_body)
-                VALUES (%s, 'Nông trại VietGAP Mẫu', 'VN-GAP-001', 'Đồng Nai', 'Chi cục Trồng trọt & BVTV');
+                VALUES (%s, 'HỢP TÁC XÃ ĐẠI ĐỒNG', 'VN-HBOR-0033', 'Xóm Độc Lập - Xã Thịnh Minh - Tỉnh Phú Thọ', 'VietGAP Trồng trọt');
                 """,
                 (u_id,),
             )
@@ -297,8 +297,8 @@ def get_default_season_id(conn, user_id: Optional[Any] = None) -> int:
         if not p_row:
             cur.execute(
                 """
-                INSERT INTO plots (farm_id, name, plot_code, crop_name, area_size, area_unit)
-                VALUES (%s, 'Lô A1 - Vườn chính', 'PLOT-A1', 'Sầu riêng Ri6', 10000.0, 'm2');
+                INSERT INTO plots (farm_id, name, plot_code, crop_name, variety, area_size, area_unit)
+                VALUES (%s, 'Lô 1 — Vườn Bưởi diễn Trung tâm', 'VN-HBOR-0033-L01', 'Bưởi diễn', 'Bưởi', 30000.0, 'm2');
                 """,
                 (farm_id,),
             )
@@ -308,8 +308,8 @@ def get_default_season_id(conn, user_id: Optional[Any] = None) -> int:
 
         cur.execute(
             """
-            INSERT INTO crop_seasons (plot_id, season_name, crop_name, start_date, expected_yield, yield_unit)
-            VALUES (%s, 'Vụ mùa VietGAP 2026', 'Sầu riêng Ri6', CURRENT_DATE(), 10000.0, 'kg');
+            INSERT INTO crop_seasons (plot_id, season_name, crop_name, variety, start_date, expected_yield, yield_unit)
+            VALUES (%s, 'Vụ mùa Bưởi diễn 2026', 'Bưởi diễn', 'Bưởi', CURRENT_DATE(), 100.0, 'tấn/năm');
             """,
             (plot_id,),
         )
@@ -338,7 +338,7 @@ def init_db_and_seed():
                 """
                 INSERT INTO users (username, password, full_name, phone, role)
                 VALUES 
-                ('nongdan1', %s, 'Nguyễn Văn Nông', '0912345678', 'WORKER'),
+                ('nongdan1', %s, 'Vũ Xuân Anh', '0912345678', 'WORKER'),
                 ('admin', %s, 'Quản trị viên Hệ thống', '0909999888', 'ADMIN')
                 ON DUPLICATE KEY UPDATE full_name=VALUES(full_name);
                 """,
@@ -353,7 +353,7 @@ def init_db_and_seed():
             cur.execute(
                 """
                 INSERT INTO farm (owner_user_id, name, farm_code, address, phone, certification_body, certification_no, certification_date, certification_expiry, target_market)
-                VALUES (%s, 'HỢP TÁC XÃ ĐẠI ĐỒNG', 'VN-HBOR-0033', 'Xóm Độc Lập - Xã Thịnh Minh - Tỉnh Phú Thọ', '0912345678', 'VietGAP Trồng trọt', 'VietGAP-HBOR-0033', '2025-01-01', '2027-12-31', 'Các doanh nghiệp chế biến dược liệu, thương lái trong nước')
+                VALUES (%s, 'HỢP TÁC XÃ ĐẠI ĐỒNG', 'VN-HBOR-0033', 'Xóm Độc Lập - Xã Thịnh Minh - Tỉnh Phú Thọ', '0912345678', 'VietGAP Trồng trọt', 'VietGAP-HBOR-0033', '2025-01-01', '2027-12-31', 'Thị trường hoa quả tươi, siêu thị và thương lái trong nước')
                 ON DUPLICATE KEY UPDATE name=VALUES(name);
                 """,
                 (user1_id,),
@@ -367,13 +367,13 @@ def init_db_and_seed():
                 """
                 INSERT INTO plots (farm_id, name, plot_code, crop_name, variety, area_size, area_unit, soil_type, water_source, land_use_history)
                 VALUES 
-                (%s, 'Vườn Cà gai leo Thịnh Minh', 'VN-HBOR-0033-P01', 'Cà gai leo', 'Cà gai leo', 70000.0, 'm2', 'Đất đồi trung du', 'Nguồn nước tự nhiên / Giếng khoan', 'Vườn tại Xã Thịnh Minh, Phú Thọ - Tiêu chuẩn VietGAP Trồng trọt'),
-                (%s, 'Lô B2 - Dược liệu mở rộng', 'PLOT-B2', 'Cà gai leo', 'Cà gai leo', 10000.0, 'm2', 'Đất đồi trung du', 'Hồ chứa nước mưa', 'Quy hoạch mở rộng vùng trồng')
+                (%s, 'Lô 1 — Vườn Bưởi diễn Trung tâm', 'VN-HBOR-0033-L01', 'Bưởi diễn', 'Bưởi', 30000.0, 'm2', 'Đất đồi trung du', 'Nguồn nước tự nhiên / Giếng khoan', 'Vườn chuyên canh Bưởi diễn VietGAP tại Xã Thịnh Minh'),
+                (%s, 'Lô 2 — Vườn Bưởi diễn Bãi Sông Đà', 'VN-HBOR-0033-L02', 'Bưởi diễn', 'Bưởi', 25000.0, 'm2', 'Đất phù sa ven sông', 'Nước sông Đà / Tự nhiên', 'Vườn canh tác Bưởi diễn VietGAP ven sông')
                 ON DUPLICATE KEY UPDATE name=VALUES(name);
                 """,
                 (farm_id, farm_id),
             )
-            cur.execute("SELECT plot_id FROM plots WHERE plot_code = 'VN-HBOR-0033-P01' LIMIT 1;")
+            cur.execute("SELECT plot_id FROM plots WHERE plot_code = 'VN-HBOR-0033-L01' LIMIT 1;")
             p_row = cur.fetchone()
             plot_id = p_row["plot_id"] if p_row else 1
 
@@ -381,7 +381,7 @@ def init_db_and_seed():
             cur.execute(
                 """
                 INSERT INTO crop_seasons (plot_id, season_name, crop_name, variety, seed_source, start_date, expected_harvest_date, actual_end_date, expected_yield, actual_yield, yield_unit, target_market)
-                VALUES (%s, 'Vụ mùa Cà gai leo 2025', 'Cà gai leo', 'Cà gai leo', 'Vườn ươm giống Cà gai leo đạt chuẩn', '2025-04-01', '2025-10-31', '2025-10-31', 100.0, 84.0, 'tấn/năm', 'Các doanh nghiệp chế biến dược liệu, thương lái trong nước')
+                VALUES (%s, 'Vụ mùa Bưởi diễn 2026', 'Bưởi diễn', 'Bưởi', 'Vườn ươm giống Bưởi đạt chuẩn VietGAP', '2026-01-01', '2026-11-30', '2026-11-30', 100.0, 84.0, 'tấn/năm', 'Thị trường hoa quả tươi, siêu thị và thương lái trong nước')
                 ON DUPLICATE KEY UPDATE season_name=VALUES(season_name);
                 """,
                 (plot_id,),
@@ -686,11 +686,45 @@ def get_farmer_by_id(user_id: Any) -> Optional[Dict[str, Any]]:
 
 GROWTH_STAGES = [
     "Sau thu hoạch",
+    "Sinh trưởng",
     "Ra hoa",
     "Quả non",
-    "Sinh trưởng",
     "Thu hoạch",
 ]
+
+GROWTH_STAGE_ORDER = {stage: idx for idx, stage in enumerate(GROWTH_STAGES)}
+
+
+def infer_pomelo_stage_from_date(date_val: Any, fallback: Optional[str] = None) -> str:
+    """
+    Suy luận giai đoạn sinh trưởng của cây Bưởi diễn theo tháng thực hiện trong năm
+    nếu bản ghi độc lập (như Mua vật tư, Xử lý bao bì, Tiêu thụ) không lưu trực tiếp cột growth_stage.
+    Trình tự sinh học chuẩn của cây Bưởi diễn:
+      1. Sau thu hoạch (Tháng 1): Vệ sinh vườn, cắt tỉa cành, bón phân hữu cơ phục hồi.
+      2. Sinh trưởng (Tháng 2): Bật mầm lộc xuân, phát triển cành lá, phòng sâu vẽ bùa.
+      3. Ra hoa (Tháng 3 - 4): Phân hóa mầm hoa, bung hoa, thụ phấn, đậu tượng quả.
+      4. Quả non (Tháng 5 - 9): Tuyển quả, bao trái, bón thúc nuôi quả lớn và vào đường.
+      5. Thu hoạch (Tháng 10 - 12): Kiểm tra độ chín, thu hoạch và tiêu thụ bưởi thương phẩm.
+    """
+    if fallback and str(fallback).strip() in GROWTH_STAGE_ORDER:
+        return str(fallback).strip()
+    d_str = _parse_date(date_val)
+    if d_str:
+        try:
+            month = int(d_str.split("-")[1])
+            if month == 1:
+                return "Sau thu hoạch"
+            elif month == 2:
+                return "Sinh trưởng"
+            elif month in (3, 4):
+                return "Ra hoa"
+            elif 5 <= month <= 9:
+                return "Quả non"
+            else:
+                return "Thu hoạch"
+        except Exception:
+            pass
+    return fallback or "Sinh trưởng"
 
 
 def detect_growth_stage_from_text(text: Optional[str]) -> Optional[str]:
@@ -822,9 +856,51 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
         "diary_pests": [],
     }
 
+    def _extract_media_from_note(note_text: Optional[str]):
+        if not note_text:
+            return "", "", ""
+        raw_n = str(note_text)
+        p_url = ""
+        a_url = ""
+        m_p = re.search(r"Ảnh(?:\s*chứng\s*từ)?:\s*(\S+)", raw_n, flags=re.IGNORECASE)
+        if m_p:
+            p_url = m_p.group(1).rstrip(";,")
+        m_a = re.search(r"Ghi\s*âm:\s*(\S+)", raw_n, flags=re.IGNORECASE)
+        if m_a:
+            a_url = m_a.group(1).rstrip(";,")
+        clean_n = re.sub(r"[;\s]*Ảnh(?:\s*chứng\s*từ)?:\s*\S+", "", raw_n, flags=re.IGNORECASE)
+        clean_n = re.sub(r"[;\s]*Ghi\s*âm:\s*\S+", "", clean_n, flags=re.IGNORECASE).strip(" ;")
+        return clean_n, p_url, a_url
+
     try:
         conn = get_db_connection()
         with conn.cursor() as cur:
+            photo_map: Dict[int, str] = {}
+            voice_map: Dict[int, Any] = {}
+            try:
+                cur.execute("SELECT activity_id, photo_url FROM activity_photos ORDER BY photo_id ASC;")
+                for pr in cur.fetchall():
+                    if pr.get("activity_id") and pr.get("photo_url"):
+                        p_val = str(pr["photo_url"]).strip()
+                        if p_val and not p_val.startswith("/") and not p_val.startswith("http"):
+                            p_val = f"/uploads/{os.path.basename(p_val)}" if "uploads" in p_val else f"/static/photos/{os.path.basename(p_val)}"
+                        elif p_val.startswith("/root/"):
+                            p_val = f"/uploads/{os.path.basename(p_val)}" if "/uploads/" in p_val else f"/static/photos/{os.path.basename(p_val)}"
+                        photo_map[int(pr["activity_id"])] = p_val
+            except Exception as _ep:
+                logger.debug("Không đọc được activity_photos: %s", _ep)
+
+            try:
+                cur.execute("SELECT activity_id, audio_url, stt_text FROM activity_voice_records ORDER BY voice_id ASC;")
+                for vr in cur.fetchall():
+                    if vr.get("activity_id"):
+                        voice_map[int(vr["activity_id"])] = (
+                            vr.get("audio_url") or "",
+                            vr.get("stt_text") or "",
+                        )
+            except Exception as _ev:
+                logger.debug("Không đọc được activity_voice_records: %s", _ev)
+
             # 1. BẢNG 1.5: MUA VẬT TƯ (input_purchases)
             cur.execute(
                 """
@@ -858,12 +934,18 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
             for r in cur.fetchall():
                 p_qty = float(r["quantity"]) if r["quantity"] is not None else None
                 q_str = f"{int(p_qty) if p_qty and p_qty.is_integer() else p_qty} {r.get('unit') or ''}".strip()
+                p_date_str = str(r["purchase_date"]) if r["purchase_date"] else ""
+                p_stage = infer_pomelo_stage_from_date(p_date_str)
+                clean_note, note_photo_url, note_audio_url = _extract_media_from_note(r.get("note"))
                 item = {
                     "id": r["purchase_id"],
                     "purchase_id": r["purchase_id"],
                     "table": "input_purchases",
-                    "ngay_thuc_hien": str(r["purchase_date"]) if r["purchase_date"] else "",
-                    "purchase_date": str(r["purchase_date"]) if r["purchase_date"] else "",
+                    "ngay_thuc_hien": p_date_str,
+                    "purchase_date": p_date_str,
+                    "activity_time": "08:00:00",
+                    "growth_stage": p_stage,
+                    "giai_doan": p_stage,
                     "ten_vat_tu": r.get("material_name"),
                     "material_name": r.get("material_name"),
                     "material_type": r.get("item_type"),
@@ -877,7 +959,9 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
                     "han_su_dung": str(r["expiry_date"]) if r["expiry_date"] else "",
                     "expiry_date": str(r["expiry_date"]) if r["expiry_date"] else "",
                     "invoice_no": r.get("invoice_no"),
-                    "note": r.get("note"),
+                    "note": clean_note,
+                    "photo_url": note_photo_url,
+                    "audio_url": note_audio_url,
                     "season_name": r.get("season_name"),
                     "created_at": r["created_at"].isoformat() if r.get("created_at") else "",
                 }
@@ -898,6 +982,8 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
                     ca.description,
                     ca.performed_by,
                     ca.created_at,
+                    pl.plot_code,
+                    pl.name AS plot_name,
                     p.name AS pesticide_name,
                     s.name AS supplier_name,
                     pa.dose_quantity,
@@ -913,6 +999,7 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
                     vr.stt_text
                 FROM pesticide_applications pa
                 JOIN cultivation_activities ca ON pa.activity_id = ca.activity_id
+                LEFT JOIN plots pl ON ca.plot_id = pl.plot_id
                 JOIN pesticides p ON pa.pesticide_id = p.pesticide_id
                 LEFT JOIN suppliers s ON pa.supplier_id = s.supplier_id
                 LEFT JOIN activity_voice_records vr ON ca.activity_id = vr.activity_id
@@ -933,13 +1020,15 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
                     c_str = f"{cv_fmt} {r.get('concentration_unit') or '%'}"
                     dose_str = f"{dose_str} (Nồng độ: {c_str})".strip() if dose_str else c_str
 
+                act_date_str = str(r["activity_date"]) if r["activity_date"] else ""
+                p_stage = infer_pomelo_stage_from_date(act_date_str, r.get("growth_stage"))
                 item_pest = {
                     "id": r["activity_id"],
                     "application_id": r["application_id"],
                     "activity_id": r["activity_id"],
                     "table": "pesticide_applications",
-                    "ngay_thuc_hien": str(r["activity_date"]) if r["activity_date"] else "",
-                    "activity_date": str(r["activity_date"]) if r["activity_date"] else "",
+                    "ngay_thuc_hien": act_date_str,
+                    "activity_date": act_date_str,
                     "activity_time": str(r["activity_time"]) if r["activity_time"] else "",
                     "ten_thuoc_bvtv": r.get("pesticide_name"),
                     "pesticide_name": r.get("pesticide_name"),
@@ -957,14 +1046,18 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
                     "thoi_gian_cach_ly": f"{r['isolation_days']} ngày" if r.get("isolation_days") is not None else "",
                     "isolation_days": r.get("isolation_days"),
                     "safe_harvest_date": str(r["safe_harvest_date"]) if r.get("safe_harvest_date") else "",
-                    "growth_stage": r.get("growth_stage"),
-                    "giai_doan": r.get("growth_stage"),
+                    "growth_stage": p_stage,
+                    "giai_doan": p_stage,
+                    "description": r.get("description"),
+                    "plot_code": r.get("plot_code"),
+                    "plot_name": r.get("plot_name"),
                     "weather_condition": r.get("weather_condition"),
                     "performed_by": r.get("performed_by"),
                     "supplier_name": r.get("supplier_name"),
                     "note": r.get("note"),
-                    "raw_text": r.get("stt_text") or "",
-                    "audio_url": r.get("audio_url") or "",
+                    "raw_text": r.get("stt_text") or voice_map.get(r["activity_id"], ("", ""))[1],
+                    "audio_url": r.get("audio_url") or voice_map.get(r["activity_id"], ("", ""))[0],
+                    "photo_url": photo_map.get(r["activity_id"], ""),
                     "created_at": r["created_at"].isoformat() if r.get("created_at") else "",
                 }
                 tables_data["pesticide_applications"].append(item_pest)
@@ -984,6 +1077,8 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
                     ca.description,
                     ca.performed_by,
                     ca.created_at,
+                    pl.plot_code,
+                    pl.name AS plot_name,
                     f.name AS fertilizer_name,
                     s.name AS supplier_name,
                     fa.quantity,
@@ -994,6 +1089,7 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
                     vr.stt_text
                 FROM fertilizer_applications fa
                 JOIN cultivation_activities ca ON fa.activity_id = ca.activity_id
+                LEFT JOIN plots pl ON ca.plot_id = pl.plot_id
                 JOIN fertilizers f ON fa.fertilizer_id = f.fertilizer_id
                 LEFT JOIN suppliers s ON fa.supplier_id = s.supplier_id
                 LEFT JOIN activity_voice_records vr ON ca.activity_id = vr.activity_id
@@ -1005,13 +1101,15 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
             for r in cur.fetchall():
                 f_qty = float(r["quantity"]) if r["quantity"] is not None else None
                 q_fmt = f"{int(f_qty) if f_qty and f_qty.is_integer() else f_qty} {r.get('unit') or ''}".strip()
+                act_date_str = str(r["activity_date"]) if r["activity_date"] else ""
+                f_stage = infer_pomelo_stage_from_date(act_date_str, r.get("growth_stage"))
                 item_fert = {
                     "id": r["activity_id"],
                     "application_id": r["application_id"],
                     "activity_id": r["activity_id"],
                     "table": "fertilizer_applications",
-                    "ngay_thuc_hien": str(r["activity_date"]) if r["activity_date"] else "",
-                    "activity_date": str(r["activity_date"]) if r["activity_date"] else "",
+                    "ngay_thuc_hien": act_date_str,
+                    "activity_date": act_date_str,
                     "activity_time": str(r["activity_time"]) if r["activity_time"] else "",
                     "ten_phan_bon": r.get("fertilizer_name"),
                     "fertilizer_name": r.get("fertilizer_name"),
@@ -1022,23 +1120,28 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
                     "unit": r.get("unit"),
                     "phuong_phap_bon": r.get("application_method"),
                     "application_method": r.get("application_method"),
-                    "growth_stage": r.get("growth_stage"),
-                    "giai_doan": r.get("growth_stage"),
+                    "growth_stage": f_stage,
+                    "giai_doan": f_stage,
+                    "description": r.get("description"),
+                    "plot_code": r.get("plot_code"),
+                    "plot_name": r.get("plot_name"),
                     "weather_condition": r.get("weather_condition"),
                     "performed_by": r.get("performed_by"),
                     "supplier_name": r.get("supplier_name"),
                     "note": r.get("note"),
-                    "raw_text": r.get("stt_text") or "",
-                    "audio_url": r.get("audio_url") or "",
+                    "raw_text": r.get("stt_text") or voice_map.get(r["activity_id"], ("", ""))[1],
+                    "audio_url": r.get("audio_url") or voice_map.get(r["activity_id"], ("", ""))[0],
+                    "photo_url": photo_map.get(r["activity_id"], ""),
                     "created_at": r["created_at"].isoformat() if r.get("created_at") else "",
                 }
                 tables_data["fertilizer_applications"].append(item_fert)
                 tables_data["b1_6_material_usages"].append(item_fert)
                 tables_data["material_usages"].append(item_fert)
 
-            # Sắp xếp b1_6_material_usages theo ngày giảm dần
+            # Sắp xếp b1_6_material_usages theo ngày & giờ thực hiện giảm dần
             tables_data["b1_6_material_usages"].sort(
-                key=lambda x: x.get("ngay_thuc_hien") or x.get("created_at") or "", reverse=True
+                key=lambda x: (x.get("ngay_thuc_hien") or "", x.get("activity_time") or "", x.get("created_at") or ""),
+                reverse=True,
             )
 
             # 4. BẢNG THU HOẠCH (harvest_records JOIN cultivation_activities) - Bảng 1.8
@@ -1055,14 +1158,18 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
                     ca.activity_date,
                     ca.activity_time,
                     ca.growth_stage,
+                    ca.description,
                     ca.performed_by,
                     ca.created_at,
+                    pl.plot_code,
+                    pl.name AS plot_name,
                     cs.crop_name,
                     cs.variety,
                     vr.audio_url,
                     vr.stt_text
                 FROM harvest_records hr
                 JOIN cultivation_activities ca ON hr.activity_id = ca.activity_id
+                LEFT JOIN plots pl ON ca.plot_id = pl.plot_id
                 JOIN crop_seasons cs ON hr.season_id = cs.season_id
                 LEFT JOIN activity_voice_records vr ON ca.activity_id = vr.activity_id
                 ORDER BY ca.activity_date DESC, ca.activity_time DESC, ca.created_at DESC
@@ -1073,14 +1180,22 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
             for r in cur.fetchall():
                 h_qty = float(r["quantity"]) if r["quantity"] is not None else None
                 hq_fmt = f"{int(h_qty) if h_qty and h_qty.is_integer() else h_qty} {r.get('unit') or 'kg'}".strip()
+                act_date_str = str(r["activity_date"]) if r["activity_date"] else ""
+                h_stage = r.get("growth_stage") or "Thu hoạch"
                 item_h = {
                     "id": r["harvest_id"],
                     "harvest_id": r["harvest_id"],
                     "activity_id": r["activity_id"],
                     "table": "harvest_records",
-                    "ngay_thuc_hien": str(r["activity_date"]) if r["activity_date"] else "",
-                    "harvest_date": str(r["activity_date"]) if r["activity_date"] else "",
-                    "activity_date": str(r["activity_date"]) if r["activity_date"] else "",
+                    "ngay_thuc_hien": act_date_str,
+                    "harvest_date": act_date_str,
+                    "activity_date": act_date_str,
+                    "activity_time": str(r["activity_time"]) if r["activity_time"] else "",
+                    "growth_stage": h_stage,
+                    "giai_doan": h_stage,
+                    "description": r.get("description"),
+                    "plot_code": r.get("plot_code"),
+                    "plot_name": r.get("plot_name"),
                     "loai_nong_san": r.get("crop_name"),
                     "crop_name": r.get("crop_name"),
                     "variety": r.get("variety"),
@@ -1091,8 +1206,9 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
                     "processing_location": r.get("processing_location"),
                     "harvester_name": r.get("harvester_name") or r.get("performed_by"),
                     "note": r.get("note"),
-                    "raw_text": r.get("stt_text") or "",
-                    "audio_url": r.get("audio_url") or "",
+                    "raw_text": r.get("stt_text") or voice_map.get(r["activity_id"], ("", ""))[1],
+                    "audio_url": r.get("audio_url") or voice_map.get(r["activity_id"], ("", ""))[0],
+                    "photo_url": photo_map.get(r["activity_id"], ""),
                     "created_at": r["created_at"].isoformat() if r.get("created_at") else "",
                 }
                 tables_data["harvest_records"].append(item_h)
@@ -1127,14 +1243,18 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
             for r in cur.fetchall():
                 s_qty = float(r["quantity"]) if r["quantity"] is not None else None
                 sq_fmt = f"{int(s_qty) if s_qty and s_qty.is_integer() else s_qty} {r.get('unit') or 'kg'}".strip()
+                sale_date_str = str(r["sale_date"]) if r["sale_date"] else ""
                 item_s = {
                     "id": r["sale_id"],
                     "sale_id": r["sale_id"],
                     "harvest_id": r["harvest_id"],
                     "table": "sales_records",
-                    "ngay_thuc_hien": str(r["sale_date"]) if r["sale_date"] else "",
-                    "sale_date": str(r["sale_date"]) if r["sale_date"] else "",
-                    "thoi_gian_xuat_ban": str(r["sale_date"]) if r["sale_date"] else "",
+                    "ngay_thuc_hien": sale_date_str,
+                    "sale_date": sale_date_str,
+                    "thoi_gian_xuat_ban": sale_date_str,
+                    "activity_time": "09:00:00",
+                    "growth_stage": "Thu hoạch",
+                    "giai_doan": "Thu hoạch",
                     "loai_nong_san": r.get("crop_name"),
                     "crop_name": r.get("crop_name"),
                     "co_so_thu_mua": r.get("buyer_name"),
@@ -1176,13 +1296,19 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
             )
             for r in cur.fetchall():
                 w_qty = float(r["quantity"]) if r["quantity"] is not None else None
+                disp_date_str = str(r["disposal_date"]) if r["disposal_date"] else ""
+                w_stage = infer_pomelo_stage_from_date(disp_date_str)
+                clean_w_note, w_photo_url, w_audio_url = _extract_media_from_note(r.get("note"))
                 item_w = {
                     "id": r["disposal_id"],
                     "disposal_id": r["disposal_id"],
                     "table": "waste_disposals",
-                    "ngay_thuc_hien": str(r["disposal_date"]) if r["disposal_date"] else "",
-                    "treatment_date": str(r["disposal_date"]) if r["disposal_date"] else "",
-                    "disposal_date": str(r["disposal_date"]) if r["disposal_date"] else "",
+                    "ngay_thuc_hien": disp_date_str,
+                    "treatment_date": disp_date_str,
+                    "disposal_date": disp_date_str,
+                    "activity_time": "10:00:00",
+                    "growth_stage": w_stage,
+                    "giai_doan": w_stage,
                     "loai_bao_bi_thuoc_du": r.get("waste_type"),
                     "waste_type": r.get("waste_type"),
                     "quantity": w_qty,
@@ -1191,18 +1317,21 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
                     "storage_location": r.get("storage_location"),
                     "cach_xu_ly": r.get("treatment_method"),
                     "treatment_method": r.get("treatment_method"),
-                    "note": r.get("note"),
+                    "note": clean_w_note,
+                    "photo_url": w_photo_url,
+                    "audio_url": w_audio_url,
                     "created_at": r["created_at"].isoformat() if r.get("created_at") else "",
                 }
                 tables_data["waste_disposals"].append(item_w)
                 tables_data["b1_7_waste_treatments"].append(item_w)
                 tables_data["waste_treatments"].append(item_w)
 
-            # 7. BẢNG HOẠT ĐỘNG CANH TÁC KHÁC (cultivation_activities - OTHER: Dọn cỏ, tỉa cành, làm đất...)
+            # 7. BẢNG HOẠT ĐỘNG CANH TÁC KHÁC, QUAN SÁT SÂU BỆNH & TƯỚI TIÊU (cultivation_activities)
             cur.execute(
                 """
                 SELECT 
                     ca.activity_id,
+                    ca.activity_type,
                     ca.activity_date,
                     ca.activity_time,
                     ca.growth_stage,
@@ -1210,11 +1339,21 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
                     ca.weather_condition,
                     ca.performed_by,
                     ca.created_at,
+                    pl.plot_code,
+                    pl.name AS plot_name,
+                    po.pest_name,
+                    po.severity AS pest_severity,
+                    po.action_taken AS pest_action,
+                    ir.method AS irrigation_method,
+                    ir.duration_minutes,
                     vr.audio_url,
                     vr.stt_text
                 FROM cultivation_activities ca
+                LEFT JOIN plots pl ON ca.plot_id = pl.plot_id
+                LEFT JOIN pest_observations po ON ca.activity_id = po.activity_id
+                LEFT JOIN irrigation_records ir ON ca.activity_id = ir.activity_id
                 LEFT JOIN activity_voice_records vr ON ca.activity_id = vr.activity_id
-                WHERE ca.activity_type = 'OTHER'
+                WHERE ca.activity_type IN ('OTHER', 'PEST_OBSERVATION', 'IRRIGATION')
                 ORDER BY ca.activity_date DESC, ca.activity_time DESC, ca.created_at DESC
                 LIMIT %s;
                 """,
@@ -1222,11 +1361,13 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
             )
             for r in cur.fetchall():
                 stt_t = (r.get("stt_text") or "").lower()
-                p_display = "Không phát hiện"
-                if "rầy" in stt_t or "sâu" in stt_t or "nấm" in stt_t or "bệnh" in stt_t:
+                p_display = r.get("pest_name") or "Không phát hiện"
+                if p_display == "Không phát hiện" and ("rầy" in stt_t or "sâu" in stt_t or "nấm" in stt_t or "bệnh" in stt_t):
                     m_p = re.search(r"(rầy\s+\w+|sâu\s+\w+|bệnh\s+\w+|nấm\s+\w+)", stt_t)
                     if m_p and not any(k in stt_t for k in ["không có", "không phát hiện", "sạch"]):
                         p_display = m_p.group(1).title()
+                if r.get("pest_severity") and p_display != "Không phát hiện":
+                    p_display = f"{p_display} (Mức độ: {r['pest_severity']})"
 
                 raw_desc = r.get("description") or ""
                 clean_desc = raw_desc
@@ -1235,13 +1376,18 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
                 if m_qty:
                     qty_val = m_qty.group(1).strip()
                     clean_desc = re.sub(r"\s*\((?:Số lượng(?:/liều lượng)?|Liều lượng):\s*[^)]+\)", "", raw_desc, flags=re.IGNORECASE).strip()
+                elif r.get("duration_minutes"):
+                    qty_val = f"{r['duration_minutes']} phút"
 
+                act_date_str = str(r["activity_date"]) if r["activity_date"] else ""
+                c_stage = infer_pomelo_stage_from_date(act_date_str, r.get("growth_stage"))
                 item_cd = {
                     "id": r["activity_id"],
                     "activity_id": r["activity_id"],
+                    "activity_type": r.get("activity_type"),
                     "table": "cultivation_activities",
-                    "ngay_thuc_hien": str(r["activity_date"]) if r["activity_date"] else "",
-                    "activity_date": str(r["activity_date"]) if r["activity_date"] else "",
+                    "ngay_thuc_hien": act_date_str,
+                    "activity_date": act_date_str,
                     "activity_time": str(r["activity_time"]) if r["activity_time"] else "",
                     "cong_viec": clean_desc,
                     "task_name": clean_desc,
@@ -1252,12 +1398,15 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
                     "quantity": qty_val,
                     "sinh_vat_gay_hai": p_display,
                     "target_pest": p_display,
-                    "growth_stage": r.get("growth_stage"),
-                    "giai_doan": r.get("growth_stage"),
+                    "growth_stage": c_stage,
+                    "giai_doan": c_stage,
+                    "plot_code": r.get("plot_code"),
+                    "plot_name": r.get("plot_name"),
                     "weather_condition": r.get("weather_condition"),
                     "performed_by": r.get("performed_by"),
-                    "raw_text": r.get("stt_text") or "",
-                    "audio_url": r.get("audio_url") or "",
+                    "raw_text": r.get("stt_text") or voice_map.get(r["activity_id"], ("", ""))[1],
+                    "audio_url": r.get("audio_url") or voice_map.get(r["activity_id"], ("", ""))[0],
+                    "photo_url": photo_map.get(r["activity_id"], ""),
                     "created_at": r["created_at"].isoformat() if r.get("created_at") else "",
                 }
                 tables_data["cultivation_activities"].append(item_cd)
@@ -1287,17 +1436,26 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
                 (limit,),
             )
             for r in cur.fetchall():
+                act_date_str = str(r["activity_date"]) if r["activity_date"] else ""
+                po_stage = infer_pomelo_stage_from_date(act_date_str, r.get("growth_stage"))
                 item_po = {
                     "id": r["observation_id"],
                     "observation_id": r["observation_id"],
                     "activity_id": r["activity_id"],
                     "table": "pest_observations",
-                    "ngay_thuc_hien": str(r["activity_date"]) if r["activity_date"] else "",
+                    "ngay_thuc_hien": act_date_str,
+                    "activity_date": act_date_str,
+                    "activity_time": str(r["activity_time"]) if r["activity_time"] else "",
+                    "growth_stage": po_stage,
+                    "giai_doan": po_stage,
                     "pest_name": r.get("pest_name"),
                     "pest_type": r.get("pest_type"),
                     "severity": r.get("severity"),
                     "action_taken": r.get("action_taken"),
                     "note": r.get("note"),
+                    "raw_text": voice_map.get(r["activity_id"], ("", ""))[1],
+                    "audio_url": voice_map.get(r["activity_id"], ("", ""))[0],
+                    "photo_url": photo_map.get(r["activity_id"], ""),
                     "created_at": r["created_at"].isoformat() if r.get("created_at") else "",
                 }
                 tables_data["pest_observations"].append(item_po)
@@ -1316,6 +1474,7 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
                     ir.note,
                     ca.activity_date,
                     ca.activity_time,
+                    ca.growth_stage,
                     ca.created_at
                 FROM irrigation_records ir
                 JOIN cultivation_activities ca ON ir.activity_id = ca.activity_id
@@ -1325,17 +1484,26 @@ def get_diary_by_tables(farmer_id: Optional[Any] = None, limit: int = 100) -> Di
                 (limit,),
             )
             for r in cur.fetchall():
+                act_date_str = str(r["activity_date"]) if r["activity_date"] else ""
+                ir_stage = infer_pomelo_stage_from_date(act_date_str, r.get("growth_stage"))
                 item_ir = {
                     "id": r["irrigation_id"],
                     "irrigation_id": r["irrigation_id"],
                     "activity_id": r["activity_id"],
                     "table": "irrigation_records",
-                    "ngay_thuc_hien": str(r["activity_date"]) if r["activity_date"] else "",
+                    "ngay_thuc_hien": act_date_str,
+                    "activity_date": act_date_str,
+                    "activity_time": str(r["activity_time"]) if r["activity_time"] else "",
+                    "growth_stage": ir_stage,
+                    "giai_doan": ir_stage,
                     "water_source": r.get("water_source"),
                     "method": r.get("method"),
                     "duration_minutes": r.get("duration_minutes"),
                     "quantity": float(r["quantity"]) if r.get("quantity") is not None else None,
                     "note": r.get("note"),
+                    "raw_text": voice_map.get(r["activity_id"], ("", ""))[1],
+                    "audio_url": voice_map.get(r["activity_id"], ("", ""))[0],
+                    "photo_url": photo_map.get(r["activity_id"], ""),
                     "created_at": r["created_at"].isoformat() if r.get("created_at") else "",
                 }
                 tables_data["irrigation_records"].append(item_ir)
@@ -1367,7 +1535,14 @@ def get_diary_records(farmer_id: Optional[Any] = None, limit: int = 100) -> List
                 seen_ids.add(unique_key)
                 combined.append(row)
 
-    combined.sort(key=lambda x: x.get("created_at") or x.get("ngay_thuc_hien") or "", reverse=True)
+    combined.sort(
+        key=lambda x: (
+            x.get("ngay_thuc_hien") or "",
+            x.get("activity_time") or "",
+            x.get("created_at") or "",
+        ),
+        reverse=True,
+    )
     return combined
 
 
@@ -1392,6 +1567,13 @@ def save_diary_to_mysql(
         final_raw_text = raw_text or data.get("raw_text") or ""
         final_audio_url = audio_url or data.get("audio_url") or ""
         final_photo_url = photo_url or data.get("photo_url") or ""
+        if final_photo_url and str(final_photo_url).startswith("/root/"):
+            if "/uploads/" in str(final_photo_url):
+                final_photo_url = f"/uploads/{os.path.basename(final_photo_url)}"
+            else:
+                final_photo_url = f"/static/photos/{os.path.basename(final_photo_url)}"
+        if final_audio_url and str(final_audio_url).startswith("/root/"):
+            final_audio_url = f"/static/audio/{os.path.basename(final_audio_url)}"
 
         # Lấy season_id hợp lệ
         season_id = get_default_season_id(conn, farmer_id)
@@ -1460,6 +1642,8 @@ def save_diary_to_mysql(
                 p_note = p_dict.get("note") or p_dict.get("ghi_chu")
                 if final_photo_url and "Ảnh" not in str(p_note or ""):
                     p_note = f"{p_note}; Ảnh chứng từ: {final_photo_url}" if p_note else f"Ảnh chứng từ: {final_photo_url}"
+                if final_audio_url and "Ghi âm" not in str(p_note or ""):
+                    p_note = f"{p_note}; Ghi âm: {final_audio_url}" if p_note else f"Ghi âm: {final_audio_url}"
 
                 m_type = str(p_dict.get("material_type") or "").upper()
                 sup_id = _ensure_supplier(cur, p_dict.get("supplier_name") or p_dict.get("noi_cung_cap"))
@@ -1760,6 +1944,11 @@ def save_diary_to_mysql(
                 w_unit = waste_dict.get("unit")
                 w_loc = waste_dict.get("storage_location") or waste_dict.get("noi_ton_tru") or "Bể chứa bao bì có nắp đậy"
                 w_meth = waste_dict.get("treatment_method") or waste_dict.get("cach_xu_ly") or "Súc rửa 3 lần bàn giao thu gom"
+                w_note = waste_dict.get("note") or ""
+                if final_photo_url and "Ảnh" not in str(w_note):
+                    w_note = f"{w_note}; Ảnh chứng từ: {final_photo_url}".strip("; ")
+                if final_audio_url and "Ghi âm" not in str(w_note):
+                    w_note = f"{w_note}; Ghi âm: {final_audio_url}".strip("; ")
 
                 cur.execute(
                     """
@@ -1767,7 +1956,7 @@ def save_diary_to_mysql(
                         season_id, disposal_date, waste_type, quantity, unit, storage_location, treatment_method, note
                     ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
                     """,
-                    (season_id, w_date, w_type, w_qty, w_unit, w_loc, w_meth, waste_dict.get("note")),
+                    (season_id, w_date, w_type, w_qty, w_unit, w_loc, w_meth, w_note or None),
                 )
                 created_records["waste_disposals"] = cur.lastrowid
 
@@ -2736,3 +2925,516 @@ def get_diary_record_by_id(table_name: str, record_id: Any) -> Optional[Dict[str
     except Exception as e:
         logger.exception("Lỗi get_diary_record_by_id: %s", e)
     return None
+
+
+# ==============================================================================
+# TRUY XUẤT NGUỒN GỐC VIETGAP (TRACEABILITY & PUBLIC PASSPORT)
+# ==============================================================================
+
+def _format_batch_code(harvest_id: Optional[int], activity_date: Any) -> str:
+    """Tạo mã lô truy xuất chuẩn NK-YYYYMMDD-H<id>."""
+    if not harvest_id:
+        return "VN-HBOR-0033"
+    d_str = _parse_date(activity_date) or date.today().strftime("%Y-%m-%d")
+    compact_date = d_str.replace("-", "")
+    return f"NK-{compact_date}-H{harvest_id}"
+
+
+def _compute_phi_safety(cur, season_id: int, ref_date_str: str) -> Dict[str, Any]:
+    """
+    Tính toán chỉ số an toàn thời gian cách ly thuốc BVTV (PHI)
+    so với ngày thu hoạch (hoặc ngày hiện tại).
+    """
+    cur.execute(
+        """
+        SELECT
+            ca.activity_id,
+            ca.activity_date,
+            ca.description,
+            pa.dose_quantity,
+            pa.dose_unit,
+            pa.target_pest,
+            pa.isolation_days,
+            pa.safe_harvest_date,
+            p.name AS pesticide_name,
+            p.active_ingredient,
+            p.min_isolation_days
+        FROM pesticide_applications pa
+        JOIN cultivation_activities ca ON pa.activity_id = ca.activity_id
+        LEFT JOIN pesticides p ON pa.pesticide_id = p.pesticide_id
+        WHERE ca.activity_date <= %s
+        ORDER BY ca.activity_date DESC, ca.activity_id DESC
+        LIMIT 1;
+        """,
+        (ref_date_str,),
+    )
+    last_spray = cur.fetchone()
+
+    commitments = [
+        "Không sử dụng thuốc BVTV ngoài danh mục được phép tại Việt Nam",
+        "Tuân thủ nghiêm ngặt thời gian cách ly (PHI) trước khi thu hoạch",
+        "Nhật ký canh tác được ghi nhận trực tiếp tại vườn qua Edge AI",
+    ]
+
+    if not last_spray:
+        return {
+            "has_spray_record": False,
+            "is_safe": True,
+            "safety_status": "SAFE_VERIFIED",
+            "safety_label": "ĐẠT CHUẨN AN TOÀN VIETGAP — KHÔNG SỬ DỤNG HÓA CHẤT SÁT VỤ",
+            "last_spray_date": None,
+            "last_pesticide_name": "Canh tác hữu cơ / Chưa phun thuốc",
+            "active_ingredient": "Không phát sinh",
+            "target_pest": "Phòng trừ tổng hợp (IPM)",
+            "required_phi_days": 0,
+            "actual_days_elapsed": 30,
+            "days_remaining": 0,
+            "excess_safe_days": 30,
+            "safe_harvest_date": ref_date_str,
+            "commitments": commitments,
+        }
+
+    spray_date_obj = last_spray.get("activity_date")
+    if isinstance(spray_date_obj, str):
+        try:
+            spray_date_obj = datetime.strptime(spray_date_obj[:10], "%Y-%m-%d").date()
+        except Exception:
+            spray_date_obj = date.today()
+    elif isinstance(spray_date_obj, datetime):
+        spray_date_obj = spray_date_obj.date()
+
+    try:
+        ref_date_obj = datetime.strptime(ref_date_str[:10], "%Y-%m-%d").date()
+    except Exception:
+        ref_date_obj = date.today()
+
+    req_phi = (
+        last_spray.get("isolation_days")
+        or last_spray.get("min_isolation_days")
+        or 7
+    )
+    req_phi = int(req_phi) if req_phi is not None else 7
+
+    elapsed = max(0, (ref_date_obj - spray_date_obj).days)
+    is_safe = elapsed >= req_phi
+    days_remaining = max(0, req_phi - elapsed)
+    excess_days = max(0, elapsed - req_phi)
+    safe_date_obj = spray_date_obj + timedelta(days=req_phi)
+
+    return {
+        "has_spray_record": True,
+        "is_safe": is_safe,
+        "safety_status": "SAFE_VERIFIED" if is_safe else "QUARANTINE_PENDING",
+        "safety_label": (
+            "ĐẠT CHUẨN AN TOÀN VIETGAP — ĐÃ ĐỦ THỜI GIAN CÁCH LY (PHI)"
+            if is_safe
+            else f"ĐANG TRONG THỜI GIAN CÁCH LY (CÒN {days_remaining} NGÀY)"
+        ),
+        "last_spray_date": spray_date_obj.isoformat(),
+        "last_pesticide_name": last_spray.get("pesticide_name") or last_spray.get("description") or "Thuốc BVTV trong danh mục",
+        "active_ingredient": last_spray.get("active_ingredient") or "Theo danh mục cho phép",
+        "target_pest": last_spray.get("target_pest") or "Phòng trừ sâu bệnh hại",
+        "required_phi_days": req_phi,
+        "actual_days_elapsed": elapsed,
+        "days_remaining": days_remaining,
+        "excess_safe_days": excess_days,
+        "safe_harvest_date": safe_date_obj.isoformat(),
+        "commitments": commitments,
+    }
+
+
+def get_traceability_batches(user_id: Optional[int] = None) -> List[Dict[str, Any]]:
+    """
+    Lấy danh sách các lô thu hoạch (harvest_records) + hồ sơ vùng trồng
+    kèm trạng thái kiểm định an toàn PHI để hiển thị và in mã QR.
+    """
+    batches: List[Dict[str, Any]] = []
+    try:
+        conn = get_db_connection()
+        season_id = get_default_season_id(conn, user_id)
+        with conn.cursor() as cur:
+
+            cur.execute(
+                """
+                SELECT
+                    hr.harvest_id,
+                    hr.activity_id,
+                    hr.season_id,
+                    hr.quantity,
+                    hr.unit,
+                    hr.processing_location,
+                    hr.harvester_name,
+                    hr.note,
+                    ca.activity_date,
+                    ca.activity_time,
+                    ca.growth_stage,
+                    ca.description,
+                    ca.performed_by,
+                    cs.season_name,
+                    cs.crop_name,
+                    cs.variety,
+                    p.name AS plot_name,
+                    p.plot_code,
+                    f.name AS farm_name,
+                    f.farm_code
+                FROM harvest_records hr
+                JOIN cultivation_activities ca ON hr.activity_id = ca.activity_id
+                JOIN crop_seasons cs ON hr.season_id = cs.season_id
+                JOIN plots p ON cs.plot_id = p.plot_id
+                JOIN farm f ON p.farm_id = f.farm_id
+                ORDER BY ca.activity_date DESC, hr.harvest_id DESC
+                LIMIT 25;
+                """
+            )
+            rows = cur.fetchall() or []
+
+            for r in rows:
+                h_date = _parse_date(r.get("activity_date")) or date.today().isoformat()
+                b_code = _format_batch_code(r.get("harvest_id"), h_date)
+                phi = _compute_phi_safety(cur, r.get("season_id") or season_id, h_date)
+                qty = _serialize_db_val(r.get("quantity")) or 0
+                unit = r.get("unit") or "kg"
+                crop = r.get("crop_name") or "Bưởi diễn"
+                if "sầu riêng" in str(crop).lower():
+                    crop = "Bưởi diễn"
+                desc = r.get("description") or f"Thu hoạch {crop}"
+                if "sầu riêng" in str(desc).lower():
+                    desc = desc.replace("sầu riêng", "Bưởi diễn").replace("Sầu riêng", "Bưởi diễn")
+
+                batches.append({
+                    "batch_code": b_code,
+                    "harvest_id": r.get("harvest_id"),
+                    "activity_id": r.get("activity_id"),
+                    "batch_type": "HARVEST_LOT",
+                    "title": f"Lô thu hoạch {crop} ({qty:g} {unit})" if isinstance(qty, (int, float)) and qty > 0 else f"Lô thu hoạch {crop}",
+                    "product_name": f"{crop} VietGAP — HTX Đại Đồng",
+                    "harvest_date": h_date,
+                    "quantity": qty,
+                    "unit": unit,
+                    "plot_code": r.get("plot_code") or "VN-HBOR-0033-L01",
+                    "plot_name": r.get("plot_name") or "Lô 1 — Vườn Bưởi diễn Trung tâm",
+                    "farm_code": r.get("farm_code") or "VN-HBOR-0033",
+                    "farm_name": r.get("farm_name") or "HỢP TÁC XÃ ĐẠI ĐỒNG",
+                    "note": r.get("note") or desc,
+                    "is_safe": phi["is_safe"],
+                    "safety_status": phi["safety_status"],
+                    "safety_label": phi["safety_label"],
+                    "actual_days_elapsed": phi["actual_days_elapsed"],
+                    "required_phi_days": phi["required_phi_days"],
+                })
+
+            # Luôn kèm theo 1 Mã Truy Xuất Vùng Trồng Tổng Quát (VN-HBOR-0033)
+            today_str = date.today().isoformat()
+            phi_farm = _compute_phi_safety(cur, season_id, today_str)
+            batches.append({
+                "batch_code": "VN-HBOR-0033",
+                "harvest_id": None,
+                "activity_id": None,
+                "batch_type": "FARM_PASSPORT",
+                "title": "Mã vùng trồng cố định (P.U.C: VN-HBOR-0033)",
+                "product_name": "Bưởi diễn Đặc Sản VietGAP — HTX Đại Đồng",
+                "harvest_date": today_str,
+                "quantity": 7.0,
+                "unit": "HA",
+                "plot_code": "VN-HBOR-0033-L01",
+                "plot_name": "Toàn vùng trồng HTX Đại Đồng (07 HA)",
+                "farm_code": "VN-HBOR-0033",
+                "farm_name": "HỢP TÁC XÃ ĐẠI ĐỒNG",
+                "note": "Tem truy xuất nguồn gốc vùng trồng & nhật ký canh tác toàn vụ",
+                "is_safe": phi_farm["is_safe"],
+                "safety_status": phi_farm["safety_status"],
+                "safety_label": phi_farm["safety_label"],
+                "actual_days_elapsed": phi_farm["actual_days_elapsed"],
+                "required_phi_days": phi_farm["required_phi_days"],
+            })
+
+        conn.close()
+    except Exception as e:
+        logger.exception("Lỗi get_traceability_batches: %s", e)
+    return batches
+
+
+def get_public_trace_passport(batch_code: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Trả về toàn bộ dữ liệu Hộ Chiếu Nông Sản VietGAP (5 tầng) cho một mã batch_code
+    (hoặc mã vùng trồng VN-HBOR-0033). Phục vụ trang công khai khi quét QR.
+    """
+    code_clean = (batch_code or "").strip().upper()
+    try:
+        conn = get_db_connection()
+        with conn.cursor() as cur:
+            # 1. Xác định lô thu hoạch nếu batch_code có dạng NK-...-H<id> hoặc H<id> hoặc A<id>
+            target_harvest = None
+            harvest_id_match = re.search(r"-H(\d+)$|^H(\d+)$", code_clean)
+            act_id_match = re.search(r"-A(\d+)$|^A(\d+)$", code_clean)
+
+            if harvest_id_match:
+                h_id = int(harvest_id_match.group(1) or harvest_id_match.group(2))
+                cur.execute(
+                    """
+                    SELECT
+                        hr.*, ca.activity_date, ca.activity_time, ca.description,
+                        ca.performed_by, ca.growth_stage,
+                        cs.season_name, cs.crop_name, cs.variety, cs.start_date,
+                        p.name AS plot_name, p.plot_code, p.area_size, p.area_unit, p.soil_type, p.water_source,
+                        f.name AS farm_name, f.farm_code, f.address AS farm_address, f.phone AS farm_phone,
+                        f.certification_body, f.certification_no, f.certification_date, f.certification_expiry,
+                        u.full_name AS farmer_name
+                    FROM harvest_records hr
+                    JOIN cultivation_activities ca ON hr.activity_id = ca.activity_id
+                    JOIN crop_seasons cs ON hr.season_id = cs.season_id
+                    JOIN plots p ON cs.plot_id = p.plot_id
+                    JOIN farm f ON p.farm_id = f.farm_id
+                    LEFT JOIN users u ON f.owner_user_id = u.user_id
+                    WHERE hr.harvest_id = %s
+                    LIMIT 1;
+                    """,
+                    (h_id,),
+                )
+                target_harvest = cur.fetchone()
+            elif act_id_match:
+                a_id = int(act_id_match.group(1) or act_id_match.group(2))
+                cur.execute(
+                    """
+                    SELECT
+                        hr.*, ca.activity_date, ca.activity_time, ca.description,
+                        ca.performed_by, ca.growth_stage,
+                        cs.season_name, cs.crop_name, cs.variety, cs.start_date,
+                        p.name AS plot_name, p.plot_code, p.area_size, p.area_unit, p.soil_type, p.water_source,
+                        f.name AS farm_name, f.farm_code, f.address AS farm_address, f.phone AS farm_phone,
+                        f.certification_body, f.certification_no, f.certification_date, f.certification_expiry,
+                        u.full_name AS farmer_name
+                    FROM harvest_records hr
+                    JOIN cultivation_activities ca ON hr.activity_id = ca.activity_id
+                    JOIN crop_seasons cs ON hr.season_id = cs.season_id
+                    JOIN plots p ON cs.plot_id = p.plot_id
+                    JOIN farm f ON p.farm_id = f.farm_id
+                    LEFT JOIN users u ON f.owner_user_id = u.user_id
+                    WHERE hr.activity_id = %s
+                    LIMIT 1;
+                    """,
+                    (a_id,),
+                )
+                target_harvest = cur.fetchone()
+            elif code_clean not in ("VN-HBOR-0033", "VN-HBOR-0033-L01", "VN-HBOR-0033-L02"):
+                # Mặc định lấy lô thu hoạch mới nhất nếu không truyền mã cụ thể
+                cur.execute(
+                    """
+                    SELECT
+                        hr.*, ca.activity_date, ca.activity_time, ca.description,
+                        ca.performed_by, ca.growth_stage,
+                        cs.season_name, cs.crop_name, cs.variety, cs.start_date,
+                        p.name AS plot_name, p.plot_code, p.area_size, p.area_unit, p.soil_type, p.water_source,
+                        f.name AS farm_name, f.farm_code, f.address AS farm_address, f.phone AS farm_phone,
+                        f.certification_body, f.certification_no, f.certification_date, f.certification_expiry,
+                        u.full_name AS farmer_name
+                    FROM harvest_records hr
+                    JOIN cultivation_activities ca ON hr.activity_id = ca.activity_id
+                    JOIN crop_seasons cs ON hr.season_id = cs.season_id
+                    JOIN plots p ON cs.plot_id = p.plot_id
+                    JOIN farm f ON p.farm_id = f.farm_id
+                    LEFT JOIN users u ON f.owner_user_id = u.user_id
+                    ORDER BY ca.activity_date DESC, hr.harvest_id DESC
+                    LIMIT 1;
+                    """
+                )
+                target_harvest = cur.fetchone()
+
+            # 2. Lấy thông tin mặc định của Farm & Plot nếu truy xuất theo mã vùng trồng VN-HBOR-0033
+            cur.execute(
+                """
+                SELECT
+                    cs.season_id, cs.season_name, cs.crop_name, cs.variety, cs.start_date,
+                    p.plot_id, p.name AS plot_name, p.plot_code, p.area_size, p.area_unit, p.soil_type, p.water_source,
+                    f.farm_id, f.name AS farm_name, f.farm_code, f.address AS farm_address, f.phone AS farm_phone,
+                    f.certification_body, f.certification_no, f.certification_date, f.certification_expiry,
+                    u.full_name AS farmer_name
+                FROM crop_seasons cs
+                JOIN plots p ON cs.plot_id = p.plot_id
+                JOIN farm f ON p.farm_id = f.farm_id
+                LEFT JOIN users u ON f.owner_user_id = u.user_id
+                ORDER BY cs.season_id ASC
+                LIMIT 1;
+                """
+            )
+            base_info = cur.fetchone() or {}
+
+            active_row = target_harvest or base_info
+            season_id = active_row.get("season_id") or 1
+            ref_date = _parse_date(active_row.get("activity_date")) or date.today().isoformat()
+
+            resolved_code = (
+                _format_batch_code(target_harvest.get("harvest_id"), ref_date)
+                if target_harvest
+                else (code_clean if code_clean.startswith("VN-") else "VN-HBOR-0033")
+            )
+
+            # 3. Tính toán chỉ số an toàn cách ly PHI
+            phi_safety = _compute_phi_safety(cur, season_id, ref_date)
+
+            crop_name = active_row.get("crop_name") or "Bưởi diễn"
+            if "sầu riêng" in str(crop_name).lower():
+                crop_name = "Bưởi diễn"
+
+            raw_note = (target_harvest or {}).get("note") or (target_harvest or {}).get("description") or "Đạt tiêu chuẩn VietGAP loại 1"
+            if "sầu riêng" in str(raw_note).lower():
+                raw_note = raw_note.replace("sầu riêng", "Bưởi diễn").replace("Sầu riêng", "Bưởi diễn")
+
+            batch_info = {
+                "batch_code": resolved_code,
+                "batch_type": "HARVEST_LOT" if target_harvest else "FARM_PASSPORT",
+                "product_name": f"{crop_name} Đặc Sản VietGAP",
+                "variety": "Bưởi Diễn chính vụ",
+                "season_name": active_row.get("season_name") or "Vụ mùa Bưởi diễn 2026",
+                "harvest_date": ref_date,
+                "quantity": _serialize_db_val((target_harvest or {}).get("quantity")) or 1200.0,
+                "unit": (target_harvest or {}).get("unit") or "kg",
+                "processing_location": (target_harvest or {}).get("processing_location") or "Nhà sơ chế & đóng gói tại vườn HTX Đại Đồng",
+                "harvester_name": (target_harvest or {}).get("harvester_name") or active_row.get("performed_by") or "Vũ Xuân Anh",
+                "grade_note": raw_note,
+                "is_safe": phi_safety["is_safe"],
+                "safety_status": phi_safety["safety_status"],
+                "safety_label": phi_safety["safety_label"],
+            }
+
+            origin_passport = {
+                "farm_name": active_row.get("farm_name") or "HỢP TÁC XÃ ĐẠI ĐỒNG",
+                "farmer_name": active_row.get("farmer_name") or "Vũ Xuân Anh",
+                "puc_code": active_row.get("farm_code") or "VN-HBOR-0033",
+                "plot_code": active_row.get("plot_code") or "VN-HBOR-0033-L01",
+                "plot_name": active_row.get("plot_name") or "Lô 1 — Vườn Bưởi diễn Trung tâm",
+                "area_text": "07 HA (70.000 m²)",
+                "address": "Xóm Đại Đồng - Xã Yên Trị - Tỉnh Phú Thọ",
+                "phone": active_row.get("farm_phone") or "0912.345.678",
+                "certification_body": active_row.get("certification_body") or "VietGAP Trồng trọt (TCVN 11892-1:2017)",
+                "certification_no": active_row.get("certification_no") or "VietGAP-HBOR-0033",
+                "certification_expiry": _parse_date(active_row.get("certification_expiry")) or "2027-12-31",
+                "soil_type": active_row.get("soil_type") or "Đất đồi trung du & phù sa giàu khoáng",
+                "water_source": active_row.get("water_source") or "Nước ngầm giếng khoan kiểm định định kỳ",
+            }
+
+            # 4. Lấy Dòng thời gian Nhật ký Canh tác minh bạch (ẩn chi phí/giá bán nội bộ)
+            cur.execute(
+                """
+                SELECT
+                    ca.activity_id,
+                    ca.activity_type,
+                    ca.activity_date,
+                    ca.activity_time,
+                    ca.growth_stage,
+                    ca.description,
+                    ca.weather_condition,
+                    ca.performed_by,
+                    ca.source,
+                    pa.dose_quantity,
+                    pa.dose_unit,
+                    pa.target_pest,
+                    pa.isolation_days,
+                    pa.application_method AS spray_method,
+                    p.name AS pesticide_name,
+                    p.active_ingredient,
+                    fa.quantity AS fert_quantity,
+                    fa.unit AS fert_unit,
+                    fa.application_method AS fert_method,
+                    fz.name AS fertilizer_name,
+                    po.pest_name,
+                    po.severity AS severity_level,
+                    po.action_taken AS symptom_description,
+                    hr.quantity AS harvest_quantity,
+                    hr.unit AS harvest_unit,
+                    hr.processing_location,
+                    hr.note AS harvest_note
+                FROM cultivation_activities ca
+                LEFT JOIN pesticide_applications pa ON ca.activity_id = pa.activity_id
+                LEFT JOIN pesticides p ON pa.pesticide_id = p.pesticide_id
+                LEFT JOIN fertilizer_applications fa ON ca.activity_id = fa.activity_id
+                LEFT JOIN fertilizers fz ON fa.fertilizer_id = fz.fertilizer_id
+                LEFT JOIN pest_observations po ON ca.activity_id = po.activity_id
+                LEFT JOIN harvest_records hr ON ca.activity_id = hr.activity_id
+                WHERE ca.activity_date <= %s
+                ORDER BY ca.activity_date DESC, ca.activity_id DESC
+                LIMIT 25;
+                """,
+                (ref_date,),
+            )
+            act_rows = cur.fetchall() or []
+
+            timeline: List[Dict[str, Any]] = []
+            for ar in act_rows:
+                atype = (ar.get("activity_type") or "OTHER").upper()
+                a_date = _parse_date(ar.get("activity_date")) or ref_date
+                desc = ar.get("description") or ""
+                if "sầu riêng" in desc.lower():
+                    desc = desc.replace("sầu riêng", "bưởi Diễn").replace("Sầu riêng", "Bưởi Diễn")
+
+                if atype == "HARVEST":
+                    h_qty = _serialize_db_val(ar.get("harvest_quantity"))
+                    h_unit = ar.get("harvest_unit") or "kg"
+                    title = "Thu hoạch & Phân loại tại vườn"
+                    detail = desc or f"Thu hoạch {h_qty:g} {h_unit} trái đạt chuẩn VietGAP"
+                    badge = f"{h_qty:g} {h_unit}" if isinstance(h_qty, (int, float)) and h_qty > 0 else "Thu hoạch"
+                    category = "harvest"
+                elif atype == "PESTICIDE":
+                    p_name = ar.get("pesticide_name") or "Thuốc BVTV trong danh mục"
+                    t_pest = ar.get("target_pest") or "Phòng trừ sâu bệnh"
+                    iso = ar.get("isolation_days") or 7
+                    title = f"Phun phòng trừ: {p_name}"
+                    detail = f"Đối tượng: {t_pest}. Thời gian cách ly quy định: {iso} ngày."
+                    badge = f"Cách ly {iso} ngày"
+                    category = "spray"
+                elif atype == "FERTILIZER":
+                    f_name = ar.get("fertilizer_name") or "Phân bón hữu cơ / NPK"
+                    f_qty = _serialize_db_val(ar.get("fert_quantity"))
+                    f_unit = ar.get("fert_unit") or "kg"
+                    f_method = ar.get("fert_method") or "Bón quanh tán gốc"
+                    title = f"Bón dinh dưỡng: {f_name}"
+                    detail = f"{f_method} ({f_qty:g} {f_unit})" if isinstance(f_qty, (int, float)) and f_qty > 0 else f_method
+                    badge = "Dinh dưỡng"
+                    category = "fertilize"
+                elif atype == "PEST_OBSERVATION":
+                    p_obs = ar.get("pest_name") or "Kiểm tra sinh vật gây hại"
+                    sym = ar.get("symptom_description") or desc or "Thăm vườn định kỳ"
+                    title = f"Thăm vườn & Theo dõi: {p_obs}"
+                    detail = sym
+                    badge = "Giám sát IPM"
+                    category = "observation"
+                else:
+                    title = "Chăm sóc & Vệ sinh vườn"
+                    detail = desc or "Tỉa cành tạo tán, phát cỏ quanh gốc và duy trì độ ẩm"
+                    badge = "Canh tác"
+                    category = "general"
+
+                performer = ar.get("performed_by") or "Vũ Xuân Anh"
+                if performer == "Nguyễn Văn Nông":
+                    performer = "Vũ Xuân Anh"
+
+                timeline.append({
+                    "activity_id": ar.get("activity_id"),
+                    "category": category,
+                    "date": a_date,
+                    "growth_stage": ar.get("growth_stage") or "Sinh trưởng",
+                    "title": title,
+                    "detail": detail,
+                    "badge": badge,
+                    "performed_by": performer,
+                    "verified_source": "Edge AI Voice/Vision" if ar.get("source") == "VOICE_AI" else "Sổ điện tử VietGAP",
+                })
+
+            conn.close()
+
+            all_batches = get_traceability_batches()
+            return {
+                "status": "success",
+                "batch_info": batch_info,
+                "phi_safety": phi_safety,
+                "origin_passport": origin_passport,
+                "cultivation_timeline": timeline,
+                "available_batches": all_batches,
+            }
+    except Exception as e:
+        logger.exception("Lỗi get_public_trace_passport: %s", e)
+        return {
+            "status": "error",
+            "message": str(e),
+        }
+

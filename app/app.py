@@ -80,6 +80,8 @@ from services.database import (
     detect_growth_stage_from_text,
     update_season_growth_stage,
     GROWTH_STAGES,
+    get_traceability_batches,
+    get_public_trace_passport,
 )
 from services.exporters import (
     export_cultivation_diary_to_bytes,
@@ -339,12 +341,27 @@ def diary():
 
 @app.route("/conversation")
 @app.route("/hoi-thoai")
+@app.route("/ghi-nhat-ky")
 def conversation_page():
-    """Trang Trợ lý Hội thoại AI đa lượt (giao diện chat tiếng Việt)."""
+    """Trang Ghi nhật ký canh tác bằng giọng nói / hội thoại AI."""
     farmer = session.get("farmer")
     if not farmer:
         return redirect(url_for("login"))
-    return render_template("conversation.html", farmer=farmer)
+    flow_mode = request.args.get("flow", "diary")
+    if flow_mode not in ("diary", "diagnosis"):
+        flow_mode = "diary"
+    return render_template("conversation.html", farmer=farmer, flow_mode=flow_mode)
+
+
+@app.route("/diagnosis")
+@app.route("/chan-doan")
+@app.route("/chan-doan-sau-benh")
+def diagnosis_page():
+    """Trang Chẩn đoán sâu bệnh & Tư vấn kỹ thuật AI riêng biệt."""
+    farmer = session.get("farmer")
+    if not farmer:
+        return redirect(url_for("login"))
+    return render_template("conversation.html", farmer=farmer, flow_mode="diagnosis")
 
 
 @app.route("/ghi-nhat-ky-cu")
@@ -371,7 +388,7 @@ def serve_tmp_audio(filename):
 
 
 # ==============================================================================
-# API CHO TRỢ LÝ HỘI THOẠI AI (CONVERSATION)
+# API CHO TRỢ LÝ HỘI THOẠI AI (CONVERSATION: GHI NHẬT KÝ & CHẨN ĐOÁN SÂU BỆNH)
 # ==============================================================================
 
 @app.route("/api/conversation/message", methods=["POST"])
@@ -382,11 +399,13 @@ def api_conversation_message():
         farmer_id = (farmer.get("id") or farmer.get("farmer_id") or 1) if farmer else 1
         data = request.get_json() or {}
         text = data.get("text", "").strip()
+        flow_mode = (data.get("flow_mode") or "diary").strip().lower()
         session_id = data.get("session_id") or session.get("conv_session_id")
         if not session_id:
-            session_id = f"web_{uuid.uuid4().hex[:8]}"
+            session_id = f"web_{flow_mode}_{uuid.uuid4().hex[:8]}"
             session["conv_session_id"] = session_id
         enable_tts = bool(data.get("enable_tts", False))
+        audio_url = data.get("audio_url") or session.pop("last_voice_audio_url", "")
 
         res = run_async(
             conversation_manager.handle_text(
@@ -394,6 +413,8 @@ def api_conversation_message():
                 user_text=text,
                 farmer_id=farmer_id,
                 enable_tts=enable_tts,
+                flow_mode=flow_mode,
+                audio_url=audio_url,
             )
         )
         if res.get("audio_file"):
@@ -414,9 +435,10 @@ def api_conversation_image():
         if not file:
             return jsonify({"status": "error", "message": "Không có file ảnh"}), 400
 
+        flow_mode = (request.form.get("flow_mode") or "diary").strip().lower()
         session_id = request.form.get("session_id") or session.get("conv_session_id")
         if not session_id:
-            session_id = f"web_{uuid.uuid4().hex[:8]}"
+            session_id = f"web_{flow_mode}_{uuid.uuid4().hex[:8]}"
             session["conv_session_id"] = session_id
         enable_tts = request.form.get("enable_tts") in ("true", "1", "True")
 
@@ -424,6 +446,7 @@ def api_conversation_image():
         temp_name = f"conv_img_{uuid.uuid4().hex[:10]}{ext}"
         temp_path = os.path.join(UPLOADS_DIR, temp_name)
         file.save(temp_path)
+        web_image_url = f"/uploads/{temp_name}"
 
         res = run_async(
             conversation_manager.handle_image(
@@ -431,9 +454,11 @@ def api_conversation_image():
                 image_path=temp_path,
                 farmer_id=farmer_id,
                 enable_tts=enable_tts,
+                flow_mode=flow_mode,
+                photo_url=web_image_url,
             )
         )
-        res["web_image_url"] = f"/uploads/{temp_name}"
+        res["web_image_url"] = web_image_url
         if res.get("audio_file"):
             res["audio_file"] = f"/tmp/{os.path.basename(res['audio_file'])}"
         return jsonify(res)
@@ -452,9 +477,10 @@ def api_conversation_audio():
         if not file:
             return jsonify({"status": "error", "message": "Không có file âm thanh"}), 400
 
+        flow_mode = (request.form.get("flow_mode") or "diary").strip().lower()
         session_id = request.form.get("session_id") or session.get("conv_session_id")
         if not session_id:
-            session_id = f"web_{uuid.uuid4().hex[:8]}"
+            session_id = f"web_{flow_mode}_{uuid.uuid4().hex[:8]}"
             session["conv_session_id"] = session_id
         enable_tts = request.form.get("enable_tts") in ("true", "1", "True")
 
@@ -469,6 +495,7 @@ def api_conversation_audio():
                 audio_path=temp_path,
                 farmer_id=farmer_id,
                 enable_tts=enable_tts,
+                flow_mode=flow_mode,
             )
         )
         if res.get("audio_file"):
@@ -1069,7 +1096,15 @@ except Exception as e:
 
 @app.route("/static/audio/<path:filename>")
 def serve_static_audio(filename):
-    """Phục vụ file âm thanh trực tiếp từ thư mục lưu trữ /mnt/data/audio."""
+    """Phục vụ file âm thanh trực tiếp từ thư mục lưu trữ /mnt/data/audio hoặc fallback."""
+    for folder in (
+        STATIC_AUDIO_DIR,
+        os.path.join(APP_DIR, "static", "audio"),
+        os.path.join(APP_DIR, "static", "audio_old"),
+        UPLOADS_DIR,
+    ):
+        if folder and os.path.isfile(os.path.join(folder, filename)):
+            return send_from_directory(folder, filename)
     return send_from_directory(STATIC_AUDIO_DIR, filename)
 
 
@@ -1080,6 +1115,13 @@ os.makedirs(STATIC_PHOTOS_DIR, exist_ok=True)
 @app.route("/static/photos/<path:filename>")
 def serve_static_photos(filename):
     """Phục vụ ảnh chụp hoạt động thực địa."""
+    for folder in (
+        STATIC_PHOTOS_DIR,
+        "/mnt/data/photos",
+        UPLOADS_DIR,
+    ):
+        if folder and os.path.isfile(os.path.join(folder, filename)):
+            return send_from_directory(folder, filename)
     return send_from_directory(STATIC_PHOTOS_DIR, filename)
 
 
@@ -1559,18 +1601,30 @@ def realtime_stt_finish():
     if not session_id:
         return jsonify({"status": "error", "message": "Thiếu session_id"}), 400
 
-    session = realtime_stt_engine.get_session(session_id)
-    if not session:
+    stt_sess = realtime_stt_engine.get_session(session_id)
+    if not stt_sess:
         return jsonify({"status": "error", "message": f"Session {session_id} không tồn tại hoặc đã kết thúc"}), 404
 
     preserve_case = body.get("preserve_case", True)
-    events = session.finish(preserve_case=preserve_case)
+    events = stt_sess.finish(preserve_case=preserve_case)
+
+    audio_url = ""
+    try:
+        wav_filename = f"voice_{uuid.uuid4().hex[:12]}.wav"
+        wav_dest = os.path.join(STATIC_AUDIO_DIR, wav_filename)
+        if stt_sess.save_wav(wav_dest):
+            audio_url = f"/static/audio/{wav_filename}"
+            session["last_voice_audio_url"] = audio_url
+    except Exception as e:
+        logger.warning("Không lưu được file âm thanh realtime: %s", e)
+
     realtime_stt_engine.close_session(session_id)
 
     complete_ev = next((ev for ev in events if ev.event_type == "complete"), None)
     return jsonify({
         "status": "success",
         "session_id": session_id,
+        "audio_url": audio_url,
         "events": [ev.to_dict() for ev in events],
         "result": complete_ev.to_dict() if complete_ev else None
     })
@@ -2583,6 +2637,38 @@ def get_seasons_api():
     except Exception as e:
         logger.exception("Lỗi lấy danh sách mùa vụ: %s", e)
         return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route("/api/traceability/batches", methods=["GET"])
+def api_traceability_batches():
+    """Lấy danh sách các lô thu hoạch & mã vùng trồng phục vụ cấp mã QR truy xuất."""
+    try:
+        farmer = session.get("farmer")
+        farmer_id = request.args.get("farmer_id") or (farmer.get("user_id") if farmer else None)
+        batches = get_traceability_batches(user_id=farmer_id)
+        return jsonify({"status": "success", "data": batches})
+    except Exception as e:
+        logger.exception("Lỗi lấy danh sách lô truy xuất: %s", e)
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route("/api/public/trace", methods=["GET"])
+@app.route("/api/public/trace/<path:batch_code>", methods=["GET"])
+def api_public_trace(batch_code=None):
+    """
+    API Công khai (không yêu cầu đăng nhập) trả về Hộ chiếu Nông sản VietGAP 5 tầng
+    khi người tiêu dùng / thương lái quét mã QR trên sản phẩm.
+    """
+    try:
+        code = batch_code or request.args.get("code") or request.args.get("batch")
+        passport = get_public_trace_passport(code)
+        if passport.get("status") == "error":
+            return jsonify(passport), 500
+        return jsonify(passport)
+    except Exception as e:
+        logger.exception("Lỗi truy xuất nguồn gốc công khai: %s", e)
+        return jsonify({"status": "error", "message": str(e)}), 500
+
 
 
 if __name__ == "__main__":

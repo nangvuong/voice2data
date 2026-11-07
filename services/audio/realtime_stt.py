@@ -265,6 +265,26 @@ class StreamingSTTSession:
 
         return events
 
+    def save_wav(self, dest_path: str) -> bool:
+        """Lưu toàn bộ mẫu âm thanh đã ghi trong phiên ra file WAV (16kHz, Mono, PCM16)."""
+        try:
+            if not self._all_samples or len(self._all_samples) < 1600:
+                return False
+            import wave
+            import numpy as np
+            os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+            samples_np = np.clip(np.array(self._all_samples, dtype=np.float32), -1.0, 1.0)
+            pcm16 = (samples_np * 32767.0).astype(np.int16)
+            with wave.open(dest_path, "wb") as wf:
+                wf.setnchannels(1)
+                wf.setsampwidth(2)
+                wf.setframerate(self.sample_rate)
+                wf.writeframes(pcm16.tobytes())
+            return True
+        except Exception as e:
+            logger.warning("Không thể lưu file WAV cho phiên STT: %s", e)
+            return False
+
     def reset(self):
         """Khởi động lại trạng thái session."""
         self._vad.reset()

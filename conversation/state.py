@@ -89,8 +89,10 @@ class ConversationState:
     # Lịch sử hội thoại
     history: List[Turn] = field(default_factory=list)
 
-    # Dữ liệu hình ảnh (nếu có)
+    # Dữ liệu hình ảnh & âm thanh (nếu có)
     last_image_path: Optional[str] = None
+    last_photo_url: Optional[str] = None
+    last_audio_url: Optional[str] = None
     last_image_analysis: Optional[Dict[str, Any]] = None
 
     # Dữ liệu tư vấn RAG & Context Bridge (Chuyển đổi 1 chạm sang nhật ký)
@@ -191,6 +193,8 @@ class ConversationState:
         self.accumulated_slots = {}
         self.missing_slots = []
         self.last_image_path = None
+        self.last_photo_url = None
+        self.last_audio_url = None
         self.last_image_analysis = None
         self.last_rag_result = None
         self.bridge_slots = {}

@@ -408,8 +408,7 @@
     </div>
     {% if farmer %}
     <div class="user-bar">
-      <span class="user-greeting">Nông hộ: <b>{{ farmer.full_name }}</b> ({{ farmer.username }})</span>
-      <span class="user-role">{{ farmer.role }}</span>
+      <span class="user-greeting">Nông hộ: <b>{{ farmer.full_name }}</b></span>
     </div>
     {% endif %}
   </div>
@@ -491,10 +490,10 @@
     </button>
   </div>
 
-  <!-- ==================== KHU VỰC TRUNG TÂM: 2 LỰA CHỌN ĐIỀU HƯỚNG CHÍNH ==================== -->
+  <!-- ==================== KHU VỰC TRUNG TÂM: 3 CHỨC NĂNG CHÍNH RIÊNG BIỆT ==================== -->
   <div class="section">
 
-    <!-- LỰA CHỌN 1: SỔ NHẬT KÝ CANH TÁC VIETGAP (như cũ) -->
+    <!-- LỰA CHỌN 1: SỔ NHẬT KÝ CANH TÁC VIETGAP -->
     <div class="hub-card">
       <div class="hub-card-top">
         <div class="hub-icon-wrap hub-icon-diary">
@@ -505,7 +504,7 @@
             <span>Sổ nhật ký canh tác VietGAP</span>
           </div>
           <div class="hub-desc">
-            Xem các hoạt động đã làm theo thời gian, xuất báo cáo theo tiêu chuẩn VietGAP, GlobalGAP.
+            Xem các hoạt động đã làm theo trình tự phát triển của cây bưởi, xuất báo cáo theo tiêu chuẩn VietGAP, GlobalGAP.
           </div>
         </div>
       </div>
@@ -517,29 +516,63 @@
       </div>
     </div>
 
-    <!-- LỰA CHỌN 2: TRỢ LÝ HỘI THOẠI AI (CONVERSATION) (tương tự phần mở nhật ký) -->
+    <!-- LỰA CHỌN 2: GHI NHẬT KÝ CANH TÁC (RIÊNG BIỆT) -->
     <div class="hub-card">
       <div class="hub-card-top">
         <div class="hub-icon-wrap hub-icon-conversation">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-            <circle cx="9" cy="10" r="1.2" fill="currentColor"/>
-            <circle cx="12" cy="10" r="1.2" fill="currentColor"/>
-            <circle cx="15" cy="10" r="1.2" fill="currentColor"/>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="22"/>
           </svg>
         </div>
         <div class="hub-meta">
           <div class="hub-title">
-            <span>Ghi nhật ký</span>
+            <span>Ghi nhật ký canh tác</span>
           </div>
           <div class="hub-desc">
-            Ghi nhật ký nhanh chóng bằng giọng nói. Hỗ trợ phát hiện và chuẩn đoán sâu bệnh, thuốc BVTV, phân bón.
+            Ghi chép nhanh công việc hàng ngày (phun thuốc, bón phân, mua vật tư, thu hoạch, bán hàng) bằng giọng nói hoặc tin nhắn.
           </div>
         </div>
       </div>
       <div class="hub-card-action">
-        <a href="/conversation" class="btn-hub-action btn-hub-conversation">
+        <a href="/conversation?flow=diary" class="btn-hub-action btn-hub-conversation">
           <span>Thêm hoạt động</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- LỰA CHỌN 3: CHẨN ĐOÁN SÂU BỆNH & TƯ VẤN KỸ THUẬT (RIÊNG BIỆT) -->
+    <div class="hub-card">
+      <div class="hub-card-top">
+        <div class="hub-icon-wrap" style="background: linear-gradient(135deg, #0D9488, #115E59);">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m8 2 1.88 1.88"/>
+            <path d="M14.12 3.88 16 2"/>
+            <path d="M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/>
+            <path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6"/>
+            <path d="M12 20v-9"/>
+            <path d="M6.53 9C4.6 8.8 3 7.1 3 5"/>
+            <path d="M6 13H2"/>
+            <path d="M3 21c0-2.1 1.7-3.9 3.8-4"/>
+            <path d="M20.97 5c0 2.1-1.6 3.8-3.5 4"/>
+            <path d="M22 13h-4"/>
+            <path d="M17.2 17c2.1.1 3.8 1.9 3.8 4"/>
+          </svg>
+        </div>
+        <div class="hub-meta">
+          <div class="hub-title">
+            <span>Chẩn đoán sâu bệnh & Tư vấn</span>
+          </div>
+          <div class="hub-desc">
+            Chụp ảnh lá, quả bưởi bị bệnh hoặc mô tả triệu chứng để AI chẩn đoán sâu bệnh, tra cứu thuốc BVTV, phân bón và thời gian cách ly.
+          </div>
+        </div>
+      </div>
+      <div class="hub-card-action">
+        <a href="/chan-doan" class="btn-hub-action" style="background: linear-gradient(135deg, #0D9488, #0F766E); color: #fff; box-shadow: 0 6px 18px -4px rgba(13,148,136,0.45);">
+          <span>Chẩn đoán sâu bệnh</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
         </a>
       </div>

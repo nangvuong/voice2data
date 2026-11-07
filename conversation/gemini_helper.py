@@ -229,7 +229,9 @@ QUY TẮC CHUYỂN TIẾP THÔNG MINH GIỮA MUA VẬT TƯ VÀ PHUN THUỐC / B�
    - Nếu người dùng VỪA CUNG CẤP THÔNG TIN VỪA NÓI LƯU (vd: "bón thúc rồi lưu luôn", "2 sào lưu đi", "đại lý Tuấn lưu luôn"):
      -> "intent": "CONFIRM", đồng thời trích xuất các trường thông tin đó vào "extracted_slots".
 
-- LƯU Ý VỀ CÁC TRƯỜNG TÙY CHỌN:
+- LƯU Ý QUAN TRỌNG VỀ TRÍCH XUẤT TRIỆT ĐỂ 1 LẦN (ALL-IN-ONE EXTRACTION):
+  + Khi nông dân nói một câu có nhiều thông tin, BẮT BUỘC trích xuất TẤT CẢ mọi chi tiết có trong câu nói vào "extracted_slots" ngay trong 1 lượt duy nhất (bao gồm: tên thuốc/phân/vật tư, số lượng, đơn vị tính, liều lượng pha, đối tượng sâu bệnh, diện tích/số gốc/tên lô, dụng cụ/phương pháp phun bón, nơi mua/thương lái, đơn giá, ngày thực hiện, chất lượng nông sản...).
+  + Nếu nông dân nói gộp số lượng và đơn vị (vd: "mua 5 bao", "10 chai", "50 kg"), hãy tách rõ "quantity": 5, "unit": "bao" (đối với purchase) hoặc giữ nguyên chuỗi đầy đủ (đối với luong_phan_bon, nong_do_va_luong_dung, san_luong_thu_hoach, khoi_luong_tieu_thu).
   + Các trường weather_condition (thời tiết), growth_stage (giai đoạn sinh trưởng), dien_tich (diện tích/số gốc) KHÔNG CẦN hỏi thêm nếu nông dân không nhắc đến (chỉ trích xuất nếu họ tự nguyện nói ra).
   + Đối với hoạt động Mua vật tư (purchase): Nông dân có thể được gợi ý hoặc yêu cầu chụp ảnh hóa đơn / chứng từ hoặc chụp ảnh bao bì vật tư để lấy thông tin tự động.
 
@@ -335,8 +337,9 @@ Trả về ĐÚNG cấu trúc JSON, không kèm bất kỳ giải thích nào:
         secondary_slots: Dict[str, Any] = {}
 
         # Heuristic phát hiện chuyển đổi hoặc câu kết hợp
-        is_spray_word = any(k in clean for k in ["phun", "xịt", "trị sâu", "trị bệnh", "thuốc bvtv"])
-        is_fertilize_word = any(k in clean for k in ["bón", "rải phân", "phân bón", "tưới phân"])
+        is_waste_word = any(k in clean for k in ["xử lý bao bì", "vỏ bao", "bao bì", "vỏ chai", "thu gom vỏ", "tiêu hủy bao", "bể chứa"])
+        is_spray_word = not is_waste_word and any(k in clean for k in ["phun", "xịt", "trị sâu", "trị bệnh", "thuốc bvtv"])
+        is_fertilize_word = not is_waste_word and any(k in clean for k in ["bón", "rải phân", "phân bón", "tưới phân"])
         is_purchase_word = any(k in clean for k in ["mua", "nhập", "đại lý", "cửa hàng"])
 
         detected_activity = current_activity
@@ -381,27 +384,34 @@ Trả về ĐÚNG cấu trúc JSON, không kèm bất kỳ giải thích nào:
                 detected_activity = "spray"
             elif is_fertilize_word:
                 detected_activity = "fertilize"
-            elif any(k in clean for k in ["thu hoạch", "hái", "cắt"]):
+            elif any(k in clean for k in ["thu hoạch", "hái", "cắt quả", "bẻ"]):
                 detected_activity = "harvest"
-            elif any(k in clean for k in ["bán", "xuất bán", "thương lái"]):
+            elif any(k in clean for k in ["bán", "xuất bán", "thương lái", "tiêu thụ"]):
                 detected_activity = "sale"
             elif any(k in clean for k in ["xử lý bao bì", "vỏ bao", "bao bì", "vỏ chai", "thu gom vỏ", "tiêu hủy bao"]):
                 detected_activity = "waste"
+            elif any(k in clean for k in ["phát hiện", "quan sát", "thấy sâu", "thấy bệnh", "xuất hiện sâu", "bị sâu", "bị bệnh"]):
+                detected_activity = "observation"
+            elif any(k in clean for k in ["làm cỏ", "phát cỏ", "tỉa cành", "tạo tán", "tưới nước", "bọc quả", "xới đất", "đào rãnh"]):
+                detected_activity = "general"
 
         # Phát hiện ngày tháng
-        if "hôm nay" in clean:
+        if any(k in clean for k in ["hôm nay", "sáng nay", "chiều nay", "tối nay", "trưa nay"]):
             extracted["activity_date"] = time.strftime("%Y-%m-%d")
-        elif "hôm qua" in clean:
+        elif any(k in clean for k in ["hôm qua", "sáng qua", "chiều qua", "tối qua"]):
             from datetime import date, timedelta
             extracted["activity_date"] = (date.today() - timedelta(days=1)).isoformat()
+        elif "hôm kia" in clean:
+            from datetime import date, timedelta
+            extracted["activity_date"] = (date.today() - timedelta(days=2)).isoformat()
 
         # Phát hiện cách ly
         m_iso = re.search(r"(\d+)\s*(ngày|hôm)\s*(cách\s*ly)?", clean)
-        if m_iso:
+        if m_iso and ("cách ly" in clean or detected_activity == "spray"):
             extracted["thoi_gian_cach_ly"] = int(m_iso.group(1))
 
         # Phát hiện liều lượng / khối lượng (hỗ trợ cả 2 lượng trong câu kết hợp)
-        all_doses = list(re.finditer(r"(\d+[\.,]?\d*)\s*(lít|chai|gói|tạ|tấn|bao|ký|kg|bình)", clean))
+        all_doses = list(re.finditer(r"(\d+[\.,]?\d*)\s*(lít|chai|gói|tạ|tấn|bao|ký|kg|cân|bình|quả|trái|sọt|thùng|can|lọ|ml|gam|g)\b", clean))
         if all_doses:
             first_dose = all_doses[0]
             first_qty_str = f"{first_dose.group(1)} {first_dose.group(2)}"
@@ -412,6 +422,10 @@ Trả về ĐÚNG cấu trúc JSON, không kèm bất kỳ giải thích nào:
             elif detected_activity == "purchase":
                 extracted["quantity"] = first_dose.group(1)
                 extracted["unit"] = first_dose.group(2)
+            elif detected_activity == "harvest":
+                extracted["san_luong_thu_hoach"] = first_qty_str
+            elif detected_activity == "sale":
+                extracted["khoi_luong_tieu_thu"] = first_qty_str
 
             if len(all_doses) > 1 and secondary_act:
                 second_dose = all_doses[1]
@@ -427,24 +441,78 @@ Trả về ĐÚNG cấu trúc JSON, không kèm bất kỳ giải thích nào:
         # Phát hiện tên phân bón
         fert_keywords = [
             ("npk 16-16-8", "NPK 16-16-8"),
+            ("npk 20-20-15", "NPK 20-20-15"),
             ("npk đầu trâu", "NPK Đầu Trâu"),
             ("đầu trâu", "NPK Đầu Trâu"),
             ("npk", "NPK"),
             ("phân chuồng", "Phân chuồng"),
             ("hữu cơ vi sinh", "Phân hữu cơ vi sinh"),
             ("hữu cơ", "Phân hữu cơ"),
+            ("trùn quế", "Phân trùn quế"),
+            ("phân bò", "Phân bò hoai mục"),
+            ("phân gà", "Phân gà vi sinh"),
+            ("humic", "Phân Humic"),
             ("đạm", "Phân đạm"),
             ("lân", "Phân lân"),
             ("kali", "Phân kali"),
             ("dap", "DAP"),
             ("urê", "Phân Urê"),
             ("ure", "Phân Urê"),
+            ("vôi", "Vôi nông nghiệp"),
         ]
         found_fert = None
         for fk, f_name in fert_keywords:
             if fk in clean:
                 found_fert = f_name
                 break
+
+        # Phát hiện tên thuốc BVTV
+        pesticide_keywords = [
+            ("radiant 60sc", "Radiant 60SC"),
+            ("radiant", "Radiant 60SC"),
+            ("antracol 70wp", "Antracol 70WP"),
+            ("antracol", "Antracol 70WP"),
+            ("anvil 5sc", "Anvil 5SC"),
+            ("anvil", "Anvil 5SC"),
+            ("ridomil gold", "Ridomil Gold 68WG"),
+            ("ridomil", "Ridomil Gold 68WG"),
+            ("regent", "Regent 800WG"),
+            ("actara", "Actara 25WG"),
+            ("confidor", "Confidor 100SL"),
+            ("amistar", "Amistar Top 325SC"),
+            ("score", "Score 250EC"),
+            ("tilt", "Tilt Super 300EC"),
+            ("aliette", "Aliette 800WG"),
+            ("kasumin", "Kasumin 2SL"),
+            ("validacin", "Validacin 5SL"),
+            ("movento", "Movento 150OD"),
+            ("proclaim", "Proclaim 5WG"),
+            ("coc 85", "COC 85WP"),
+            ("dầu khoáng", "Dầu khoáng SK Enspray 99EC"),
+            ("trichoderma", "Chế phẩm nấm đối kháng Trichoderma"),
+            ("nano ecotech", "Nano Ecotech"),
+            ("top 1", "Top 1"),
+        ]
+        found_pest = None
+        for pk, p_name in pesticide_keywords:
+            if pk in clean:
+                found_pest = p_name
+                break
+
+        # Nếu chưa tìm thấy trong danh sách tĩnh, quét nhanh qua CSDL MaterialMatcher
+        if not found_fert and not found_pest:
+            try:
+                from services.vietgap.material_matcher import material_matcher
+                db_hits = material_matcher._regex_heuristic_extract(user_text)
+                for h_name in db_hits:
+                    m_res = material_matcher.fuzzy_match(h_name)
+                    if m_res and m_res.matched:
+                        if m_res.category == "pesticide" and not found_pest:
+                            found_pest = m_res.canonical_name or h_name
+                        elif m_res.category == "fertilizer" and not found_fert:
+                            found_fert = m_res.canonical_name or h_name
+            except Exception:
+                pass
 
         if found_fert:
             if detected_activity == "fertilize":
@@ -458,23 +526,6 @@ Trả về ĐÚNG cấu trúc JSON, không kèm bất kỳ giải thích nào:
                 secondary_slots["material_name"] = found_fert
                 secondary_slots["material_type"] = "Phân bón"
 
-        # Phát hiện tên thuốc BVTV
-        pesticide_keywords = [
-            ("radiant 60sc", "Radiant 60SC"),
-            ("radiant", "Radiant 60SC"),
-            ("antracol 70wp", "Antracol 70WP"),
-            ("antracol", "Antracol 70WP"),
-            ("anvil 5sc", "Anvil 5SC"),
-            ("anvil", "Anvil 5SC"),
-            ("nano ecotech", "Nano Ecotech"),
-            ("top 1", "Top 1"),
-        ]
-        found_pest = None
-        for pk, p_name in pesticide_keywords:
-            if pk in clean:
-                found_pest = p_name
-                break
-
         if found_pest:
             if detected_activity == "spray":
                 extracted["ten_thuoc_bvtv"] = found_pest
@@ -487,40 +538,58 @@ Trả về ĐÚNG cấu trúc JSON, không kèm bất kỳ giải thích nào:
                 secondary_slots["material_name"] = found_pest
                 secondary_slots["material_type"] = "Thuốc BVTV"
 
-        # Phát hiện nơi mua / đại lý
-        m_sup = re.search(r"(?:ở|tại)\s+(đại lý\s+[\w\s]+|cửa hàng\s+[\w\s]+|hợp tác xã\s+[\w\s]+)", clean)
+        # Phát hiện nơi mua / đại lý / thương lái
+        m_sup = re.search(r"(?:ở|tại|cho)?\s*(đại lý\s+[\w\sÀ-ỹ]+|cửa hàng\s+[\w\sÀ-ỹ]+|hợp tác xã\s+[\w\sÀ-ỹ]+|thương lái\s+[\w\sÀ-ỹ]+)", clean)
         if m_sup:
-            sup_name = m_sup.group(1).title().strip()
+            sup_raw = re.split(r"\b(?:giá|với|số lượng|rồi|đem|mang|hết|tổng)\b", m_sup.group(1))[0].strip()
+            sup_name = sup_raw.title().strip()
             if detected_activity == "purchase":
                 extracted["supplier_name"] = sup_name
+            elif detected_activity == "sale":
+                extracted["co_so_thu_mua"] = sup_name
             elif secondary_act == "purchase":
                 secondary_slots["supplier_name"] = sup_name
 
         # Phát hiện sâu bệnh
-        for pest in ["rầy nâu", "sâu ăn lá", "sâu đục thân", "bọ trĩ", "nấm bệnh", "thán thư", "nhện đỏ", "sâu vẽ bùa", "loét sẹo"]:
+        for pest in [
+            "rầy nâu", "rầy chổng cánh", "sâu ăn lá", "sâu đục thân", "sâu đục quả",
+            "bọ trĩ", "nấm bệnh", "nấm hồng", "thán thư", "nhện đỏ", "nhện trắng",
+            "sâu vẽ bùa", "loét sẹo", "ghẻ sẹo", "ruồi vàng", "ruồi đục quả", "rệp sáp", "vàng lá", "thối rễ"
+        ]:
             if pest in clean:
                 if detected_activity == "spray":
-                    extracted["target_pest"] = pest
+                    extracted["target_pest"] = pest.capitalize()
+                elif detected_activity == "observation":
+                    extracted["sinh_vat_gay_hai"] = pest.capitalize()
                 elif secondary_act == "spray":
-                    secondary_slots["target_pest"] = pest
+                    secondary_slots["target_pest"] = pest.capitalize()
                 break
 
         # Phát hiện phương pháp bón
-        for meth in ["bón lót", "bón thúc", "tưới gốc", "rải gốc", "bón vãi", "phun qua lá"]:
+        for meth in ["bón lót", "bón thúc", "tưới gốc", "rải gốc", "rải quanh gốc", "rải quanh tán", "bón vãi", "phun qua lá", "hòa nước tưới"]:
             if meth in clean:
                 extracted["phuong_phap_bon"] = meth
                 break
 
         # Phát hiện phương thức / dụng cụ phun
-        for p_meth in ["máy bay", "drone", "bình đeo vai", "máy nén", "bình điện", "bình bơm", "phun sương"]:
+        for p_meth in ["máy bay", "drone", "bình đeo vai", "máy nén", "bình điện", "bình bơm", "bình máy", "phun sương", "máy phun"]:
             if p_meth in clean:
                 extracted["phuong_thuc_phun"] = p_meth
                 break
 
-        # Phát hiện diện tích hoặc số gốc / số cây
-        m_dt = re.search(r"(\d+(?:[\.,]\d+)?\s*(?:sào|ha|hecta|gốc|cây|m2|mét vuông))", clean)
+        # Phát hiện diện tích, lô hoặc số gốc / số cây
+        m_dt = re.search(r"(\d+(?:[\.,]\d+)?\s*(?:sào|ha|hecta|mẫu|gốc|cây|m2|mét vuông)|lô\s+[a-z0-9]+|khu\s+[a-z0-9]+)", clean)
         if m_dt:
             extracted["dien_tich"] = m_dt.group(1).strip()
+
+        # Phát hiện chất lượng thu hoạch
+        m_ql = re.search(r"(loại\s*\d+|hàng\s*đẹp|hàng\s*tuyển|loại\s*[a-c])", clean)
+        if m_ql and detected_activity == "harvest":
+            extracted["chat_luong"] = m_ql.group(1).strip().capitalize()
+
+        # Phát hiện công việc chung
+        if detected_activity == "general" and not extracted.get("cong_viec"):
+            extracted["cong_viec"] = user_text.strip()
 
         # Phát hiện thời tiết
         for w_val in ["trời nắng", "trời râm", "râm mát", "lặng gió", "mát mẻ", "nắng ráo", "trời mát"]:
@@ -529,7 +598,7 @@ Trả về ĐÚNG cấu trúc JSON, không kèm bất kỳ giải thích nào:
                 break
 
         # Phát hiện đơn giá / tiền
-        m_pr = re.search(r"(\d+(?:[\.,]\d+)?\s*(?:nghìn|ngàn|triệu|k|đồng|vnd)(?:\s*(?:một|1)?\s*(?:bao|ký|kg|chai|gói))?)", clean)
+        m_pr = re.search(r"(\d+(?:[\.,]\d+)?\s*(?:nghìn|ngàn|triệu|k|đồng|vnd)(?:\s*(?:một|1|/)?\s*(?:bao|ký|kg|cân|chai|gói|tạ|quả))?)", clean)
         if m_pr and "unit_price" not in extracted:
             extracted["unit_price"] = m_pr.group(1).strip()
 
@@ -543,12 +612,11 @@ Trả về ĐÚNG cấu trúc JSON, không kèm bất kỳ giải thích nào:
             if not extracted.get("material_name"):
                 if last_saved_slots and (last_saved_slots.get("ten_thuoc_bvtv") or last_saved_slots.get("pesticide_name")):
                     extracted["material_name"] = last_saved_slots.get("ten_thuoc_bvtv") or last_saved_slots.get("pesticide_name")
+                else:
+                    extracted["material_name"] = "Vỏ bao bì thuốc BVTV"
             if not extracted.get("waste_type"):
                 extracted["waste_type"] = "Vỏ chai, bao bì thuốc BVTV"
-            for w_meth in ["bể chứa", "hố chứa", "thu gom", "tiêu hủy", "chôn lấp", "bể thu gom"]:
-                if w_meth in clean:
-                    extracted["treatment_method"] = "Thu gom vào bể chứa chuyên dụng"
-                    break
+            extracted["treatment_method"] = "Thu gom vào bể chứa chuyên dụng"
 
         confirm_words = ["lưu", "ok", "đồng ý", "đúng", "chuẩn", "chính xác", "ghi đi", "lưu đi", "xác nhận", "được rồi"]
         if dialogue_state == "CONFIRMING":

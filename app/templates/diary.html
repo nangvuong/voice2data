@@ -737,6 +737,54 @@
     align-items: center;
     gap: 3px;
   }
+  .tl-stage-pill {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #166534;
+    background: #DCFCE7;
+    border: 1px solid #BBF7D0;
+    padding: 2px 7px;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .stage-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: linear-gradient(135deg, #1F3626 0%, #2D4F36 100%);
+    color: #FBF8EF;
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin: 18px 0 10px;
+    box-shadow: 0 3px 10px rgba(20, 28, 21, 0.14);
+    border-left: 4px solid #D6A339;
+  }
+  .stage-section-header:first-child {
+    margin-top: 4px;
+  }
+  .stage-section-title {
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    color: #FBF8EF;
+  }
+  .stage-section-sub {
+    font-size: 0.73rem;
+    color: #D6E6D8;
+    margin-top: 2px;
+  }
+  .stage-section-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #141C15;
+    background: #D6A339;
+    padding: 3px 9px;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
   .tl-time-pill {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.7rem;
@@ -891,6 +939,51 @@
     word-break: break-word;
   }
 
+  /* Photo Attachment Box */
+  .tl-photo-box {
+    background: #FFFFFF;
+    border: 1px solid rgba(35,42,28,0.08);
+    border-radius: 10px;
+    padding: 10px;
+  }
+  .tl-photo-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--forest-mid);
+  }
+  .tl-photo-img {
+    width: 100%;
+    max-height: 220px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: zoom-in;
+    border: 1px solid rgba(35,42,28,0.08);
+    display: block;
+  }
+  .tl-media-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 5px;
+  }
+  .tl-media-pill.photo {
+    background: #EFF6FF;
+    color: #1D4ED8;
+    border: 1px solid #BFDBFE;
+  }
+  .tl-media-pill.audio {
+    background: #FEF3C7;
+    color: #92400E;
+    border: 1px solid #FDE68A;
+  }
+
   /* Actions inside expanded body */
   .tl-card-actions {
     display: flex;
@@ -921,27 +1014,78 @@
   }
 
   @media (max-width: 576px) {
+    .main-content {
+      padding: 16px 12px 80px;
+    }
+    .farmer-card {
+      margin: -24px 12px 0;
+      padding: 13px 14px 10px;
+    }
+    .puc-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+    .stage-section-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 10px 12px;
+    }
     .timeline {
-      padding-left: 36px;
+      padding-left: 34px;
     }
     .timeline::before {
-      left: 15px;
+      left: 13px;
     }
     .timeline-marker {
-      left: -36px;
-      width: 32px;
-      height: 32px;
+      left: -34px;
+      width: 28px;
+      height: 28px;
       top: 10px;
     }
     .timeline-marker svg {
-      width: 15px;
-      height: 15px;
+      width: 14px;
+      height: 14px;
     }
     .timeline-card {
+      padding: 0;
+    }
+    .tl-card-header {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 7px;
       padding: 11px 13px;
     }
-    .tl-main-title {
-      font-size: 0.92rem;
+    .tl-task-title {
+      font-size: 0.95rem;
+    }
+    .tl-card-subtitle {
+      font-size: 0.84rem;
+      line-height: 1.4;
+    }
+    .tl-card-meta-right {
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 5px;
+    }
+    .tl-chevron-icon {
+      margin-left: auto;
+    }
+    .tl-detail-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+      padding: 6px 0;
+    }
+    .tl-detail-value {
+      text-align: left;
+      font-size: 0.85rem;
+    }
+    .tl-detail-row.is-phi {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
     }
   }
 
@@ -1111,7 +1255,6 @@
     <div class="header-top">
       <div class="brand-wrap">
         <span class="app-name">nông<em>ký</em></span>
-        <span class="badge-portal">SỔ NHẬT KÝ CANH TÁC</span>
       </div>
       <div class="header-actions">
         <a href="/nongky" class="btn-nav-header primary" title="Tạo ghi chép / thu âm nhật ký mới">
@@ -1132,8 +1275,7 @@
 
     {% if farmer %}
     <div class="user-bar">
-      <span class="user-greeting">Xin chào, <b>{{ farmer.full_name }}</b> </span>
-      <span class="user-role">{{ farmer.role }}</span>
+      <span class="user-greeting">Nông hộ: <b>{{ farmer.full_name }}</b></span>
     </div>
     {% endif %}
   </div>
@@ -1242,7 +1384,7 @@
         </button>
         <div id="exportMenuDropdown" style="display:none; position:absolute; right:0; top:calc(100% + 6px); background:#1a3122; border:1px solid #3d6349; border-radius:10px; box-shadow:0 12px 32px rgba(0,0,0,0.4); z-index:9999; min-width:275px; padding:8px; font-size:0.8rem; text-align:left;">
           <div style="padding:6px 8px; font-size:0.7rem; font-weight:700; color:#a5d6a7; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:4px; letter-spacing:0.04em;">
-            MẪU 1: NHẬT KÝ VƯỜN CÀ GAI
+            MẪU 1: NHẬT KÝ VƯỜN BƯỞI DIỄN
           </div>
           <a href="/api/export/excel" style="display:flex; align-items:center; gap:8px; padding:7px 9px; color:#e8f5e9; text-decoration:none; border-radius:6px; transition:background 0.15s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'" onmouseout="this.style.background='none'">
             <span style="background:#2e7d32; color:#fff; font-size:0.65rem; font-weight:700; padding:2px 6px; border-radius:3px;">XLSX</span>
@@ -1309,12 +1451,25 @@
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
         </button>
       </div>
+
+      <!-- Thanh tiến trình lọc theo 5 giai đoạn phát triển của cây Bưởi diễn -->
+      <div id="pomeloStageBar" style="display:flex; align-items:center; gap:6px; overflow-x:auto; padding-top:8px; margin-top:8px; border-top:1px dashed var(--line); scrollbar-width:none;">
+        <button type="button" class="stage-chip is-active" data-stage="all" onclick="selectStageFilter('all', this)" style="flex-shrink:0; font-family:inherit; font-size:0.73rem; font-weight:700; padding:4px 10px; border-radius:999px; border:1px solid var(--leaf); background:var(--leaf); color:#fff; cursor:pointer;">Tất cả chu kỳ</button>
+        <button type="button" class="stage-chip" data-stage="Sau thu hoạch" onclick="selectStageFilter('Sau thu hoạch', this)" style="flex-shrink:0; font-family:inherit; font-size:0.73rem; font-weight:600; padding:4px 10px; border-radius:999px; border:1px solid var(--line); background:var(--paper); color:var(--ink-soft); cursor:pointer;">1. Sau thu hoạch</button>
+        <button type="button" class="stage-chip" data-stage="Sinh trưởng" onclick="selectStageFilter('Sinh trưởng', this)" style="flex-shrink:0; font-family:inherit; font-size:0.73rem; font-weight:600; padding:4px 10px; border-radius:999px; border:1px solid var(--line); background:var(--paper); color:var(--ink-soft); cursor:pointer;">2. Sinh trưởng (Lộc xuân)</button>
+        <button type="button" class="stage-chip" data-stage="Ra hoa" onclick="selectStageFilter('Ra hoa', this)" style="flex-shrink:0; font-family:inherit; font-size:0.73rem; font-weight:600; padding:4px 10px; border-radius:999px; border:1px solid var(--line); background:var(--paper); color:var(--ink-soft); cursor:pointer;">3. Ra hoa & Đậu quả</button>
+        <button type="button" class="stage-chip" data-stage="Quả non" onclick="selectStageFilter('Quả non', this)" style="flex-shrink:0; font-family:inherit; font-size:0.73rem; font-weight:600; padding:4px 10px; border-radius:999px; border:1px solid var(--line); background:var(--paper); color:var(--ink-soft); cursor:pointer;">4. Quả non & Nuôi trái</button>
+        <button type="button" class="stage-chip" data-stage="Thu hoạch" onclick="selectStageFilter('Thu hoạch', this)" style="flex-shrink:0; font-family:inherit; font-size:0.73rem; font-weight:600; padding:4px 10px; border-radius:999px; border:1px solid var(--line); background:var(--paper); color:var(--ink-soft); cursor:pointer;">5. Thu hoạch & Tiêu thụ</button>
+      </div>
     </div>
 
-    <!-- Thanh Accordion Controls (Đóng/Mở ngày) -->
+    <!-- Thanh Accordion Controls (Đóng/Mở ngày & Đổi chiều sắp xếp) -->
     <div class="timeline-accordion-toolbar">
       <div class="toolbar-stats" id="timelineStatsText">Đang tải nhật ký...</div>
-      <div class="toolbar-actions">
+      <div class="toolbar-actions" style="display:flex; align-items:center; gap:6px;">
+        <button type="button" id="btnSortOrder" onclick="toggleSortOrder()" title="Đổi chiều sắp xếp thời gian" style="font-family:inherit; font-size:0.72rem; font-weight:700; color:var(--leaf); background:rgba(63,107,63,0.1); border:1px solid rgba(63,107,63,0.28); border-radius:7px; padding:4px 9px; cursor:pointer; display:inline-flex; align-items:center; gap:4px;">
+          <span id="btnSortOrderText">Trình tự: Đầu vụ → Thu hoạch</span>
+        </button>
         <button type="button" class="btn-toolbar-icon" id="btnToggleAllDays" title="Thu gọn tất cả ngày" aria-label="Thu gọn tất cả ngày">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
         </button>
@@ -1357,10 +1512,86 @@ const ICONS = {
 let rawDiaryTables = {};
 let allTimelineItems = [];
 let currentFilter = 'all';
+let currentStageFilter = 'all';
 let currentSearch = '';
+let sortAscending = true; // Mặc định sắp xếp theo trình tự phát triển cây bưởi (Đầu vụ -> Thu hoạch)
+
+const POMELO_STAGE_INFO = {
+  'Sau thu hoạch': {
+    order: 1,
+    title: 'Giai đoạn 1: Sau thu hoạch — Phục hồi & Vệ sinh vườn (Tháng 12 - Tháng 01)',
+    sub: 'Cắt tỉa cành tăm, cành sâu bệnh, quét vôi gốc, bón phân chuồng ủ hoai & lân phục hồi bộ rễ'
+  },
+  'Sinh trưởng': {
+    order: 2,
+    title: 'Giai đoạn 2: Sinh trưởng — Thúc lộc xuân & Phát triển thân lá (Tháng 02)',
+    sub: 'Tưới ẩm, bón thúc NPK giàu Đạm đón lộc xuân, phòng trừ sâu vẽ bùa & nhện đỏ hại lộc non'
+  },
+  'Ra hoa': {
+    order: 3,
+    title: 'Giai đoạn 3: Ra hoa — Phân hóa mầm hoa, Thụ phấn & Đậu quả (Tháng 03 - Tháng 04)',
+    sub: 'Phun Bo & vi lượng tăng tỷ lệ đậu quả, phòng bọ trĩ và nấm thán thư hại hoa bưởi'
+  },
+  'Quả non': {
+    order: 4,
+    title: 'Giai đoạn 4: Quả non & Nuôi trái — Tuyển quả, Bao trái & Bón thúc (Tháng 05 - Tháng 09)',
+    sub: 'Tỉa quả dị dạng, phun Canxi-Bo chống nứt rụng, bao trái bưởi Diễn & bón Kali ngọt quả'
+  },
+  'Thu hoạch': {
+    order: 5,
+    title: 'Giai đoạn 5: Thu hoạch — Kiểm tra cách ly PHI, Thu hái & Tiêu thụ (Tháng 10 - Tháng 11)',
+    sub: 'Kiểm định an toàn VietGAP, thu hoạch bưởi Diễn chín vàng theo từng lô và xuất bán'
+  }
+};
+
+function inferStageFromDateStr(dateStr, rawStage) {
+  if (rawStage && POMELO_STAGE_INFO[rawStage]) return rawStage;
+  const m = String(dateStr || '').match(/^(\d{4})-(\d{2})/);
+  if (m) {
+    const month = parseInt(m[2], 10);
+    if (month === 1 || month === 12) return 'Sau thu hoạch';
+    if (month === 2) return 'Sinh trưởng';
+    if (month === 3 || month === 4) return 'Ra hoa';
+    if (month >= 5 && month <= 9) return 'Quả non';
+    if (month === 10 || month === 11) return 'Thu hoạch';
+  }
+  return rawStage || 'Sinh trưởng';
+}
+
+function selectStageFilter(stage, btnEl) {
+  currentStageFilter = stage || 'all';
+  const bar = document.getElementById('pomeloStageBar');
+  if (bar) {
+    bar.querySelectorAll('.stage-chip').forEach(btn => {
+      const isAct = btn.getAttribute('data-stage') === currentStageFilter;
+      btn.classList.toggle('is-active', isAct);
+      btn.style.background = isAct ? 'var(--leaf)' : 'var(--paper)';
+      btn.style.color = isAct ? '#fff' : 'var(--ink-soft)';
+      btn.style.borderColor = isAct ? 'var(--leaf)' : 'var(--line)';
+      btn.style.fontWeight = isAct ? '700' : '600';
+    });
+  }
+  renderFilteredTimeline();
+}
+
+function toggleSortOrder() {
+  sortAscending = !sortAscending;
+  const txtEl = document.getElementById('btnSortOrderText');
+  if (txtEl) {
+    txtEl.textContent = sortAscending
+      ? 'Trình tự: Đầu vụ → Thu hoạch'
+      : 'Trình tự: Mới nhất → Cũ nhất';
+  }
+  sortTimelineItems();
+  renderFilteredTimeline();
+}
 
 // Helper date & time
-function extractTime(createdAt) {
+function extractTime(createdAt, activityTime) {
+  if (activityTime) {
+    const mAct = String(activityTime).trim().match(/^(\d{1,2}):(\d{2})/);
+    if (mAct) return `${mAct[1].padStart(2, '0')}:${mAct[2].padStart(2, '0')}`;
+  }
   if (!createdAt) return '';
   const s = String(createdAt).trim();
   const m = s.match(/(?:T|\s)(\d{1,2}):(\d{2})/);
@@ -1740,10 +1971,26 @@ async function loadTimelineData() {
   }
 }
 
+function sortTimelineItems() {
+  allTimelineItems.sort((a, b) => {
+    if (a.dateKey !== b.dateKey) {
+      if (a.dateKey === 'Chưa rõ ngày') return 1;
+      if (b.dateKey === 'Chưa rõ ngày') return -1;
+      return sortAscending
+        ? String(a.dateKey).localeCompare(String(b.dateKey))
+        : String(b.dateKey).localeCompare(String(a.dateKey));
+    }
+    return sortAscending
+      ? String(a.timeStr || '').localeCompare(String(b.timeStr || ''))
+      : String(b.timeStr || '').localeCompare(String(a.timeStr || ''));
+  });
+}
+
 // Xử lý gom nhóm và kết xuất timeline
 function processAndRenderTimeline() {
   allTimelineItems = [];
-  const tables = ['b1_5_material_purchases', 'b1_6_material_usages', 'b1_7_waste_treatments', 'b1_8_harvests', 'b1_9_sales', 'b1_8_harvest_sales', 'cultivation_diaries'];
+  // Không lặp qua b1_8_harvest_sales vì đã có b1_8_harvests và b1_9_sales riêng biệt
+  const tables = ['b1_5_material_purchases', 'b1_6_material_usages', 'b1_7_waste_treatments', 'b1_8_harvests', 'b1_9_sales', 'cultivation_diaries'];
 
   const seenKeys = new Set();
 
@@ -1757,9 +2004,13 @@ function processAndRenderTimeline() {
 
       const meta = getItemMeta(tableKey, row);
       const dateKey = getRecordDate(row);
-      const timeStr = extractTime(row.created_at);
+      const timeStr = extractTime(row.created_at, row.activity_time);
+      const stage = inferStageFromDateStr(dateKey, row.growth_stage || row.giai_doan);
       const fields = getExtractedFields(tableKey, row);
-      const audioUrl = row.audio_path ? (row.audio_path.startsWith('/') ? row.audio_path : ('/' + row.audio_path)) : (row.audio_url || null);
+      const rawAudio = row.audio_url || row.audio_path || null;
+      const audioUrl = rawAudio ? (rawAudio.startsWith('/') || rawAudio.startsWith('http') ? rawAudio : ('/' + rawAudio)) : null;
+      const rawPhoto = row.photo_url || row.image_url || null;
+      const photoUrl = rawPhoto ? (rawPhoto.startsWith('/') || rawPhoto.startsWith('http') ? rawPhoto : ('/' + rawPhoto)) : null;
       const transcript = row.stt_transcript || row.raw_text || row.transcript || '';
 
       allTimelineItems.push({
@@ -1767,9 +2018,11 @@ function processAndRenderTimeline() {
         recordId: recId,
         dateKey,
         timeStr,
+        stage,
         meta,
         fields,
         audioUrl,
+        photoUrl,
         transcript,
         raw: row
       });
@@ -1783,9 +2036,13 @@ function processAndRenderTimeline() {
       const recId = row.id || row.entry_id || row.activity_id || Math.random();
       const meta = getItemMeta(tableKey, row);
       const dateKey = getRecordDate(row);
-      const timeStr = extractTime(row.created_at);
+      const timeStr = extractTime(row.created_at, row.activity_time);
+      const stage = inferStageFromDateStr(dateKey, row.growth_stage || row.giai_doan);
       const fields = getExtractedFields(tableKey, row);
-      const audioUrl = row.audio_url || row.audio_path || null;
+      const rawAudio = row.audio_url || row.audio_path || null;
+      const audioUrl = rawAudio ? (rawAudio.startsWith('/') || rawAudio.startsWith('http') ? rawAudio : ('/' + rawAudio)) : null;
+      const rawPhoto = row.photo_url || row.image_url || null;
+      const photoUrl = rawPhoto ? (rawPhoto.startsWith('/') || rawPhoto.startsWith('http') ? rawPhoto : ('/' + rawPhoto)) : null;
       const transcript = row.raw_text || row.stt_transcript || row.transcript || '';
 
       allTimelineItems.push({
@@ -1793,25 +2050,18 @@ function processAndRenderTimeline() {
         recordId: recId,
         dateKey,
         timeStr,
+        stage,
         meta,
         fields,
         audioUrl,
+        photoUrl,
         transcript,
         raw: row
       });
     });
   }
 
-  // Sắp xếp ngày mới nhất lên đầu, rồi tới giờ mới nhất
-  allTimelineItems.sort((a, b) => {
-    if (a.dateKey !== b.dateKey) {
-      if (a.dateKey === 'Chưa rõ ngày') return 1;
-      if (b.dateKey === 'Chưa rõ ngày') return -1;
-      return String(b.dateKey).localeCompare(String(a.dateKey));
-    }
-    return String(b.timeStr || '').localeCompare(String(a.timeStr || ''));
-  });
-
+  sortTimelineItems();
   renderFilteredTimeline();
 }
 
@@ -1895,12 +2145,16 @@ function renderFilteredTimeline() {
     if (currentFilter !== 'all' && item.meta.type !== currentFilter) {
       return false;
     }
+    if (currentStageFilter !== 'all' && item.stage !== currentStageFilter) {
+      return false;
+    }
     if (currentSearch) {
       const q = currentSearch.toLowerCase();
       const textMatch = (item.meta.title && item.meta.title.toLowerCase().includes(q)) ||
                         (item.meta.subtitle && item.meta.subtitle.toLowerCase().includes(q)) ||
                         (item.meta.mainTitle && item.meta.mainTitle.toLowerCase().includes(q)) ||
                         (item.meta.typeName && item.meta.typeName.toLowerCase().includes(q)) ||
+                        (item.stage && item.stage.toLowerCase().includes(q)) ||
                         (item.transcript && item.transcript.toLowerCase().includes(q)) ||
                         (item.dateKey && item.dateKey.toLowerCase().includes(q)) ||
                         (item.fields && item.fields.some(f => (f.label && f.label.toLowerCase().includes(q)) || (f.val && f.val.toLowerCase().includes(q))));
@@ -1910,7 +2164,8 @@ function renderFilteredTimeline() {
   });
 
   if (statsEl) {
-    statsEl.innerHTML = `Hiển thị <strong>${filtered.length}</strong> hoạt động`;
+    const stageText = currentStageFilter !== 'all' ? ` · Giai đoạn: <strong>${escapeHtml(currentStageFilter)}</strong>` : ' · Chu kỳ Bưởi diễn (5 giai đoạn)';
+    statsEl.innerHTML = `Hiển thị <strong>${filtered.length}</strong> hoạt động${stageText}`;
   }
 
   if (!filtered.length) {
@@ -1923,17 +2178,42 @@ function renderFilteredTimeline() {
     return;
   }
 
-  // Nhóm theo ngày
+  // Nhóm theo ngày (giữ nguyên thứ tự đã sort của filtered)
   const groups = {};
+  const orderedDates = [];
+  const stageCountMap = {};
   filtered.forEach(item => {
-    if (!groups[item.dateKey]) groups[item.dateKey] = [];
+    if (!groups[item.dateKey]) {
+      groups[item.dateKey] = [];
+      orderedDates.push(item.dateKey);
+    }
     groups[item.dateKey].push(item);
+    const st = item.stage || 'Sinh trưởng';
+    stageCountMap[st] = (stageCountMap[st] || 0) + 1;
   });
 
   let html = '';
-  for (const dateKey of Object.keys(groups)) {
+  let lastRenderedStage = null;
+
+  for (const dateKey of orderedDates) {
     const items = groups[dateKey];
     const heading = formatDayHeading(dateKey);
+    const dayStage = (items[0] && items[0].stage) ? items[0].stage : inferStageFromDateStr(dateKey, '');
+
+    if (dayStage && dayStage !== lastRenderedStage && POMELO_STAGE_INFO[dayStage]) {
+      lastRenderedStage = dayStage;
+      const sInfo = POMELO_STAGE_INFO[dayStage];
+      const stTotal = stageCountMap[dayStage] || items.length;
+      html += `
+        <div class="stage-section-header">
+          <div>
+            <div class="stage-section-title">${escapeHtml(sInfo.title)}</div>
+            <div class="stage-section-sub">${escapeHtml(sInfo.sub)}</div>
+          </div>
+          <span class="stage-section-badge">${stTotal} hoạt động</span>
+        </div>
+      `;
+    }
 
     html += `
       <div class="timeline-day-group" data-date="${escapeHtml(dateKey)}">
@@ -1997,6 +2277,19 @@ function renderFilteredTimeline() {
         `;
       }
 
+      let photoHtml = '';
+      if (item.photoUrl) {
+        photoHtml = `
+          <div class="tl-photo-box">
+            <div class="tl-photo-header">
+              <span>📷 Hình ảnh đính kèm hoạt động</span>
+              <a href="${escapeHtml(item.photoUrl)}" target="_blank" rel="noopener" style="color:var(--leaf); text-decoration:none; font-size:0.72rem;">🔍 Mở ảnh gốc</a>
+            </div>
+            <img class="tl-photo-img" src="${escapeHtml(item.photoUrl)}" alt="Hình ảnh hoạt động" loading="lazy" onclick="window.open('${escapeHtml(item.photoUrl)}', '_blank')" />
+          </div>
+        `;
+      }
+
       let voiceHtml = '';
       if (item.transcript || item.audioUrl) {
         voiceHtml = `
@@ -2013,6 +2306,7 @@ function renderFilteredTimeline() {
               `}
             </div>
             <div class="tl-voice-content">
+              <div class="tl-voice-label">Ghi âm giọng nói nhật ký</div>
               <div class="tl-voice-text">${item.transcript ? `“${escapeHtml(item.transcript)}”` : '<span style="color:var(--ink-faint); font-style:italic;">File âm thanh đính kèm</span>'}</div>
             </div>
           </div>
@@ -2020,7 +2314,7 @@ function renderFilteredTimeline() {
       }
 
       html += `
-        <div class="timeline-entry ${item.meta.type}" data-type="${item.meta.type}">
+        <div class="timeline-entry ${item.meta.type}" data-type="${item.meta.type}" data-stage="${escapeHtml(item.stage || '')}">
           <div class="timeline-marker" title="${escapeHtml(item.meta.taskName || item.meta.typeName)}">
             ${item.meta.icon}
           </div>
@@ -2031,7 +2325,10 @@ function renderFilteredTimeline() {
                 <div class="tl-card-subtitle">${escapeHtml(item.meta.subtitle)}</div>
               </div>
               <div class="tl-card-meta-right">
+                ${item.stage ? `<span class="tl-stage-pill">${escapeHtml(item.stage)}</span>` : ''}
                 ${item.meta.plot ? `<span class="tl-plot-pill"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${escapeHtml(item.meta.plot)}</span>` : ''}
+                ${item.photoUrl ? `<span class="tl-media-pill photo">📷 Hình ảnh</span>` : ''}
+                ${(item.audioUrl || item.transcript) ? `<span class="tl-media-pill audio">🎤 Ghi âm</span>` : ''}
                 ${item.timeStr ? `<span class="tl-time-pill">${escapeHtml(item.timeStr)}</span>` : ''}
                 <span class="tl-chevron-icon" title="Bấm để mở rộng xem chi tiết">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -2041,6 +2338,7 @@ function renderFilteredTimeline() {
 
             <div class="tl-card-body">
               ${detailTableHtml}
+              ${photoHtml}
               ${voiceHtml}
               <div class="tl-card-actions">
                 <button type="button" class="btn-delete-entry" title="Xóa bản ghi này" onclick="event.stopPropagation(); deleteEntry('${escapeHtml(item.tableKey)}', '${escapeHtml(String(item.recordId))}', this)">
@@ -2142,9 +2440,9 @@ function toggleFarmerAccordion(e) {
 }
 
 const DEFAULT_PLOTS_DIARY = [
-  { plot_id: 1, name: 'Lô 1 — Vườn Cà gai leo Trung tâm', plot_code: 'VN-HBOR-0033-L01', latitude: 20.86552, longitude: 105.32895 },
-  { plot_id: 2, name: 'Lô 2 — Vườn Cà gai leo Bãi Sông Đà', plot_code: 'VN-HBOR-0033-L02', latitude: 20.86815, longitude: 105.33210 },
-  { plot_id: 3, name: 'Lô 3 — Vườn Dược liệu Đồi Cao', plot_code: 'VN-HBOR-0033-L03', latitude: 20.86310, longitude: 105.32540 }
+  { plot_id: 1, name: 'Lô 1 — Vườn Bưởi diễn Trung tâm', plot_code: 'VN-HBOR-0033-L01', latitude: 20.86552, longitude: 105.32895 },
+  { plot_id: 2, name: 'Lô 2 — Vườn Bưởi diễn Bãi Sông Đà', plot_code: 'VN-HBOR-0033-L02', latitude: 20.86815, longitude: 105.33210 },
+  { plot_id: 3, name: 'Lô 3 — Vườn Bưởi diễn Đồi Cao', plot_code: 'VN-HBOR-0033-L03', latitude: 20.86310, longitude: 105.32540 }
 ];
 let farmPlotsDiary = DEFAULT_PLOTS_DIARY;
 

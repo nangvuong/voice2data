@@ -93,7 +93,7 @@ def get_vietgap_full_tables_data(
     conn = get_db_connection()
     try:
         with conn.cursor() as cur:
-            # 1. Tìm season_id
+            # 1. Tìm season_id (ưu tiên vụ mùa có nhiều hoạt động canh tác nhất)
             if not season_id and farmer_id:
                 cur.execute(
                     """
@@ -102,7 +102,7 @@ def get_vietgap_full_tables_data(
                     JOIN plots p ON cs.plot_id = p.plot_id
                     JOIN farm f ON p.farm_id = f.farm_id
                     WHERE f.owner_user_id = %s
-                    ORDER BY cs.season_id DESC LIMIT 1;
+                    ORDER BY (SELECT COUNT(*) FROM cultivation_activities ca WHERE ca.season_id = cs.season_id) DESC, cs.season_id ASC LIMIT 1;
                     """,
                     (farmer_id,),
                 )
@@ -111,7 +111,13 @@ def get_vietgap_full_tables_data(
                     season_id = r["season_id"]
 
             if not season_id:
-                cur.execute("SELECT season_id FROM crop_seasons ORDER BY season_id DESC LIMIT 1;")
+                cur.execute(
+                    """
+                    SELECT cs.season_id 
+                    FROM crop_seasons cs
+                    ORDER BY (SELECT COUNT(*) FROM cultivation_activities ca WHERE ca.season_id = cs.season_id) DESC, cs.season_id ASC LIMIT 1;
+                    """
+                )
                 r = cur.fetchone()
                 if r:
                     season_id = r["season_id"]

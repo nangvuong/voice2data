@@ -1,0 +1,19 @@
+[Unit]
+Description=Nong Ky - React Native Frontend (Expo Web/Mobile)
+After=network.target nongky.service
+Wants=nongky.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/voice_to_data/frontend
+Environment="PATH=/usr/local/bin:/usr/bin:/bin"
+Environment="CI=1"
+ExecStart=/usr/local/bin/npx expo start --port 5001 --host lan
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

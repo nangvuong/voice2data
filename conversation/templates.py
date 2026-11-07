@@ -8,13 +8,12 @@ và các bản tóm tắt xác nhận lưu CSDL.
 from typing import Any, Dict, List, Optional, Tuple
 import re
 
-# Bảng các trường bắt buộc theo từng hoạt động (Đồng bộ với app/app.py)
+# Bảng các trường bắt buộc tối thiểu theo từng hoạt động
+# Nguyên tắc: Trích xuất tối đa thông tin từ câu nói của người dùng và hạn chế hỏi lại nhiều lần.
 ACTIVITY_REQUIRED_FIELDS: Dict[str, List[Tuple[str, str, List[str]]]] = {
     "spray": [
         ("ten_thuoc_bvtv", "Tên thuốc BVTV", ["material_name", "ten_thuoc", "ten_phan_thuoc", "pesticide_name", "pesticide", "medicine", "brand_name"]),
-        ("target_pest", "Đối tượng sâu bệnh", ["sinh_vat_gay_hai", "pest_name", "doi_tuong_phong_tru", "doi_tuong_sau_benh", "pest", "target_pests"]),
-        ("nong_do_va_luong_dung", "Nồng độ & liều lượng", ["concentration", "luong_nuoc_pha", "lieu_luong_thuoc", "lieu_luong", "dose_quantity", "dosage", "dose", "luong_dung"]),
-        ("thoi_gian_cach_ly", "Thời gian cách ly (ngày)", ["isolation_days", "quarantine_days", "cach_ly", "preharvest_interval", "phi", "isolation"]),
+        ("nong_do_va_luong_dung", "Nồng độ & liều lượng", ["concentration", "luong_nuoc_pha", "lieu_luong_thuoc", "lieu_luong", "dose_quantity", "dosage", "dose", "luong_dung", "quantity"]),
     ],
     "fertilize": [
         ("ten_phan_bon", "Tên phân bón", ["material_name", "ten_phan_thuoc", "fertilizer_name", "fertilizer", "ten_phan"]),
@@ -22,19 +21,18 @@ ACTIVITY_REQUIRED_FIELDS: Dict[str, List[Tuple[str, str, List[str]]]] = {
     ],
     "purchase": [
         ("material_name", "Tên vật tư", ["ten_thuoc_bvtv", "ten_phan_bon", "ten_vat_tu", "ten_vat_tu_nhap", "input_name", "item_name", "pesticide_name", "fertilizer_name"]),
-        ("quantity", "Số lượng", ["so_luong_vat_tu", "luong_su_dung", "so_luong", "qty"]),
-        ("unit", "Đơn vị tính", ["don_vi"]),
+        ("quantity", "Số lượng", ["so_luong_vat_tu", "luong_su_dung", "so_luong", "qty", "luong_phan_bon", "nong_do_va_luong_dung"]),
     ],
     "harvest": [
         ("crop_name", "Loại nông sản", ["loai_nong_san", "ten_cay_trong", "crop"]),
-        ("san_luong_thu_hoach", "Sản lượng thu hoạch", ["quantity", "harvest_quantity", "so_luong", "yield_amount", "yield"]),
+        ("san_luong_thu_hoach", "Sản lượng thu hoạch", ["quantity", "harvest_quantity", "so_luong", "yield_amount", "yield", "khoi_luong_tieu_thu"]),
     ],
     "sale": [
         ("crop_name", "Loại nông sản", ["loai_nong_san", "ten_cay_trong", "crop"]),
-        ("khoi_luong_tieu_thu", "Khối lượng bán", ["khoi_luong_ban", "sale_quantity", "quantity", "so_luong"]),
+        ("khoi_luong_tieu_thu", "Khối lượng bán", ["khoi_luong_ban", "sale_quantity", "quantity", "so_luong", "san_luong_thu_hoach"]),
     ],
     "waste": [
-        ("material_name", "Tên thuốc / vật tư", ["ten_vat_tu", "ten_thuoc"]),
+        ("material_name", "Tên thuốc / vật tư", ["ten_vat_tu", "ten_thuoc", "ten_thuoc_bvtv", "ten_phan_bon"]),
         ("treatment_method", "Cách xử lý & nơi lưu trữ", ["cach_xu_ly", "phuong_phap_xu_ly", "storage_location"]),
     ],
     "observation": [
@@ -172,9 +170,10 @@ SLOT_CANONICAL_MAP: Dict[str, str] = {
     "phuong_phap_xu_ly": "treatment_method",
     "noi_ton_tru": "storage_location",
     "noi_luu_tru": "storage_location",
-    # general
+    # general & location
     "task_name": "cong_viec",
     "description": "cong_viec",
+    "noi_dung_cong_viec": "cong_viec",
     "dien_tich": "dien_tich",
     "area": "dien_tich",
     "area_applied": "dien_tich",
@@ -182,6 +181,9 @@ SLOT_CANONICAL_MAP: Dict[str, str] = {
     "dien_tich_bon": "dien_tich",
     "so_goc": "dien_tich",
     "so_cay": "dien_tich",
+    "lo_thua": "dien_tich",
+    "plot_code": "dien_tich",
+    "khu_vuc": "dien_tich",
     "dung_cu_phun": "phuong_thuc_phun",
     "thiet_bi_phun": "phuong_thuc_phun",
     "dung_cu": "phuong_thuc_phun",
@@ -205,7 +207,7 @@ SLOT_CANONICAL_MAP: Dict[str, str] = {
 
 
 def canonicalize_slots(slots: Dict[str, Any], activity_type: Optional[str] = None) -> Dict[str, Any]:
-    """Quy chuẩn hóa tên các trường slot về khóa chính thống."""
+    """Quy chuẩn hóa tên các trường slot về khóa chính thống và tự động trích xuất/đồng bộ các trường liên quan."""
     if not isinstance(slots, dict):
         return {}
     res = dict(slots)
@@ -220,7 +222,7 @@ def canonicalize_slots(slots: Dict[str, Any], activity_type: Optional[str] = Non
             res[canon_k] = v
 
         # Xử lý trường hợp đặc biệt: material_name ở spray hoặc fertilize
-        if lk == "material_name" or lk == "ten_vat_tu":
+        if lk in ("material_name", "ten_vat_tu"):
             if act == "spray" and "ten_thuoc_bvtv" not in res:
                 res["ten_thuoc_bvtv"] = v
             elif act == "fertilize" and "ten_phan_bon" not in res:
@@ -250,9 +252,19 @@ def canonicalize_slots(slots: Dict[str, Any], activity_type: Optional[str] = Non
             if res.get("activity_date") and "treatment_date" not in res:
                 res["treatment_date"] = res["activity_date"]
 
-        # Xử lý trường hợp đặc biệt: quantity ở fertilize
-        if lk == "quantity" and act == "fertilize" and "luong_phan_bon" not in res:
-            res["luong_phan_bon"] = v
+        # Xử lý trường hợp đặc biệt: quantity ở fertilize / spray / harvest / sale
+        if lk in ("quantity", "so_luong"):
+            unit_str = str(res.get("unit") or "").strip()
+            v_str = str(v).strip()
+            combined_qty = f"{v_str} {unit_str}".strip() if (unit_str and unit_str.lower() not in v_str.lower()) else v_str
+            if act == "fertilize" and "luong_phan_bon" not in res:
+                res["luong_phan_bon"] = combined_qty
+            elif act == "spray" and "nong_do_va_luong_dung" not in res:
+                res["nong_do_va_luong_dung"] = combined_qty
+            elif act == "harvest" and "san_luong_thu_hoach" not in res:
+                res["san_luong_thu_hoach"] = combined_qty
+            elif act == "sale" and "khoi_luong_tieu_thu" not in res:
+                res["khoi_luong_tieu_thu"] = combined_qty
 
         # Xử lý observation: map target_pest / pest_name -> sinh_vat_gay_hai
         if act == "observation":
@@ -264,13 +276,50 @@ def canonicalize_slots(slots: Dict[str, Any], activity_type: Optional[str] = Non
 
         # Chuẩn hóa thời gian cách ly thành số nguyên nếu có
         if canon_k == "thoi_gian_cach_ly" or lk == "thoi_gian_cach_ly":
-            import re
             m = re.search(r"(\d+)", str(v))
             if m:
                 try:
                     res["thoi_gian_cach_ly"] = int(m.group(1))
                 except ValueError:
                     pass
+
+    # Tự động tách unit từ quantity khi ở hoạt động purchase (VD: quantity="5 bao" -> quantity=5, unit="bao")
+    if act == "purchase":
+        raw_q = res.get("quantity") or res.get("luong_phan_bon") or res.get("nong_do_va_luong_dung")
+        if raw_q is not None and "quantity" not in res:
+            res["quantity"] = raw_q
+        if res.get("quantity") is not None:
+            q_str = str(res["quantity"]).strip()
+            m_qu = re.match(
+                r"^(\d+(?:[\.,]\d+)?)\s*(bao|chai|gói|lọ|can|thùng|hộp|túi|kg|ký|cân|tạ|tấn|lít|l|ml|gam|g|bình|viên|cái|chiếc|cuộn)\b",
+                q_str,
+                re.IGNORECASE,
+            )
+            if m_qu:
+                num_part = m_qu.group(1).replace(",", ".")
+                unit_part = m_qu.group(2).lower()
+                try:
+                    res["quantity"] = int(num_part) if num_part.isdigit() else float(num_part)
+                except ValueError:
+                    res["quantity"] = num_part
+                if not res.get("unit"):
+                    res["unit"] = unit_part
+            elif not res.get("unit"):
+                # Tự động suy luận đơn vị tính hợp lý nếu người dùng chỉ nói số lượng
+                mat_cat = classify_material_category(str(res.get("material_name") or ""), res.get("material_type"))
+                if mat_cat == "pesticide":
+                    res["unit"] = "chai"
+                elif mat_cat == "fertilizer":
+                    res["unit"] = "bao"
+                else:
+                    res["unit"] = "đơn vị"
+
+    # Nếu ở fertilize mà luong_phan_bon mới chỉ là số, ghép thêm unit nếu có
+    if act == "fertilize" and res.get("luong_phan_bon") and res.get("unit"):
+        lp = str(res["luong_phan_bon"]).strip()
+        u = str(res["unit"]).strip()
+        if lp.replace(".", "").replace(",", "").isdigit() and u.lower() not in lp.lower():
+            res["luong_phan_bon"] = f"{lp} {u}"
 
     # Đồng bộ ngày thực hiện giữa activity_date và purchase_date / treatment_date
     if act == "purchase":
@@ -316,14 +365,16 @@ CATEGORY_NAMES_VN: Dict[str, str] = {
 def check_missing_fields(activity_type: str, current_slots: Dict[str, Any]) -> List[Dict[str, Any]]:
     """
     Kiểm tra danh sách các trường bắt buộc còn thiếu cho một loại hoạt động.
+    Tự động điền giá trị mặc định hợp lý khi người dùng đã cung cấp nhiều thông tin
+    để chuyển thẳng sang bước xác nhận (CONFIRMING), tránh hỏi lại quá nhiều lần.
     Trả về danh sách [{'key': ..., 'label': ...}]
     """
     if not activity_type or not isinstance(activity_type, str):
         return []
     canon = activity_type.lower()
     reqs = ACTIVITY_REQUIRED_FIELDS.get(canon, [])
-    missing = []
 
+    # 1. Đồng bộ qua alias trước
     for req_key, req_label, aliases in reqs:
         val = current_slots.get(req_key)
         if val is None or str(val).strip() in ("", "null", "None"):
@@ -334,7 +385,7 @@ def check_missing_fields(activity_type: str, current_slots: Dict[str, Any]) -> L
                     current_slots[req_key] = al_val
                     break
 
-        # Tự động gán crop_name từ CSDL nếu chưa có hoặc đang là mặc định cũ
+        # Tự động gán crop_name từ CSDL nếu chưa có
         if req_key == "crop_name" and (val is None or not str(val).strip() or str(val).strip() in ("Cà gai leo", "null", "None")):
             try:
                 from services.database import get_db_connection, get_crop_name_for_farmer
@@ -345,6 +396,69 @@ def check_missing_fields(activity_type: str, current_slots: Dict[str, Any]) -> L
                 val = "Bưởi diễn"
             current_slots["crop_name"] = val or "Bưởi diễn"
 
+    # 2. Cơ chế tự động điền khuyết thông minh khi người dùng đã nói câu giàu thông tin
+    if canon == "spray":
+        # Nếu đã có tên thuốc BVTV
+        if current_slots.get("ten_thuoc_bvtv"):
+            # Tự động điền đối tượng sâu bệnh và thời gian cách ly mặc định nếu chưa có
+            if not current_slots.get("target_pest"):
+                current_slots["target_pest"] = "Sâu bệnh hại"
+            if not current_slots.get("thoi_gian_cach_ly"):
+                current_slots["thoi_gian_cach_ly"] = 7
+            # Nếu người dùng đã nói kèm thông tin hiện trường (diện tích, dụng cụ phun, thời tiết...)
+            has_other_details = any(
+                current_slots.get(k)
+                for k in ("dien_tich", "phuong_thuc_phun", "thoi_tiet")
+            )
+            if not current_slots.get("nong_do_va_luong_dung") and has_other_details:
+                current_slots["nong_do_va_luong_dung"] = current_slots.pop("_catalog_dosage", None) or "Theo liều khuyến cáo bao bì"
+
+    elif canon == "fertilize":
+        if current_slots.get("ten_phan_bon"):
+            has_other_details = any(
+                current_slots.get(k)
+                for k in ("dien_tich", "phuong_phap_bon", "thoi_diem_bon")
+            )
+            if not current_slots.get("luong_phan_bon") and has_other_details:
+                current_slots["luong_phan_bon"] = "Theo quy trình canh tác"
+
+    elif canon == "purchase":
+        if current_slots.get("material_name"):
+            has_other_details = any(
+                current_slots.get(k)
+                for k in ("unit_price", "supplier_name", "invoice_no")
+            )
+            if not current_slots.get("quantity") and has_other_details:
+                current_slots["quantity"] = 1
+            if current_slots.get("quantity") and not current_slots.get("unit"):
+                mat_cat = classify_material_category(str(current_slots.get("material_name") or ""), current_slots.get("material_type"))
+                current_slots["unit"] = "chai" if mat_cat == "pesticide" else ("bao" if mat_cat == "fertilizer" else "đơn vị")
+
+    elif canon == "harvest":
+        has_other_details = any(current_slots.get(k) for k in ("dia_diem_cach_so_che", "chat_luong", "dien_tich"))
+        if not current_slots.get("san_luong_thu_hoach") and has_other_details:
+            current_slots["san_luong_thu_hoach"] = "Theo thực tế"
+
+    elif canon == "sale":
+        has_other_details = any(current_slots.get(k) for k in ("co_so_thu_mua", "unit_price"))
+        if not current_slots.get("khoi_luong_tieu_thu") and has_other_details:
+            current_slots["khoi_luong_tieu_thu"] = "Theo thực tế"
+
+    elif canon == "waste":
+        if not current_slots.get("material_name"):
+            current_slots["material_name"] = "Vỏ bao bì thuốc BVTV"
+        if not current_slots.get("treatment_method"):
+            current_slots["treatment_method"] = "Thu gom vào bể chứa chuyên dụng"
+
+    elif canon == "observation":
+        has_other_details = any(current_slots.get(k) for k in ("severity", "bien_phap_xu_ly", "dien_tich"))
+        if not current_slots.get("sinh_vat_gay_hai") and has_other_details:
+            current_slots["sinh_vat_gay_hai"] = "Sâu bệnh hại trên vườn"
+
+    # 3. Kiểm tra lại các trường bắt buộc thực sự còn thiếu
+    missing = []
+    for req_key, req_label, _ in reqs:
+        val = current_slots.get(req_key)
         if val is None or str(val).strip() in ("", "null", "None"):
             missing.append({"key": req_key, "label": req_label})
 
@@ -376,7 +490,7 @@ def build_clarification_question(
         has_iso = "thoi_gian_cach_ly" not in missing_keys
 
         if "ten_thuoc_bvtv" in missing_keys:
-            return "Bác cho em hỏi mình đang phun loại thuốc bảo vệ thực vật tên gì thế ạ?"
+            return "Bác cho em hỏi mình đang phun loại thuốc bảo vệ thực vật tên gì và pha mấy bình ạ?"
 
         if not has_pest and not has_dose and not has_iso:
             return f"Dạ bác phun thuốc {ten_thuoc} để trị sâu bệnh gì, liều lượng bao nhiêu và cách ly mấy ngày ạ?"
@@ -397,7 +511,7 @@ def build_clarification_question(
     elif canon == "fertilize":
         ten_phan = current_slots.get("ten_phan_bon") or current_slots.get("fertilizer_name") or "phân"
         if "ten_phan_bon" in missing_keys:
-            return "Bác cho em hỏi đợt này mình bón loại phân gì thế ạ (NPK, phân chuồng, hữu cơ vi sinh...)?"
+            return "Bác cho em hỏi đợt này mình bón loại phân gì và số lượng bao nhiêu thế ạ?"
         if "luong_phan_bon" in missing_keys:
             return f"Bác bón phân {ten_phan} với khối lượng bao nhiêu (mấy tạ, mấy bao hoặc mấy ký) ạ?"
 
@@ -407,7 +521,7 @@ def build_clarification_question(
         if "material_name" in missing_keys:
             return "Bác vừa nhập hoặc mua loại vật tư nông nghiệp nào thế ạ? Bác có thể nói tên hoặc bấm chụp ảnh vật tư để em lấy thông tin tự động nhé!"
         if "quantity" in missing_keys or "unit" in missing_keys:
-            return f"Bác mua {m_name} với số lượng là bao nhiêu và đơn vị tính thế nào (bao, ký, chai, gói...) ạ?"
+            return f"Bác mua {m_name} với số lượng là bao nhiêu (mấy bao, mấy chai hoặc mấy ký) ạ?"
 
     # 4. THU HOẠCH (harvest)
     elif canon == "harvest":
@@ -501,9 +615,10 @@ def build_confirmation_message(activity_type: str, slots: Dict[str, Any]) -> str
     elif canon == "purchase":
         m_name = slots.get("material_name") or "Vật tư nông nghiệp"
         qty = slots.get("quantity") or 1
-        unit = slots.get("unit") or ""
+        unit = str(slots.get("unit") or "").strip()
+        qty_str = f"{qty} {unit}".strip() if (unit and unit.lower() not in str(qty).lower()) else str(qty)
         lines.append(f"📦 **Tên vật tư:** {m_name}")
-        lines.append(f"⚖️ **Số lượng:** {qty} {unit}".strip())
+        lines.append(f"⚖️ **Số lượng:** {qty_str}")
         if slots.get("supplier_name"):
             lines.append(f"🏪 **Nơi mua / Đại lý:** {slots.get('supplier_name')}")
         if slots.get("unit_price"):

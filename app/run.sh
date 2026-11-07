@@ -7,7 +7,7 @@ if [ ! -f "$PYTHON_BIN" ]; then
     PYTHON_BIN="python3"
 fi
 
-PORT=${PORT:-6000}
+PORT=${PORT:-5000}
 SSL_FLAG="--ssl"
 if [ "$1" == "--no-ssl" ]; then
     SSL_FLAG="--no-ssl"
