@@ -6,9 +6,13 @@ Entrypoint khởi tạo Flask Server và đăng ký các API Blueprints từ th�
 import os
 import sys
 
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if ROOT_DIR not in sys.path:
-    sys.path.insert(0, ROOT_DIR)
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT_DIR = os.path.dirname(APP_DIR)
+if APP_DIR in sys.path:
+    sys.path.remove(APP_DIR)
+if ROOT_DIR in sys.path:
+    sys.path.remove(ROOT_DIR)
+sys.path.insert(0, ROOT_DIR)
 
 # Thiết lập đường dẫn tuyệt đối cho các model của services
 os.environ["TOKENS_PATH"] = os.path.join(ROOT_DIR, "models/tokens.txt")

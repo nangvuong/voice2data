@@ -390,6 +390,101 @@ def api_vlm_add_activity():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
+@ai_bp.route("/api/invoice-read", methods=["POST"])
+def api_invoice_read():
+    """
+    Chuyên dụng đọc hóa đơn mua phân bón & thuốc trừ sâu (invoice_receipt) để ghi nhật ký mua vật tư (Bảng 1.5 - input_purchases).
+    - Trích xuất: Tên nhà cung cấp, số hóa đơn, ngày mua, tổng tiền, và danh sách từng mặt hàng (tên phân/thuốc, số lượng, đơn vị, đơn giá).
+    - Tự động đối chiếu với CSDL `pesticides` / `fertilizers` và kiểm tra hoạt chất cấm.
+    - Nếu truyền `auto_save=true`, tự động lưu toàn bộ các mặt hàng vào bảng `input_purchases` (chặn lưu nếu phát hiện thuốc cấm).
+    """
+    photo_file = request.files.get("photo") or request.files.get("image") or request.files.get("file")
+    target_img_input = None
+    photo_url = ""
+
+    if photo_file:
+        orig_ext = os.path.splitext(photo_file.filename or "")[1].lower()
+        if not orig_ext or orig_ext not in [".jpg", ".jpeg", ".png", ".webp", ".heic", ".bmp"]:
+            orig_ext = ".jpg"
+        photo_id = uuid.uuid4().hex
+        filename = f"invoice_{photo_id}{orig_ext}"
+        dest_path = os.path.join(STATIC_PHOTOS_DIR, filename)
+        photo_file.save(dest_path)
+        photo_url = f"/static/photos/{filename}"
+        target_img_input = dest_path
+    else:
+        data = request.get_json(silent=True) or request.form or {}
+        photo_url = data.get("photo_url") or data.get("image_url") or ""
+        b64_data = data.get("image_base64") or data.get("base64") or ""
+        if b64_data:
+            target_img_input = b64_data
+        elif photo_url:
+            clean_name = os.path.basename(photo_url.split("?")[0])
+            local_path = os.path.join(STATIC_PHOTOS_DIR, clean_name)
+            if os.path.exists(local_path):
+                target_img_input = local_path
+            else:
+                target_img_input = photo_url
+
+    if not target_img_input:
+        return jsonify({"status": "error", "message": "Vui lòng đính kèm file ảnh hóa đơn hoặc cung cấp photo_url / base64"}), 400
+
+    data = request.get_json(silent=True) or request.form or {}
+    farmer = session.get("farmer") or {}
+    farmer_id = session.get("user_id") or farmer.get("id") or request.args.get("farmer_id") or data.get("farmer_id") or 1
+    crop_name = request.args.get("crop_name") or data.get("crop_name") or "Bưởi diễn"
+    auto_save = str(request.args.get("auto_save") or data.get("auto_save") or "false").lower() in ("true", "1", "yes")
+
+    try:
+        res = run_async(vlm_engine.analyze_image(
+            image_input=target_img_input,
+            task="invoice_receipt",
+            match_db=True,
+            crop_name=crop_name,
+        ))
+
+        analysis_dict = res.to_dict()
+        analysis_dict["photo_url"] = photo_url
+        diary_payload = res.to_diary_payload(
+            intent="purchase",
+            photo_url=photo_url,
+            crop_name=crop_name,
+        )
+
+        inv_data = analysis_dict.get("invoice_receipt") or {}
+        has_banned = bool(inv_data.get("has_banned_items"))
+
+        db_res = None
+        if auto_save:
+            if has_banned:
+                return jsonify({
+                    "status": "error",
+                    "message": "Phát hiện thuốc BVTV thuộc danh mục CẤM trên hóa đơn! Hệ thống từ chối lưu vào sổ nhật ký VietGAP.",
+                    "photo_url": photo_url,
+                    "invoice_receipt": inv_data,
+                    "diary_payload": diary_payload,
+                    "analysis": analysis_dict,
+                }), 400
+            db_res = res.save_to_database(
+                farmer_id=int(farmer_id) if farmer_id else 1,
+                intent="purchase",
+                photo_url=photo_url,
+                crop_name=crop_name,
+            )
+
+        return jsonify({
+            "status": "success",
+            "photo_url": photo_url,
+            "invoice_receipt": inv_data,
+            "diary_payload": diary_payload,
+            "db_result": db_res,
+            "analysis": analysis_dict,
+        })
+    except Exception as e:
+        logger.exception("Lỗi đọc hóa đơn vật tư: %s", e)
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
 # ==========================================
 # STT ĐƠN LẺ & TRÍCH XUẤT VIETGAP & VOICE-TO-DATA
 # ==========================================

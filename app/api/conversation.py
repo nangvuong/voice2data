@@ -59,6 +59,7 @@ def api_conversation_image():
             return jsonify({"status": "error", "message": "Không có file ảnh"}), 400
 
         flow_mode = (request.form.get("flow_mode") or "diary").strip().lower()
+        task = (request.form.get("task") or "auto").strip().lower()
         session_id = request.form.get("session_id") or session.get("conv_session_id")
         if not session_id:
             session_id = f"web_{flow_mode}_{uuid.uuid4().hex[:8]}"
@@ -79,6 +80,7 @@ def api_conversation_image():
                 enable_tts=enable_tts,
                 flow_mode=flow_mode,
                 photo_url=web_image_url,
+                task=task,
             )
         )
         res["web_image_url"] = web_image_url

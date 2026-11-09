@@ -742,6 +742,13 @@ class ConversationManager:
                     # Nếu câu xác nhận có kèm thông tin bổ sung (vd: "bón thúc rồi lưu luôn", "2 sào lưu đi")
                     if extracted_slots:
                         canon_slots = canonicalize_slots(extracted_slots, state.current_activity)
+                        has_multi_invoice = (
+                            isinstance(state.accumulated_slots.get("invoice_items"), list)
+                            and len(state.accumulated_slots["invoice_items"]) > 1
+                        )
+                        if has_multi_invoice:
+                            for k_skip in ("material_name", "quantity", "unit"):
+                                canon_slots.pop(k_skip, None)
                         state.update_slots(canon_slots)
                         self._match_materials_in_slots(state)
 
@@ -966,111 +973,112 @@ class ConversationManager:
                             context_data={"crop_name": state.crop_name, "current_activity": None, "slots": {}},
                         )
                         action_taken = "CHITCHAT_OR_UNKNOWN_REPLIED"
+                # Quy chuẩn hóa tên các trường slot về khóa chính thống
                 else:
-                    # Quy chuẩn hóa tên các trường slot về khóa chính thống
                     extracted_slots = canonicalize_slots(extracted_slots, state.current_activity)
                     corrected_slots = canonicalize_slots(corrected_slots, state.current_activity)
 
-                    # Ghi đè nếu có slot đính chính (CORRECTION)
-                    if corrected_slots:
-                        state.update_slots(corrected_slots)
+                    if True:
+                        # Ghi đè nếu có slot đính chính (CORRECTION)
+                        if corrected_slots:
+                            state.update_slots(corrected_slots)
 
-                    # Cập nhật slot mới
-                    if extracted_slots:
-                        state.update_slots(extracted_slots)
+                        # Cập nhật slot mới
+                        if extracted_slots:
+                            state.update_slots(extracted_slots)
 
-                    state.accumulated_slots = canonicalize_slots(state.accumulated_slots, state.current_activity)
+                        state.accumulated_slots = canonicalize_slots(state.accumulated_slots, state.current_activity)
 
-                    # Tự động gán ngày hôm nay nếu chưa có ngày
-                    date_keys = ["activity_date", "purchase_date", "harvest_date", "sale_date", "treatment_date"]
-                    has_date = any(state.accumulated_slots.get(k) for k in date_keys)
-                    if not has_date:
-                        state.accumulated_slots["activity_date"] = date.today().isoformat()
-                    if not state.accumulated_slots.get("crop_name"):
-                        state.accumulated_slots["crop_name"] = state.crop_name or "Bưởi diễn"
+                        # Tự động gán ngày hôm nay nếu chưa có ngày
+                        date_keys = ["activity_date", "purchase_date", "harvest_date", "sale_date", "treatment_date"]
+                        has_date = any(state.accumulated_slots.get(k) for k in date_keys)
+                        if not has_date:
+                            state.accumulated_slots["activity_date"] = date.today().isoformat()
+                        if not state.accumulated_slots.get("crop_name"):
+                            state.accumulated_slots["crop_name"] = state.crop_name or "Bưởi diễn"
 
-                    # Kiểm tra danh mục vật tư bằng MaterialMatcher
-                    self._match_materials_in_slots(state)
+                        # Kiểm tra danh mục vật tư bằng MaterialMatcher
+                        self._match_materials_in_slots(state)
 
-                    # Kiểm tra hoạt chất cấm trong slot
-                    if state.accumulated_slots.get("is_banned"):
-                        b_info = state.accumulated_slots.get("banned_info") or {}
-                        b_name = b_info.get("matched_name") or state.accumulated_slots.get("ten_thuoc_bvtv") or state.accumulated_slots.get("material_name") or "Thuốc"
-                        hazard = b_info.get("hazard") or "Rất độc hại, gây tồn lưu nguy hiểm trong môi trường và nông sản."
-                        state.state = DialogState.IDLE
-                        state.current_activity = None
-                        state.accumulated_slots = {}
-                        response_text = (
-                            f"⛔ **CẢNH BÁO PHÁP LÝ VIETGAP: PHÁT HIỆN THUỐC CẤM {b_name.upper()}!**\n\n"
-                            f"Theo Thông tư 75/BNNMT & Luật BVTV 41/2013, hoạt chất này đã bị **CẤM SỬ DỤNG TẠI VIỆT NAM** ({hazard}).\n\n"
-                            f"🚨 **Quy chuẩn VietGAP:** Hệ thống từ chối ghi nhận hoạt động này vào sổ nhật ký VietGAP.\n\n"
-                            f"🌿 **Giải pháp an toàn:** Bác nên chuyển sang dùng các chế phẩm sinh học như vi sinh Bt, nấm đối kháng Trichoderma hoặc dầu khoáng nông nghiệp nhé!"
-                        )
-                        action_taken = "BANNED_PESTICIDE_BLOCKED"
-                    else:
-                        # Nếu người dùng đã nói câu nhiều thông tin (>= 2 trường trích xuất hoặc >= 7 từ)
-                        # hoặc đã trả lời 1 lượt hỏi bổ sung (đang ở CLARIFYING), tự động điền giá trị mặc định
-                        # cho các trường còn khuyết để chuyển thẳng sang CONFIRMING, không hỏi đi hỏi lại.
-                        was_clarifying = (state.state == DialogState.CLARIFYING)
-                        word_count = len(clean_text.split())
-                        user_slot_count = len([
-                            k for k, v in state.accumulated_slots.items()
-                            if v is not None and str(v).strip() not in ("", "null", "None")
-                            and k not in ("activity_date", "purchase_date", "treatment_date", "crop_name", "pesticide_id", "fertilizer_id", "waste_type", "material_type")
-                        ])
-                        is_rich_utterance = (user_slot_count >= 2) or (word_count >= 7 and user_slot_count >= 1)
-
-                        if was_clarifying or is_rich_utterance:
-                            act_now = state.current_activity
-                            s_now = state.accumulated_slots
-                            if act_now == "spray":
-                                if s_now.get("ten_thuoc_bvtv") and not s_now.get("nong_do_va_luong_dung"):
-                                    s_now["nong_do_va_luong_dung"] = s_now.pop("_catalog_dosage", None) or "Theo liều khuyến cáo bao bì"
-                                elif was_clarifying and not s_now.get("ten_thuoc_bvtv"):
-                                    s_now["ten_thuoc_bvtv"] = "Thuốc BVTV"
-                                    if not s_now.get("nong_do_va_luong_dung"):
-                                        s_now["nong_do_va_luong_dung"] = "Theo liều khuyến cáo bao bì"
-                            elif act_now == "fertilize":
-                                if s_now.get("ten_phan_bon") and not s_now.get("luong_phan_bon"):
-                                    s_now["luong_phan_bon"] = "Theo quy trình canh tác"
-                                elif was_clarifying and not s_now.get("ten_phan_bon"):
-                                    s_now["ten_phan_bon"] = "Phân bón nông nghiệp"
-                                    if not s_now.get("luong_phan_bon"):
-                                        s_now["luong_phan_bon"] = "Theo quy trình canh tác"
-                            elif act_now == "purchase":
-                                if s_now.get("material_name") and not s_now.get("quantity"):
-                                    s_now["quantity"] = 1
-                                    if not s_now.get("unit"):
-                                        s_now["unit"] = "đơn vị"
-                            elif act_now == "harvest" and not s_now.get("san_luong_thu_hoach"):
-                                s_now["san_luong_thu_hoach"] = "Theo thực tế"
-                            elif act_now == "sale" and not s_now.get("khoi_luong_tieu_thu"):
-                                s_now["khoi_luong_tieu_thu"] = "Theo thực tế"
-                            elif act_now == "observation" and not s_now.get("sinh_vat_gay_hai"):
-                                s_now["sinh_vat_gay_hai"] = "Sâu bệnh hại trên vườn"
-                            elif act_now == "general" and not s_now.get("cong_viec"):
-                                s_now["cong_viec"] = clean_text
-
-                        # Kiểm tra các trường bắt buộc còn thiếu bằng Template
-                        missing = check_missing_fields(state.current_activity, state.accumulated_slots)
-                        state.missing_slots = missing
-
-                        if missing:
-                            state.state = DialogState.CLARIFYING
-                            response_text = build_clarification_question(
-                                state.current_activity, state.accumulated_slots, missing
+                        # Kiểm tra hoạt chất cấm trong slot
+                        if state.accumulated_slots.get("is_banned"):
+                            b_info = state.accumulated_slots.get("banned_info") or {}
+                            b_name = b_info.get("matched_name") or state.accumulated_slots.get("ten_thuoc_bvtv") or state.accumulated_slots.get("material_name") or "Thuốc"
+                            hazard = b_info.get("hazard") or "Rất độc hại, gây tồn lưu nguy hiểm trong môi trường và nông sản."
+                            state.state = DialogState.IDLE
+                            state.current_activity = None
+                            state.accumulated_slots = {}
+                            response_text = (
+                                f"⛔ **CẢNH BÁO PHÁP LÝ VIETGAP: PHÁT HIỆN THUỐC CẤM {b_name.upper()}!**\n\n"
+                                f"Theo Thông tư 75/BNNMT & Luật BVTV 41/2013, hoạt chất này đã bị **CẤM SỬ DỤNG TẠI VIỆT NAM** ({hazard}).\n\n"
+                                f"🚨 **Quy chuẩn VietGAP:** Hệ thống từ chối ghi nhận hoạt động này vào sổ nhật ký VietGAP.\n\n"
+                                f"🌿 **Giải pháp an toàn:** Bác nên chuyển sang dùng các chế phẩm sinh học như vi sinh Bt, nấm đối kháng Trichoderma hoặc dầu khoáng nông nghiệp nhé!"
                             )
-                            action_taken = "CLARIFYING_QUESTION_ASKED"
+                            action_taken = "BANNED_PESTICIDE_BLOCKED"
                         else:
-                            state.state = DialogState.CONFIRMING
-                            response_text = build_confirmation_message(
-                                state.current_activity, state.accumulated_slots
-                            )
-                            if state.meta.get("pending_activity"):
-                                p_act = state.meta["pending_activity"].get("activity")
-                                p_disp = TASK_NAME_DISPLAY.get(p_act, p_act)
-                                response_text += f"\n\n💡 *(Sau khi lưu phiếu này, em sẽ tự động ghi tiếp **{p_disp}** luôn nhé bác)*"
-                            action_taken = "CONFIRMATION_REQUESTED"
+                            # Nếu người dùng đã nói câu nhiều thông tin (>= 2 trường trích xuất hoặc >= 7 từ)
+                            # hoặc đã trả lời 1 lượt hỏi bổ sung (đang ở CLARIFYING), tự động điền giá trị mặc định
+                            # cho các trường còn khuyết để chuyển thẳng sang CONFIRMING, không hỏi đi hỏi lại.
+                            was_clarifying = (state.state == DialogState.CLARIFYING)
+                            word_count = len(clean_text.split())
+                            user_slot_count = len([
+                                k for k, v in state.accumulated_slots.items()
+                                if v is not None and str(v).strip() not in ("", "null", "None")
+                                and k not in ("activity_date", "purchase_date", "treatment_date", "crop_name", "pesticide_id", "fertilizer_id", "waste_type", "material_type")
+                            ])
+                            is_rich_utterance = (user_slot_count >= 2) or (word_count >= 7 and user_slot_count >= 1)
+
+                            if was_clarifying or is_rich_utterance:
+                                act_now = state.current_activity
+                                s_now = state.accumulated_slots
+                                if act_now == "spray":
+                                    if s_now.get("ten_thuoc_bvtv") and not s_now.get("nong_do_va_luong_dung"):
+                                        s_now["nong_do_va_luong_dung"] = s_now.pop("_catalog_dosage", None) or "Theo liều khuyến cáo bao bì"
+                                    elif was_clarifying and not s_now.get("ten_thuoc_bvtv"):
+                                        s_now["ten_thuoc_bvtv"] = "Thuốc BVTV"
+                                        if not s_now.get("nong_do_va_luong_dung"):
+                                            s_now["nong_do_va_luong_dung"] = "Theo liều khuyến cáo bao bì"
+                                elif act_now == "fertilize":
+                                    if s_now.get("ten_phan_bon") and not s_now.get("luong_phan_bon"):
+                                        s_now["luong_phan_bon"] = "Theo quy trình canh tác"
+                                    elif was_clarifying and not s_now.get("ten_phan_bon"):
+                                        s_now["ten_phan_bon"] = "Phân bón nông nghiệp"
+                                        if not s_now.get("luong_phan_bon"):
+                                            s_now["luong_phan_bon"] = "Theo quy trình canh tác"
+                                elif act_now == "purchase":
+                                    if s_now.get("material_name") and not s_now.get("quantity"):
+                                        s_now["quantity"] = 1
+                                        if not s_now.get("unit"):
+                                            s_now["unit"] = "đơn vị"
+                                elif act_now == "harvest" and not s_now.get("san_luong_thu_hoach"):
+                                    s_now["san_luong_thu_hoach"] = "Theo thực tế"
+                                elif act_now == "sale" and not s_now.get("khoi_luong_tieu_thu"):
+                                    s_now["khoi_luong_tieu_thu"] = "Theo thực tế"
+                                elif act_now == "observation" and not s_now.get("sinh_vat_gay_hai"):
+                                    s_now["sinh_vat_gay_hai"] = "Sâu bệnh hại trên vườn"
+                                elif act_now == "general" and not s_now.get("cong_viec"):
+                                    s_now["cong_viec"] = clean_text
+
+                            # Kiểm tra các trường bắt buộc còn thiếu bằng Template
+                            missing = check_missing_fields(state.current_activity, state.accumulated_slots)
+                            state.missing_slots = missing
+
+                            if missing:
+                                state.state = DialogState.CLARIFYING
+                                response_text = build_clarification_question(
+                                    state.current_activity, state.accumulated_slots, missing
+                                )
+                                action_taken = "CLARIFYING_QUESTION_ASKED"
+                            else:
+                                state.state = DialogState.CONFIRMING
+                                response_text = build_confirmation_message(
+                                    state.current_activity, state.accumulated_slots
+                                )
+                                if state.meta.get("pending_activity"):
+                                    p_act = state.meta["pending_activity"].get("activity")
+                                    p_disp = TASK_NAME_DISPLAY.get(p_act, p_act)
+                                    response_text += f"\n\n💡 *(Sau khi lưu phiếu này, em sẽ tự động ghi tiếp **{p_disp}** luôn nhé bác)*"
+                                action_taken = "CONFIRMATION_REQUESTED"
 
         # Ghi nhận lượt trả lời của trợ lý vào lịch sử
         state.add_turn(role="assistant", text=response_text)
@@ -1088,8 +1096,8 @@ class ConversationManager:
                     response_text,
                     analysis_dict=tts_analysis,
                     dialog_state=state.state.value,
-                    activity_type=state.current_activity,
-                    slots=state.accumulated_slots,
+                    activity_type=state.current_activity or state.last_saved_activity,
+                    slots=state.accumulated_slots or state.last_saved_slots,
                 )
             audio_result_path = self._generate_tts_audio(tts_text, tts_output_path)
             if audio_result_path:
@@ -1130,8 +1138,11 @@ class ConversationManager:
             "field_crop": "general",
             "other": "general",
         }
+        # Nếu ảnh là hóa đơn mua vật tư nông nghiệp, luôn ưu tiên hoạt động purchase
+        if cat == "invoice_receipt" or analysis_dict.get("invoice_receipt"):
+            target_act = "purchase"
         # Nếu đang trong một hoạt động cụ thể (VD: purchase, waste...), tôn trọng hoạt động đó
-        if current_activity == "purchase":
+        elif current_activity == "purchase":
             target_act = "purchase"
         elif current_activity == "waste":
             target_act = "waste"
@@ -1143,8 +1154,6 @@ class ConversationManager:
             target_act = "fertilize"
         elif cat == "pest_disease" or analysis_dict.get("pest_disease"):
             target_act = "observation"
-        elif cat == "invoice_receipt":
-            target_act = "purchase"
         elif current_activity and current_activity != "general":
             target_act = current_activity
         else:
@@ -1159,7 +1168,83 @@ class ConversationManager:
         # 1. Hoạt động MUA VẬT TƯ (purchase)
         if target_act == "purchase":
             slots["purchase_date"] = date.today().isoformat()
-            if cat == "pesticide" or analysis_dict.get("pesticide"):
+            if cat == "invoice_receipt" or analysis_dict.get("invoice_receipt"):
+                inv = analysis_dict.get("invoice_receipt") or {}
+                if inv.get("purchase_date"):
+                    slots["purchase_date"] = inv["purchase_date"]
+                    slots["activity_date"] = inv["purchase_date"]
+                if inv.get("supplier_name"):
+                    slots["supplier_name"] = inv["supplier_name"]
+                if inv.get("buyer_name"):
+                    slots["buyer_name"] = inv["buyer_name"]
+                if inv.get("invoice_no"):
+                    slots["invoice_no"] = inv["invoice_no"]
+                if inv.get("total_amount"):
+                    slots["total_amount"] = inv["total_amount"]
+
+                raw_items = inv.get("items") or []
+                items = []
+                for it_raw in raw_items:
+                    if not isinstance(it_raw, dict):
+                        continue
+                    items.append({
+                        "material_name": it_raw.get("material_name"),
+                        "material_type": it_raw.get("material_type"),
+                        "active_ingredient": it_raw.get("active_ingredient"),
+                        "quantity": it_raw.get("quantity"),
+                        "unit": it_raw.get("unit") or "",
+                        "unit_price": it_raw.get("unit_price"),
+                        "amount": it_raw.get("amount"),
+                        "expiry_date": it_raw.get("expiry_date"),
+                        "batch_no": it_raw.get("batch_no"),
+                        "pesticide_id": it_raw.get("pesticide_id"),
+                        "fertilizer_id": it_raw.get("fertilizer_id"),
+                        "is_banned": bool(it_raw.get("is_banned")),
+                    })
+
+                if len(items) == 1:
+                    it = items[0]
+                    slots["material_name"] = it.get("material_name") or analysis_dict.get("title") or "Vật tư mua theo hóa đơn"
+                    slots["material_type"] = it.get("material_type") or "Vật tư nông nghiệp"
+                    slots["quantity"] = it.get("quantity") or 1
+                    slots["unit"] = it.get("unit") or ""
+                    if it.get("unit_price"):
+                        slots["unit_price"] = it.get("unit_price")
+                    elif inv.get("total_amount"):
+                        slots["unit_price"] = inv.get("total_amount")
+                    if it.get("pesticide_id"):
+                        slots["pesticide_id"] = it["pesticide_id"]
+                    if it.get("fertilizer_id"):
+                        slots["fertilizer_id"] = it["fertilizer_id"]
+                    if it.get("expiry_date"):
+                        slots["expiry_date"] = it["expiry_date"]
+                    slots["invoice_items"] = items
+                elif len(items) > 1:
+                    slots["invoice_items"] = items
+                    names = [str(it.get("material_name") or "").strip() for it in items if it.get("material_name")]
+                    slots["material_name"] = ", ".join(names) if names else (analysis_dict.get("title") or "Vật tư mua theo hóa đơn")
+                    types = set(str(it.get("material_type") or "").strip() for it in items if it.get("material_type"))
+                    if "Thuốc BVTV" in types and "Phân bón" in types:
+                        slots["material_type"] = "Phân bón & Thuốc BVTV"
+                    elif "Thuốc BVTV" in types:
+                        slots["material_type"] = "Thuốc BVTV"
+                    elif "Phân bón" in types:
+                        slots["material_type"] = "Phân bón"
+                    else:
+                        slots["material_type"] = "Vật tư nông nghiệp"
+                    slots["quantity"] = f"{len(items)} mặt hàng"
+                    slots["unit"] = ""
+                    if inv.get("total_amount"):
+                        slots["unit_price"] = inv.get("total_amount")
+                    elif items[0].get("unit_price"):
+                        slots["unit_price"] = items[0].get("unit_price")
+                else:
+                    slots["material_name"] = analysis_dict.get("title") or "Vật tư mua theo hóa đơn"
+                    slots["quantity"] = 1
+                    slots["unit"] = "đơn vị"
+                if analysis_dict.get("summary"):
+                    slots["note"] = analysis_dict.get("summary")
+            elif cat == "pesticide" or analysis_dict.get("pesticide"):
                 p = analysis_dict.get("pesticide") or {}
                 name = p.get("trade_name") or p.get("brand_name") or analysis_dict.get("title")
                 db = p.get("db_match") or {}
@@ -1181,10 +1266,6 @@ class ConversationManager:
                 slots["material_type"] = "Phân bón"
                 if f.get("manufacturer"):
                     slots["supplier_name"] = f.get("manufacturer")
-            elif cat == "invoice_receipt":
-                slots["material_name"] = analysis_dict.get("title") or "Vật tư mua theo hóa đơn"
-                if analysis_dict.get("summary"):
-                    slots["note"] = analysis_dict.get("summary")
             else:
                 slots["material_name"] = analysis_dict.get("title") or "Vật tư nông nghiệp"
 
@@ -1267,6 +1348,7 @@ class ConversationManager:
         enable_tts: bool = False,
         flow_mode: str = "diary",
         photo_url: Optional[str] = None,
+        task: str = "auto",
     ) -> Dict[str, Any]:
         """
         Tiếp nhận ảnh từ người dùng:
@@ -1301,10 +1383,16 @@ class ConversationManager:
         state.accumulated_slots["photo_url"] = web_photo_url
         state.add_turn(role="user", text=f"[Gửi ảnh: {os.path.basename(image_path)}]", image_path=web_photo_url)
 
+        # Nếu đang trong luồng đọc hóa đơn hoặc task truyền vào là invoice_receipt
+        effective_task = task or "auto"
+        if effective_task == "auto" and state.meta.get("invoice_flow"):
+            effective_task = "invoice_receipt"
+
         # Phân tích ảnh qua VLM Engine — truyền tên giống cây từ phiên hội thoại
         try:
             analysis = await vlm_engine.analyze_image(
                 image_path,
+                task=effective_task,
                 crop_name=state.crop_name or "Bưởi diễn",
             )
             analysis_dict = analysis.to_dict()
@@ -1333,14 +1421,21 @@ class ConversationManager:
         analysis_dict["sections"] = sections
         state.last_image_analysis = analysis_dict
 
-        # Kiểm tra chốt chặn an toàn: Thuốc bị CẤM trong ảnh
+        # Kiểm tra chốt chặn an toàn: Thuốc bị CẤM trong ảnh hoặc trên hóa đơn
         p_info = analysis_dict.get("pesticide") or {}
-        is_banned_image = (lead_info.get("type") == "pesticide_banned") or bool(p_info.get("is_banned"))
+        inv_info = analysis_dict.get("invoice_receipt") or {}
+        is_invoice_image = (analysis_dict.get("category") == "invoice_receipt") or bool(inv_info)
+        is_banned_image = (
+            (lead_info.get("type") in ("pesticide_banned", "invoice_banned"))
+            or bool(p_info.get("is_banned"))
+            or bool(inv_info.get("has_banned_items"))
+        )
 
         response_text = ""
         action_taken = ""
         clarifying_q = ""
         missing = []
+        suggested_actions = []
 
         if is_banned_image:
             # Thuốc cấm: TUYỆT ĐỐI KHÔNG ghi nhật ký, xóa slot và chuyển về ADVISORY để cảnh báo
@@ -1351,7 +1446,7 @@ class ConversationManager:
             response_text = advisory_info
             action_taken = "BANNED_PESTICIDE_IMAGE_ALERT"
 
-        elif is_diagnosis_mode:
+        elif is_diagnosis_mode and not is_invoice_image:
             # -----------------------------------------------------------------
             # LUỒNG CHẨN ĐOÁN SÂU BỆNH & TƯ VẤN KỸ THUẬT: Chỉ trả lời chẩn đoán & tư vấn
             # -----------------------------------------------------------------
@@ -1364,10 +1459,33 @@ class ConversationManager:
             response_text = advisory_info
             action_taken = "DIAGNOSIS_IMAGE_ANALYZED"
 
+        elif analysis_dict.get("category") == "other" and not is_invoice_image and not state.current_activity:
+            # -----------------------------------------------------------------
+            # HÓA ĐƠN NGOÀI NÔNG NGHIỆP HOẶC ẢNH NGOÀI NÔNG NGHIỆP:
+            # Không ghi vào sổ nhật ký, chỉ trả lời bình thường
+            # -----------------------------------------------------------------
+            state.accumulated_slots = {}
+            state.missing_slots = []
+            state.current_activity = None
+            state.state = DialogState.IDLE
+            img_title = analysis_dict.get("title") or "hình ảnh"
+            img_sum = analysis_dict.get("summary") or ""
+            comb_lower = f"{img_title} {img_sum}".lower()
+            if any(k in comb_lower for k in ("hóa đơn", "hoá đơn", "biên lai", "vat invoice", "phiếu")):
+                response_text = (
+                    f"Dạ em nhận thấy đây là **{img_title}**. {img_sum}\n\n"
+                    f"Vì đây là hóa đơn ngoài lĩnh vực vật tư nông nghiệp nên em không ghi vào Sổ nhật ký VietGAP nhé bác!"
+                )
+            else:
+                response_text = f"Dạ em nhận thấy trong ảnh là **{img_title}**. {img_sum}".strip()
+            action_taken = "NON_AGRICULTURAL_IMAGE_REPLIED"
+
         else:
             # -----------------------------------------------------------------
             # LUỒNG GHI NHẬT KÝ: Trích xuất thông tin từ ảnh vào phiếu nhật ký ngay
             # -----------------------------------------------------------------
+            if is_invoice_image and state.current_activity != "purchase":
+                state.accumulated_slots = {"photo_url": web_photo_url}
             target_act, img_slots = self._extract_slots_from_image(
                 analysis_dict,
                 state.current_activity,
@@ -1384,24 +1502,53 @@ class ConversationManager:
             self._match_materials_in_slots(state)
             state.accumulated_slots = canonicalize_slots(state.accumulated_slots, state.current_activity)
 
-            missing = check_missing_fields(state.current_activity, state.accumulated_slots)
-            state.missing_slots = missing
-
-            act_display = TASK_NAME_DISPLAY.get(state.current_activity, state.current_activity)
-            diary_status_header = (
-                f"**Đã nhận diện hình ảnh và trích xuất vào phiếu {act_display}:**\n\n"
-            )
-
-            if missing:
-                state.state = DialogState.CLARIFYING
-                clarifying_q = build_clarification_question(state.current_activity, state.accumulated_slots, missing)
-                response_text = f"{diary_status_header}{clarifying_q}"
-                action_taken = "DIARY_UPDATED_FROM_IMAGE_CLARIFYING"
-            else:
+            if state.accumulated_slots.get("is_banned"):
+                b_info = state.accumulated_slots.get("banned_info") or {}
+                b_name = b_info.get("matched_name") or state.accumulated_slots.get("material_name") or "Thuốc"
+                hazard = b_info.get("hazard") or "Rất độc hại, gây tồn lưu nguy hiểm trong môi trường và nông sản."
+                state.accumulated_slots = {}
+                state.missing_slots = []
+                state.current_activity = None
+                state.state = DialogState.ADVISORY
+                response_text = (
+                    f"⛔ **CẢNH BÁO PHÁP LÝ VIETGAP: PHÁT HIỆN THUỐC CẤM {b_name.upper()} TRÊN HÓA ĐƠN!**\n\n"
+                    f"Theo Thông tư 75/BNNMT & Luật BVTV 41/2013, hoạt chất này đã bị **CẤM SỬ DỤNG TẠI VIỆT NAM** ({hazard}).\n\n"
+                    f"🚨 **Quy chuẩn VietGAP:** Hệ thống từ chối ghi nhận hóa đơn này vào sổ nhật ký VietGAP."
+                )
+                action_taken = "BANNED_PESTICIDE_IMAGE_ALERT"
+            elif is_invoice_image:
+                # Chụp hóa đơn -> Tự động điền sang hoạt động Mua vật tư (purchase) và hiển thị Phiếu xác nhận (CONFIRMING)
+                if not state.accumulated_slots.get("quantity"):
+                    state.accumulated_slots["quantity"] = 1
+                    state.accumulated_slots["unit"] = state.accumulated_slots.get("unit") or "đơn vị"
+                state.current_activity = "purchase"
+                state.missing_slots = []
                 state.state = DialogState.CONFIRMING
-                confirm_msg = build_confirmation_message(state.current_activity, state.accumulated_slots)
-                response_text = f"{diary_status_header}{confirm_msg}"
+                confirm_msg = build_confirmation_message("purchase", state.accumulated_slots)
+                response_text = (
+                    "**Đã đọc hóa đơn mua vật tư nông nghiệp và trích xuất vào phiếu Mua vật tư:**\n\n"
+                    f"{confirm_msg}"
+                )
                 action_taken = "DIARY_UPDATED_FROM_IMAGE_CONFIRMING"
+            else:
+                missing = check_missing_fields(state.current_activity, state.accumulated_slots)
+                state.missing_slots = missing
+
+                act_display = TASK_NAME_DISPLAY.get(state.current_activity, state.current_activity)
+                diary_status_header = (
+                    f"**Đã nhận diện hình ảnh và trích xuất vào phiếu {act_display}:**\n\n"
+                )
+
+                if missing:
+                    state.state = DialogState.CLARIFYING
+                    clarifying_q = build_clarification_question(state.current_activity, state.accumulated_slots, missing)
+                    response_text = f"{diary_status_header}{clarifying_q}"
+                    action_taken = "DIARY_UPDATED_FROM_IMAGE_CLARIFYING"
+                else:
+                    state.state = DialogState.CONFIRMING
+                    confirm_msg = build_confirmation_message(state.current_activity, state.accumulated_slots)
+                    response_text = f"{diary_status_header}{confirm_msg}"
+                    action_taken = "DIARY_UPDATED_FROM_IMAGE_CONFIRMING"
 
         state.add_turn(role="assistant", text=response_text)
 
@@ -1410,9 +1557,9 @@ class ConversationManager:
             tts_text = build_tts_spoken_text(
                 response_text,
                 analysis_dict=analysis_dict,
-                dialog_state="ADVISORY" if (is_diagnosis_mode or is_banned_image) else state.state.value,
-                activity_type=state.current_activity,
-                slots=state.accumulated_slots,
+                dialog_state="ADVISORY" if (is_diagnosis_mode and not is_invoice_image or is_banned_image) else state.state.value,
+                activity_type="purchase" if is_invoice_image else state.current_activity,
+                slots=state.last_saved_slots if action_taken == "INVOICE_AUTO_COMMITTED" else state.accumulated_slots,
             )
             audio_file = self._generate_tts_audio(tts_text)
             if audio_file:
@@ -1422,7 +1569,7 @@ class ConversationManager:
             "status": "success",
             "session_id": session_id,
             "dialog_state": state.state.value,
-            "current_activity": state.current_activity,
+            "current_activity": "purchase" if action_taken == "INVOICE_AUTO_COMMITTED" else state.current_activity,
             "category": analysis_dict.get("category"),
             "title": analysis_dict.get("title"),
             "action_taken": action_taken,
@@ -1431,8 +1578,9 @@ class ConversationManager:
             "lead_info": lead_info,
             "sections": sections,
             "analysis": analysis_dict,
-            "accumulated_slots": state.accumulated_slots,
+            "accumulated_slots": state.last_saved_slots if action_taken == "INVOICE_AUTO_COMMITTED" else state.accumulated_slots,
             "missing_slots": state.missing_slots,
+            "suggested_actions": suggested_actions,
             "audio_file": audio_file,
         }
 
@@ -1564,29 +1712,43 @@ class ConversationManager:
             try:
                 from conversation.templates import classify_material_category
                 from services.rag.safety_checker import safety_checker
-                mat_val = str(slots["material_name"])
-                cat = classify_material_category(mat_val, slots.get("material_type"))
-                if cat == "pesticide":
-                    slots["material_type"] = "Thuốc BVTV"
-                    banned_res = safety_checker.check_banned_substance(mat_val)
-                    if banned_res.is_banned:
-                        slots["is_banned"] = True
-                        slots["banned_info"] = banned_res.to_dict()
-                    else:
-                        match_res = material_matcher.fuzzy_match(mat_val, category_hint="pesticide")
-                        if match_res:
-                            if match_res.is_banned:
-                                slots["is_banned"] = True
-                                slots["banned_info"] = match_res.banned_info
-                            elif match_res.matched:
-                                slots["material_name"] = match_res.canonical_name or slots["material_name"]
-                                slots["pesticide_id"] = match_res.item_id
-                elif cat == "fertilizer":
-                    slots["material_type"] = "Phân bón"
-                    match_res = material_matcher.fuzzy_match(mat_val, category_hint="fertilizer")
-                    if match_res and match_res.matched:
-                        slots["material_name"] = match_res.canonical_name or slots["material_name"]
-                        slots["fertilizer_id"] = match_res.item_id
+                inv_items = slots.get("invoice_items")
+                if isinstance(inv_items, list) and len(inv_items) > 1:
+                    for it in inv_items:
+                        if not isinstance(it, dict):
+                            continue
+                        it_name = str(it.get("material_name") or "").strip()
+                        if not it_name:
+                            continue
+                        banned_res = safety_checker.check_banned_substance(it_name)
+                        if banned_res.is_banned or it.get("is_banned"):
+                            slots["is_banned"] = True
+                            slots["banned_info"] = banned_res.to_dict() if banned_res.is_banned else (it.get("banned_info") or {})
+                            break
+                else:
+                    mat_val = str(slots["material_name"])
+                    cat = classify_material_category(mat_val, slots.get("material_type"))
+                    if cat == "pesticide":
+                        slots["material_type"] = "Thuốc BVTV"
+                        banned_res = safety_checker.check_banned_substance(mat_val)
+                        if banned_res.is_banned:
+                            slots["is_banned"] = True
+                            slots["banned_info"] = banned_res.to_dict()
+                        else:
+                            match_res = material_matcher.fuzzy_match(mat_val, category_hint="pesticide")
+                            if match_res:
+                                if match_res.is_banned:
+                                    slots["is_banned"] = True
+                                    slots["banned_info"] = match_res.banned_info
+                                elif match_res.matched:
+                                    slots["material_name"] = match_res.canonical_name or slots["material_name"]
+                                    slots["pesticide_id"] = match_res.item_id
+                    elif cat == "fertilizer":
+                        slots["material_type"] = "Phân bón"
+                        match_res = material_matcher.fuzzy_match(mat_val, category_hint="fertilizer")
+                        if match_res and match_res.matched:
+                            slots["material_name"] = match_res.canonical_name or slots["material_name"]
+                            slots["fertilizer_id"] = match_res.item_id
             except Exception as e:
                 logger.debug("Khớp danh mục vật tư mua không thành công: %s", e)
 
@@ -1606,7 +1768,13 @@ class ConversationManager:
 
         # Chốt chặn kiểm tra an toàn VietGAP: Tuyệt đối không lưu hoạt chất cấm vào MySQL
         from services.rag.safety_checker import safety_checker
-        for cand in [target_slots.get("ten_thuoc_bvtv"), target_slots.get("material_name"), target_slots.get("active_ingredient")]:
+        candidates_to_check = [target_slots.get("ten_thuoc_bvtv"), target_slots.get("material_name"), target_slots.get("active_ingredient")]
+        if isinstance(target_slots.get("invoice_items"), list):
+            for it in target_slots["invoice_items"]:
+                if isinstance(it, dict):
+                    candidates_to_check.append(it.get("material_name"))
+                    candidates_to_check.append(it.get("active_ingredient"))
+        for cand in candidates_to_check:
             if cand:
                 banned_chk = safety_checker.check_banned_substance(str(cand))
                 if banned_chk.is_banned:

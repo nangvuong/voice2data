@@ -285,34 +285,39 @@ def canonicalize_slots(slots: Dict[str, Any], activity_type: Optional[str] = Non
 
     # Tự động tách unit từ quantity khi ở hoạt động purchase (VD: quantity="5 bao" -> quantity=5, unit="bao")
     if act == "purchase":
-        raw_q = res.get("quantity") or res.get("luong_phan_bon") or res.get("nong_do_va_luong_dung")
-        if raw_q is not None and "quantity" not in res:
-            res["quantity"] = raw_q
-        if res.get("quantity") is not None:
-            q_str = str(res["quantity"]).strip()
-            m_qu = re.match(
-                r"^(\d+(?:[\.,]\d+)?)\s*(bao|chai|gói|lọ|can|thùng|hộp|túi|kg|ký|cân|tạ|tấn|lít|l|ml|gam|g|bình|viên|cái|chiếc|cuộn)\b",
-                q_str,
-                re.IGNORECASE,
-            )
-            if m_qu:
-                num_part = m_qu.group(1).replace(",", ".")
-                unit_part = m_qu.group(2).lower()
-                try:
-                    res["quantity"] = int(num_part) if num_part.isdigit() else float(num_part)
-                except ValueError:
-                    res["quantity"] = num_part
-                if not res.get("unit"):
-                    res["unit"] = unit_part
-            elif not res.get("unit"):
-                # Tự động suy luận đơn vị tính hợp lý nếu người dùng chỉ nói số lượng
-                mat_cat = classify_material_category(str(res.get("material_name") or ""), res.get("material_type"))
-                if mat_cat == "pesticide":
-                    res["unit"] = "chai"
-                elif mat_cat == "fertilizer":
-                    res["unit"] = "bao"
-                else:
-                    res["unit"] = "đơn vị"
+        inv_items = res.get("invoice_items")
+        if isinstance(inv_items, list) and len(inv_items) > 1:
+            res["quantity"] = f"{len(inv_items)} mặt hàng"
+            res["unit"] = ""
+        else:
+            raw_q = res.get("quantity") or res.get("luong_phan_bon") or res.get("nong_do_va_luong_dung")
+            if raw_q is not None and "quantity" not in res:
+                res["quantity"] = raw_q
+            if res.get("quantity") is not None:
+                q_str = str(res["quantity"]).strip()
+                m_qu = re.match(
+                    r"^(\d+(?:[\.,]\d+)?)\s*(bao|chai|gói|lọ|can|thùng|hộp|túi|kg|ký|cân|tạ|tấn|lít|l|ml|gam|g|bình|viên|cái|chiếc|cuộn)\b",
+                    q_str,
+                    re.IGNORECASE,
+                )
+                if m_qu:
+                    num_part = m_qu.group(1).replace(",", ".")
+                    unit_part = m_qu.group(2).lower()
+                    try:
+                        res["quantity"] = int(num_part) if num_part.isdigit() else float(num_part)
+                    except ValueError:
+                        res["quantity"] = num_part
+                    if not res.get("unit"):
+                        res["unit"] = unit_part
+                elif not res.get("unit") and not (isinstance(inv_items, list) and len(inv_items) == 1):
+                    # Tự động suy luận đơn vị tính hợp lý nếu người dùng chỉ nói số lượng (trừ khi đọc từ hóa đơn không ghi đơn vị)
+                    mat_cat = classify_material_category(str(res.get("material_name") or ""), res.get("material_type"))
+                    if mat_cat == "pesticide":
+                        res["unit"] = "chai"
+                    elif mat_cat == "fertilizer":
+                        res["unit"] = "bao"
+                    else:
+                        res["unit"] = "đơn vị"
 
     # Nếu ở fertilize mà luong_phan_bon mới chỉ là số, ghép thêm unit nếu có
     if act == "fertilize" and res.get("luong_phan_bon") and res.get("unit"):
@@ -424,15 +429,20 @@ def check_missing_fields(activity_type: str, current_slots: Dict[str, Any]) -> L
 
     elif canon == "purchase":
         if current_slots.get("material_name"):
-            has_other_details = any(
-                current_slots.get(k)
-                for k in ("unit_price", "supplier_name", "invoice_no")
-            )
-            if not current_slots.get("quantity") and has_other_details:
-                current_slots["quantity"] = 1
-            if current_slots.get("quantity") and not current_slots.get("unit"):
-                mat_cat = classify_material_category(str(current_slots.get("material_name") or ""), current_slots.get("material_type"))
-                current_slots["unit"] = "chai" if mat_cat == "pesticide" else ("bao" if mat_cat == "fertilizer" else "đơn vị")
+            inv_items = current_slots.get("invoice_items")
+            if isinstance(inv_items, list) and len(inv_items) > 1:
+                current_slots["quantity"] = f"{len(inv_items)} mặt hàng"
+                current_slots["unit"] = ""
+            else:
+                has_other_details = any(
+                    current_slots.get(k)
+                    for k in ("unit_price", "supplier_name", "invoice_no", "total_amount")
+                )
+                if not current_slots.get("quantity") and has_other_details:
+                    current_slots["quantity"] = 1
+                if current_slots.get("quantity") and not current_slots.get("unit") and not (isinstance(inv_items, list) and len(inv_items) == 1):
+                    mat_cat = classify_material_category(str(current_slots.get("material_name") or ""), current_slots.get("material_type"))
+                    current_slots["unit"] = "chai" if mat_cat == "pesticide" else ("bao" if mat_cat == "fertilizer" else "đơn vị")
 
     elif canon == "harvest":
         has_other_details = any(current_slots.get(k) for k in ("dia_diem_cach_so_che", "chat_luong", "dien_tich"))
@@ -613,18 +623,55 @@ def build_confirmation_message(activity_type: str, slots: Dict[str, Any]) -> str
             lines.append(f"- **Giai đoạn/Thời điểm:** {slots.get('thoi_diem_bon')}")
 
     elif canon == "purchase":
-        m_name = slots.get("material_name") or "Vật tư nông nghiệp"
-        qty = slots.get("quantity") or 1
-        unit = str(slots.get("unit") or "").strip()
-        qty_str = f"{qty} {unit}".strip() if (unit and unit.lower() not in str(qty).lower()) else str(qty)
-        lines.append(f"- **Tên vật tư:** {m_name}")
-        lines.append(f"- **Số lượng:** {qty_str}")
+        inv_items = slots.get("invoice_items")
         if slots.get("supplier_name"):
             lines.append(f"- **Nơi mua / Đại lý:** {slots.get('supplier_name')}")
-        if slots.get("unit_price"):
-            lines.append(f"- **Đơn giá:** {slots.get('unit_price')}")
+        if slots.get("buyer_name"):
+            lines.append(f"- **Người mua:** {slots.get('buyer_name')}")
         if slots.get("invoice_no"):
             lines.append(f"- **Số hóa đơn:** {slots.get('invoice_no')}")
+
+        if isinstance(inv_items, list) and len(inv_items) > 1:
+            lines.append(f"- **Danh mục vật tư trên hóa đơn ({len(inv_items)} mặt hàng):**")
+            for idx_it, it in enumerate(inv_items, 1):
+                if not isinstance(it, dict):
+                    continue
+                it_name = it.get("material_name") or "Vật tư"
+                it_type = it.get("material_type") or "Vật tư"
+                it_q = it.get("quantity") or 1
+                if isinstance(it_q, float) and it_q.is_integer():
+                    it_q = int(it_q)
+                it_u = str(it.get("unit") or "").strip()
+                if it_u.lower() == "đơn vị":
+                    it_u = ""
+                it_q_str = f"{it_q} {it_u}".strip() if (it_u and it_u.lower() not in str(it_q).lower()) else str(it_q)
+                u_price = it.get("unit_price")
+                amt = it.get("amount")
+                price_parts = []
+                if u_price:
+                    price_parts.append(f"ĐG: {u_price}")
+                if amt and amt != u_price:
+                    price_parts.append(f"Thành tiền: **{amt}**")
+                price_part = f" — {' | '.join(price_parts)}" if price_parts else ""
+                lines.append(f"  {idx_it}. **{it_name}** ({it_type}): SL **{it_q_str}**{price_part}")
+        else:
+            m_name = slots.get("material_name") or "Vật tư nông nghiệp"
+            qty = slots.get("quantity") or 1
+            if isinstance(qty, float) and qty.is_integer():
+                qty = int(qty)
+            unit = str(slots.get("unit") or "").strip()
+            if unit.lower() == "đơn vị":
+                unit = ""
+            qty_str = f"{qty} {unit}".strip() if (unit and unit.lower() not in str(qty).lower()) else str(qty)
+            lines.append(f"- **Tên vật tư:** {m_name}")
+            if slots.get("material_type"):
+                lines.append(f"- **Phân loại:** {slots.get('material_type')}")
+            lines.append(f"- **Số lượng:** {qty_str}")
+            if slots.get("unit_price"):
+                lines.append(f"- **Đơn giá:** {slots.get('unit_price')}")
+
+        if slots.get("total_amount") or slots.get("total_price"):
+            lines.append(f"- **Tổng cộng thanh toán:** **{slots.get('total_amount') or slots.get('total_price')}**")
 
     elif canon == "harvest":
         san_luong = slots.get("san_luong_thu_hoach") or slots.get("quantity") or "Theo thực tế"
@@ -999,7 +1046,118 @@ def build_lead_and_sections(analysis_dict: Dict[str, Any], prompt_for_diary: boo
             })
         return lead_info, sections
 
-    # 4. KHÁC / HÓA ĐƠN
+    # 4. HÓA ĐƠN MUA VẬT TƯ NÔNG NGHIỆP (invoice_receipt)
+    elif cat == "invoice_receipt" or analysis_dict.get("invoice_receipt"):
+        inv = analysis_dict.get("invoice_receipt") or {}
+        items = inv.get("items") or []
+        sup_name = inv.get("supplier_name") or "Đại lý vật tư nông nghiệp"
+        inv_no = inv.get("invoice_no")
+        p_date = inv.get("purchase_date")
+        total_amt = inv.get("total_amount")
+
+        # Kiểm tra xem trên hóa đơn có mặt hàng nào bị cấm không
+        banned_items = inv.get("banned_items") or []
+        if inv.get("has_banned_items") or banned_items:
+            first_b = banned_items[0] if banned_items else {}
+            b_mat_name = first_b.get("material_name") or "Thuốc BVTV trên hóa đơn"
+            b_info = first_b.get("banned_info") or {}
+            chem_name = b_info.get("matched_name") or first_b.get("active_ingredient") or b_mat_name
+            hazard = b_info.get("hazard") or "Rất độc hại, tồn lưu lâu dài trong môi trường và nông sản."
+            legal_source = b_info.get("source_legal") or "Thông tư số 75/BNNMT & Luật BVTV số 41/2013"
+
+            lead_info = {
+                "type": "pesticide_banned",
+                "type_label": "HÓA ĐƠN CÓ CHỨA THUỐC CẤM (VI PHẠM VIETGAP)",
+                "item_label": "Mặt hàng CẤM trên hóa đơn",
+                "item_name": b_mat_name,
+                "core_label": "Tình trạng pháp lý",
+                "core_val": f"ĐÃ BỊ CẤM SỬ DỤNG theo {legal_source}",
+                "sub_info": f"Hoạt chất cấm: {chem_name}",
+            }
+            sections = [
+                {
+                    "id": "banned_hazard",
+                    "question": "Tại sao thuốc trên hóa đơn này bị cấm?",
+                    "label": "Tại sao thuốc trên hóa đơn này bị cấm?",
+                    "icon": "alertTriangle",
+                    "title": "Mức độ nguy hại & Lý do cấm sử dụng",
+                    "content": f"Trên hóa đơn có mặt hàng **{b_mat_name}** chứa hoạt chất cấm **{chem_name}**.\n- **Căn cứ:** {legal_source}\n- **Tác hại:** {hazard}\n- **Quy chuẩn VietGAP:** Tuyệt đối không nhập kho, không lưu trữ và không sử dụng thuốc cấm trong trang trại VietGAP.",
+                    "spoken_text": f"Bác ơi, trên hóa đơn này có thuốc {b_mat_name} đã bị cấm sử dụng tại Việt Nam. Bác tuyệt đối không nhập kho và không phun cho vườn nhé!",
+                }
+            ]
+            return lead_info, sections
+
+        item_lines = []
+        spoken_items = []
+        for idx_i, it in enumerate(items, 1):
+            if not isinstance(it, dict):
+                continue
+            it_name = it.get("material_name") or "Vật tư"
+            it_type = it.get("material_type") or "Vật tư"
+            it_q = it.get("quantity") or 1
+            if isinstance(it_q, float) and it_q.is_integer():
+                it_q = int(it_q)
+            it_u = str(it.get("unit") or "").strip()
+            if it_u.lower() == "đơn vị":
+                it_u = ""
+            it_q_str = f"{it_q} {it_u}".strip() if (it_u and it_u.lower() not in str(it_q).lower()) else str(it_q)
+            u_price = it.get("unit_price")
+            amt = it.get("amount")
+            p_parts = []
+            if u_price:
+                p_parts.append(f"ĐG: {u_price}")
+            if amt and amt != u_price:
+                p_parts.append(f"TT: {amt}")
+            price_str = f" — {' | '.join(p_parts)}" if p_parts else ""
+            item_lines.append(f"{idx_i}. **{it_name}** ({it_type}): SL {it_q_str}{price_str}")
+            spoken_items.append(f"{it_name} (SL: {it_q_str})")
+
+        core_summary = ", ".join(spoken_items) if spoken_items else (summary or "Các mặt hàng phân bón, thuốc BVTV theo hóa đơn")
+        sub_parts = []
+        if inv_no:
+            sub_parts.append(f"Số HĐ: {inv_no}")
+        if p_date:
+            sub_parts.append(f"Ngày: {p_date}")
+        if total_amt:
+            sub_parts.append(f"Tổng: {total_amt}")
+
+        lead_info = {
+            "type": "invoice_receipt",
+            "type_label": "Hóa Đơn Mua Vật Tư Nông Nghiệp",
+            "item_label": "Đại lý / Hóa đơn",
+            "item_name": sup_name if sup_name != "Đại lý vật tư nông nghiệp" else (title or sup_name),
+            "core_label": "Mặt hàng trên hóa đơn",
+            "core_val": core_summary,
+            "sub_info": " | ".join(sub_parts),
+        }
+
+        sections = []
+        if item_lines:
+            detail_content = "\n".join(item_lines)
+            if total_amt:
+                detail_content += f"\n\n**Tổng tiền thanh toán:** {total_amt}"
+            sections.append({
+                "id": "invoice_items",
+                "question": "Chi tiết các mặt hàng và giá tiền trên hóa đơn?",
+                "label": "Chi tiết các mặt hàng và giá tiền trên hóa đơn?",
+                "icon": "cart",
+                "title": "Danh mục vật tư & Giá mua trên hóa đơn",
+                "content": detail_content,
+                "spoken_text": f"Trên hóa đơn của {sup_name} gồm có: {', '.join(spoken_items)}." + (f" Tổng tiền là {total_amt}." if total_amt else ""),
+            })
+
+        if prompt_for_diary:
+            sections.append({
+                "id": "diary",
+                "question": "Ghi hóa đơn mua vật tư này vào sổ nhật ký giúp tôi",
+                "label": "Ghi hóa đơn mua vật tư này vào sổ nhật ký giúp tôi",
+                "icon": "fileEdit",
+                "is_action": True,
+                "action_prompt": "Ghi hóa đơn mua vật tư này vào sổ nhật ký giúp tôi.",
+            })
+        return lead_info, sections
+
+    # 5. KHÁC
     lead_info = {
         "type": "other",
         "type_label": "Hình Ảnh Canh Tác",
@@ -1106,10 +1264,74 @@ def build_success_message(
     crop = s.get("crop_name") or "cây trồng"
 
     if canon == "purchase":
+        inv_items = s.get("invoice_items")
+        if isinstance(inv_items, list) and len(inv_items) >= 1:
+            bullet_lines = []
+            first_pest = None
+            first_fert = None
+            for idx_it, it in enumerate(inv_items, 1):
+                if not isinstance(it, dict):
+                    continue
+                it_name = it.get("material_name") or "Vật tư"
+                it_type = it.get("material_type") or "Vật tư"
+                it_q = it.get("quantity") or 1
+                if isinstance(it_q, float) and it_q.is_integer():
+                    it_q = int(it_q)
+                it_u = str(it.get("unit") or "").strip()
+                if it_u.lower() == "đơn vị":
+                    it_u = ""
+                it_q_str = f"{it_q} {it_u}".strip() if (it_u and it_u.lower() not in str(it_q).lower()) else str(it_q)
+                u_price = it.get("unit_price")
+                amt = it.get("amount")
+                p_parts = []
+                if u_price:
+                    p_parts.append(f"ĐG: {u_price}")
+                if amt and amt != u_price:
+                    p_parts.append(f"Thành tiền: **{amt}**")
+                it_price = f" — {' | '.join(p_parts)}" if p_parts else ""
+                bullet_lines.append(f"{idx_it}. **{it_name}** ({it_type}): SL **{it_q_str}**{it_price}")
+                it_cat = classify_material_category(it_name, it_type)
+                if it_cat == "pesticide" and not first_pest:
+                    first_pest = it_name
+                elif it_cat == "fertilizer" and not first_fert:
+                    first_fert = it_name
+
+            meta_lines = []
+            if s.get("supplier_name"):
+                meta_lines.append(f"- **Đại lý / Nhà cung cấp:** {s.get('supplier_name')}")
+            if s.get("invoice_no"):
+                meta_lines.append(f"- **Số hóa đơn:** {s.get('invoice_no')}")
+            if s.get("total_amount"):
+                meta_lines.append(f"- **Tổng tiền thanh toán:** **{s.get('total_amount')}**")
+            meta_str = ("\n" + "\n".join(meta_lines)) if meta_lines else ""
+
+            text = (
+                f"**ĐÃ LƯU THÀNH CÔNG HÓA ĐƠN MUA VẬT TƯ ({len(inv_items)} MẶT HÀNG)**\n"
+                + "\n".join(bullet_lines)
+                + meta_str
+                + "\n\n💡 *Bác có muốn chuyển sang ghi chép việc đem phân bón hoặc thuốc vừa mua đi sử dụng cho vườn luôn không?*"
+            )
+            actions = []
+            if first_pest:
+                actions.append({
+                    "id": "switch_to_spray",
+                    "label": f"Phun thuốc {first_pest} luôn",
+                    "prompt": f"Ghi việc phun thuốc {first_pest} luôn",
+                    "icon": "flask",
+                })
+            if first_fert:
+                actions.append({
+                    "id": "switch_to_fertilize",
+                    "label": f"Bón phân {first_fert} luôn",
+                    "prompt": f"Ghi việc bón phân {first_fert} luôn",
+                    "icon": "sprout",
+                })
+            return text, actions
+
         mat_name = s.get("material_name") or "vật tư"
         qty = s.get("quantity") or ""
         unit = s.get("unit") or ""
-        qty_str = f"{qty} {unit}".strip()
+        qty_str = f"{qty} {unit}".strip() if (unit and str(unit).lower() not in str(qty).lower()) else str(qty)
         mat_cat = classify_material_category(mat_name, s.get("material_type"))
 
         if mat_cat == "pesticide":
@@ -1123,7 +1345,7 @@ def build_success_message(
                     "id": "switch_to_spray",
                     "label": f"Phun thuốc {mat_name} luôn",
                     "prompt": f"Ghi việc phun thuốc {mat_name} luôn",
-                    "icon": "spray",
+                    "icon": "flask",
                 }
             ]
             return text, actions
@@ -1138,7 +1360,7 @@ def build_success_message(
                     "id": "switch_to_fertilize",
                     "label": f"Bón phân {mat_name} luôn",
                     "prompt": f"Ghi việc bón phân {mat_name} luôn",
-                    "icon": "fertilize",
+                    "icon": "sprout",
                 }
             ]
             return text, actions
@@ -1280,8 +1502,36 @@ def build_tts_spoken_text(
             fert = s.get("ten_phan_bon") or "phân bón"
             return f"Dạ em đã tổng hợp xong phiếu bón phân {fert} cho {crop}.{hint_spoken}"
         elif act == "purchase":
+            inv_items = s.get("invoice_items")
+            sup = s.get("supplier_name")
+            sup_part = f" tại {sup}" if sup else ""
+            total_amt = s.get("total_amount")
+            total_part = f", tổng cộng {total_amt}" if total_amt else ""
+            if isinstance(inv_items, list) and len(inv_items) > 1:
+                spoken_parts = []
+                for it in inv_items:
+                    if not isinstance(it, dict) or not it.get("material_name"):
+                        continue
+                    it_name = it.get("material_name")
+                    it_q = it.get("quantity") or 1
+                    if isinstance(it_q, float) and it_q.is_integer():
+                        it_q = int(it_q)
+                    it_u = str(it.get("unit") or "").strip()
+                    if it_u.lower() == "đơn vị":
+                        it_u = ""
+                    q_phrase = f"{it_q} {it_u}".strip() if it_u else f"số lượng {it_q}"
+                    spoken_parts.append(f"{it_name} {q_phrase}")
+                items_str = ", ".join(spoken_parts)
+                return f"Dạ em đã đọc xong hóa đơn{sup_part} gồm {len(inv_items)} mặt hàng là: {items_str}{total_part}. Bác kiểm tra lại phiếu và bấm xác nhận để em lưu vào sổ nhật ký nhé!"
             mat = s.get("material_name") or "vật tư"
-            return f"Dạ em đã tổng hợp phiếu mua {mat}.{hint_spoken}"
+            qty = s.get("quantity")
+            if isinstance(qty, float) and qty.is_integer():
+                qty = int(qty)
+            unit = str(s.get("unit") or "").strip()
+            if unit.lower() == "đơn vị":
+                unit = ""
+            qty_phrase = f" số lượng {qty} {unit}".strip() if qty else ""
+            return f"Dạ em đã tổng hợp phiếu mua {mat}{qty_phrase}{sup_part}{total_part}.{hint_spoken}"
         elif act == "harvest":
             qty = s.get("san_luong_thu_hoach") or "sản lượng"
             return f"Dạ em đã tổng hợp phiếu thu hoạch {crop} {qty}.{hint_spoken}"
@@ -1302,7 +1552,12 @@ def build_tts_spoken_text(
         act = (activity_type or "").lower()
         s = slots or {}
         if act == "purchase":
+            inv_items = s.get("invoice_items")
             mat = s.get("material_name") or "vật tư"
+            if isinstance(inv_items, list) and len(inv_items) > 1:
+                return f"Dạ em đã lưu thành công đầy đủ {len(inv_items)} mặt hàng trên hóa đơn vào sổ nhật ký mua vật tư rồi bác nhé!"
+            elif isinstance(inv_items, list) and len(inv_items) == 1:
+                return f"Dạ em đã lưu thành công hóa đơn mua {mat} vào sổ nhật ký mua vật tư rồi bác nhé!"
             cat = classify_material_category(mat, s.get("material_type"))
             if cat == "pesticide":
                 return f"Dạ em đã lưu thành công việc mua thuốc {mat}. Bác có muốn ghi luôn việc đem thuốc này đi phun cho vườn không ạ?"
@@ -1391,6 +1646,20 @@ def build_tts_spoken_text(
             benefits = f.get("benefits") or []
             ben_str = ", ".join(benefits[:2]) if isinstance(benefits, list) and benefits else "cung cấp dinh dưỡng"
             return f"Dạ đây là phân bón {name}, tác dụng {ben_str}. Bác chạm câu hỏi bên dưới để nghe hướng dẫn hoặc ghi nhật ký nhé!"
+
+        # Hóa đơn mua vật tư nông nghiệp
+        elif cat == "invoice_receipt" or analysis_dict.get("invoice_receipt"):
+            inv = analysis_dict.get("invoice_receipt") or {}
+            if inv.get("has_banned_items") or inv.get("banned_items"):
+                b_list = inv.get("banned_items") or [{}]
+                b_name = b_list[0].get("material_name") or "thuốc bảo vệ thực vật"
+                return f"Cảnh báo nguy hiểm! Trên hóa đơn này có thuốc {b_name} đã bị cấm sử dụng tại Việt Nam theo quy chuẩn VietGAP. Bác tuyệt đối không nhập kho và không phun thuốc này cho vườn nhé!"
+            items = inv.get("items") or []
+            sup = inv.get("supplier_name") or "đại lý vật tư"
+            if items:
+                names = [f"{int(i['quantity']) if isinstance(i.get('quantity'), (int, float)) and float(i['quantity']).is_integer() else i.get('quantity', 1)} {i.get('unit', '')} {i.get('material_name', '')}".strip() for i in items[:3] if isinstance(i, dict)]
+                return f"Dạ em đã đọc xong hóa đơn của {sup}, gồm có {', '.join(names)}. Bác chạm câu hỏi bên dưới để xem chi tiết hoặc lưu vào sổ nhật ký mua vật tư nhé!"
+            return f"Dạ em đã đọc được hóa đơn mua vật tư từ {sup}. Bác chạm bên dưới để ghi vào sổ nhật ký mua vật tư nhé!"
 
     # 4. Trạng thái hỏi bổ sung thông tin (CLARIFYING) hoặc câu thoại chung
     clean = text

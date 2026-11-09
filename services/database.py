@@ -1631,51 +1631,112 @@ def save_diary_to_mysql(
                 or tables_submitted.get("b1_5_material_purchases")
                 or (flat_data if ("purchase" in task_types or flat_data.get("table") in ("purchase", "input_purchases", "b1_5_material_purchases") or (flat_data.get("material_name") and flat_data.get("purchase_date"))) else None)
             )
-            if p_dict and isinstance(p_dict, dict) and (p_dict.get("material_name") or p_dict.get("ten_vat_tu") or p_dict.get("quantity") or "purchase" in task_types):
-                m_name = p_dict.get("material_name") or p_dict.get("ten_vat_tu") or "Vật tư nông nghiệp"
+            if p_dict and isinstance(p_dict, dict) and (p_dict.get("material_name") or p_dict.get("ten_vat_tu") or p_dict.get("invoice_items") or p_dict.get("quantity") or "purchase" in task_types):
                 p_date = _parse_date(p_dict.get("purchase_date") or p_dict.get("ngay_thuc_hien") or p_dict.get("activity_date")) or date.today().isoformat()
-                p_qty = _parse_number(p_dict.get("quantity") or p_dict.get("so_luong_vat_tu")) or 1.0
-                p_unit = p_dict.get("unit") or "kg"
-                p_price = _parse_number(p_dict.get("unit_price") or p_dict.get("don_gia"))
-                p_exp = _parse_date(p_dict.get("expiry_date") or p_dict.get("han_su_dung"))
                 p_inv = p_dict.get("invoice_no") or p_dict.get("hoa_don")
-                p_note = p_dict.get("note") or p_dict.get("ghi_chu")
-                if final_photo_url and "Ảnh" not in str(p_note or ""):
-                    p_note = f"{p_note}; Ảnh chứng từ: {final_photo_url}" if p_note else f"Ảnh chứng từ: {final_photo_url}"
-                if final_audio_url and "Ghi âm" not in str(p_note or ""):
-                    p_note = f"{p_note}; Ghi âm: {final_audio_url}" if p_note else f"Ghi âm: {final_audio_url}"
-
-                m_type = str(p_dict.get("material_type") or "").upper()
                 sup_id = _ensure_supplier(cur, p_dict.get("supplier_name") or p_dict.get("noi_cung_cap"))
 
-                item_type = "MATERIAL"
-                p_pest_id = None
-                p_fert_id = None
-                p_mat_id = None
+                base_note = p_dict.get("note") or p_dict.get("ghi_chu")
+                if final_photo_url and "Ảnh" not in str(base_note or ""):
+                    base_note = f"{base_note}; Ảnh chứng từ: {final_photo_url}" if base_note else f"Ảnh chứng từ: {final_photo_url}"
+                if final_audio_url and "Ghi âm" not in str(base_note or ""):
+                    base_note = f"{base_note}; Ghi âm: {final_audio_url}" if base_note else f"Ghi âm: {final_audio_url}"
 
-                if "PEST" in m_type or any(k in m_name.lower() for k in ["thuốc", "bvtv", "trừ sâu", "trừ rầy", "trừ nấm"]):
-                    item_type = "PESTICIDE"
-                    p_pest_id = _ensure_pesticide(cur, m_name)
-                elif "FERT" in m_type or any(k in m_name.lower() for k in ["phân", "npk", "đạm", "lân", "kali", "hữu cơ", "dap"]):
-                    item_type = "FERTILIZER"
-                    p_fert_id = _ensure_fertilizer(cur, m_name)
-                elif "SEED" in m_type or any(k in m_name.lower() for k in ["giống", "cây con", "hạt", "bầu"]):
-                    item_type = "MATERIAL"
-                    p_mat_id = _ensure_material(cur, m_name, material_type="SEED", unit=p_unit)
+                invoice_items_list = p_dict.get("invoice_items") or flat_data.get("invoice_items")
+                if isinstance(invoice_items_list, list) and len(invoice_items_list) > 0:
+                    inserted_purchase_ids: List[int] = []
+                    for it_row in invoice_items_list:
+                        if not isinstance(it_row, dict):
+                            continue
+                        it_name = str(it_row.get("material_name") or it_row.get("ten_vat_tu") or "").strip()
+                        if not it_name:
+                            continue
+                        it_date = _parse_date(it_row.get("purchase_date")) or p_date
+                        it_qty = _parse_number(it_row.get("quantity")) or 1.0
+                        it_unit = it_row.get("unit") or "đơn vị"
+                        it_price = _parse_number(it_row.get("unit_price") or it_row.get("amount"))
+                        it_exp = _parse_date(it_row.get("expiry_date")) or _parse_date(p_dict.get("expiry_date"))
+                        it_inv = it_row.get("invoice_no") or p_inv
+                        it_type_raw = str(it_row.get("material_type") or "").upper()
+
+                        it_note_parts = []
+                        if it_row.get("active_ingredient"):
+                            it_note_parts.append(f"Hoạt chất/TP: {it_row.get('active_ingredient')}")
+                        if it_row.get("amount"):
+                            it_note_parts.append(f"Thành tiền: {it_row.get('amount')}")
+                        if base_note:
+                            it_note_parts.append(str(base_note))
+                        it_note = "; ".join(it_note_parts) if it_note_parts else None
+
+                        item_type = "MATERIAL"
+                        p_pest_id = it_row.get("pesticide_id")
+                        p_fert_id = it_row.get("fertilizer_id")
+                        p_mat_id = None
+
+                        if p_pest_id or "PEST" in it_type_raw or "THUỐC" in it_type_raw or "BVTV" in it_type_raw or any(k in it_name.lower() for k in ["thuốc", "bvtv", "trừ sâu", "trừ rầy", "trừ nấm", "trừ bệnh"]):
+                            item_type = "PESTICIDE"
+                            p_pest_id = p_pest_id or _ensure_pesticide(cur, it_name)
+                        elif p_fert_id or "FERT" in it_type_raw or "PHÂN" in it_type_raw or any(k in it_name.lower() for k in ["phân", "npk", "đạm", "lân", "kali", "hữu cơ", "dap", "vi lượng", "canxi"]):
+                            item_type = "FERTILIZER"
+                            p_fert_id = p_fert_id or _ensure_fertilizer(cur, it_name)
+                        elif "SEED" in it_type_raw or "GIỐNG" in it_type_raw or any(k in it_name.lower() for k in ["giống", "cây con", "hạt", "bầu"]):
+                            item_type = "MATERIAL"
+                            p_mat_id = _ensure_material(cur, it_name, material_type="SEED", unit=it_unit)
+                        else:
+                            p_mat_id = _ensure_material(cur, it_name, material_type="MATERIAL", unit=it_unit)
+
+                        cur.execute(
+                            """
+                            INSERT INTO input_purchases (
+                                season_id, supplier_id, item_type, pesticide_id, fertilizer_id, material_id,
+                                purchase_date, quantity, unit, unit_price, expiry_date, invoice_no, note
+                            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+                            """,
+                            (season_id, sup_id, item_type, p_pest_id, p_fert_id, p_mat_id, it_date, it_qty, it_unit, it_price, it_exp, it_inv, it_note),
+                        )
+                        inserted_purchase_ids.append(cur.lastrowid)
+
+                    if inserted_purchase_ids:
+                        created_records["input_purchases"] = inserted_purchase_ids[0]
+                        created_records["input_purchases_ids"] = inserted_purchase_ids
                 else:
-                    p_mat_id = _ensure_material(cur, m_name, material_type="MATERIAL", unit=p_unit)
+                    m_name = p_dict.get("material_name") or p_dict.get("ten_vat_tu") or "Vật tư nông nghiệp"
+                    p_qty = _parse_number(p_dict.get("quantity") or p_dict.get("so_luong_vat_tu")) or 1.0
+                    p_unit = p_dict.get("unit") or "kg"
+                    p_price = _parse_number(p_dict.get("unit_price") or p_dict.get("don_gia"))
+                    p_exp = _parse_date(p_dict.get("expiry_date") or p_dict.get("han_su_dung"))
+                    p_note = base_note
 
-                cur.execute(
-                    """
-                    INSERT INTO input_purchases (
-                        season_id, supplier_id, item_type, pesticide_id, fertilizer_id, material_id,
-                        purchase_date, quantity, unit, unit_price, expiry_date, invoice_no, note
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
-                    """,
-                    (season_id, sup_id, item_type, p_pest_id, p_fert_id, p_mat_id, p_date, p_qty, p_unit, p_price, p_exp, p_inv, p_note),
-                )
-                purchase_id = cur.lastrowid
-                created_records["input_purchases"] = purchase_id
+                    m_type = str(p_dict.get("material_type") or "").upper()
+
+                    item_type = "MATERIAL"
+                    p_pest_id = None
+                    p_fert_id = None
+                    p_mat_id = None
+
+                    if "PEST" in m_type or "THUỐC" in m_type or "BVTV" in m_type or any(k in m_name.lower() for k in ["thuốc", "bvtv", "trừ sâu", "trừ rầy", "trừ nấm"]):
+                        item_type = "PESTICIDE"
+                        p_pest_id = _ensure_pesticide(cur, m_name)
+                    elif "FERT" in m_type or "PHÂN" in m_type or any(k in m_name.lower() for k in ["phân", "npk", "đạm", "lân", "kali", "hữu cơ", "dap"]):
+                        item_type = "FERTILIZER"
+                        p_fert_id = _ensure_fertilizer(cur, m_name)
+                    elif "SEED" in m_type or "GIỐNG" in m_type or any(k in m_name.lower() for k in ["giống", "cây con", "hạt", "bầu"]):
+                        item_type = "MATERIAL"
+                        p_mat_id = _ensure_material(cur, m_name, material_type="SEED", unit=p_unit)
+                    else:
+                        p_mat_id = _ensure_material(cur, m_name, material_type="MATERIAL", unit=p_unit)
+
+                    cur.execute(
+                        """
+                        INSERT INTO input_purchases (
+                            season_id, supplier_id, item_type, pesticide_id, fertilizer_id, material_id,
+                            purchase_date, quantity, unit, unit_price, expiry_date, invoice_no, note
+                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+                        """,
+                        (season_id, sup_id, item_type, p_pest_id, p_fert_id, p_mat_id, p_date, p_qty, p_unit, p_price, p_exp, p_inv, p_note),
+                    )
+                    purchase_id = cur.lastrowid
+                    created_records["input_purchases"] = purchase_id
 
             # ----------------------------------------------------
             # 2. PHUN THUỐC BVTV (pesticide_applications)

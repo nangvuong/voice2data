@@ -160,6 +160,74 @@ class FertilizerDetection:
 
 
 @dataclass
+class InvoiceItem:
+    """Một dòng mặt hàng phân bón / thuốc BVTV / vật tư trên hóa đơn mua bán."""
+    material_name: str
+    material_type: str = "Vật tư"            # 'Thuốc BVTV', 'Phân bón', 'Giống', 'Vật tư'
+    active_ingredient: Optional[str] = None
+    quantity: float = 1.0
+    unit: str = "đơn vị"                     # chai, gói, bao, kg, lít...
+    unit_price: Optional[Any] = None         # Đơn giá (VD: 120000 hoặc '120.000 đ')
+    amount: Optional[Any] = None             # Thành tiền dòng hàng
+    expiry_date: Optional[str] = None
+    batch_no: Optional[str] = None
+    pesticide_id: Optional[int] = None
+    fertilizer_id: Optional[int] = None
+    db_match: Optional[Dict[str, Any]] = None
+    is_banned: bool = False
+    banned_info: Optional[Dict[str, Any]] = None
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "material_name": self.material_name,
+            "material_type": self.material_type,
+            "active_ingredient": self.active_ingredient,
+            "quantity": self.quantity,
+            "unit": self.unit,
+            "unit_price": self.unit_price,
+            "amount": self.amount,
+            "expiry_date": self.expiry_date,
+            "batch_no": self.batch_no,
+            "pesticide_id": self.pesticide_id,
+            "fertilizer_id": self.fertilizer_id,
+            "db_match": self.db_match,
+            "is_banned": self.is_banned,
+            "banned_info": self.banned_info,
+        }
+
+
+@dataclass
+class InvoiceReceiptDetection:
+    """Kết quả trích xuất hóa đơn / phiếu mua bán phân bón, thuốc trừ sâu."""
+    supplier_name: Optional[str] = None      # Tên đại lý / cửa hàng VTNN
+    supplier_phone: Optional[str] = None
+    supplier_address: Optional[str] = None
+    invoice_no: Optional[str] = None         # Số hóa đơn / Mã phiếu
+    purchase_date: Optional[str] = None      # Ngày mua (YYYY-MM-DD)
+    buyer_name: Optional[str] = None
+    total_amount: Optional[Any] = None       # Tổng tiền thanh toán
+    payment_status: Optional[str] = None
+    items: List[InvoiceItem] = field(default_factory=list)
+    has_banned_items: bool = False
+    banned_items: List[Dict[str, Any]] = field(default_factory=list)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "supplier_name": self.supplier_name,
+            "supplier_phone": self.supplier_phone,
+            "supplier_address": self.supplier_address,
+            "invoice_no": self.invoice_no,
+            "purchase_date": self.purchase_date,
+            "buyer_name": self.buyer_name,
+            "total_amount": self.total_amount,
+            "payment_status": self.payment_status,
+            "items": [it.to_dict() for it in self.items],
+            "has_banned_items": self.has_banned_items,
+            "banned_items": self.banned_items,
+        }
+
+
+@dataclass
 class VLMAnalysisResult:
     """Kết quả phân tích tổng thể từ VLM Engine."""
     status: str = "success"
@@ -170,6 +238,7 @@ class VLMAnalysisResult:
     pest_disease: Optional[PestDiseaseDiagnosis] = None
     pesticide: Optional[PesticideDetection] = None
     fertilizer: Optional[FertilizerDetection] = None
+    invoice_receipt: Optional[InvoiceReceiptDetection] = None
     execution_time_ms: float = 0.0
     model_used: str = ""
     raw_json: Optional[Dict[str, Any]] = None
@@ -350,9 +419,70 @@ class VLMAnalysisResult:
             sup_name = None
             unit = "chai"
             qty = 1.0
+            u_price = None
+            t_amount = None
+            inv_no = None
+            p_date = today_iso
+            exp_date = None
+            invoice_items_payload: List[Dict[str, Any]] = []
             note_parts = []
 
-            if self.pesticide:
+            if self.invoice_receipt:
+                inv = self.invoice_receipt
+                sup_name = inv.supplier_name or sup_name
+                inv_no = inv.invoice_no
+                if inv.purchase_date:
+                    p_date = inv.purchase_date
+                t_amount = inv.total_amount
+                if inv.items:
+                    for it in inv.items:
+                        it_dict = it.to_dict()
+                        if sup_name and not it_dict.get("supplier_name"):
+                            it_dict["supplier_name"] = sup_name
+                        if inv_no and not it_dict.get("invoice_no"):
+                            it_dict["invoice_no"] = inv_no
+                        if p_date and not it_dict.get("purchase_date"):
+                            it_dict["purchase_date"] = p_date
+                        invoice_items_payload.append(it_dict)
+
+                    first_it = inv.items[0]
+                    p_id = first_it.pesticide_id
+                    f_id = first_it.fertilizer_id
+                    if len(inv.items) == 1:
+                        m_name = first_it.material_name or m_name
+                        m_type = first_it.material_type or "Vật tư"
+                        qty = first_it.quantity or 1.0
+                        unit = first_it.unit or "đơn vị"
+                        u_price = first_it.unit_price
+                        exp_date = first_it.expiry_date
+                        if first_it.active_ingredient:
+                            note_parts.append(f"Hoạt chất/TP: {first_it.active_ingredient}")
+                    else:
+                        item_names = [
+                            f"{i.material_name} ({int(i.quantity) if float(i.quantity or 1).is_integer() else i.quantity} {i.unit})"
+                            for i in inv.items
+                        ]
+                        m_name = ", ".join([i.material_name for i in inv.items])
+                        types_set = {i.material_type for i in inv.items if i.material_type}
+                        if "Thuốc BVTV" in types_set and "Phân bón" in types_set:
+                            m_type = "Phân bón & Thuốc BVTV"
+                        elif "Thuốc BVTV" in types_set:
+                            m_type = "Thuốc BVTV"
+                        elif "Phân bón" in types_set:
+                            m_type = "Phân bón"
+                        else:
+                            m_type = first_it.material_type or "Vật tư"
+                        qty = float(len(inv.items))
+                        unit = "loại vật tư"
+                        u_price = t_amount or first_it.unit_price
+                        note_parts.append("Chi tiết hóa đơn: " + "; ".join(item_names))
+
+                if inv.total_amount:
+                    note_parts.append(f"Tổng tiền HĐ: {inv.total_amount}")
+                if inv.supplier_phone:
+                    note_parts.append(f"SĐT đại lý: {inv.supplier_phone}")
+
+            elif self.pesticide:
                 m_type = "Thuốc BVTV"
                 m_name = self.pesticide.trade_name or m_name
                 if self.pesticide.db_match and self.pesticide.db_match.get("matched"):
@@ -376,14 +506,19 @@ class VLMAnalysisResult:
                     note_parts.append(f"Thành phần: {self.fertilizer.composition_npk}")
 
             table_data = {
-                "purchase_date": today_iso,
+                "purchase_date": p_date,
                 "material_name": m_name,
                 "material_type": m_type,
                 "pesticide_id": p_id,
                 "fertilizer_id": f_id,
                 "quantity": qty,
                 "unit": unit,
+                "unit_price": u_price,
+                "total_amount": t_amount,
+                "invoice_no": inv_no,
+                "expiry_date": exp_date,
                 "supplier_name": sup_name,
+                "invoice_items": invoice_items_payload if invoice_items_payload else None,
                 "note": "; ".join(note_parts) or f"Mua {m_name} (Nhận diện từ ảnh VLM)",
             }
             if parcel_id:
@@ -524,6 +659,7 @@ class VLMAnalysisResult:
             "pest_disease": self.pest_disease.to_dict() if self.pest_disease else None,
             "pesticide": self.pesticide.to_dict() if self.pesticide else None,
             "fertilizer": self.fertilizer.to_dict() if self.fertilizer else None,
+            "invoice_receipt": self.invoice_receipt.to_dict() if self.invoice_receipt else None,
             "execution_time_ms": round(self.execution_time_ms, 1),
             "model_used": self.model_used,
             "raw_json": self.raw_json,
@@ -788,16 +924,17 @@ BỐI CẢNH CANH TÁC CỦA TRANG TRẠI:
   TUYỆT ĐỐI KHÔNG chẩn đoán hoặc nói lan man sang các loại cây khác trừ khi trên nhãn bao bì thuốc BVTV hoặc phân bón có danh mục đăng ký riêng.
 
 Nhiệm vụ: Phân tích kỹ lưỡng hình ảnh do nông dân hoặc kỹ sư nông nghiệp cung cấp để nhận diện chính xác 1 trong các nhóm đối tượng:
-1. SÂU BỆNH HẠI (Pest & Disease): Cây trồng bị nấm, vi khuẩn, sâu, rầy, nhện hại, thán thư, đốm lá, rỉ sắt, xì mủ, vàng lá, rệp sáp... trên cây {crop_name}.
-2. THUỐC BẢO VỆ THỰC VẬT (Pesticide): Nhãn chai, gói, bao bì thuốc trừ sâu, trừ bệnh, diệt cỏ, diệt ốc, điều hòa sinh trưởng.
-3. PHÂN BÓN (Fertilizer): Nhãn bao, chai, hũ phân bón lá, phân hữu cơ, NPK, vi lượng, vi sinh, phân chuồng, chất cải tạo đất.
-4. KHÁC (Other/Field): Vườn cây {crop_name} tổng quan, hóa đơn vật tư nông nghiệp hoặc ảnh không liên quan.
+1. SÂU BỆNH HẠI (Pest & Disease - "pest_disease"): Cây trồng bị nấm, vi khuẩn, sâu, rầy, nhện hại, thán thư, đốm lá, rỉ sắt, xì mủ, vàng lá, rệp sáp... trên cây {crop_name}.
+2. THUỐC BẢO VỆ THỰC VẬT (Pesticide - "pesticide"): Nhãn chai, gói, bao bì thuốc trừ sâu, trừ bệnh, diệt cỏ, diệt ốc, điều hòa sinh trưởng.
+3. PHÂN BÓN (Fertilizer - "fertilizer"): Nhãn bao, chai, hũ phân bón lá, phân hữu cơ, NPK, vi lượng, vi sinh, phân chuồng, chất cải tạo đất.
+4. HÓA ĐƠN MUA VẬT TƯ NÔNG NGHIỆP (Invoice / Receipt - "invoice_receipt"): Hóa đơn bán hàng, hóa đơn GTGT, biên lai, phiếu xuất kho, sổ ghi mua phân bón, thuốc trừ sâu, thuốc BVTV, giống cây, vật tư nông nghiệp (kể cả hóa đơn in hoặc viết tay). Lưu ý: Nếu là hóa đơn ngoài nông nghiệp (ví dụ: hóa đơn thuốc tây/dược phẩm người như Pharmacity, hóa đơn siêu thị, ăn uống, điện nước...), đặt category là "other" và "invoice_receipt" để null.
+5. KHÁC (Other/Field - "field_crop" | "other"): Vườn cây {crop_name} tổng quan hoặc ảnh không liên quan.
 
 BẮT BUỘC TRẢ VỀ DUY NHẤT MỘT ĐỐI TƯỢNG JSON THEO ĐÚNG CẤU TRÚC SAU (không kèm markdown ngoài JSON):
 {{
-  "category": "pest_disease" | "pesticide" | "fertilizer" | "field_crop" | "invoice_receipt" | "other",
-  "title": "Tên tiêu đề ngắn gọn (ví dụ: Bệnh thán thư trên cây {crop_name}, hoặc Thuốc trừ sâu Regent 800WG, hoặc Phân bón vi lượng SIAMB 12)",
-  "summary": "Tóm tắt chẩn đoán hoặc đặc điểm chính trong 1-2 câu ngắn gọn",
+  "category": "pest_disease" | "pesticide" | "fertilizer" | "invoice_receipt" | "field_crop" | "other",
+  "title": "Tên tiêu đề ngắn gọn (ví dụ: Hóa đơn mua phân bón & thuốc BVTV, hoặc Bệnh thán thư trên cây {crop_name}, hoặc Thuốc trừ sâu Regent 800WG, hoặc Phân bón NPK Đầu Trâu)",
+  "summary": "Tóm tắt chẩn đoán hoặc nội dung hóa đơn trong 1-2 câu ngắn gọn",
   "confidence_score": 0.95,
   "pest_disease": {{
     "pest_name": "Tên sâu bệnh hại thông dụng tiếng Việt (ví dụ: Bệnh thán thư, Bệnh lở cổ rễ, Đốm mắt cua, Rệp sáp, Nhện đỏ, Bọ trĩ...)",
@@ -832,15 +969,39 @@ BẮT BUỘC TRẢ VỀ DUY NHẤT MỘT ĐỐI TƯỢNG JSON THEO ĐÚNG CẤU 
     "dosage_and_usage": "Hướng dẫn liều lượng bón hoặc pha tưới gốc / phun lá",
     "suitable_crops": ["{crop_name}", "Cây dược liệu", "Rau màu"],
     "manufacturer": "Tên công ty sản xuất hoặc phân phối"
+  }},
+  "invoice_receipt": {{
+    "supplier_name": "Tên đại lý / cửa hàng vật tư nông nghiệp / nhà cung cấp trên hóa đơn",
+    "supplier_phone": "Số điện thoại đại lý (nếu có)",
+    "supplier_address": "Địa chỉ đại lý / cửa hàng (nếu có)",
+    "invoice_no": "Số hóa đơn / Mã phiếu / Số chứng từ (nếu có)",
+    "purchase_date": "Ngày mua hàng trên hóa đơn chuẩn hóa định dạng YYYY-MM-DD (nếu nhìn thấy)",
+    "buyer_name": "Tên khách hàng / người mua (nếu có)",
+    "total_amount": "Tổng cộng tiền thanh toán cuối cùng của cả hóa đơn (chú ý đọc kỹ số tổng cộng cuối bảng, kể cả khi người bán viết lệch xuống dòng dưới; ví dụ: '7.585.000 đ')",
+    "payment_status": "Đã thanh toán / Tiền mặt / Chuyển khoản / Ghi nợ (nếu có)",
+    "items": [
+      {{
+        "material_name": "Ghi CHÍNH XÁC tên phân bón / thuốc BVTV / vật tư theo đúng chữ viết trên từng dòng hóa đơn (không tự ý đổi sang tên khác)",
+        "material_type": "Thuốc BVTV" | "Phân bón" | "Giống" | "Vật tư",
+        "active_ingredient": "Hoạt chất hoặc hàm lượng NPK nếu có ghi kèm",
+        "quantity": 10,
+        "unit": "Chỉ điền đơn vị tính ('bao', 'chai', 'gói', 'kg', 'lít', 'lon', 'hộp') NẾU trên hóa đơn có ghi rõ ở cột Đơn vị tính hoặc ghi kèm trong tên hàng (như 'bao 25kg'); nếu cột Đơn vị tính để trống thì để chuỗi rỗng ''",
+        "unit_price": "Đơn giá của dòng hàng (ví dụ: '125.000 đ')",
+        "amount": "Thành tiền của dòng hàng = Số lượng x Đơn giá (ví dụ: '500.000 đ')",
+        "expiry_date": "Hạn sử dụng YYYY-MM-DD (nếu có)",
+        "batch_no": "Số lô sản xuất (nếu có)"
+      }}
+    ]
   }}
 }}
 
 QUY TẮC BẮT BUỘC:
-1. Nếu ảnh là sâu bệnh hại: Điền chi tiết "pest_disease", "crop_name" luôn là "{crop_name}", còn "pesticide" và "fertilizer" để null.
-2. Nếu ảnh là thuốc BVTV: Điền chi tiết "pesticide", còn "pest_disease" và "fertilizer" để null.
-3. Nếu ảnh là phân bón: Điền chi tiết "fertilizer", còn "pest_disease" và "pesticide" để null.
-4. Nếu ảnh là hóa đơn, vườn cây {crop_name} bình thường, hoặc khác: Category là "field_crop", "invoice_receipt" hoặc "other", 3 khối trên để null.
-5. Tuyệt đối không tự bịa đặt tên thuốc hay thông số không nhìn thấy hoặc không chắc chắn.""".strip()
+1. Nếu ảnh là sâu bệnh hại: Điền chi tiết "pest_disease", "crop_name" luôn là "{crop_name}", còn "pesticide", "fertilizer", "invoice_receipt" để null.
+2. Nếu ảnh là thuốc BVTV: Điền chi tiết "pesticide", còn "pest_disease", "fertilizer", "invoice_receipt" để null.
+3. Nếu ảnh là phân bón: Điền chi tiết "fertilizer", còn "pest_disease", "pesticide", "invoice_receipt" để null.
+4. Nếu ảnh là hóa đơn, biên lai, phiếu xuất kho mua bán phân bón / thuốc trừ sâu / thuốc BVTV / giống / vật tư nông nghiệp: Category BẮT BUỘC là "invoice_receipt", điền đầy đủ khối "invoice_receipt" và danh sách "items" (tách riêng đầy đủ TẤT CẢ từng dòng mặt hàng trên hóa đơn, kể cả dòng viết ở cuối bảng hay dòng tổng cộng nếu có tên hàng + số lượng + đơn giá + thành tiền), các khối còn lại để null. Ngược lại, nếu ảnh là hóa đơn ngoài nông nghiệp (như dược phẩm y tế người, siêu thị, ăn uống...), đặt category là "other", điền rõ "title" và "summary" mô tả hóa đơn đó, và để "invoice_receipt" là null.
+5. Nếu ảnh là vườn cây {crop_name} bình thường hoặc khác: Category là "field_crop" hoặc "other", 4 khối trên để null.
+6. Tuyệt đối không tự bịa đặt tên thuốc hay thông số không nhìn thấy hoặc không chắc chắn.""".strip()
 
     # --------------------------------------------------------------------------
     # Core Analysis API Call
@@ -856,12 +1017,12 @@ QUY TẮC BẮT BUỘC:
         crop_name: Optional[str] = None,
     ) -> VLMAnalysisResult:
         """
-        Gửi hình ảnh đến Gemini 3.1 Flash Lite để nhận diện sâu bệnh, thuốc BVTV hoặc phân bón.
+        Gửi hình ảnh đến Gemini 3.1 Flash Lite để nhận diện sâu bệnh, thuốc BVTV, phân bón hoặc hóa đơn vật tư.
         
         Args:
             image_input: Đường dẫn file, bytes, buffer hoặc PIL Image
             prompt: Chỉ dẫn bổ sung của người dùng (tùy chọn)
-            task: 'auto', 'pest_disease', 'pesticide', 'fertilizer'
+            task: 'auto', 'pest_disease', 'pesticide', 'fertilizer', 'invoice_receipt'
             model: Tên model Gemini ghi đè (mặc định gemini-3.1-flash-lite)
             match_db: Tự động đối soát với CSDL MySQL trang trại (mặc định True)
             crop_name: Tên giống cây đang trồng tại trang trại (mặc định 'Cà gai leo')
@@ -896,6 +1057,13 @@ QUY TẮC BẮT BUỘC:
             user_text += "\n[Yêu cầu]: Hãy tập trung đọc chi tiết nhãn thuốc BVTV, hoạt chất, dạng thuốc, liều lượng và đối tượng phòng trừ."
         elif task == "fertilizer":
             user_text += "\n[Yêu cầu]: Hãy tập trung đọc nhãn phân bón, loại phân, thành phần NPK/dinh dưỡng và cách bón."
+        elif task in ("invoice_receipt", "invoice", "purchase"):
+            user_text += (
+                "\n[Yêu cầu]: Đây là hóa đơn / biên lai / phiếu mua bán phân bón, thuốc trừ sâu, vật tư nông nghiệp. "
+                "Hãy đặt category là 'invoice_receipt' và trích xuất đầy đủ tên đại lý, số hóa đơn, ngày mua (YYYY-MM-DD), "
+                "tổng tiền và danh sách từng mặt hàng trong 'items' (tên thuốc/phân bón, phân loại 'Thuốc BVTV' hoặc 'Phân bón', "
+                "số lượng, đơn vị tính, đơn giá, thành tiền)."
+            )
 
         payload = {
             "system_instruction": {
@@ -969,12 +1137,129 @@ QUY TẮC BẮT BUỘC:
                 logger.warning("[VLM Engine %s] Thử nghiệm thất bại: %s", m_name, e_call)
                 last_error = str(e_call)
 
+        # Fallback sang RapidOCR + LLM/Regex nếu ảnh hóa đơn gặp lỗi kết nối VLM
+        try:
+            fallback_res = await self._fallback_ocr_invoice(image_input, t0=t0, match_db=match_db)
+            if fallback_res and fallback_res.status == "success":
+                return fallback_res
+        except Exception as e_fb:
+            logger.warning("Fallback OCR hóa đơn thất bại: %s", e_fb)
+
         return VLMAnalysisResult(
             status="error",
             error=f"Tất cả các model VLM đều gặp lỗi. Lỗi cuối: {last_error}",
             title="Lỗi xử lý VLM",
             execution_time_ms=(time.time() - t0) * 1000,
         )
+
+    async def _fallback_ocr_invoice(
+        self,
+        image_input: Union[str, bytes, io.BytesIO, Image.Image],
+        t0: float,
+        match_db: bool = True,
+    ) -> Optional[VLMAnalysisResult]:
+        """Fallback trích xuất hóa đơn bằng RapidOCR + LLM/MaterialMatcher khi Gemini VLM không khả dụng."""
+        from services.engines.ocr_engine import ocr_engine
+        ocr_res = await ocr_engine.ocr(image_input, min_score=0.45)
+        if not ocr_res or not ocr_res.text or not ocr_res.text.strip():
+            return None
+
+        raw_ocr = ocr_res.text.strip()
+        lower_ocr = raw_ocr.lower()
+        is_invoice_like = any(
+            kw in lower_ocr
+            for kw in ["hóa đơn", "hoá đơn", "phiếu", "biên lai", "đại lý", "cửa hàng", "tổng tiền", "thành tiền", "đơn giá", "số lượng"]
+        )
+        matched_mats = await material_matcher.extract_and_match(raw_ocr, min_score=55.0)
+        if not is_invoice_like and not matched_mats:
+            return None
+
+        items_raw = []
+        for m in matched_mats:
+            m_dict = m.to_dict()
+            cat_str = m_dict.get("category") or ""
+            m_type = "Thuốc BVTV" if cat_str == "pesticide" else ("Phân bón" if cat_str == "fertilizer" else "Vật tư")
+            items_raw.append({
+                "material_name": m_dict.get("name") or m_dict.get("query") or "Vật tư nông nghiệp",
+                "material_type": m_type,
+                "active_ingredient": m_dict.get("active_ingredient"),
+                "quantity": 1,
+                "unit": "bao" if m_type == "Phân bón" else "chai",
+            })
+
+        sup_match = re.search(r"(?:đại\s*lý|cửa\s*hàng|nhà\s*cung\s*cấp|cty|công\s*ty)[:\s\-]*([^\n\r]{3,60})", raw_ocr, flags=re.IGNORECASE)
+        inv_match = re.search(r"(?:số\s*hđ|số\s*hóa\s*đơn|mã\s*phiếu|số\s*phiếu|no\.?)[:\s#\-]*([A-Za-z0-9\-_/]{2,25})", raw_ocr, flags=re.IGNORECASE)
+        date_match = re.search(r"(\d{1,2}[/\-\.]\d{1,2}[/\-\.]\d{2,4}|\d{4}[/\-\.]\d{1,2}[/\-\.]\d{1,2})", raw_ocr)
+        total_match = re.search(r"(?:tổng\s*cộng|tổng\s*tiền|thanh\s*toán|thành\s*tiền)[:\s]*([\d\.,]+\s*(?:đ|vnđ|vnd|nghìn|triệu)?)", raw_ocr, flags=re.IGNORECASE)
+
+        parsed_fallback = {
+            "category": "invoice_receipt",
+            "title": "Hóa đơn mua vật tư nông nghiệp",
+            "summary": f"Trích xuất từ hóa đơn OCR ({len(items_raw)} mặt hàng).",
+            "confidence_score": 0.85,
+            "invoice_receipt": {
+                "supplier_name": sup_match.group(1).strip() if sup_match else None,
+                "invoice_no": inv_match.group(1).strip() if inv_match else None,
+                "purchase_date": date_match.group(1).strip() if date_match else None,
+                "total_amount": total_match.group(1).strip() if total_match else None,
+                "items": items_raw,
+            },
+        }
+        elapsed = (time.time() - t0) * 1000
+        return await self._process_vlm_json_output(
+            parsed=parsed_fallback,
+            execution_time_ms=elapsed,
+            model_used="rapidocr_fallback",
+            match_db=match_db,
+        )
+
+    @staticmethod
+    def _normalize_invoice_date(raw_date: Any) -> Optional[str]:
+        """Chuẩn hóa ngày trên hóa đơn sang định dạng YYYY-MM-DD."""
+        if not raw_date:
+            return None
+        s = str(raw_date).strip()
+        if not s or s.lower() in ("null", "none"):
+            return None
+        m_iso = re.search(r"(\d{4})[/\-\.](\d{1,2})[/\-\.](\d{1,2})", s)
+        if m_iso:
+            y, m, d = int(m_iso.group(1)), int(m_iso.group(2)), int(m_iso.group(3))
+            if 1 <= m <= 12 and 1 <= d <= 31:
+                return f"{y:04d}-{m:02d}-{d:02d}"
+        m_vn = re.search(r"(\d{1,2})[/\-\.](\d{1,2})[/\-\.](\d{2,4})", s)
+        if m_vn:
+            d, m, y = int(m_vn.group(1)), int(m_vn.group(2)), int(m_vn.group(3))
+            if y < 100:
+                y += 2000
+            if 1 <= m <= 12 and 1 <= d <= 31:
+                return f"{y:04d}-{m:02d}-{d:02d}"
+        m_text = re.search(r"ngày\s*(\d{1,2})\s*tháng\s*(\d{1,2})(?:\s*năm\s*(\d{4}))?", s, flags=re.IGNORECASE)
+        if m_text:
+            d, m = int(m_text.group(1)), int(m_text.group(2))
+            y = int(m_text.group(3)) if m_text.group(3) else date.today().year
+            if 1 <= m <= 12 and 1 <= d <= 31:
+                return f"{y:04d}-{m:02d}-{d:02d}"
+        return s
+
+    @staticmethod
+    def _parse_invoice_qty(raw_qty: Any, current_unit: Optional[str] = None, item_name: Optional[str] = None) -> Tuple[float, str]:
+        """Tách số lượng và đơn vị tính từ dòng mặt hàng hóa đơn."""
+        unit = (str(current_unit).strip() if current_unit and str(current_unit).strip().lower() not in ("null", "none", "", "đơn vị") else "")
+        if not unit and item_name:
+            m_u_name = re.search(r"\b(bao|chai|gói|lọ|can|thùng|hộp|túi|lon|xô)\b", str(item_name), flags=re.IGNORECASE)
+            if m_u_name:
+                unit = m_u_name.group(1).lower()
+        if raw_qty is None:
+            return 1.0, unit
+        if isinstance(raw_qty, (int, float)):
+            return float(raw_qty), unit
+        s = str(raw_qty).strip()
+        m = re.search(r"(\d+(?:[\.,]\d+)?)\s*([a-zA-ZÀ-ỹ]+)?", s)
+        if m:
+            val = float(m.group(1).replace(",", "."))
+            u_found = (m.group(2) or "").strip()
+            return val, (unit or u_found)
+        return 1.0, unit
 
     # --------------------------------------------------------------------------
     # Output Processing & Database Linking
@@ -1078,6 +1363,117 @@ QUY TẮC BẮT BUỘC:
                 db_match=db_match_dict,
             )
 
+        inv_det: Optional[InvoiceReceiptDetection] = None
+        inv_raw = parsed.get("invoice_receipt")
+        if isinstance(inv_raw, dict) or category == "invoice_receipt":
+            inv_dict = inv_raw if isinstance(inv_raw, dict) else {}
+            from services.vietgap.material_matcher import check_banned_ingredient
+
+            raw_items = inv_dict.get("items") or []
+            if not isinstance(raw_items, list):
+                raw_items = []
+
+            processed_items: List[InvoiceItem] = []
+            banned_items_list: List[Dict[str, Any]] = []
+
+            for it_raw in raw_items:
+                if not isinstance(it_raw, dict):
+                    continue
+                m_name = str(it_raw.get("material_name") or it_raw.get("trade_name") or it_raw.get("name") or "").strip()
+                if not m_name:
+                    continue
+
+                raw_type = str(it_raw.get("material_type") or "").strip()
+                lower_type = raw_type.lower()
+                lower_name = m_name.lower()
+
+                cat_hint = None
+                has_npk_ratio = bool(re.search(r"\b\d{1,2}\s*[\-\.]\s*\d{1,2}\s*[\-\.]\s*\d{1,2}\b", lower_name))
+                if any(k in lower_type or k in lower_name for k in ["thuốc", "bvtv", "trừ sâu", "trừ bệnh", "trừ cỏ", "diệt ốc", "wg", "sc", "ec", "wp", "sl", "od", "atamite", "cy rut", "cyrut", "anpho", "anvil", "comcat"]):
+                    m_type_norm = "Thuốc BVTV"
+                    cat_hint = "pesticide"
+                elif has_npk_ratio or any(k in lower_type or k in lower_name for k in ["phân", "npk", "hữu cơ", "vi lượng", "đạm", "lân", "kali", "urea", "dap", "humic", "canxi", "combi", "manhe", "magie", "mầm", "kẽm", "bo"]):
+                    m_type_norm = "Phân bón"
+                    cat_hint = "fertilizer"
+                elif any(k in lower_type or k in lower_name for k in ["giống", "hạt", "cây con"]):
+                    m_type_norm = "Giống"
+                else:
+                    m_type_norm = raw_type or "Vật tư"
+
+                db_match_dict = None
+                p_id = None
+                f_id = None
+                act_ing = it_raw.get("active_ingredient")
+
+                if match_db:
+                    match_res = material_matcher.fuzzy_match(m_name, category_hint=cat_hint)
+                    db_match_dict = match_res.to_dict()
+                    if db_match_dict.get("matched"):
+                        # Giữ nguyên tên thực tế ghi trên hóa đơn trừ khi khớp gần như tuyệt đối (>= 96)
+                        if (db_match_dict.get("score") or 0) >= 96:
+                            m_name = db_match_dict.get("name") or m_name
+                        matched_cat = db_match_dict.get("category")
+                        if matched_cat == "pesticide":
+                            if not has_npk_ratio:
+                                m_type_norm = "Thuốc BVTV"
+                            p_id = db_match_dict.get("id")
+                        elif matched_cat == "fertilizer":
+                            m_type_norm = "Phân bón"
+                            f_id = db_match_dict.get("id")
+                        if not act_ing and db_match_dict.get("active_ingredient") and (db_match_dict.get("score") or 0) >= 90:
+                            act_ing = db_match_dict.get("active_ingredient")
+
+                is_banned, banned_info = check_banned_ingredient(f"{m_name} {act_ing or ''}")
+                if not is_banned and db_match_dict and db_match_dict.get("is_banned"):
+                    is_banned = True
+                    banned_info = db_match_dict.get("banned_info")
+
+                qty_val, unit_str = self._parse_invoice_qty(it_raw.get("quantity"), it_raw.get("unit"), item_name=m_name)
+                exp_norm = self._normalize_invoice_date(it_raw.get("expiry_date"))
+
+                inv_item = InvoiceItem(
+                    material_name=m_name,
+                    material_type=m_type_norm,
+                    active_ingredient=act_ing,
+                    quantity=qty_val,
+                    unit=unit_str,
+                    unit_price=it_raw.get("unit_price"),
+                    amount=it_raw.get("amount") or it_raw.get("total_price"),
+                    expiry_date=exp_norm,
+                    batch_no=it_raw.get("batch_no"),
+                    pesticide_id=p_id,
+                    fertilizer_id=f_id,
+                    db_match=db_match_dict,
+                    is_banned=is_banned,
+                    banned_info=banned_info,
+                )
+                processed_items.append(inv_item)
+                if is_banned:
+                    banned_items_list.append({
+                        "material_name": m_name,
+                        "active_ingredient": act_ing,
+                        "banned_info": banned_info,
+                    })
+
+            if processed_items or inv_dict.get("supplier_name") or inv_dict.get("invoice_no") or category == "invoice_receipt":
+                category = "invoice_receipt"
+                norm_p_date = self._normalize_invoice_date(inv_dict.get("purchase_date"))
+                inv_det = InvoiceReceiptDetection(
+                    supplier_name=inv_dict.get("supplier_name"),
+                    supplier_phone=inv_dict.get("supplier_phone"),
+                    supplier_address=inv_dict.get("supplier_address"),
+                    invoice_no=inv_dict.get("invoice_no"),
+                    purchase_date=norm_p_date,
+                    buyer_name=inv_dict.get("buyer_name"),
+                    total_amount=inv_dict.get("total_amount"),
+                    payment_status=inv_dict.get("payment_status"),
+                    items=processed_items,
+                    has_banned_items=bool(banned_items_list),
+                    banned_items=banned_items_list,
+                )
+                if not title or title == "Kết quả phân tích hình ảnh":
+                    title = "Hóa đơn mua phân bón & thuốc BVTV"
+
         return VLMAnalysisResult(
             status="success",
             category=category,
@@ -1087,6 +1483,7 @@ QUY TẮC BẮT BUỘC:
             pest_disease=pest_diag,
             pesticide=pest_det,
             fertilizer=fert_det,
+            invoice_receipt=inv_det,
             execution_time_ms=execution_time_ms,
             model_used=model_used,
             raw_json=parsed,
